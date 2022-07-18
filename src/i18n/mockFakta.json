@@ -1,0 +1,741 @@
+[
+  {
+    "faktumId": 636824,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "bolker",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {
+      "personalia": "true",
+      "tiltaksliste": "false"
+    },
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636825,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "personalia",
+    "value": null,
+    "faktumEgenskaper": [
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "epost",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "alder",
+        "value": "50",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "kontonummer",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "gjeldendeAdresseGyldigFra",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "sekundarAdresseGyldigFra",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "kjonn",
+        "value": "m",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "gjeldendeAdresseType",
+        "value": "BOSTEDSADRESSE",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "sekundarAdresseType",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "utenlandskKontoBanknavn",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "statsborgerskapType",
+        "value": "norsk",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "mellomnavn",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "fornavn",
+        "value": "Mock",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "diskresjonskode",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "gjeldendeAdresseGyldigTil",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "statsborgerskap",
+        "value": "NOR",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "gjeldendeAdresse",
+        "value": "SANNERGATA 2, 0557 OSLO",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "sekundarAdresse",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "utenlandskKontoLand",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "fnr",
+        "value": "XXXXXXXXXXX",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "navn",
+        "value": "Mocki McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "erUtenlandskBankkonto",
+        "value": "false",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "gjeldendeAdresseLandkode",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "sekundarAdresseGyldigTil",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 636825,
+        "soknadId": 1,
+        "key": "etternavn",
+        "value": "McMockface",
+        "systemEgenskap": 1
+      }
+    ],
+    "properties": {
+      "gjeldendeAdresseLandkode": null,
+      "statsborgerskapType": "norsk",
+      "statsborgerskap": "NOR",
+      "mellomnavn": null,
+      "utenlandskKontoBanknavn": null,
+      "erUtenlandskBankkonto": "false",
+      "kjonn": "m",
+      "sekundarAdresseType": null,
+      "epost": null,
+      "gjeldendeAdresse": "SANNERGATA 2, 0557 OSLO",
+      "fornavn": "Mock",
+      "fnr": "XXXXXXXXXXX",
+      "alder": "50",
+      "sekundarAdresseGyldigTil": null,
+      "utenlandskKontoLand": null,
+      "kontonummer": null,
+      "sekundarAdresseGyldigFra": null,
+      "sekundarAdresse": null,
+      "etternavn": "McMockface",
+      "gjeldendeAdresseType": "BOSTEDSADRESSE",
+      "diskresjonskode": null,
+      "navn": "Mock McMockface",
+      "gjeldendeAdresseGyldigTil": null,
+      "gjeldendeAdresseGyldigFra": null
+    },
+    "type": "SYSTEMREGISTRERT"
+  },
+  {
+    "faktumId": 636826,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "dagpenger",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636827,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.dagpenger",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636828,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.dagpenger.beholde.soketilleggsstonad",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636829,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.institusjon",
+    "value": "nei",
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636830,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.institusjon.ja.hvaslags",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636831,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.institusjon.ja.hvaslags.annet.soketilleggstonad",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636832,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.kvalifiseringsprogram",
+    "value": "nei",
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636833,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.kvalifiseringsprogram.ja.soketilleggsstonad",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636834,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.deltarIIntroprogram",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636835,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "informasjonsside.deltarIIntroprogram.info",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636836,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "tiltaksliste.valgtTiltak",
+    "value": "annetTiltak",
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636837,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "tiltaksliste.tiltakslistenErTom",
+    "value": "true",
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636838,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "trygdogpensjon",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636839,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "tilleggsopplysninger.fritekst",
+    "value": null,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636840,
+    "soknadId": 1,
+    "parrentFaktum": 636840,
+    "key": "tiltaksliste.annetTiltak",
+    "value": "Annet",
+    "faktumEgenskaper": [],
+    "properties": {
+      "antallDager": "",
+      "arrangoernavn": "",
+      "adresse": "",
+      "postnummer": "",
+      "beskrivelse": "asdas"
+    },
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 636846,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "arenakall.har.feilet",
+    "value": "false",
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 635429,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "barn",
+    "value": null,
+    "faktumEgenskaper": [
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "fnr",
+        "value": "XXXXXXXXXXX",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "fornavn",
+        "value": "Mocki",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "mellomnavn",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "sammensattnavn",
+        "value": "Mocki McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "etternavn",
+        "value": "McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "uniqueKey",
+        "value": "fnr",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "land",
+        "value": "NOR",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "alder",
+        "value": "1",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635429,
+        "soknadId": 1,
+        "key": "kjonn",
+        "value": "k",
+        "systemEgenskap": 1
+      }
+    ],
+    "properties": {
+      "etternavn": "McMockface",
+      "mellomnavn": null,
+      "kjonn": "k",
+      "uniqueKey": "fnr",
+      "sammensattnavn": "Mocki McMockface",
+      "land": "NOR",
+      "fornavn": "Mocki",
+      "fnr": "XXXXXXXXXXX",
+      "alder": "1"
+    },
+    "type": "SYSTEMREGISTRERT"
+  },
+  {
+    "faktumId": 635430,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "barn",
+    "value": null,
+    "faktumEgenskaper": [
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "etternavn",
+        "value": "McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "kjonn",
+        "value": "k",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "alder",
+        "value": "2",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "fnr",
+        "value": "XXXXXXXXXXX",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "sammensattnavn",
+        "value": "Lunken McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "mellomnavn",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "land",
+        "value": "NOR",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "fornavn",
+        "value": "Lunken",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635430,
+        "soknadId": 1,
+        "key": "uniqueKey",
+        "value": "fnr",
+        "systemEgenskap": 1
+      }
+    ],
+    "properties": {
+      "mellomnavn": null,
+      "etternavn": "McMockface",
+      "kjonn": "k",
+      "sammensattnavn": "Lunken McMockface",
+      "uniqueKey": "fnr",
+      "land": "NOR",
+      "fnr": "XXXXXXXXXXX",
+      "fornavn": "Lunken",
+      "alder": "2"
+    },
+    "type": "SYSTEMREGISTRERT"
+  },
+  {
+    "faktumId": 635431,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "barn",
+    "value": null,
+    "faktumEgenskaper": [
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "mellomnavn",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "sammensattnavn",
+        "value": "Smekker McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "alder",
+        "value": "3",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "etternavn",
+        "value": "McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "land",
+        "value": "NOR",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "kjonn",
+        "value": "k",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "uniqueKey",
+        "value": "fnr",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "fnr",
+        "value": "XXXXXXXXXXX",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635431,
+        "soknadId": 1,
+        "key": "fornavn",
+        "value": "Smekker",
+        "systemEgenskap": 1
+      }
+    ],
+    "properties": {
+      "mellomnavn": null,
+      "etternavn": "McMockface",
+      "kjonn": "k",
+      "sammensattnavn": "Smekker McMockface",
+      "uniqueKey": "fnr",
+      "land": "NOR",
+      "fnr": "XXXXXXXXXXX",
+      "fornavn": "Smekker",
+      "alder": "3"
+    },
+    "type": "SYSTEMREGISTRERT"
+  },
+  {
+    "faktumId": 635432,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "barn",
+    "value": null,
+    "faktumEgenskaper": [
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "uniqueKey",
+        "value": "fnr",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "fnr",
+        "value": "XXXXXXXXXXX",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "sammensattnavn",
+        "value": "Liten McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "kjonn",
+        "value": "m",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "alder",
+        "value": "8",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "mellomnavn",
+        "value": null,
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "etternavn",
+        "value": "McMockface",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "land",
+        "value": "NOR",
+        "systemEgenskap": 1
+      },
+      {
+        "faktumId": 635432,
+        "soknadId": 1,
+        "key": "fornavn",
+        "value": "Liten",
+        "systemEgenskap": 1
+      }
+    ],
+    "properties": {
+      "mellomnavn": null,
+      "etternavn": "McMockface",
+      "kjonn": "m",
+      "sammensattnavn": "Liten McMockface",
+      "uniqueKey": "fnr",
+      "land": "NOR",
+      "fnr": "XXXXXXXXXXX",
+      "fornavn": "Liten",
+      "alder": "8"
+    },
+    "type": "SYSTEMREGISTRERT"
+  },
+  {
+    "faktumId": 8587733,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "arenakall.har.feilet",
+    "value": false,
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  },
+  {
+    "faktumId": 9053623,
+    "soknadId": 1,
+    "parrentFaktum": null,
+    "key": "trygdogpensjon.utbetalere",
+    "value": "",
+    "faktumEgenskaper": [],
+    "properties": {},
+    "type": "BRUKERREGISTRERT"
+  }
+]

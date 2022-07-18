@@ -1,0 +1,67 @@
+import React, { useState } from "react";
+import { Button, TextField } from "@navikt/ds-react";
+import { useI18n } from "../../../i18n/i18n";
+import Skjema from "../../../components/skjema/Skjema";
+import UtbetalingBolk, { UtbetalingFields } from "./UtbetalingBolk";
+
+const emptyBolk: (
+  bolkId: number
+) => Record<UtbetalingFields | "bolkId", any> = (bolkId) => ({
+  fra: undefined,
+  til: undefined,
+  prosent: undefined,
+  utbetaler: undefined,
+  bolkId,
+});
+
+type BolkWithId = Record<UtbetalingFields | "bolkId", any>;
+
+const UtbetalingerSkjema = () => {
+  const t = useI18n();
+
+  const [nextBolkId, setNextBolkId] = useState(1);
+  const [bolker, setBolker] = useState<BolkWithId[]>([
+    emptyBolk(nextBolkId - 1),
+  ]);
+
+  const [formState, setFormState] = useState({});
+
+  const _onChange =
+    (bolkIndex: number) => (state: Record<UtbetalingFields, any>) => {
+      setFormState({
+        ...formState,
+        [bolkIndex]: state,
+      });
+    };
+
+  const addBolk = () => {
+    setBolker([...bolker, { ...emptyBolk(nextBolkId) }]);
+    setNextBolkId(nextBolkId + 1);
+  };
+  const removeBolk = (index: number) => () => {
+    // TODO: This does not work
+    console.log("Removing index", index);
+    const restBolker = bolker.filter((_, bolkIndex) => bolkIndex !== index);
+    setBolker(restBolker);
+  };
+
+  return (
+    <div>
+      {bolker.map(({ bolkId }, index) => (
+        <UtbetalingBolk
+          key={bolkId}
+          onDelete={removeBolk(index)}
+          onChange={_onChange(index)}
+          deleteable={index !== 0}
+        />
+      ))}
+      <div className="mt-4  flex justify-center">
+        <Button onClick={addBolk}>
+          {t("trygdogpensjon.harsokt.utbetaler.leggtil")}
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export default UtbetalingerSkjema;

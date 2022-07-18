@@ -1,0 +1,25 @@
+export const HelpForDev = () => (
+  <div>
+    <header className="soknad-header">
+      <div data-nav-tittel="skjema.tittel" />
+    </header>
+    <div
+      className="side-innhold"
+      data-panelbelyst
+      data-sidetittel="global.sidetittel"
+      data-ng-cloak
+    >
+      <div data-novalidate data-gruppevaliderer>
+        <h2
+          className="hode hode-advarsel hode-innholdstittel hode-dekorert"
+          data-ng-bind-html="'opprett.soknad.tittel' | cmstekst"
+        />
+        <div
+          className="skjema-infotekst blokk"
+          data-ng-bind-html="'opprett.soknad.informasjon' | cmstekst"
+        />
+        <div data-start-soknad-knapp />
+      </div>
+    </div>
+  </div>
+);

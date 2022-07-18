@@ -1,0 +1,18 @@
+.alder {
+  width: 40px;
+  margin-right: 10px; 
+  text-align: center; 
+}
+
+.legg-til-informasjon {
+  max-width: 400px;
+  margin-left: auto; 
+  margin-right: auto; 
+  text-align: center; 
+}
+
+.endre-slett-kulepunkt {
+	display: inline-block;
+	margin-left: .5rem;
+	margin-right: .5rem; 
+}

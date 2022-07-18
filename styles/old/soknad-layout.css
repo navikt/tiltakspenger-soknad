@@ -1,0 +1,198 @@
+.begrensning {
+	width: 100%; 
+	max-width: 640px; 
+	margin-left: auto; 
+	margin-right: auto; 
+}
+
+.bolk-innhold {
+	padding: 2rem 1rem 1rem 1rem; 
+}
+
+.bolk-tilleggsinfo {
+	padding-top: 2rem;
+	padding-bottom: 2rem;
+	border-top: 1px solid #b7b1a9;
+}
+
+.knapp-leggtil:before {
+	content: "+";
+	padding-right: 0.4rem;
+}
+
+/* -----------------
+	HEADER 
+----------------- */
+
+.soknad-header {
+	border-bottom: 1px solid #b7b1a9;
+	background-color: #efefef;
+	padding: 2rem 1rem;
+}
+
+.soknad-header .stegindikator {
+	margin-top: 2rem; 
+}
+
+.soknad-tittel {
+	/*.mixin-typo-sidetittel(); */
+	margin: 0; 
+	text-align: center; 
+	padding: 0; 
+}
+
+.soknad-accordion .accordion {
+	top: -5px; 
+}
+
+/* -----------------
+	FOOTER
+----------------- */
+
+.sticky-bunn-container {
+	margin-bottom: 2rem; 
+	margin-top: 2rem; 
+}
+
+.sticky-bunn {
+	text-align: center; 
+	padding-top: 1rem;
+	padding-bottom: 1rem;
+}
+.sticky-bunn p {
+	margin-bottom: .5rem;
+}
+
+/* -----------------
+	SPINNER 
+	for appen - vises når siden lastes 
+--------------- */
+
+
+.spinner-app {
+	width: 64px;
+	height: 64px;
+	display: block; 
+	position: absolute;
+	left: 50%; 
+	top: 33%; 
+	/*.mixin-transform(translate(-50%, -100%));*/
+}
+
+.spinner-app img {
+	width: 100%;
+	height: auto;
+}
+
+/* -----------------
+	MEDIA QUERIES
+----------------- */
+
+@media only screen and (min-width: 38.75rem) {
+
+	.soknad-header {
+		padding: 3rem 2rem;
+	}
+
+	.soknad-header .stegindikator {
+		margin-top: 3rem; 
+	}
+
+	.spinner-app {
+		width: 128px;
+		height: 128px; 
+		top: 50%; 
+	}
+
+	.soknad-innhold {
+		padding: 2rem; 
+	}
+
+	.bolk-innhold {
+		padding: 3rem 1rem; 
+	}
+
+	.sticky-bunn.stick {
+		width: 100%;
+		position: fixed;
+		bottom: 0;
+		z-index: 1030;
+		background-color: #efefef;
+		box-shadow: 0 0 .5rem rgba(0, 0, 0, 0.5);
+		/*.mixin-nav-transition(300ms, box-shadow);*/
+	}
+
+}
+
+/* Følgende flyttes til modig-frontend_3 */
+
+.blokk-adskilt {
+	padding-top: 20px; 
+	padding-bottom: 20px;  
+	border-top: 1px solid #b7b1a9;
+	border-bottom: 1px solid #b7b1a9;
+}
+.blokk-adskilt:first-child, + .blokk-adskilt {
+	border-top-width: 0;
+}
+
+.blokk-adskilt:first-child {
+	padding-top: 0;
+}
+
+.blokk-adskilt:last-child {
+	border-bottom-width: 0;
+}
+
+/* -----------------
+	NY DEKOR
+----------------- */
+.vekk {
+    position: absolute;
+    left: -3000px;
+    clip: rect(1px, 1px, 1px, 1px);
+    padding: 0;
+    border: 0;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    z-index: -1000;
+}
+
+html, body {
+    height: 100%;
+}
+  
+body {
+    background-color: #efefef;
+    color: #3e3832;
+    font-family: Arial,sans-serif;
+    line-height: 1.42857143;
+    margin: 0;
+}
+ 
+.pagewrapper{
+    height: auto;
+    min-height: 100%;
+    margin-bottom: -5rem;
+    padding-bottom: 5rem;
+}
+
+.visuallyhidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+.visuallyhidden.focusable:focus, .visuallyhidden.focusable:active {
+    clip: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    position: static;
+    width: auto
+}

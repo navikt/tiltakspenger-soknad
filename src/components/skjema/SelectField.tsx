@@ -1,0 +1,39 @@
+import React, { FC } from "react";
+import { useI18n } from "../../i18n/i18n";
+import { Select } from "@navikt/ds-react";
+import { useFormContext } from "react-hook-form";
+import { RequiredFields, useRequiredFields } from "./requires";
+
+export interface Option {
+  value: string;
+  text: string;
+}
+
+interface Props {
+  options: Option[];
+  label: string;
+  name: string;
+  requireFields?: RequiredFields;
+}
+
+const SelectField: FC<Props> = ({ options, label, name, requireFields }) => {
+  const t = useI18n();
+  const { register, watch } = useFormContext();
+  const shouldRender = useRequiredFields(watch, requireFields);
+
+  if (!shouldRender) {
+    return null;
+  }
+
+  return (
+    <Select {...register(name)} className={"flex-1 mr-6 mb-8"} label={t(label)}>
+      {options.map((option, i) => (
+        <option key={i} value={option.value}>
+          {option.text}
+        </option>
+      ))}
+    </Select>
+  );
+};
+
+export default SelectField;
