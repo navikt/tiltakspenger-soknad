@@ -18,7 +18,7 @@ export const FooterButtons = ({
   const buttonProps = onClick ? { onClick } : { href: nextUrl, as: "a" };
 
   return (
-    <div className="border-t pt-4 border-gray-400 flex flex-col items-center">
+    <div className="border-t pt-4 border-gray-400 flex flex-col">
       <Button {...buttonProps}>{t(buttonTextKey)}</Button>
       {onCancel ? (
         <Button onClick={onCancel} variant="tertiary">

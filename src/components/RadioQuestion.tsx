@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useI18n } from "../i18n/i18n";
 import { useFormContext } from "react-hook-form";
-import { SelfRegisterProps, useRequiredFields } from "./skjema/requires";
+import { SelfRegisterProps } from "./skjema/requires";
 import { RegisterOptions } from "react-hook-form/dist/types/validator";
 import { getFieldError } from "./skjema/getFieldError";
 
@@ -17,31 +17,22 @@ interface Props extends SelfRegisterProps {
   errorKey: string;
 }
 
-const RadioQuestion = ({
-  trueKey,
-  falseKey,
-  name,
-  requireFields,
-  errorKey,
-}: Props) => {
+const RadioQuestion = ({ trueKey, falseKey, name, errorKey }: Props) => {
   const t = useI18n();
   const {
     register,
-    watch,
     formState: { errors },
   } = useFormContext();
-  const shouldRender = useRequiredFields(watch, requireFields);
-  if (!shouldRender) return null;
 
   const error = getFieldError(name, errors);
 
   return (
-    <RadioGroup legend={"test legend"} error={error?.message}>
-      <Radio {...register(name, validator(t(errorKey)))} value={"true"}>
-        {t(trueKey)}
-      </Radio>
+    <RadioGroup error={error?.message}>
       <Radio {...register(name, validator(t(errorKey)))} value={"false"}>
         {t(falseKey)}
+      </Radio>
+      <Radio {...register(name, validator(t(errorKey)))} value={"true"}>
+        {t(trueKey)}
       </Radio>
     </RadioGroup>
   );
@@ -52,12 +43,14 @@ const RadioGroup = ({
   children,
   error,
 }: {
-  legend: string;
+  legend?: string;
   children: ReactElement[];
   error: string | undefined;
 }) => {
+  const navFieldsetStyle =
+    "navds-radio-group navds-radio-group--medium navds-fieldset navds-fieldset--medium ";
   return (
-    <fieldset className="navds-radio-group navds-radio-group--medium navds-fieldset navds-fieldset--medium">
+    <fieldset className={navFieldsetStyle}>
       <legend>{legend}</legend>
       <div className="navds-radio-buttons ">{children}</div>
       {error ? (

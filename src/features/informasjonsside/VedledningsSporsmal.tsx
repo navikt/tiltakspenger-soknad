@@ -1,4 +1,5 @@
 import Skjema from "../../components/skjema/Skjema";
+import AvslagWarning from "./AvslagWarning";
 
 export const VedledningsSporsmal = () => {
   return (
@@ -7,11 +8,46 @@ export const VedledningsSporsmal = () => {
         {
           type: "radio",
           name: "kvp",
-          label: "informasjonsside.kvalifiseringsprogram.tittel",
-          infoText: "informasjonsside.kvalifiseringsprogram.informasjon",
-          trueTextKey: "informasjonsside.kvalifiseringsprogram.ja",
-          falseTextKey: "informasjonsside.kvalifiseringsprogram.nei",
+          label: "informasjonsside.deltarIKvalifiseringsprogram.sporsmal",
+          infoText: "",
+          trueTextKey: "informasjonsside.deltarIKvalifiseringsprogram.false",
+          falseTextKey: "informasjonsside.deltarIKvalifiseringsprogram.true",
           errorKey: "informasjonsside.deltarIKvalifiseringsprogram.feilmelding",
+        },
+        {
+          type: "radio",
+          name: "kvpAvbryt",
+          label: "informasjonsside.soketilleggsstonad.sporsmal",
+          infoText: "deltarIKvalifiseringsprogram.advarsel.informasjon",
+          trueTextKey: "informasjonsside.soketilleggsstonad.ja",
+          falseTextKey: "informasjonsside.soketilleggsstonad.nei",
+          errorKey: "informasjonsside.deltarIKvalifiseringsprogram.feilmelding",
+          requires: {
+            kvp: "true",
+          },
+          indent: true,
+        },
+        {
+          type: "subfield",
+          noWrapper: true,
+          name: "intro",
+          label: "",
+          component: AvslagWarning,
+          requires: {
+            kvp: "true",
+            kvpAvbryt: "true",
+          },
+        },
+        {
+          type: "subfield",
+          noWrapper: true,
+          name: "intro",
+          label: "",
+          component: AvslagWarning,
+          requires: {
+            kvp: "true",
+            kvpAvbryt: "false",
+          },
         },
         {
           type: "radio",
@@ -21,6 +57,21 @@ export const VedledningsSporsmal = () => {
           trueTextKey: "informasjonsside.institusjon.ja",
           falseTextKey: "informasjonsside.institusjon.nei",
           errorKey: "informasjonsside.institusjon.feilmelding",
+        },
+        {
+          type: "radio",
+          name: "instType",
+          label: "informasjonsside.institusjon.ja.hvaslags.sporsmal",
+          infoText: "",
+          trueTextKey:
+            "informasjonsside.institusjon.ja.hvaslags.barneverninstitusjon",
+          falseTextKey:
+            "informasjonsside.institusjon.ja.hvaslags.overgangsbolig",
+          errorKey: "informasjonsside.introprogram.feilmelding",
+          requires: {
+            inst: "true",
+          },
+          indent: true,
         },
         {
           type: "radio",

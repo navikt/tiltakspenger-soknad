@@ -24,25 +24,28 @@ const DateField = ({ requireFields, label, name }: Props) => {
   }
 
   return (
-    <div
-      className={`my-4 mb-8 flex flex-col w-1/2 ${
-        error ? "bg-red-100 p-4 border border-red-300" : ""
-      }`}
-    >
+    <div className="my-4 mb-8 flex flex-col w-1/2">
       <label className="font-bold">{t(label)}</label>
       <input
         {...register(name, dateFieldValidator)}
-        className="p-4 mt-2 border border-black"
+        className={`p-4 mt-2 border border-black  rounded ${
+          error ? "border-red-600 border-2" : ""
+        }`}
         type="date"
       />
       {error ? (
-        <span className="font-bold text-red-700 mt-2">{error?.message}</span>
+        <ul>
+          <li className="list-disc p-1 ml-5 text-red-700 mt-2">
+            {error?.message}
+          </li>
+        </ul>
       ) : null}
     </div>
   );
 };
 
-const validDate = (v: any): boolean => v instanceof Date && !isNaN(v);
+const validDate = (v: any): boolean =>
+  v instanceof Date && !isNaN(v as unknown as number);
 
 export const dateFieldValidator: RegisterOptions = {
   required: "This is required",

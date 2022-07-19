@@ -4,14 +4,30 @@ import { useFormContext } from "react-hook-form";
 
 interface Props extends SelfRegisterProps {
   children: ReactElement;
+  noWrapper: boolean;
 }
 
-const Subfield = ({ children }: Props) => {
+const Subfield = ({ children, noWrapper }: Props) => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  if (noWrapper) {
+    return (
+      <div className="overflow-hidden -mt-6">
+        <div
+          className={
+            "relative transition ease-in-out " +
+            (isMounted ? "" : preMountClass)
+          }
+        >
+          {children}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="overflow-hidden pt-4">

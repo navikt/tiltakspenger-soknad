@@ -34,9 +34,7 @@ const TextField: FC<InternalProps> = ({
   }
 
   return (
-    <div
-      className={`mb-8 ${error ? "bg-red-100 border border-red-300 p-4" : ""}`}
-    >
+    <div className={`mb-8`}>
       <DSTextField
         {...register(name, validator)}
         label={t(label)}

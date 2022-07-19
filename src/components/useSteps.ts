@@ -1,24 +1,36 @@
 import { useRouter } from "next/router";
+import { Routes, soknadIdParam, useRoutes } from "./useRoutes";
 import { useSoknadId } from "./useSoknadId";
 
 export const useSteps = () => {
   const router = useRouter();
-  const page = router.asPath.split("/").at(4);
-  const soknadId = useSoknadId();
-  const baseUrl = `/soknadtiltakspenger/app/${soknadId}`;
-  const currentStep = steps.findIndex((step) => step.name === page);
+  const currentPath = router.asPath || "/404";
+  const soknadId = useSoknadId() || "empty";
+
+  const routes = useRoutes();
+  const steps = getSteps(routes);
+  const currentStep = steps.findIndex((step) =>
+    step.path.startsWith(currentPath)
+  );
+
+  const nextStep = steps[currentStep + 1];
 
   return {
     currentStep,
-    nextStep: currentStep + 1,
-    nextUrl: `${baseUrl}/${steps[currentStep]?.name}`,
     steps,
+    nextStep:
+      currentStep !== -1
+        ? {
+            path: nextStep.path.replace(soknadIdParam, soknadId),
+            index: currentStep + 1,
+          }
+        : undefined,
   };
 };
 
-const steps = [
-  { name: "veiledning" },
-  { name: "skjema" },
-  { name: "vedlegg" },
-  { name: "sendinn" },
+const getSteps = (routes: Routes) => [
+  { name: "veiledning", path: routes.veiledning },
+  { name: "skjema", path: routes.skjema.tiltak },
+  { name: "vedlegg", path: routes.vedlegg },
+  { name: "sendinn", path: routes.sendinn },
 ];

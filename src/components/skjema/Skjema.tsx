@@ -28,9 +28,11 @@ interface RadioField<T extends string> extends BaseField<T> {
   falseTextKey: string;
   infoText?: string;
   errorKey: string;
+  indent?: boolean;
 }
 interface SubfieldType<T extends string> extends BaseField<T> {
   type: "subfield";
+  noWrapper: boolean;
   component: React.FC<{ children: any }>;
 }
 
@@ -46,7 +48,7 @@ interface Props<T extends string> {
 }
 
 const Skjema = function <T extends string>({ fields }: Props<T>) {
-  console.log("Render skjema");
+  // console.log("Render skjema");
   return (
     <>
       {fields /*
@@ -85,6 +87,7 @@ const Skjema = function <T extends string>({ fields }: Props<T>) {
           if (field.type === "subfield") {
             return (
               <Subfield
+                noWrapper={field.noWrapper}
                 requireFields={field.requires}
                 label={field.label}
                 name={field.name}
@@ -97,6 +100,7 @@ const Skjema = function <T extends string>({ fields }: Props<T>) {
           if (field.type === "radio") {
             return (
               <Question
+                indent={field.indent}
                 infoTextKey={field.infoText}
                 name={field.name}
                 label={field.label}
