@@ -16,6 +16,7 @@ Funksjonalitet som skal implementeres
 - [ ] Last opp vedlegg (ligger idag i backend)
 - [ ] Send inn
 - [ ] Annet
+  - [ ] Slette søknad 
   - [ ] Fjerne ubrukt kode 
   - [ ] Sette opp pipelines
   - [ ] Tilgang til backend (sendsoknad-boot) i test (og prod)
