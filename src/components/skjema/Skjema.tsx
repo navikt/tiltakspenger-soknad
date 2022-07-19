@@ -26,6 +26,8 @@ interface RadioField<T extends string> extends BaseField<T> {
   type: "radio";
   trueTextKey: string;
   falseTextKey: string;
+  infoText?: string;
+  errorKey: string;
 }
 interface SubfieldType<T extends string> extends BaseField<T> {
   type: "subfield";
@@ -95,6 +97,7 @@ const Skjema = function <T extends string>({ fields }: Props<T>) {
           if (field.type === "radio") {
             return (
               <Question
+                infoTextKey={field.infoText}
                 name={field.name}
                 label={field.label}
                 requireFields={field.requires}
@@ -102,6 +105,7 @@ const Skjema = function <T extends string>({ fields }: Props<T>) {
                 title={field.label}
                 trueTextKey={field.trueTextKey}
                 falseTextKey={field.falseTextKey}
+                errorKey={field.errorKey}
               />
             );
           }

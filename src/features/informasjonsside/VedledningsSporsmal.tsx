@@ -1,37 +1,37 @@
-import Question from "../../components/Question";
+import Skjema from "../../components/skjema/Skjema";
 
 export const VedledningsSporsmal = () => {
   return (
-    <fieldset className="skjema-fieldset blokk">
-      <Question
-        name={"veiledning.kvp"}
-        label={"informasjonsside.kvalifiseringsprogram.tittel"}
-        infoTextKey={"informasjonsside.kvalifiseringsprogram.informasjon"}
-        title={"informasjonsside.kvalifiseringsprogram.tittel"}
-        trueTextKey={"informasjonsside.kvalifiseringsprogram.ja"}
-        falseTextKey={"informasjonsside.kvalifiseringsprogram.nei"}
-      />
-      <Question
-        name={"veiledning.inst"}
-        label={"informasjonsside.institusjon.tittel"}
-        infoTextKey={"informasjonsside.institusjon.informasjon"}
-        title={"informasjonsside.institusjon.tittel"}
-        trueTextKey={"informasjonsside.institusjon.ja"}
-        falseTextKey={"informasjonsside.institusjon.nei"}
-      />
-      <div
-        className="blokk"
-        data-ng-if="informasjonssideController.oppfyllerIntroprogramKriterier()"
-      >
-        <Question
-          name={"veiledning.intro"}
-          label={"informasjonsside.introprogram.overskrift"}
-          infoTextKey={"informasjonsside.introprogram.tekst"}
-          title={"informasjonsside.introprogram.overskrift"}
-          trueTextKey={"informasjonsside.introprogram.false"}
-          falseTextKey={"informasjonsside.introprogram.true"}
-        />
-      </div>
-    </fieldset>
+    <Skjema
+      fields={[
+        {
+          type: "radio",
+          name: "kvp",
+          label: "informasjonsside.kvalifiseringsprogram.tittel",
+          infoText: "informasjonsside.kvalifiseringsprogram.informasjon",
+          trueTextKey: "informasjonsside.kvalifiseringsprogram.ja",
+          falseTextKey: "informasjonsside.kvalifiseringsprogram.nei",
+          errorKey: "informasjonsside.deltarIKvalifiseringsprogram.feilmelding",
+        },
+        {
+          type: "radio",
+          name: "inst",
+          label: "informasjonsside.institusjon.tittel",
+          infoText: "informasjonsside.institusjon.informasjon",
+          trueTextKey: "informasjonsside.institusjon.ja",
+          falseTextKey: "informasjonsside.institusjon.nei",
+          errorKey: "informasjonsside.institusjon.feilmelding",
+        },
+        {
+          type: "radio",
+          name: "intro",
+          label: "informasjonsside.introprogram.overskrift",
+          infoText: "informasjonsside.introprogram.tekst",
+          trueTextKey: "informasjonsside.introprogram.false",
+          falseTextKey: "informasjonsside.introprogram.true",
+          errorKey: "informasjonsside.introprogram.feilmelding",
+        },
+      ]}
+    />
   );
 };

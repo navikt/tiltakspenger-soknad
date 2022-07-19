@@ -1,9 +1,16 @@
 import React, { FC, memo } from "react";
 
 import { TextField as DSTextField } from "@navikt/ds-react";
-import { useFormContext, UseFormRegister } from "react-hook-form";
+import {
+  DeepRequired,
+  FieldErrorsImpl,
+  useFormContext,
+  UseFormRegister,
+  useFormState,
+} from "react-hook-form";
 import { SelfRegisterProps, useRequiredFields } from "./requires";
 import { useI18n } from "../../i18n/i18n";
+import { getFieldError } from "./getFieldError";
 
 interface ExposedProps extends SelfRegisterProps {}
 
@@ -19,14 +26,23 @@ const TextField: FC<InternalProps> = ({
   register,
 }) => {
   const t = useI18n();
+  const { errors } = useFormState({ name });
+  const error = getFieldError(name, errors);
 
   if (!shouldRender) {
     return null;
   }
 
   return (
-    <div className="mb-8">
-      <DSTextField {...register(name)} label={t(label)} size="medium" />
+    <div
+      className={`mb-8 ${error ? "bg-red-100 border border-red-300 p-4" : ""}`}
+    >
+      <DSTextField
+        {...register(name, validator)}
+        label={t(label)}
+        size="medium"
+        error={error?.message}
+      />
     </div>
   );
 };
@@ -34,7 +50,7 @@ const TextField: FC<InternalProps> = ({
 const propsAreEqual = (prevProps: InternalProps, nextProps: InternalProps) => {
   if (
     prevProps.name !== nextProps.name ||
-    prevProps.label !== prevProps.label
+    prevProps.label !== nextProps.label
   ) {
     console.log("Name or label changed");
     return false;
@@ -51,6 +67,7 @@ const MemoedTextField = memo(TextField, propsAreEqual);
 
 const Wrapper = ({ name, label, requireFields }: ExposedProps) => {
   const { watch, register } = useFormContext();
+
   const shouldRender = useRequiredFields(watch, requireFields);
   return (
     <MemoedTextField
@@ -60,6 +77,10 @@ const Wrapper = ({ name, label, requireFields }: ExposedProps) => {
       register={register}
     />
   );
+};
+
+const validator = {
+  required: "Field is required",
 };
 
 export default Wrapper;

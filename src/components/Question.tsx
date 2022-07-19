@@ -9,6 +9,7 @@ interface Props extends SelfRegisterProps {
   infoTextKey?: string;
   trueTextKey: string;
   falseTextKey: string;
+  errorKey: string;
 }
 
 const Question = ({
@@ -19,6 +20,7 @@ const Question = ({
   label,
   requireFields,
   name,
+  errorKey,
 }: Props) => {
   const t = useI18n();
 
@@ -32,6 +34,7 @@ const Question = ({
         requireFields={requireFields}
         trueKey={trueTextKey}
         falseKey={falseTextKey}
+        errorKey={errorKey}
       />
     </div>
   );

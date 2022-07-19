@@ -9,44 +9,60 @@ import { useI18n } from "../i18n/i18n";
 import { useFormContext } from "react-hook-form";
 import { SelfRegisterProps, useRequiredFields } from "./skjema/requires";
 import { RegisterOptions } from "react-hook-form/dist/types/validator";
+import { getFieldError } from "./skjema/getFieldError";
 
 interface Props extends SelfRegisterProps {
   trueKey: string;
   falseKey: string;
+  errorKey: string;
 }
 
-const RadioQuestion = ({ trueKey, falseKey, name, requireFields }: Props) => {
+const RadioQuestion = ({
+  trueKey,
+  falseKey,
+  name,
+  requireFields,
+  errorKey,
+}: Props) => {
   const t = useI18n();
-
-  const { register, watch } = useFormContext();
+  const {
+    register,
+    watch,
+    formState: { errors },
+  } = useFormContext();
   const shouldRender = useRequiredFields(watch, requireFields);
-  if (!shouldRender) {
-    return null;
-  }
+  if (!shouldRender) return null;
+
+  const error = getFieldError(name, errors);
 
   return (
-    <RadioGroupB legend={"test legend"}>
-      <RadioB {...register(name, validator)} value={"true"}>
+    <RadioGroup legend={"test legend"} error={error?.message}>
+      <Radio {...register(name, validator(t(errorKey)))} value={"true"}>
         {t(trueKey)}
-      </RadioB>
-      <RadioB {...register(name, validator)} value={"false"}>
+      </Radio>
+      <Radio {...register(name, validator(t(errorKey)))} value={"false"}>
         {t(falseKey)}
-      </RadioB>
-    </RadioGroupB>
+      </Radio>
+    </RadioGroup>
   );
 };
 
-const RadioGroupB = ({
+const RadioGroup = ({
   legend,
   children,
+  error,
 }: {
   legend: string;
   children: ReactElement[];
+  error: string | undefined;
 }) => {
   return (
     <fieldset className="navds-radio-group navds-radio-group--medium navds-fieldset navds-fieldset--medium">
       <legend>{legend}</legend>
-      <div className="navds-radio-buttons">{children}</div>
+      <div className="navds-radio-buttons ">{children}</div>
+      {error ? (
+        <span className="navds-error-message navds-label">{error}</span>
+      ) : null}
     </fieldset>
   );
 };
@@ -56,7 +72,9 @@ type RadioBProps = HTMLProps<HTMLInputElement> & {
   value: string;
 };
 
-const RadioBWithoutForwardRef = (
+/* Radio component from Design-system does not seem to work properly with ref
+ * , reuses some of the css */
+const RadioWithoutForwardRef = (
   props: RadioBProps,
   ref: ForwardedRef<HTMLInputElement>
 ) => {
@@ -79,8 +97,10 @@ const RadioBWithoutForwardRef = (
   );
 };
 
-const RadioB = forwardRef(RadioBWithoutForwardRef);
+const Radio = forwardRef(RadioWithoutForwardRef);
 
-const validator: RegisterOptions = {};
+const validator: (errorKey: string) => RegisterOptions = (errorKey) => ({
+  required: errorKey,
+});
 
 export default RadioQuestion;

@@ -34,7 +34,6 @@ export const useRequiredFields = (
 ) => {
   if (!requireFields) return true;
   const watched = watchFields(watch, requireFields);
-  console.log({ watched });
   const shouldRender = conditionsAreMet(watched, requireFields);
   return shouldRender;
 };
