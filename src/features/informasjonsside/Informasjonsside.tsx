@@ -8,12 +8,13 @@ import {
   SubmitHandler,
   SubmitErrorHandler,
 } from "react-hook-form";
-import { Button } from "@navikt/ds-react";
-import Link from "next/link";
 import { useRoutes } from "../../components/useRoutes";
+import FooterButtons from "../../components/FooterButtons";
+import { useRouter } from "next/router";
 
 export const Informasjonsside = () => {
   const t = useI18n();
+  const router = useRouter();
   const {
     skjema: { tiltak },
   } = useRoutes();
@@ -21,17 +22,17 @@ export const Informasjonsside = () => {
   const form = useForm();
 
   const onSubmit: SubmitHandler<any> = (values, e) => {
-    e.preventDefault();
+    e?.preventDefault();
+    router.push(tiltak);
   };
   const onError: SubmitErrorHandler<any> = () => {};
 
   return (
     <form action="post" onSubmit={form.handleSubmit(onSubmit, onError)}>
       <Header />
-      <div className="side-innhold" data-sidetittel="global.sidetittel">
+      <div>
         <div className="bg-white p-8 flex justify-center">
           <div className="max-w-2xl">
-            <div data-feilliste />
             <h2 className="font-bold text-2xl text-center mb-8">
               {t("informasjonsside.tittel")}
             </h2>
@@ -42,14 +43,7 @@ export const Informasjonsside = () => {
             <FormProvider {...form}>
               <VedledningsSporsmal />
             </FormProvider>
-            <div className="border-t pt-4 border-gray-400 flex items-start">
-              <Link href={tiltak}>
-                <Button as={"a"}>{t("neste")}</Button>
-              </Link>
-              <Button onClick={() => {}} variant="tertiary">
-                Avbryt
-              </Button>
-            </div>
+            <FooterButtons submit />
           </div>
         </div>
       </div>

@@ -4,7 +4,7 @@ import { Heading } from "@navikt/ds-react";
 import React from "react";
 import UtbetalingerSkjema from "./UtbetalingerSkjema";
 
-export const TrygdOgPensjon = () => {
+export const Utbetalinger = () => {
   const t = useI18n();
 
   return (
@@ -17,19 +17,21 @@ export const TrygdOgPensjon = () => {
         fields={[
           {
             type: "radio",
-            name: "andreUtbetalinger",
+            name: "harUtbetalinger",
             label: "trygdogpensjon.sporsmal",
             trueTextKey: "trygdogpensjon.ja",
             falseTextKey: "trygdogpensjon.nei",
+            errorKey: "trygdogpensjon.feilmelding",
           },
           {
             type: "subfield",
-            name: "subUtbetaling",
+            name: "utbetalinger",
             label: "",
             component: UtbetalingerSkjema,
             requires: {
-              andreUtbetalinger: "true",
+              harUtbetalinger: "true",
             },
+            errorKey: "",
           },
         ]}
       />

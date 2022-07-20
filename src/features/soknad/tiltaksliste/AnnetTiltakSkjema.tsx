@@ -5,7 +5,6 @@ import { Option } from "../../../components/skjema/SelectField";
 import { useMemo } from "react";
 
 export const AnnetTiltakSkjema = () => {
-  console.log("Render AnnetTiltakSkjema");
   const t = useI18n();
   const tekstDag = t("tiltaksliste.antalldager.dag");
   const teskstDager = t("tiltaksliste.antalldager.dager");
@@ -19,7 +18,6 @@ export const AnnetTiltakSkjema = () => {
     return fields(typerOptions, dagerOptions);
   }, []);
 
-  console.log("Render AnnetTiltakSkjema");
   return <Skjema fields={memoFields} />;
 
   return (

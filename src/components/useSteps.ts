@@ -21,7 +21,7 @@ export const useSteps = () => {
     nextStep:
       currentStep !== -1
         ? {
-            path: nextStep.path.replace(soknadIdParam, soknadId),
+            path: nextStep?.path.replace(soknadIdParam, soknadId),
             index: currentStep + 1,
           }
         : undefined,

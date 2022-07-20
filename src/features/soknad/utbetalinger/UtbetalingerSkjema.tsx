@@ -24,16 +24,6 @@ const UtbetalingerSkjema = () => {
     emptyBolk(nextBolkId - 1),
   ]);
 
-  const [formState, setFormState] = useState({});
-
-  const _onChange =
-    (bolkIndex: number) => (state: Record<UtbetalingFields, any>) => {
-      setFormState({
-        ...formState,
-        [bolkIndex]: state,
-      });
-    };
-
   const addBolk = () => {
     setBolker([...bolker, { ...emptyBolk(nextBolkId) }]);
     setNextBolkId(nextBolkId + 1);
@@ -50,13 +40,13 @@ const UtbetalingerSkjema = () => {
       {bolker.map(({ bolkId }, index) => (
         <UtbetalingBolk
           key={bolkId}
+          name={`utbetalinger.${bolkId}`}
           onDelete={removeBolk(index)}
-          onChange={_onChange(index)}
           deleteable={index !== 0}
         />
       ))}
       <div className="mt-4  flex justify-center">
-        <Button onClick={addBolk}>
+        <Button type="button" onClick={addBolk}>
           {t("trygdogpensjon.harsokt.utbetaler.leggtil")}
         </Button>
       </div>

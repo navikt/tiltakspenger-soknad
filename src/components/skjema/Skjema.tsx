@@ -3,8 +3,9 @@ import Question from "../Question";
 import SelectField, { Option } from "./SelectField";
 import Subfield from "./Subfield";
 import DateField from "./DateField";
-import TextField from "./ TextField";
+import TextField, { InputType } from "./ TextField";
 import { RequiredFields } from "./requires";
+import FraTilField from "./FraTilField";
 
 interface BaseField<T extends string> {
   label: string;
@@ -18,10 +19,16 @@ interface SelectField<T extends string> extends BaseField<T> {
 }
 interface TextField<T extends string> extends BaseField<T> {
   type: "text";
+  inputType?: InputType;
 }
 interface DateField<T extends string> extends BaseField<T> {
   type: "date";
 }
+type FraTilField<T extends string> = Omit<BaseField<T>, "label"> & {
+  type: "fratil";
+  fraLabel: string;
+  tilLabel: string;
+};
 interface RadioField<T extends string> extends BaseField<T> {
   type: "radio";
   trueTextKey: string;
@@ -41,7 +48,8 @@ export type Field<T extends string> =
   | TextField<T>
   | DateField<T>
   | RadioField<T>
-  | SubfieldType<T>;
+  | SubfieldType<T>
+  | FraTilField<T>;
 
 interface Props<T extends string> {
   fields: Field<T>[];
@@ -78,11 +86,22 @@ const Skjema = function <T extends string>({ fields }: Props<T>) {
                 requireFields={field.requires}
                 key={i}
                 name={field.name}
+                type={field.inputType}
               />
             );
           }
           if (field.type === "date") {
             return <DateField name={field.name} key={i} label={field.label} />;
+          }
+          if (field.type === "fratil") {
+            return (
+              <FraTilField
+                name={field.name}
+                key={i}
+                labelTil={field.tilLabel}
+                labelFra={field.fraLabel}
+              />
+            );
           }
           if (field.type === "subfield") {
             return (

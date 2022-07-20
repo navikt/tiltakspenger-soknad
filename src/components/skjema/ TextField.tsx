@@ -12,18 +12,23 @@ import { SelfRegisterProps, useRequiredFields } from "./requires";
 import { useI18n } from "../../i18n/i18n";
 import { getFieldError } from "./getFieldError";
 
-interface ExposedProps extends SelfRegisterProps {}
+interface ExposedProps extends SelfRegisterProps {
+  type?: InputType | undefined;
+}
 
 interface InternalProps extends ExposedProps {
   register: UseFormRegister<any>;
   shouldRender: boolean;
 }
 
+export type InputType = "number" | "text";
+
 const TextField: FC<InternalProps> = ({
   label,
   name,
   shouldRender,
   register,
+  type,
 }) => {
   const t = useI18n();
   const { errors } = useFormState({ name });
@@ -33,13 +38,17 @@ const TextField: FC<InternalProps> = ({
     return null;
   }
 
+  const widthStyle = type === "number" ? "w-42" : "flex-1";
+
   return (
-    <div className={`mb-8`}>
+    <div className={`mb-8 flex`}>
       <DSTextField
+        className={widthStyle}
         {...register(name, validator)}
         label={t(label)}
         size="medium"
         error={error?.message}
+        type={type}
       />
     </div>
   );
@@ -63,7 +72,7 @@ const propsAreEqual = (prevProps: InternalProps, nextProps: InternalProps) => {
 };
 const MemoedTextField = memo(TextField, propsAreEqual);
 
-const Wrapper = ({ name, label, requireFields }: ExposedProps) => {
+const Wrapper = ({ name, label, requireFields, type }: ExposedProps) => {
   const { watch, register } = useFormContext();
 
   const shouldRender = useRequiredFields(watch, requireFields);
@@ -73,6 +82,7 @@ const Wrapper = ({ name, label, requireFields }: ExposedProps) => {
       label={label}
       shouldRender={shouldRender}
       register={register}
+      type={type}
     />
   );
 };

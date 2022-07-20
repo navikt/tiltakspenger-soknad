@@ -19,12 +19,8 @@ const DateField = ({ requireFields, label, name }: Props) => {
     return null;
   }
 
-  if (error) {
-    console.log(error);
-  }
-
   return (
-    <div className="my-4 mb-8 flex flex-col w-1/2">
+    <div className="mb-8 flex flex-col w-44">
       <label className="font-bold">{t(label)}</label>
       <input
         {...register(name, dateFieldValidator)}
@@ -53,9 +49,7 @@ export const dateFieldValidator: RegisterOptions = {
   validate: {
     check: (value) => {
       if (!validDate(value)) return "En dato må velges";
-      return value;
-      return "This field is required";
-      console.log(value);
+      return undefined;
     },
   },
 };

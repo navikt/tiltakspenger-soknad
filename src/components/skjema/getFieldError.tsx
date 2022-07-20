@@ -12,7 +12,7 @@ export const getFieldError = function <FieldValues>(
   if (tail.length === 0) return errors[first] as FieldError;
 
   return getFieldError(
-    tail.join(""),
+    tail.join("."),
     errors[first] as FieldErrorsImpl<DeepRequired<FieldValues>>
   );
 };

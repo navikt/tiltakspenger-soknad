@@ -5,13 +5,13 @@ import { useI18n } from "../../../i18n/i18n";
 
 interface Props {
   onDelete: () => void;
-  onChange: (formState: Record<UtbetalingFields, any>) => void;
   deleteable?: boolean;
+  name: string;
 }
 
 export type UtbetalingFields = "utbetaler" | "prosent" | "fra" | "til";
 
-const UtbetalingBolk = ({ onChange, onDelete, deleteable = true }: Props) => {
+const UtbetalingBolk = ({ name, onDelete, deleteable = true }: Props) => {
   const t = useI18n();
 
   return (
@@ -19,24 +19,21 @@ const UtbetalingBolk = ({ onChange, onDelete, deleteable = true }: Props) => {
       <Skjema
         fields={[
           {
-            name: "utbetaler",
+            name: `${name}.utbetaler`,
             type: "text",
             label: "trygdogpensjon.harsokt.utbetaler",
           },
           {
-            name: "prosent",
+            name: `${name}.prosent`,
             type: "text",
+            inputType: "number",
             label: "trygdogpensjon.harsokt.prosentandel",
           },
           {
-            name: "fra",
-            type: "date",
-            label: "trygdogpensjon.harsokt.dato.fra",
-          },
-          {
-            name: "til",
-            type: "date",
-            label: "trygdogpensjon.harsokt.dato.til",
+            type: "fratil",
+            name: name,
+            fraLabel: "trygdogpensjon.harsokt.dato.fra",
+            tilLabel: "trygdogpensjon.harsokt.dato.til",
           },
         ]}
       />

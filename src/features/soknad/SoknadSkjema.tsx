@@ -11,6 +11,7 @@ import {
   SubmitErrorHandler,
   UseFormReturn,
 } from "react-hook-form";
+import FooterButtons from "../../components/FooterButtons";
 
 interface Props {
   children: ReactNode;
@@ -50,6 +51,8 @@ const SoknadSkjemaRaw: FC<Props> = ({
     await router.push(nextStep.path);
   };
 
+  // TODO: Feature, indicate validated tabs
+
   return (
     <div>
       <Header />
@@ -60,7 +63,6 @@ const SoknadSkjemaRaw: FC<Props> = ({
             <Button
               variant="secondary"
               onClick={methods.handleSubmit(onSubmit, onError)}
-              data-ng-click="validerOgFinnFeilmeldinger(gaTilVedleggHvisValidert)"
             >
               {t("skjema.ferdig")}
             </Button>
@@ -71,54 +73,7 @@ const SoknadSkjemaRaw: FC<Props> = ({
           onSubmit={methods.handleSubmit(onSubmit, onError)}
         >
           {children}
-
-          <div
-            className="tiltakspenger"
-            data-ng-form="tiltakspengerForm"
-            data-novalidate
-            data-ng-cloak
-            data-tab-autoscroll
-          >
-            <div data-skjemavaliderer>
-              <div data-fokus-lukket-modalside data-apne-bolker>
-                <div data-sticky-feilmelding />
-                <div data-sidetittel="global.sidetittel">
-                  <div
-                    className="soknad-accordion"
-                    data-accordion
-                    data-close-others="false"
-                  >
-                    <div
-                      data-ng-repeat="bolk in bolker"
-                      className="bolk js-bolk"
-                      data-bolkvaliderer
-                      data-bolk="bolk"
-                      data-ng-form="{{bolk.id}}Form"
-                      data-ng-class="{validert : bolk.validert === 'true', 'js-er-validert': bolk.validert === 'true'}"
-                    >
-                      <div
-                        data-accordion-group
-                        id="{{bolk.id}}"
-                        data-is-open="bolk.apen"
-                        data-validert="bolk.validert"
-                      >
-                        {t("{{ bolk.tittel")}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {!!nextStep ? (
-            <Button type="submit">
-              Neste
-              {/*<FooterButtons
-              submit
-              onClick={methods.handleSubmit(onSubmit, onError)}
-            />*/}
-            </Button>
-          ) : undefined}
+          <FooterButtons submit />
         </form>
       </div>
       <div data-sticky>
