@@ -3,17 +3,18 @@ import { useSoknadId } from "./useSoknadId";
 const baseUrl = "/soknadtiltakspenger/app";
 
 export const soknadIdParam = "[soknadId]";
+const skjemaRoute = `${baseUrl}/${soknadIdParam}/skjema`;
 
 export const routes = {
   veiledning: `${baseUrl}/${soknadIdParam}/veiledning`,
   sendinn: `${baseUrl}/${soknadIdParam}/sendinn`,
   vedlegg: `${baseUrl}/${soknadIdParam}/vedlegg`,
   skjema: {
-    tiltak: `${baseUrl}/${soknadIdParam}/skjema/tiltak`,
-    utbetalinger: `${baseUrl}/${soknadIdParam}/skjema/utbetalinger`,
-    barnetillegg: `${baseUrl}/${soknadIdParam}/skjema/barnetillegg`,
-    personalia: `${baseUrl}/${soknadIdParam}/skjema/personalia`,
-    tilleggsopplysninger: `${baseUrl}/${soknadIdParam}/skjema/tilleggsopplysninger`,
+    tiltak: `${skjemaRoute}/tiltak`,
+    utbetalinger: `${skjemaRoute}/utbetalinger`,
+    barnetillegg: `${skjemaRoute}/barnetillegg`,
+    personalia: `${skjemaRoute}/personalia`,
+    tilleggsopplysninger: `${skjemaRoute}/tilleggsopplysninger`,
   },
 };
 

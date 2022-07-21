@@ -4,6 +4,11 @@ import { useI18n } from "../../i18n/i18n";
 import { SelfRegisterProps, useRequiredFields } from "./requires";
 import { getFieldError } from "./getFieldError";
 import { RegisterOptions } from "react-hook-form/dist/types/validator";
+import { BaseField } from "./Skjema";
+
+export interface DateFieldType<T extends string> extends BaseField<T> {
+  type: "date";
+}
 
 interface Props extends SelfRegisterProps {}
 

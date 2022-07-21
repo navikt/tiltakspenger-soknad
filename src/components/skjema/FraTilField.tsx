@@ -1,5 +1,12 @@
 import React from "react";
 import DateField from "./DateField";
+import { BaseField } from "./Skjema";
+
+export type FraTilFieldType<T extends string> = Omit<BaseField<T>, "label"> & {
+  type: "fratil";
+  fraLabel: string;
+  tilLabel: string;
+};
 
 interface Props {
   name: string;

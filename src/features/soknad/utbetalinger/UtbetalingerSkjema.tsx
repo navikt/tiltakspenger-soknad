@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@navikt/ds-react";
+import { Button } from "@navikt/ds-react";
 import { useI18n } from "../../../i18n/i18n";
-import Skjema from "../../../components/skjema/Skjema";
 import UtbetalingBolk, { UtbetalingFields } from "./UtbetalingBolk";
+import VedleggInfoBoks from "../tiltaksliste/VedleggInfoBoks";
 
 const emptyBolk: (
   bolkId: number
@@ -45,11 +45,12 @@ const UtbetalingerSkjema = () => {
           deleteable={index !== 0}
         />
       ))}
-      <div className="mt-4  flex justify-center">
+      <div className="my-4 flex justify-center">
         <Button type="button" onClick={addBolk}>
           {t("trygdogpensjon.harsokt.utbetaler.leggtil")}
         </Button>
       </div>
+      <VedleggInfoBoks text={"trygdogpensjon.vedlegg.andreutbetalinger"} />
     </div>
   );
 };

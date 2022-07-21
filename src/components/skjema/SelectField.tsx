@@ -3,6 +3,12 @@ import { useI18n } from "../../i18n/i18n";
 import { Select } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
 import { RequiredFields, useRequiredFields } from "./requires";
+import { BaseField } from "./Skjema";
+
+export interface SelectFieldType<T extends string> extends BaseField<T> {
+  type: "select";
+  options: Option[];
+}
 
 export interface Option {
   value: string;

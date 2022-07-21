@@ -1,8 +1,8 @@
 import { useI18n } from "../../i18n/i18n";
 import Header from "../../components/Header";
-import { FC, memo, ReactNode, useCallback } from "react";
+import { FC, memo, ReactNode, useCallback, useState } from "react";
 import { Button } from "@navikt/ds-react";
-import SideTabs, { useSkjemaSteps } from "./SideTabs";
+import SideTabs from "./SideTabs";
 import { NextRouter, useRouter } from "next/router";
 import {
   useForm,
@@ -12,6 +12,11 @@ import {
   UseFormReturn,
 } from "react-hook-form";
 import FooterButtons from "../../components/FooterButtons";
+import { useSkjemaSteps } from "../../components/skjema/useSkjemaSteps";
+import {
+  getFormValues,
+  setFormValues,
+} from "../../components/skjema/useFormState";
 
 interface Props {
   children: ReactNode;
@@ -28,12 +33,16 @@ const SoknadSkjemaRaw: FC<Props> = ({
   nextStep,
   methods,
 }) => {
+  const { currentStep } = useSkjemaSteps();
+
   const onSubmit: SubmitHandler<Record<string, string>> = useCallback(
-    (thing, event) => {
+    (values, event) => {
       event?.preventDefault();
       console.log("=== formState ===");
-      console.log("fields", thing);
-      console.log("errors", methods.formState.errors);
+      console.log("fields", values);
+      const existingFormValues = getFormValues();
+      setFormValues({ ...existingFormValues, [currentStep.name]: values });
+      nextForm();
     },
     [methods.handleSubmit]
   );
@@ -44,14 +53,13 @@ const SoknadSkjemaRaw: FC<Props> = ({
   }, []);
 
   const nextForm = async () => {
-    // TODO: Validate form
-    // TODO: Save form i state?
-
     if (!nextStep) return;
     await router.push(nextStep.path);
   };
 
   // TODO: Feature, indicate validated tabs
+
+  // TODO: Keep all form values
 
   return (
     <div>
@@ -109,8 +117,11 @@ const MemoSoknadSkjema = memo(SoknadSkjemaRaw, areEqual);
 const Wrapper = ({ children }: { children: ReactNode }) => {
   const t = useI18n();
   const router: NextRouter = useRouter();
-  const { nextStep } = useSkjemaSteps();
-  const methods = useForm();
+  const { nextStep, currentStep } = useSkjemaSteps();
+  const formValues = getFormValues();
+  const methods = useForm({
+    defaultValues: formValues[currentStep.name],
+  });
 
   return (
     <FormProvider {...methods}>

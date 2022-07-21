@@ -1,6 +1,13 @@
 import React, { ReactElement, useEffect, useState } from "react";
 import { SelfRegisterProps, useRequiredFields } from "./requires";
 import { useFormContext } from "react-hook-form";
+import { BaseField } from "./Skjema";
+
+export interface SubfieldType<T extends string> extends BaseField<T> {
+  type: "subfield";
+  noWrapper?: boolean;
+  component: React.FC<{ children: any }>;
+}
 
 interface Props extends SelfRegisterProps {
   children: ReactElement;
@@ -33,7 +40,7 @@ const Subfield = ({ children, noWrapper }: Props) => {
     <div className="overflow-hidden pt-4">
       <div
         className={
-          "bg-stone-100 p-4 border border-gray-400 relative transition ease-in-out " +
+          "bg-stone-100 p-4 border rounded border-gray-400 relative transition ease-in-out " +
           (isMounted ? "" : preMountClass)
         }
       >

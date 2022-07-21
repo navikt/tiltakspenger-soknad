@@ -11,6 +11,12 @@ import {
 import { SelfRegisterProps, useRequiredFields } from "./requires";
 import { useI18n } from "../../i18n/i18n";
 import { getFieldError } from "./getFieldError";
+import { BaseField } from "./Skjema";
+
+export interface TextFieldType<T extends string> extends BaseField<T> {
+  type: "text";
+  inputType?: InputType;
+}
 
 interface ExposedProps extends SelfRegisterProps {
   type?: InputType | undefined;

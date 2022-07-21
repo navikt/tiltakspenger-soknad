@@ -8,6 +8,7 @@ Funksjonalitet som skal implementeres
 - [X] Skjema - Tiltak  
   - [ ] Tiltak finnes i Arena
   - [X] Tiltak ikke finnes i Arena
+  - [ ] Ikke spør om addresse, arrangørnavn og postkode hvis bruker har diskresjonskode
 - [X] Skjema - Utebetalinger
 - [X] Skjema - Barnetillegg
   - [X] Legg til/endre udokumentert til barn
@@ -15,7 +16,9 @@ Funksjonalitet som skal implementeres
 - [X] Skjema - Personalia
 - [X] Skjema - Fritekst
 - [ ] Skjema - Felles
+  - [ ] Tilpasse bredde på tekst-felt
   - [ ] Holde state på alle sub-skjema
+  - [ ] Sticky bottom-actions, fortsett senere / slett
 - [ ] Last opp vedlegg (ligger idag i backend)
 - [ ] Send inn
 - [ ] Annet

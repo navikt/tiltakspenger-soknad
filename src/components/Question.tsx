@@ -3,6 +3,16 @@ import { useI18n } from "../i18n/i18n";
 import RadioQuestion from "./RadioQuestion";
 import { useFormContext, UseFormRegisterReturn } from "react-hook-form";
 import { SelfRegisterProps, useRequiredFields } from "./skjema/requires";
+import { BaseField } from "./skjema/Skjema";
+
+export interface RadioFieldType<T extends string> extends BaseField<T> {
+  type: "radio";
+  trueTextKey: string;
+  falseTextKey: string;
+  infoText?: string;
+  errorKey: string;
+  indent?: boolean;
+}
 
 interface Props extends SelfRegisterProps {
   title: string;

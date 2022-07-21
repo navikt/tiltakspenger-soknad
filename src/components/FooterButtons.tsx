@@ -1,6 +1,6 @@
 import { useI18n } from "../i18n/i18n";
 import { Button } from "@navikt/ds-react";
-import { useSteps } from "./useSteps";
+import { useSkjemaSteps } from "./skjema/useSkjemaSteps";
 
 interface Props {
   onClick?: () => void;
@@ -18,7 +18,7 @@ export const FooterButtons = ({
   cancelUrl,
 }: Props) => {
   const t = useI18n();
-  const { nextStep } = useSteps();
+  const { nextStep } = useSkjemaSteps();
   const buttonProps = onClick
     ? { onClick }
     : !submit

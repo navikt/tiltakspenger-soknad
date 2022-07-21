@@ -11,6 +11,7 @@ import {
   useFormContext,
   useWatch,
 } from "react-hook-form";
+import VedleggInfoBoks from "../../tiltaksliste/VedleggInfoBoks";
 
 interface Props {
   onClose: () => void;
@@ -102,15 +103,7 @@ const BarnModal = ({ onClose, open, onAddBarn, isEditing }: Props) => {
             ]}
           />
         </form>
-        <Alert className={"mt-6"} variant={"info"}>
-          <h2>{t("vedlegg.leggved")}</h2>
-          <ul>
-            <li className="list-disc">
-              {t("barnetillegg.nyttbarn.vedlegg.fodselsbevis")}
-            </li>
-          </ul>
-          <div className="mt-4">{t("vedlegg.infoboks.lastopp")}</div>
-        </Alert>
+        <VedleggInfoBoks text={"barnetillegg.nyttbarn.vedlegg.fodselsbevis"} />
 
         <div className="mt-4">
           <FooterButtons onClick={submit} onCancel={onClose} />
