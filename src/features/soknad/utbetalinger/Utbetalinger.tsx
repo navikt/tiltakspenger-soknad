@@ -31,7 +31,6 @@ export const Utbetalinger = () => {
             requires: {
               harUtbetalinger: "true",
             },
-            errorKey: "",
           },
         ]}
       />

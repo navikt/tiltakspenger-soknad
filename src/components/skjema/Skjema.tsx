@@ -39,7 +39,7 @@ interface RadioField<T extends string> extends BaseField<T> {
 }
 interface SubfieldType<T extends string> extends BaseField<T> {
   type: "subfield";
-  noWrapper: boolean;
+  noWrapper?: boolean;
   component: React.FC<{ children: any }>;
 }
 

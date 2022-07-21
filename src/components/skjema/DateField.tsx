@@ -24,7 +24,7 @@ const DateField = ({ requireFields, label, name }: Props) => {
       <label className="font-bold">{t(label)}</label>
       <input
         {...register(name, dateFieldValidator)}
-        className={`p-4 mt-2 border border-black  rounded ${
+        className={`p-3 mt-2 border border-black  rounded ${
           error ? "border-red-600 border-2" : ""
         }`}
         type="date"

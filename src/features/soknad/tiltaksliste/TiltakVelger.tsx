@@ -5,7 +5,6 @@ import { AnnetTiltakSkjema } from "./AnnetTiltakSkjema";
 import React from "react";
 
 export const TiltakVelger = () => {
-  console.log("Render TiltakVelger");
   const t = useI18n();
   return (
     <div>
@@ -41,14 +40,7 @@ export const TiltakVelger = () => {
             />
           </div>
         </div>
-        <div
-          className={"mb-8"}
-          data-navradio
-          data-index="annetTiltak"
-          data-value="annetTiltak"
-          data-name="tiltaksliste.velgTiltak"
-          data-navlabel="tiltaksliste.velgTiltak.radiovalgtekst.annet"
-        >
+        <div className={"mb-8"}>
           <AnnetTiltakSkjema />
         </div>
 

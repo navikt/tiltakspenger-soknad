@@ -187,14 +187,10 @@ const fields = (
     options: options,
   },
   {
-    name: "fra",
-    type: "date",
-    label: "tiltaksliste.annettiltak.periode.dato.fra",
-  },
-  {
-    name: "til",
-    type: "date",
-    label: "tiltaksliste.annettiltak.periode.dato.til",
+    type: "fratil",
+    name: "periode",
+    tilLabel: "tiltaksliste.annettiltak.periode.dato.fra",
+    fraLabel: "tiltaksliste.annettiltak.periode.dato.til",
   },
   {
     name: "beskrivelse",
