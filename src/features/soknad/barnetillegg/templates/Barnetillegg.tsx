@@ -1,8 +1,8 @@
 import { useI18n } from "../../../../i18n/i18n";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button, Heading, Modal } from "@navikt/ds-react";
 import { Barn } from "./Barn";
-import BarnModal from "./BarnModal";
+import BarnModal, { UndocumentedBarn } from "./BarnModal";
 import { useFakta } from "../../../../api/useFakta";
 
 export interface BarnType {
@@ -20,6 +20,12 @@ export interface BarnType {
 export const Barnetillegg = () => {
   const fakta = useFakta();
   const t = useI18n();
+  const [undocumentedBarns, setUndocumentedBarns] = useState(
+    [] as UndocumentedBarn[]
+  );
+  const [isEditingIndex, setIsEditingIndex] = useState<number | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     Modal.setAppElement?.("#__next");
@@ -30,39 +36,72 @@ export const Barnetillegg = () => {
     .map((barnFakta) => barnFakta.properties as BarnType);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const closeModal = () => setModalOpen(false);
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+    setIsEditingIndex(undefined);
+  }, [setModalOpen]);
+
   const leggTilBarnModal = () => {
     setModalOpen(true);
   };
+
+  const handleSetBarn = (barn: UndocumentedBarn, index: number) => {
+    const barns = [
+      ...undocumentedBarns.slice(0, index),
+      barn,
+      ...undocumentedBarns.slice(index + 1),
+    ];
+    setUndocumentedBarns(barns);
+    closeModal();
+  };
+
+  const handleAddBarn = useCallback(
+    (newBarn: UndocumentedBarn) => {
+      if (isEditingIndex === undefined) {
+        handleSetBarn(newBarn, undocumentedBarns.length);
+      } else {
+        handleSetBarn(newBarn, isEditingIndex);
+      }
+      setIsEditingIndex(undefined);
+    },
+    [isEditingIndex, handleSetBarn]
+  );
+
+  const onChange = useCallback((barnIndex: number) => {
+    setIsEditingIndex(barnIndex);
+    setModalOpen(true);
+  }, []);
+
+  const onDelete = useCallback(
+    (barnIndex: number) => {
+      setUndocumentedBarns(undocumentedBarns.filter((_, i) => i !== barnIndex));
+    },
+    [barn.length, undocumentedBarns]
+  );
 
   return (
     <div id="barnetillegg-skjema">
       <Heading className="text-center pb-8" level="1" size="xlarge">
         {t("barnetillegg.tittel")}
       </Heading>
-
-      <div className="js-barnetillegg-modal-feilliste" data-feilliste />
-      <fieldset className="skjema-fieldset blokk">
+      <fieldset>
         <p className="skjema-infotekst mb-4">{t("barnetillegg.informasjon")}</p>
         {barn.length !== 0 ? (
-          <p
-            data-ng-if="barnetilleggController.harBarn()"
-            className="skjema-infotekst mb-8"
-          >
-            {t("barnetillegg.informasjon.forsorger")}
-          </p>
+          <p className="mb-8">{t("barnetillegg.informasjon.forsorger")}</p>
         ) : undefined}
-
-        <div id="barnetillegg" className="blokk-m">
-          <Barn barn={barn} />
+        <Barn
+          barnActions={{ onChange, onDelete }}
+          undocumentedBarn={undocumentedBarns}
+          barn={barn}
+        />
+        <div className="flex flex-1 justify-center">
+          <span className="max-w-md text-center">
+            {barn.length === 0
+              ? t("barnetillegg.leggtil.ingenbarn.informasjon")
+              : t("barnetillegg.leggtil.informasjon")}
+          </span>
         </div>
-        <div className="legg-til-informasjon">
-          {barn.length === 0
-            ? t("barnetillegg.leggtil.ingenbarn.informasjon")
-            : t("barnetillegg.leggtil.informasjon")}
-          {t("barnetilleggController.leggTilBarnInfoTekst()")}
-        </div>
-        <div className="flex justify-center mt-8">
+        <div className="flex justify-center mt-8 mb-8">
           <Button
             variant={"secondary"}
             id="leggtilbarnknapp"
@@ -74,7 +113,12 @@ export const Barnetillegg = () => {
           </Button>
         </div>
       </fieldset>
-      {modalOpen ? <BarnModal onClose={closeModal} /> : undefined}
+      <BarnModal
+        onClose={closeModal}
+        open={modalOpen}
+        isEditing={isEditingIndex !== undefined}
+        onAddBarn={handleAddBarn}
+      />
     </div>
   );
 };

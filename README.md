@@ -10,9 +10,12 @@ Funksjonalitet som skal implementeres
   - [X] Tiltak ikke finnes i Arena
 - [X] Skjema - Utebetalinger
 - [X] Skjema - Barnetillegg
-  - [ ] Legg udokumentert til barn
+  - [X] Legg til/endre udokumentert til barn
+  - [ ] Barn i felles state
 - [X] Skjema - Personalia
 - [X] Skjema - Fritekst
+- [ ] Skjema - Felles
+  - [ ] Holde state på alle sub-skjema
 - [ ] Last opp vedlegg (ligger idag i backend)
 - [ ] Send inn
 - [ ] Annet
