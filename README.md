@@ -2,6 +2,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Søknad tiltakspenger
 
+Omskriving av tidligere [frontend for tiltakspenger-soknad](https://github.com/navikt/soknadtiltakspenger), må forløpig holdes kompatibel med [backend](https://github.com/navikt/sendsoknad-boot) inntil ny backend er på plass.
+
+Teknologier
+- React
+- Typescript
+- NextJS
+- TailwindCSS
+- [react-hook-forms](https://react-hook-form.com/) til håndtering av form-state
+
 Funksjonalitet som skal implementeres
 - [X] Introduksjons-page
   - [ ] Opprette søknad backend
