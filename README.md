@@ -13,13 +13,14 @@ Teknologier
 
 Funksjonalitet som skal implementeres
 - [X] Introduksjons-page
-  - [ ] Opprette søknad backend
-- [ ] Veiledning Inst - 3 alt-question
-- [X] Skjema - Tiltak  
+  - [ ] Opprette søknad (backend)
+- [X] Veiledning Inst
+- [X] Skjema - Tiltak
   - [ ] Tiltak finnes i Arena
   - [X] Tiltak ikke finnes i Arena
   - [ ] Ikke spør om addresse, arrangørnavn og postkode hvis bruker har diskresjonskode
 - [X] Skjema - Utebetalinger
+  - [X] Legg til "bolk" 
 - [X] Skjema - Barnetillegg
   - [X] Legg til/endre udokumentert til barn
   - [ ] Barn i felles state
@@ -29,12 +30,12 @@ Funksjonalitet som skal implementeres
   - [ ] Bruke riktige error-keys
   - [ ] Help-text på mange spørsmål
   - [ ] Tilpasse bredde på tekst-felt
-  - [ ] Holde state på alle sub-skjema
+  - [X] Holde state på alle sub-skjema
   - [X] Sticky bottom-actions, fortsett senere / slett
 - [ ] Last opp vedlegg (ligger idag i backend)
 - [ ] Send inn
 - [ ] Annet
-  - [ ] Slette søknad 
+  - [ ] Slette søknad (backend)
   - [ ] Fjerne ubrukt kode
   - [ ] Sette opp pipelines
   - [ ] Tilgang til backend (sendsoknad-boot) i test (og prod)
