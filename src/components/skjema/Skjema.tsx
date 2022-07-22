@@ -1,5 +1,5 @@
 import React from "react";
-import Question, { RadioFieldType } from "../Question";
+import Question, { BoolRadioField, MultiRadioField } from "../Question";
 import SelectField, { SelectFieldType } from "./SelectField";
 import Subfield, { SubfieldType } from "./Subfield";
 import DateField, { DateFieldType } from "./DateField";
@@ -17,7 +17,8 @@ export type Field<T extends string> =
   | SelectFieldType<T>
   | TextFieldType<T>
   | DateFieldType<T>
-  | RadioFieldType<T>
+  | BoolRadioField<T>
+  | MultiRadioField<T>
   | SubfieldType<T>
   | FraTilFieldType<T>;
 
@@ -77,19 +78,23 @@ const Skjema = function <T extends string>({ fields }: Props<T>) {
             </Subfield>
           );
         }
-        if (field.type === "radio") {
+        if (field.type === "radio-bool") {
           return (
             <Question
-              indent={field.indent}
-              infoTextKey={field.infoText}
-              name={field.name}
-              label={field.label}
+              {...field}
               requireFields={field.requires}
               key={i}
               title={field.label}
-              trueTextKey={field.trueTextKey}
-              falseTextKey={field.falseTextKey}
-              errorKey={field.errorKey}
+            />
+          );
+        }
+        if (field.type === "radio-multi") {
+          return (
+            <Question
+              {...field}
+              requireFields={field.requires}
+              key={i}
+              title={field.label}
             />
           );
         }

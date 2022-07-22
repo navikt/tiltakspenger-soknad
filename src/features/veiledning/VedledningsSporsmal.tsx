@@ -1,12 +1,19 @@
 import Skjema from "../../components/skjema/Skjema";
-import AvslagWarning from "./AvslagWarning";
+import {
+  AvbrytSøkTillegStonadWarning,
+  InstAvslagWarning,
+  KVPAvslagTilleggStonadWarning,
+  KVPAvslagWarning,
+} from "./AvslagWarning";
+import { RadioOption } from "../../components/RadioQuestion";
+import { useI18n } from "../../i18n/i18n";
 
 export const VedledningsSporsmal = () => {
   return (
     <Skjema
       fields={[
         {
-          type: "radio",
+          type: "radio-bool",
           name: "kvp",
           label: "informasjonsside.deltarIKvalifiseringsprogram.sporsmal",
           infoText: "",
@@ -15,7 +22,7 @@ export const VedledningsSporsmal = () => {
           errorKey: "informasjonsside.deltarIKvalifiseringsprogram.feilmelding",
         },
         {
-          type: "radio",
+          type: "radio-bool",
           name: "kvpAvbryt",
           label: "informasjonsside.soketilleggsstonad.sporsmal",
           infoText: "deltarIKvalifiseringsprogram.advarsel.informasjon",
@@ -30,9 +37,9 @@ export const VedledningsSporsmal = () => {
         {
           type: "subfield",
           noWrapper: true,
-          name: "intro",
+          name: "introTilleggStonad",
           label: "",
-          component: AvslagWarning,
+          component: KVPAvslagTilleggStonadWarning,
           requires: {
             kvp: "true",
             kvpAvbryt: "true",
@@ -41,16 +48,16 @@ export const VedledningsSporsmal = () => {
         {
           type: "subfield",
           noWrapper: true,
-          name: "intro",
+          name: "introSlettSoknad",
           label: "",
-          component: AvslagWarning,
+          component: KVPAvslagWarning,
           requires: {
             kvp: "true",
             kvpAvbryt: "false",
           },
         },
         {
-          type: "radio",
+          type: "radio-bool",
           name: "inst",
           label: "informasjonsside.institusjon.tittel",
           infoText: "informasjonsside.institusjon.informasjon",
@@ -59,14 +66,11 @@ export const VedledningsSporsmal = () => {
           errorKey: "informasjonsside.institusjon.feilmelding",
         },
         {
-          type: "radio",
+          type: "radio-multi",
           name: "instType",
           label: "informasjonsside.institusjon.ja.hvaslags.sporsmal",
           infoText: "",
-          trueTextKey:
-            "informasjonsside.institusjon.ja.hvaslags.barneverninstitusjon",
-          falseTextKey:
-            "informasjonsside.institusjon.ja.hvaslags.overgangsbolig",
+          options: instOptions,
           errorKey: "informasjonsside.introprogram.feilmelding",
           requires: {
             inst: "true",
@@ -74,7 +78,16 @@ export const VedledningsSporsmal = () => {
           indent: true,
         },
         {
-          type: "radio",
+          type: "subfield",
+          name: "avbrytInstSubfield",
+          component: AvbrytInst,
+          label: "",
+          requires: {
+            instType: "annet",
+          },
+        },
+        {
+          type: "radio-bool",
           name: "intro",
           label: "informasjonsside.introprogram.overskrift",
           infoText: "informasjonsside.introprogram.tekst",
@@ -86,3 +99,63 @@ export const VedledningsSporsmal = () => {
     />
   );
 };
+
+const AvbrytInst = () => {
+  const t = useI18n();
+  return (
+    <>
+      <p>
+        {t(
+          "informasjonsside.institusjon.ja.hvaslags.annet.soketilleggstonad.informasjon"
+        )}
+      </p>
+      <Skjema
+        fields={[
+          {
+            type: "radio-bool",
+            name: "avbrytInst",
+            label: "informasjonsside.soketilleggsstonad.sporsmal",
+            trueTextKey: "informasjonsside.soketilleggsstonad.ja",
+            falseTextKey: "informasjonsside.soketilleggsstonad.nei",
+            errorKey: "informasjonsside.introprogram.feilmelding",
+          },
+          {
+            type: "subfield",
+            name: "avbrytInstWarningTilleggstønader",
+            label: "",
+            noWrapper: true,
+            component: AvbrytSøkTillegStonadWarning,
+            requires: {
+              avbrytInst: "true",
+            },
+          },
+          {
+            type: "subfield",
+            name: "avbrytInstWarningSlettSoknad",
+            label: "",
+            noWrapper: true,
+            component: InstAvslagWarning,
+            requires: {
+              avbrytInst: "false",
+            },
+          },
+        ]}
+      />
+    </>
+  );
+};
+
+const instOptions: RadioOption[] = [
+  {
+    value: "barnevern",
+    label: "informasjonsside.institusjon.ja.hvaslags.barneverninstitusjon",
+  },
+  {
+    value: "overgangsbolig",
+    label: "informasjonsside.institusjon.ja.hvaslags.overgangsbolig",
+  },
+  {
+    value: "annet",
+    label: "informasjonsside.institusjon.ja.hvaslags.annet",
+  },
+];

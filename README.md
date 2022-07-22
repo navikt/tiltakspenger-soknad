@@ -5,6 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 Funksjonalitet som skal implementeres
 - [X] Introduksjons-page
   - [ ] Opprette søknad backend
+- [ ] Veiledning Inst - 3 alt-question
 - [X] Skjema - Tiltak  
   - [ ] Tiltak finnes i Arena
   - [X] Tiltak ikke finnes i Arena
@@ -16,14 +17,16 @@ Funksjonalitet som skal implementeres
 - [X] Skjema - Personalia
 - [X] Skjema - Fritekst
 - [ ] Skjema - Felles
+  - [ ] Bruke riktige error-keys
+  - [ ] Help-text på mange spørsmål
   - [ ] Tilpasse bredde på tekst-felt
   - [ ] Holde state på alle sub-skjema
-  - [ ] Sticky bottom-actions, fortsett senere / slett
+  - [X] Sticky bottom-actions, fortsett senere / slett
 - [ ] Last opp vedlegg (ligger idag i backend)
 - [ ] Send inn
 - [ ] Annet
   - [ ] Slette søknad 
-  - [ ] Fjerne ubrukt kode 
+  - [ ] Fjerne ubrukt kode
   - [ ] Sette opp pipelines
   - [ ] Tilgang til backend (sendsoknad-boot) i test (og prod)
 

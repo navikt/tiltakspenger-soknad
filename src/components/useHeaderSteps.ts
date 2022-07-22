@@ -37,5 +37,5 @@ const getSteps = (routes: Routes): Step[] => [
   { name: "veiledning", path: routes.veiledning, index: 0 },
   { name: "skjema", path: routes.skjema.tiltak, index: 1 },
   { name: "vedlegg", path: routes.vedlegg, index: 2 },
-  { name: "sendinn", path: routes.sendinn, index: 3 },
+  { name: "sendInn", path: routes.sendinn, index: 3 },
 ];

@@ -5,6 +5,8 @@ const baseUrl = "/soknadtiltakspenger/app";
 export const soknadIdParam = "[soknadId]";
 const skjemaRoute = `${baseUrl}/${soknadIdParam}/skjema`;
 
+export const startRoute = `${baseUrl}/start`;
+
 export const routes = {
   veiledning: `${baseUrl}/${soknadIdParam}/veiledning`,
   sendinn: `${baseUrl}/${soknadIdParam}/sendinn`,

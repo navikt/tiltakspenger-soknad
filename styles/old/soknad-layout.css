@@ -159,12 +159,8 @@
     z-index: -1000;
 }
 
-html, body {
-    height: 100%;
-}
-  
 body {
-    background-color: #efefef;
+    background-color: #f4f4f4;
     color: #3e3832;
     font-family: Arial,sans-serif;
     line-height: 1.42857143;
@@ -176,23 +172,4 @@ body {
     min-height: 100%;
     margin-bottom: -5rem;
     padding-bottom: 5rem;
-}
-
-.visuallyhidden {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px
-}
-.visuallyhidden.focusable:focus, .visuallyhidden.focusable:active {
-    clip: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    position: static;
-    width: auto
 }

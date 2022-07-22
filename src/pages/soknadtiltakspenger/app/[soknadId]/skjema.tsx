@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { SoknadSkjema } from "../../../../features/soknad/SoknadSkjema";
+import { SoknadSkjema } from "../../../../features/soknad/felles/SoknadSkjema";
 import { getStaticProps } from "../../../../i18n/i18n";
 import { useRouter } from "next/router";
 import { useRoutes } from "../../../../components/useRoutes";

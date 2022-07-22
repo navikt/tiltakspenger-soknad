@@ -13,3 +13,7 @@ export const getFormValues = (): FormValues => {
   if (isServerSide) return {};
   return JSON.parse(localStorage.getItem(FORM_KEY) || "{}");
 };
+
+export const clearFormValues = () => {
+  localStorage.setItem(FORM_KEY, "{}");
+};

@@ -1,5 +1,5 @@
-import { useI18n } from "../../i18n/i18n";
-import Header from "../../components/Header";
+import { useI18n } from "../../../i18n/i18n";
+import Header from "../../../components/Header";
 import { FC, memo, ReactNode, useCallback, useState } from "react";
 import { Button } from "@navikt/ds-react";
 import SideTabs from "./SideTabs";
@@ -11,12 +11,14 @@ import {
   SubmitErrorHandler,
   UseFormReturn,
 } from "react-hook-form";
-import FooterButtons from "../../components/FooterButtons";
-import { useSkjemaSteps } from "../../components/skjema/useSkjemaSteps";
+import FooterButtons from "../../../components/FooterButtons";
+import { useSkjemaSteps } from "../../../components/skjema/useSkjemaSteps";
 import {
+  clearFormValues,
   getFormValues,
   setFormValues,
-} from "../../components/skjema/useFormState";
+} from "../../../components/skjema/useFormState";
+import { startRoute } from "../../../components/useRoutes";
 
 interface Props {
   children: ReactNode;
@@ -57,6 +59,11 @@ const SoknadSkjemaRaw: FC<Props> = ({
     await router.push(nextStep.path);
   };
 
+  const deleteSoknad = () => {
+    clearFormValues();
+    router.push(startRoute);
+  };
+
   // TODO: Feature, indicate validated tabs
 
   // TODO: Keep all form values
@@ -83,6 +90,14 @@ const SoknadSkjemaRaw: FC<Props> = ({
           {children}
           <FooterButtons submit />
         </form>
+      </div>
+      <div className="p-8 bg-gray-200 border-t flex justify-center border border-gray-300 sticky bottom-0">
+        <div className="space-x-4 max-w-2xl">
+          <Button variant="tertiary">{t("fortsettSenere")}</Button>
+          <Button onClick={deleteSoknad} variant="tertiary">
+            {t("avbryt.slett")}
+          </Button>
+        </div>
       </div>
       <div data-sticky>
         <div data-sist-lagret data-navtilbakelenke="ingenlenke" />

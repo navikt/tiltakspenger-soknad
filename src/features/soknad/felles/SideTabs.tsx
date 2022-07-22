@@ -2,9 +2,9 @@ import React, { useEffect, useMemo } from "react";
 import { FillForms, SuccessColored, WarningColored } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { soknadBasePath } from "../../routing";
-import { useSkjemaSteps } from "../../components/skjema/useSkjemaSteps";
-import { getFormValues } from "../../components/skjema/useFormState";
+import { soknadBasePath } from "../../../routing";
+import { useSkjemaSteps } from "../../../components/skjema/useSkjemaSteps";
+import { getFormValues } from "../../../components/skjema/useFormState";
 
 const SideTabs = () => {
   const router = useRouter();

@@ -11,13 +11,17 @@ import { SelfRegisterProps } from "./skjema/requires";
 import { RegisterOptions } from "react-hook-form/dist/types/validator";
 import { getFieldError } from "./skjema/getFieldError";
 
-interface Props extends SelfRegisterProps {
-  trueKey: string;
-  falseKey: string;
-  errorKey: string;
+export interface RadioOption {
+  value: string | number;
+  label: string;
 }
 
-const RadioQuestion = ({ trueKey, falseKey, name, errorKey }: Props) => {
+interface Props extends SelfRegisterProps {
+  errorKey: string;
+  options: RadioOption[];
+}
+
+const RadioQuestion = ({ name, errorKey, options }: Props) => {
   const t = useI18n();
   const {
     register,
@@ -28,12 +32,15 @@ const RadioQuestion = ({ trueKey, falseKey, name, errorKey }: Props) => {
 
   return (
     <RadioGroup error={error?.message}>
-      <Radio {...register(name, validator(t(errorKey)))} value={"false"}>
-        {t(falseKey)}
-      </Radio>
-      <Radio {...register(name, validator(t(errorKey)))} value={"true"}>
-        {t(trueKey)}
-      </Radio>
+      {options.map(({ value, label }, i) => (
+        <Radio
+          key={i}
+          {...register(name, validator(t(errorKey)))}
+          value={value}
+        >
+          {t(label)}
+        </Radio>
+      ))}
     </RadioGroup>
   );
 };
@@ -60,15 +67,14 @@ const RadioGroup = ({
   );
 };
 
-type RadioBProps = HTMLProps<HTMLInputElement> & {
+type RadioProps = HTMLProps<HTMLInputElement> & {
   children: ReactNode;
-  value: string;
 };
 
 /* Radio component from Design-system does not seem to work properly with ref
  * , reuses some of the css */
 const RadioWithoutForwardRef = (
-  props: RadioBProps,
+  props: RadioProps,
   ref: ForwardedRef<HTMLInputElement>
 ) => {
   const { children, ...restProps } = props;

@@ -1,5 +1,5 @@
 import React from "react";
-import { SoknadSkjema } from "../../../../../features/soknad/SoknadSkjema";
+import { SoknadSkjema } from "../../../../../features/soknad/felles/SoknadSkjema";
 import { Utbetalinger } from "../../../../../features/soknad/utbetalinger/Utbetalinger";
 import { getStaticProps } from "../../../../../i18n/i18n";
 

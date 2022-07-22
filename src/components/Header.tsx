@@ -25,7 +25,9 @@ const Header = ({ hideSteps }: Props) => {
             >
               {steps.map((step, i) => (
                 <Link href={step.path} key={i}>
-                  <Stepper.Step unsafe_index={i}>{step.name}</Stepper.Step>
+                  <Stepper.Step unsafe_index={i}>
+                    {t(`stegindikator.${step.name}`)}
+                  </Stepper.Step>
                 </Link>
               ))}
             </Stepper>
