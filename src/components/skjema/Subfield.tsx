@@ -56,7 +56,7 @@ const preMountClass = "translate-y-[-500px]";
 
 const ShouldRenderWrapper = ({ children, ...props }: Props) => {
   const { watch } = useFormContext();
-  const shouldRender = useRequiredFields(watch, props.requireFields);
+  const shouldRender = useRequiredFields(watch, props.requires);
   if (!shouldRender) return null;
   return <Subfield {...props}>{children}</Subfield>;
 };

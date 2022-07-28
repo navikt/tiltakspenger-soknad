@@ -1,16 +1,19 @@
-const FORM_KEY = "form";
+import {
+  initialForm,
+  PersistedFormValues,
+} from "../../features/soknad/felles/SkjemaPersistanceProvider";
 
-type FormValues = Record<string, any>;
+const FORM_KEY = "form";
 
 const isServerSide = typeof window === "undefined";
 
-export const setFormValues = (values: FormValues) => {
+export const setFormValues = (values: PersistedFormValues) => {
   if (isServerSide) return;
   localStorage.setItem(FORM_KEY, JSON.stringify(values));
 };
 
-export const getFormValues = (): FormValues => {
-  if (isServerSide) return {};
+export const getFormValues = (): PersistedFormValues => {
+  if (isServerSide) return initialForm;
   return JSON.parse(localStorage.getItem(FORM_KEY) || "{}");
 };
 

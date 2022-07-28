@@ -3,7 +3,7 @@ import { useMemo } from "react";
 import { soknadBasePath } from "../../routing";
 import { Step, Steps } from "../useHeaderSteps";
 
-export const useSkjemaSteps = (): Steps => {
+export const useSkjemaSteps = (): Steps<SkjemaStepName> => {
   const router = useRouter();
   const soknadId = router.query.soknadId as string;
 
@@ -24,26 +24,33 @@ export const useSkjemaSteps = (): Steps => {
   };
 };
 
-const withIndex = (array: any[]) =>
+const withIndex = (array: Omit<Step<SkjemaStepName>, "index">[]) =>
   array.map((item, index) => ({ ...item, index }));
 
-const getTabs: (basePath: string) => Tab[] = (basePath) =>
+export type SkjemaStepName =
+  | "Tiltak"
+  | "Andre utbetalinger"
+  | "Barnetillegg"
+  | "Personalia"
+  | "Tilleggsopplysninger";
+
+const getTabs: (basePath: string) => Step<SkjemaStepName>[] = (basePath) =>
   withIndex([
-    { name: "Tiltak", completed: false, path: `${basePath}/tiltak` },
+    { name: "Tiltak", path: `${basePath}/tiltak` },
     {
       name: "Andre utbetalinger",
-      completed: false,
+
       path: `${basePath}/utbetalinger`,
     },
     {
       name: "Barnetillegg",
-      completed: false,
+
       path: `${basePath}/barnetillegg`,
     },
-    { name: "Personalia", completed: false, path: `${basePath}/personalia` },
+    { name: "Personalia", path: `${basePath}/personalia` },
     {
       name: "Tilleggsopplysninger",
-      completed: false,
+
       path: `${basePath}/tilleggsopplysninger`,
     },
   ]);

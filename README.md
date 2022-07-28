@@ -23,7 +23,8 @@ Funksjonalitet som skal implementeres
   - [X] Legg til "bolk" 
 - [X] Skjema - Barnetillegg
   - [X] Legg til/endre udokumentert til barn
-  - [ ] Barn i felles state
+  - [X] Barn i felles state
+  - [ ] Extra barn fakta synk, alle felt
 - [X] Skjema - Personalia
 - [X] Skjema - Fritekst
 - [ ] Skjema - Felles

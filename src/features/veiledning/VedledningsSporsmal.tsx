@@ -1,12 +1,13 @@
 import Skjema from "../../components/skjema/Skjema";
 import {
-  AvbrytSøkTillegStonadWarning,
+  InstAvslagTillegStonadWarning,
   InstAvslagWarning,
   KVPAvslagTilleggStonadWarning,
   KVPAvslagWarning,
 } from "./AvslagWarning";
-import { RadioOption } from "../../components/RadioQuestion";
+import { RadioOption } from "../../components/skjema/RadioQuestion";
 import { useI18n } from "../../i18n/i18n";
+import IntroSkjema from "./IntroSkjema";
 
 export const VedledningsSporsmal = () => {
   return (
@@ -28,7 +29,7 @@ export const VedledningsSporsmal = () => {
           infoText: "deltarIKvalifiseringsprogram.advarsel.informasjon",
           trueTextKey: "informasjonsside.soketilleggsstonad.ja",
           falseTextKey: "informasjonsside.soketilleggsstonad.nei",
-          errorKey: "informasjonsside.deltarIKvalifiseringsprogram.feilmelding",
+          errorKey: "informasjonsside.soketilleggsstonad.feilmelding",
           requires: {
             kvp: "true",
           },
@@ -37,7 +38,7 @@ export const VedledningsSporsmal = () => {
         {
           type: "subfield",
           noWrapper: true,
-          name: "introTilleggStonad",
+          name: "KVPTilleggStonad",
           label: "",
           component: KVPAvslagTilleggStonadWarning,
           requires: {
@@ -48,7 +49,7 @@ export const VedledningsSporsmal = () => {
         {
           type: "subfield",
           noWrapper: true,
-          name: "introSlettSoknad",
+          name: "KVPSlettSoknad",
           label: "",
           component: KVPAvslagWarning,
           requires: {
@@ -71,7 +72,7 @@ export const VedledningsSporsmal = () => {
           label: "informasjonsside.institusjon.ja.hvaslags.sporsmal",
           infoText: "",
           options: instOptions,
-          errorKey: "informasjonsside.introprogram.feilmelding",
+          errorKey: "informasjonsside.institusjon.ja.hvaslags.feilmelding",
           requires: {
             inst: "true",
           },
@@ -83,6 +84,7 @@ export const VedledningsSporsmal = () => {
           component: AvbrytInst,
           label: "",
           requires: {
+            inst: "true",
             instType: "annet",
           },
         },
@@ -94,6 +96,15 @@ export const VedledningsSporsmal = () => {
           trueTextKey: "informasjonsside.introprogram.false",
           falseTextKey: "informasjonsside.introprogram.true",
           errorKey: "informasjonsside.introprogram.feilmelding",
+        },
+        {
+          type: "subfield",
+          name: "intro-sub",
+          label: "informasjonsside.introprogram.overskrift",
+          component: IntroSkjema,
+          requires: {
+            intro: "true",
+          },
         },
       ]}
     />
@@ -124,7 +135,7 @@ const AvbrytInst = () => {
             name: "avbrytInstWarningTilleggstønader",
             label: "",
             noWrapper: true,
-            component: AvbrytSøkTillegStonadWarning,
+            component: InstAvslagTillegStonadWarning,
             requires: {
               avbrytInst: "true",
             },

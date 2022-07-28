@@ -2,7 +2,11 @@ import React, { FC } from "react";
 import { useI18n } from "../../i18n/i18n";
 import { Select } from "@navikt/ds-react";
 import { useFormContext } from "react-hook-form";
-import { RequiredFields, useRequiredFields } from "./requires";
+import {
+  RequiredFields,
+  SelfRegisterProps,
+  useRequiredFields,
+} from "./requires";
 import { BaseField } from "./Skjema";
 
 export interface SelectFieldType<T extends string> extends BaseField<T> {
@@ -15,17 +19,15 @@ export interface Option {
   text: string;
 }
 
-interface Props {
+interface Props extends SelfRegisterProps {
   options: Option[];
   label: string;
-  name: string;
-  requireFields?: RequiredFields;
 }
 
-const SelectField: FC<Props> = ({ options, label, name, requireFields }) => {
+const SelectField: FC<Props> = ({ options, label, name, requires }) => {
   const t = useI18n();
   const { register, watch } = useFormContext();
-  const shouldRender = useRequiredFields(watch, requireFields);
+  const shouldRender = useRequiredFields(watch, requires);
 
   if (!shouldRender) {
     return null;

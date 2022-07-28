@@ -3,6 +3,7 @@ import Skjema, { Field } from "../../../components/skjema/Skjema";
 import { Option } from "../../../components/skjema/SelectField";
 import { useMemo } from "react";
 import { ArbeidspraksisVedleggInfoBoks } from "./VedleggInfoBoks";
+import { dateFieldValidator } from "../../../components/skjema/DateField";
 
 export const AnnetTiltakSkjema = () => {
   const t = useI18n();
@@ -53,7 +54,9 @@ type FieldNames =
   | "arrangoernavn"
   | "adresse"
   | "postnummer"
-  | "antallDager";
+  | "antallDager"
+  | "uploadInfoBox"
+  | "periode";
 
 const fields = (
   options: Option[],
@@ -69,7 +72,6 @@ const fields = (
     type: "subfield",
     component: ArbeidspraksisVedleggInfoBoks,
     noWrapper: true,
-    indent: true,
     name: "uploadInfoBox",
     label: "",
     requires: { tiltakstype: "PRAKSORD" },
@@ -79,6 +81,14 @@ const fields = (
     name: "periode",
     tilLabel: "tiltaksliste.annettiltak.periode.dato.fra",
     fraLabel: "tiltaksliste.annettiltak.periode.dato.til",
+    validations: {
+      fra: dateFieldValidator(
+        "tiltaksliste.annettiltak.periode.dato.fra.feilmelding"
+      ),
+      til: dateFieldValidator(
+        "tiltaksliste.annettiltak.periode.dato.til.feilmelding"
+      ),
+    },
   },
   {
     name: "beskrivelse",
@@ -90,6 +100,7 @@ const fields = (
     name: "arrangoernavn",
     type: "text",
     label: "tiltaksliste.annetTiltak.arrangoernavn.hjelpetekst.tittel",
+    errorKey: "tiltaksliste.annetTiltak.arrangoernavn.feilmelding",
   },
   {
     name: "adresse",

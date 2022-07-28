@@ -2,6 +2,8 @@ import React, { useCallback, useContext, useMemo } from "react";
 import sanitizeHtml from "sanitize-html";
 import { fetchTranslations } from "../api/translations";
 
+export type Translate = (key: string) => string;
+
 export const useI18n = () => {
   const translations = useContext(TranslationContext);
 
@@ -15,7 +17,10 @@ export const useI18n = () => {
 export const useParsedText = () => {
   const t = useI18n();
   return (key: string) => (
-    <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(t(key)) }} />
+    <div
+      className="space-y-3"
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(t(key)) }}
+    />
   );
 };
 

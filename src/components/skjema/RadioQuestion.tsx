@@ -5,11 +5,11 @@ import React, {
   ReactElement,
   ReactNode,
 } from "react";
-import { useI18n } from "../i18n/i18n";
+import { useI18n } from "../../i18n/i18n";
 import { useFormContext } from "react-hook-form";
-import { SelfRegisterProps } from "./skjema/requires";
+import { SelfRegisterProps } from "./requires";
 import { RegisterOptions } from "react-hook-form/dist/types/validator";
-import { getFieldError } from "./skjema/getFieldError";
+import { getFieldError } from "./getFieldError";
 
 export interface RadioOption {
   value: string | number;

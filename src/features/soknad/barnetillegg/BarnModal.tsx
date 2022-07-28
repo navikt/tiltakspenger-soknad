@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Alert, Modal } from "@navikt/ds-react";
-import Skjema from "../../../../components/skjema/Skjema";
-import { useI18n } from "../../../../i18n/i18n";
-import { fetchLand } from "../../../../api/land";
-import FooterButtons from "../../../../components/FooterButtons";
-import { BarnType } from "./Barnetillegg";
+import Skjema from "../../../components/skjema/Skjema";
+import { useI18n } from "../../../i18n/i18n";
+import { fetchLand } from "../../../api/land";
+import FooterButtons from "../../../components/FooterButtons";
+import { BarnType } from "./BarnetilleggSkjema";
 import {
   SubmitErrorHandler,
   SubmitHandler,
   useFormContext,
   useWatch,
 } from "react-hook-form";
-import VedleggInfoBoks from "../../tiltaksliste/VedleggInfoBoks";
+import VedleggInfoBoks from "../tiltaksliste/VedleggInfoBoks";
+import { dateFieldValidator } from "../../../components/skjema/DateField";
 
 interface Props {
   onClose: () => void;
@@ -83,16 +84,19 @@ const BarnModal = ({ onClose, open, onAddBarn, isEditing }: Props) => {
                 type: "text",
                 name: "fornavn",
                 label: "barnetillegg.nyttbarn.fornavn",
+                errorKey: "barn.fornavn.feilmelding",
               },
               {
                 type: "text",
                 name: "etternavn",
                 label: "barnetillegg.nyttbarn.etternavn",
+                errorKey: "barn.etternavn.feilmelding",
               },
               {
                 type: "date",
                 name: "fodselsdato",
                 label: "barnetillegg.nyttbarn.fodselsdato",
+                validations: dateFieldValidator("barn.fodselsdato.feilmelding"),
               },
               {
                 type: "select",

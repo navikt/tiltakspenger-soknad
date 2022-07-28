@@ -1,9 +1,9 @@
-import { useI18n } from "../../../../i18n/i18n";
+import { useI18n } from "../../../i18n/i18n";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import { Barn } from "./Barn";
+import { BarnQuestion } from "./BarnQuestion";
 import BarnModal, { UndocumentedBarn } from "./BarnModal";
-import { useFakta } from "../../../../api/useFakta";
+import { useBarn, useFakta } from "../../../api/useFakta";
 
 export interface BarnType {
   alder: string;
@@ -17,8 +17,8 @@ export interface BarnType {
   uniqueKey: "fnr";
 }
 
-export const Barnetillegg = () => {
-  const fakta = useFakta();
+export const BarnetilleggSkjema = () => {
+  const barn = useBarn();
   const t = useI18n();
   const [undocumentedBarns, setUndocumentedBarns] = useState(
     [] as UndocumentedBarn[]
@@ -30,10 +30,6 @@ export const Barnetillegg = () => {
   useEffect(() => {
     Modal.setAppElement?.("#__next");
   }, []);
-
-  const barn = fakta
-    .filter((fakta) => fakta.key === "barn")
-    .map((barnFakta) => barnFakta.properties as BarnType);
 
   const [modalOpen, setModalOpen] = useState(false);
   const closeModal = useCallback(() => {
@@ -89,7 +85,7 @@ export const Barnetillegg = () => {
         {barn.length !== 0 ? (
           <p className="mb-8">{t("barnetillegg.informasjon.forsorger")}</p>
         ) : undefined}
-        <Barn
+        <BarnQuestion
           barnActions={{ onChange, onDelete }}
           undocumentedBarn={undocumentedBarns}
           barn={barn}

@@ -10,5 +10,38 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json(mockFakta as any);
+  if (req.method === "PUT") {
+    updateFakta(res, req.body);
+  } else if (req.method === "GET") {
+    getFakta(res);
+  }
 }
+
+interface FaktumEgenskaper {
+  faktumId: number;
+  key: string;
+  soknadId: number;
+  systemEgenskap: number;
+  value: string;
+}
+
+interface UpdateFaktaPayload {
+  faktumEgenskaper: FaktumEgenskaper[];
+  faktumId: number;
+  key: string;
+  parrentFaktum: null | number;
+  properties: Record<string, string | number | null>;
+  soknadId: number;
+  type: string;
+  value: null | string | number;
+}
+
+const updateFakta = (
+  res: NextApiResponse<Data>,
+  payload: UpdateFaktaPayload
+) => {
+  res.status(200).json(mockFakta as any);
+};
+const getFakta = (res: NextApiResponse<Data>) => {
+  res.status(200).json(mockFakta as any);
+};

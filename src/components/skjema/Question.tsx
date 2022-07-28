@@ -1,9 +1,9 @@
 import React, { ChangeEventHandler, MouseEventHandler } from "react";
-import { useI18n } from "../i18n/i18n";
+import { useI18n } from "../../i18n/i18n";
 import RadioQuestion, { RadioOption } from "./RadioQuestion";
 import { useFormContext, UseFormRegisterReturn } from "react-hook-form";
-import { SelfRegisterProps, useRequiredFields } from "./skjema/requires";
-import { BaseField } from "./skjema/Skjema";
+import { SelfRegisterProps, useRequiredFields } from "./requires";
+import { BaseField } from "./Skjema";
 import { options } from "sanitize-html";
 
 interface CommonFieldProps {
@@ -47,7 +47,7 @@ const Question = ({
   title,
   infoTextKey,
   label,
-  requireFields,
+  requires,
   name,
   errorKey,
   indent,
@@ -55,7 +55,7 @@ const Question = ({
 }: TrueFalseQuestionProps | MultiAltQuestionProps) => {
   const t = useI18n();
   const { watch } = useFormContext();
-  const shouldRender = useRequiredFields(watch, requireFields);
+  const shouldRender = useRequiredFields(watch, requires);
   if (!shouldRender) return null;
 
   const options = getOptions(props);
@@ -68,7 +68,7 @@ const Question = ({
         options={options}
         name={name}
         label={label}
-        requireFields={requireFields}
+        requires={requires}
         errorKey={errorKey}
       />
     </div>

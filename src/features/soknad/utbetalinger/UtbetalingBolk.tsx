@@ -2,6 +2,7 @@ import Skjema from "../../../components/skjema/Skjema";
 import React from "react";
 import { Button } from "@navikt/ds-react";
 import { useI18n } from "../../../i18n/i18n";
+import { dateFieldValidator } from "../../../components/skjema/DateField";
 
 interface Props {
   onDelete: () => void;
@@ -22,6 +23,7 @@ const UtbetalingBolk = ({ name, onDelete, deleteable = true }: Props) => {
             name: `${name}.utbetaler`,
             type: "text",
             label: "trygdogpensjon.harsokt.utbetaler",
+            errorKey: "trygdogpensjon.harsokt.utbetaler.feilmelding",
           },
           {
             name: `${name}.prosent`,
@@ -34,6 +36,12 @@ const UtbetalingBolk = ({ name, onDelete, deleteable = true }: Props) => {
             name: name,
             fraLabel: "trygdogpensjon.harsokt.dato.fra",
             tilLabel: "trygdogpensjon.harsokt.dato.til",
+            validations: {
+              fra: dateFieldValidator(
+                "trygdogpensjon.harsokt.dato.fra.feilmelding"
+              ),
+              til: undefined,
+            },
           },
         ]}
       />

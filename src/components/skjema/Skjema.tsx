@@ -1,11 +1,12 @@
 import React from "react";
-import Question, { BoolRadioField, MultiRadioField } from "../Question";
+import Question, { BoolRadioField, MultiRadioField } from "./Question";
 import SelectField, { SelectFieldType } from "./SelectField";
 import Subfield, { SubfieldType } from "./Subfield";
 import DateField, { DateFieldType } from "./DateField";
 import TextField, { TextFieldType } from "./ TextField";
 import { RequiredFields } from "./requires";
 import FraTilField, { FraTilFieldType } from "./FraTilField";
+import { text } from "stream/consumers";
 
 export interface BaseField<T extends string> {
   label: string;
@@ -31,72 +32,31 @@ const Skjema = function <T extends string>({ fields }: Props<T>) {
     <>
       {fields.map((field, i) => {
         if (field.type === "select") {
-          return (
-            <SelectField
-              name={field.name}
-              requireFields={field.requires}
-              key={i}
-              label={field.label}
-              options={field.options}
-            />
-          );
+          return <SelectField {...field} key={i} />;
         }
         if (field.type === "text") {
-          return (
-            <TextField
-              label={field.label}
-              requireFields={field.requires}
-              key={i}
-              name={field.name}
-              type={field.inputType}
-            />
-          );
+          const { type, ...props } = field;
+          const textFieldProps = { ...props, inputType: type };
+          return <TextField {...textFieldProps} key={i} />;
         }
         if (field.type === "date") {
-          return <DateField name={field.name} key={i} label={field.label} />;
+          return <DateField {...field} key={i} />;
         }
         if (field.type === "fratil") {
-          return (
-            <FraTilField
-              name={field.name}
-              key={i}
-              labelTil={field.tilLabel}
-              labelFra={field.fraLabel}
-            />
-          );
+          return <FraTilField {...field} key={i} />;
         }
         if (field.type === "subfield") {
           return (
-            <Subfield
-              noWrapper={field.noWrapper || false}
-              requireFields={field.requires}
-              label={field.label}
-              name={field.name}
-              key={i}
-            >
+            <Subfield {...field} noWrapper={field.noWrapper || false} key={i}>
               <field.component>test</field.component>
             </Subfield>
           );
         }
         if (field.type === "radio-bool") {
-          return (
-            <Question
-              {...field}
-              requireFields={field.requires}
-              key={i}
-              title={field.label}
-            />
-          );
+          return <Question {...field} key={i} title={field.label} />;
         }
         if (field.type === "radio-multi") {
-          return (
-            <Question
-              {...field}
-              requireFields={field.requires}
-              key={i}
-              title={field.label}
-            />
-          );
+          return <Question {...field} key={i} title={field.label} />;
         }
       })}
     </>

@@ -1,6 +1,6 @@
 import { useI18n } from "../../../i18n/i18n";
 import { Panel, Heading } from "@navikt/ds-react";
-import { WarningColored } from "@navikt/ds-icons";
+import { InformationColored } from "@navikt/ds-icons";
 import { AnnetTiltakSkjema } from "./AnnetTiltakSkjema";
 import React from "react";
 
@@ -12,7 +12,7 @@ export const TiltakVelger = () => {
         {t("tiltaksliste.tittel")}
       </Heading>
       <Panel border={true} className="flex flex-col">
-        <WarningColored className="text-3xl mb-4 self-center" />
+        <InformationColored className="text-3xl mb-4 self-center" />
         {t("tiltaksliste.annetTiltak.infotekst")}
       </Panel>
       <h3 className="skjema-sporsmal my-4">

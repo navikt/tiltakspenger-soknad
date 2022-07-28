@@ -41,5 +41,5 @@ export const useRequiredFields = (
 export interface SelfRegisterProps<T extends string = string> {
   name: string;
   label: string;
-  requireFields?: RequiredFields<T>;
+  requires?: RequiredFields<T>;
 }

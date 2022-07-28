@@ -1,10 +1,12 @@
-import React, { useEffect, useMemo } from "react";
-import { FillForms, SuccessColored, WarningColored } from "@navikt/ds-icons";
+import React, { useEffect } from "react";
+import { FillForms, SuccessColored } from "@navikt/ds-icons";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { soknadBasePath } from "../../../routing";
-import { useSkjemaSteps } from "../../../components/skjema/useSkjemaSteps";
-import { getFormValues } from "../../../components/skjema/useFormState";
+import {
+  SkjemaStepName,
+  useSkjemaSteps,
+} from "../../../components/skjema/useSkjemaSteps";
+import { usePersistedForm } from "./SkjemaPersistanceProvider";
 
 const SideTabs = () => {
   const router = useRouter();
@@ -12,8 +14,9 @@ const SideTabs = () => {
   const isReady = router.isReady;
   const { currentStep, steps } = useSkjemaSteps();
 
-  const formValues = getFormValues();
-  const isCompleted = (stepName: string) => !!formValues[stepName];
+  const { formValues } = usePersistedForm();
+
+  const isCompleted = (stepName: SkjemaStepName) => !!formValues[stepName];
 
   useEffect(() => {
     if (isReady && !soknadId) {

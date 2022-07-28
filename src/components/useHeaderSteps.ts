@@ -1,19 +1,19 @@
 import { useRouter } from "next/router";
 import { Routes, useRoutes } from "./useRoutes";
 
-export interface Step {
+export interface Step<StepName extends string> {
   index: number;
   path: string;
-  name: string;
+  name: StepName;
 }
 
-export interface Steps {
-  currentStep: Step;
-  nextStep?: Step;
-  steps: Step[];
+export interface Steps<StepName extends string> {
+  currentStep: Step<StepName>;
+  nextStep?: Step<StepName>;
+  steps: Step<StepName>[];
 }
 
-export const useHeaderSteps = (): Steps => {
+export const useHeaderSteps = (): Steps<HeaderStepName> => {
   const router = useRouter();
   const currentPath = router.asPath || "/404";
 
@@ -33,7 +33,9 @@ export const useHeaderSteps = (): Steps => {
   };
 };
 
-const getSteps = (routes: Routes): Step[] => [
+export type HeaderStepName = "veiledning" | "skjema" | "vedlegg" | "sendInn";
+
+const getSteps = (routes: Routes): Step<HeaderStepName>[] => [
   { name: "veiledning", path: routes.veiledning, index: 0 },
   { name: "skjema", path: routes.skjema.tiltak, index: 1 },
   { name: "vedlegg", path: routes.vedlegg, index: 2 },
