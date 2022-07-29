@@ -1,5 +1,5 @@
-import { Opprett } from "../../../features/opprett/opprettTemplate";
+import { OpprettPage } from "../../../features/opprett/opprettPage";
 import { getStaticProps } from "../../../i18n/i18n";
 
 export { getStaticProps };
-export default Opprett;
+export default OpprettPage;

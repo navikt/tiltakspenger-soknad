@@ -1,20 +1,20 @@
-import { UndocumentedBarn } from "./BarnModal";
 import { useFormContext } from "react-hook-form";
 import { useCallback } from "react";
 import { Button } from "@navikt/ds-react";
+import { BrukerRegistrertBarn } from "./BarnetilleggSkjema";
+
+export interface BarnActionHandlers {
+  onChange: (barnIndex: number) => void;
+  onDelete: (barn: BrukerRegistrertBarn) => void;
+}
 
 const BarnActions = ({
   onChange,
   onDelete,
   index,
   barn,
-}: {
-  index: number;
-  onChange: (barnIndex: number) => void;
-  onDelete: (barnIndex: number) => void;
-  barn: UndocumentedBarn;
-}) => {
-  const { setValue } = useFormContext<UndocumentedBarn>();
+}: BarnActionHandlers & { barn: BrukerRegistrertBarn; index: number }) => {
+  const { setValue } = useFormContext<BrukerRegistrertBarn>();
 
   const _onChange = useCallback(() => {
     setValue("fodselsdato", barn.fodselsdato);
@@ -22,10 +22,10 @@ const BarnActions = ({
     setValue("etternavn", barn.etternavn);
     setValue("land", barn.land);
     onChange(index);
-  }, [index, onChange, barn]);
+  }, [onChange, barn]);
   const _onDelete = useCallback(() => {
-    onDelete(index);
-  }, [index, onDelete, barn]);
+    onDelete(barn);
+  }, [onDelete, barn]);
 
   return (
     <div className="mt-4">

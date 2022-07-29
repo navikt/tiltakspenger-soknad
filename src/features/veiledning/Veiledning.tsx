@@ -14,7 +14,8 @@ import { useRouter } from "next/router";
 import {
   getFormValues,
   setFormValues,
-} from "../../components/skjema/useFormState";
+} from "../../components/skjema/formPersistance";
+import { toDateString } from "../../components/dateUtil";
 
 const formSectionName = "veiledning";
 
@@ -25,28 +26,16 @@ export interface VeiledningFormValues {
   kvp: boolean;
 }
 
-const twoDigits = (number: number) =>
-  number.toLocaleString("en-US", {
-    minimumIntegerDigits: 2,
-    useGrouping: false,
-  });
-
-const toActualDate = (date: Date) => {
-  return `${date.getFullYear()}-${twoDigits(date.getMonth())}-${twoDigits(
-    date.getDate()
-  )}`;
-};
-
 const convertDates = (values: VeiledningFormValues) => {
   return {
     ...values,
     introDates: values?.introDates
       ? {
           fra: values.introDates?.fra
-            ? toActualDate(new Date(values.introDates.fra))
+            ? toDateString(new Date(values.introDates.fra))
             : null,
           til: values.introDates?.til
-            ? toActualDate(new Date(values.introDates.til))
+            ? toDateString(new Date(values.introDates.til))
             : null,
         }
       : undefined,

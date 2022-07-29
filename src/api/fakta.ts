@@ -1,37 +1,40 @@
+import { BrukerRegistrertBarn } from "../features/soknad/barnetillegg/BarnetilleggSkjema";
+import { getAlder } from "../features/soknad/barnetillegg/common";
+import { toDateString } from "../components/dateUtil";
+import {
+  AnnetTiltakFaktumProperties,
+  BrukerRegistertBarnFaktumProperties,
+  FaktaKey,
+  Faktum,
+  FaktumProperties,
+  UtbetalerFaktumProperties,
+} from "./FaktumTypes";
+
 const faktaAPIUrl = "/api/fakta";
+const getFaktaUrl = (soknadId: string) => `/api/soknad/${soknadId}/fakta`;
 
-export interface Faktum {
-  properties: Record<string, string | number | null>;
-  faktumEgenskaper: any[];
-  faktumId: number;
-  key: string;
-  parrentFaktum: number | null;
-  soknadId: number;
-  type: "BRUKERREGISTRERT" | "SYSTEMREGISTRERT";
-}
-
-export const fetchFakta = (soknadId: string): Promise<Faktum[]> => {
-  return fetch(faktaAPIUrl).then((res) => res.json() as Promise<Faktum[]>);
+export const getFakta = (soknadId: string): Promise<Faktum[]> => {
+  return fetch(getFaktaUrl(soknadId)).then(
+    (res) => res.json() as Promise<Faktum[]>
+  );
 };
 
-interface CreateFaktaPayload {
-  behandlingsId: string;
-  key: string;
-  properties: {
-    land: string;
-    fodselsdato: string;
-    fornavn: string;
-    etternavn: string;
-    alder: number;
-  };
-  alder: number;
-  etternavn: string;
-  fodselsdato: string;
-  fornavn: string;
-  land: string;
-}
+type CreateFaktaPayload = { behandlingsId: string } & (
+  | {
+      key: "barn";
+      properties: BrukerRegistertBarnFaktumProperties;
+    }
+  | {
+      key: "barntiltaksliste.annetTiltak";
+      properties: AnnetTiltakFaktumProperties;
+    }
+  | {
+      key: "trygdogpensjon.utbetalere";
+      properties: UtbetalerFaktumProperties;
+    }
+);
 
-export const createFakta = (payload: CreateFaktaPayload, soknadsId: string) => {
+const createFakta = (payload: CreateFaktaPayload, soknadsId: string) => {
   return fetch(`${faktaAPIUrl}?behandlingsId=${soknadsId}`, {
     method: "POST",
     headers: {
@@ -39,4 +42,31 @@ export const createFakta = (payload: CreateFaktaPayload, soknadsId: string) => {
     },
     body: JSON.stringify(payload),
   });
+};
+
+export const deleteFakta = (faktumId: number) => {
+  return fetch(`${faktaAPIUrl}/${faktumId}`, {
+    method: "DELETE",
+  });
+};
+
+export const postBarn = (barn: BrukerRegistrertBarn, soknadId: string) => {
+  return createFakta(
+    {
+      key: "barn",
+      behandlingsId: soknadId,
+      properties: {
+        alder: getAlder(barn.fodselsdato),
+        etternavn: barn.etternavn,
+        fodselsdato:
+          typeof barn.fodselsdato === "string"
+            ? barn.fodselsdato
+            : toDateString(barn.fodselsdato),
+        fornavn: barn.fornavn,
+        land: barn.land,
+        sokerbarnetillegg: null,
+      },
+    },
+    soknadId
+  );
 };

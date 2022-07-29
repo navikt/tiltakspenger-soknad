@@ -1,11 +1,15 @@
 import { useI18n } from "../../../i18n/i18n";
 import React, { useCallback, useEffect, useState } from "react";
 import { Button, Heading, Modal } from "@navikt/ds-react";
-import { BarnQuestion } from "./BarnQuestion";
-import BarnModal, { UndocumentedBarn } from "./BarnModal";
-import { useBarn, useFakta } from "../../../api/useFakta";
+import { BarnQuestions } from "./BarnQuestions";
+import BarnModal from "./BarnModal";
+import { getBarn } from "../../../api/useFakta";
+import { deleteFakta, getFakta, postBarn } from "../../../api/fakta";
+import { useSoknadId } from "../../../components/useSoknadId";
 
-export interface BarnType {
+export type BarnType = SystemRegistrertBarn | BrukerRegistrertBarn;
+
+export interface SystemRegistrertBarn {
   alder: string;
   etternavn: string;
   fnr: string;
@@ -15,20 +19,47 @@ export interface BarnType {
   mellomnavn: null | string;
   sammensattnavn: string;
   uniqueKey: "fnr";
+  faktumId: number;
 }
 
+export interface BrukerRegistrertBarn {
+  // Date is converted to string when persisted in backend, but input yields Date
+  fodselsdato: Date | string;
+  alder?: string;
+  etternavn: string;
+  fornavn: string;
+  land: string;
+  faktumId: number;
+}
+
+export const isSystemregistrert = (
+  barn: BarnType
+): barn is SystemRegistrertBarn => "kjonn" in barn;
+export const isBrukerRegistrert = (
+  barn: BarnType
+): barn is BrukerRegistrertBarn => !("kjonn" in barn);
+
 export const BarnetilleggSkjema = () => {
-  const barn = useBarn();
+  const [barn, setBarn] = useState<BarnType[]>([]);
+  const brukerRegistrerteBarn = barn.filter(isBrukerRegistrert);
+  const systemRegistrerteBarn = barn.filter(isSystemregistrert);
+
   const t = useI18n();
-  const [undocumentedBarns, setUndocumentedBarns] = useState(
-    [] as UndocumentedBarn[]
-  );
-  const [isEditingIndex, setIsEditingIndex] = useState<number | undefined>(
+  const soknadId = useSoknadId();
+
+  const [editingIndex, setIsEditingIndex] = useState<number | undefined>(
     undefined
   );
 
+  const fetchBarn = async () => {
+    if (!soknadId) return;
+    const oppdaterteBarn = getBarn(await getFakta(soknadId));
+    setBarn(oppdaterteBarn);
+  };
+
   useEffect(() => {
     Modal.setAppElement?.("#__next");
+    fetchBarn();
   }, []);
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -41,26 +72,33 @@ export const BarnetilleggSkjema = () => {
     setModalOpen(true);
   };
 
-  const handleSetBarn = (barn: UndocumentedBarn, index: number) => {
-    const barns = [
-      ...undocumentedBarns.slice(0, index),
-      barn,
-      ...undocumentedBarns.slice(index + 1),
-    ];
-    setUndocumentedBarns(barns);
+  const createNewBarn = async (barn: BrukerRegistrertBarn) => {
+    if (!soknadId) return;
+    await postBarn(barn, soknadId);
+    await fetchBarn();
     closeModal();
   };
 
-  const handleAddBarn = useCallback(
-    (newBarn: UndocumentedBarn) => {
-      if (isEditingIndex === undefined) {
-        handleSetBarn(newBarn, undocumentedBarns.length);
+  const updateBarn = (updatedBarn: BrukerRegistrertBarn, index: number) => {
+    // TODO: Update via backend?
+    const barns = [
+      ...barn.slice(0, index),
+      updatedBarn,
+      ...barn.slice(index + 1),
+    ];
+    setBarn(barns);
+  };
+
+  const handleSaveBarn = useCallback(
+    async (newBarn: BrukerRegistrertBarn) => {
+      if (editingIndex === undefined) {
+        await createNewBarn(newBarn);
       } else {
-        handleSetBarn(newBarn, isEditingIndex);
+        await updateBarn(newBarn, editingIndex);
       }
       setIsEditingIndex(undefined);
     },
-    [isEditingIndex, handleSetBarn]
+    [editingIndex, createNewBarn, updateBarn]
   );
 
   const onChange = useCallback((barnIndex: number) => {
@@ -69,10 +107,11 @@ export const BarnetilleggSkjema = () => {
   }, []);
 
   const onDelete = useCallback(
-    (barnIndex: number) => {
-      setUndocumentedBarns(undocumentedBarns.filter((_, i) => i !== barnIndex));
+    async (barn: BrukerRegistrertBarn) => {
+      await deleteFakta(barn.faktumId);
+      await fetchBarn();
     },
-    [barn.length, undocumentedBarns]
+    [barn.length, brukerRegistrerteBarn]
   );
 
   return (
@@ -85,10 +124,10 @@ export const BarnetilleggSkjema = () => {
         {barn.length !== 0 ? (
           <p className="mb-8">{t("barnetillegg.informasjon.forsorger")}</p>
         ) : undefined}
-        <BarnQuestion
+        <BarnQuestions
           barnActions={{ onChange, onDelete }}
-          undocumentedBarn={undocumentedBarns}
-          barn={barn}
+          undocumentedBarn={brukerRegistrerteBarn}
+          barn={systemRegistrerteBarn}
         />
         <div className="flex flex-1 justify-center">
           <span className="max-w-md text-center">
@@ -112,8 +151,8 @@ export const BarnetilleggSkjema = () => {
       <BarnModal
         onClose={closeModal}
         open={modalOpen}
-        isEditing={isEditingIndex !== undefined}
-        onAddBarn={handleAddBarn}
+        isEditing={editingIndex !== undefined}
+        onSaveBarn={handleSaveBarn}
       />
     </div>
   );

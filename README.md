@@ -13,7 +13,7 @@ Teknologier
 
 Funksjonalitet som skal implementeres
 - [X] Introduksjons-page
-  - [ ] Opprette søknad (backend)
+  - [X] Opprette søknad (backend)
 - [X] Veiledning Inst
 - [X] Skjema - Tiltak
   - [ ] Tiltak finnes i Arena
@@ -24,7 +24,7 @@ Funksjonalitet som skal implementeres
 - [X] Skjema - Barnetillegg
   - [X] Legg til/endre udokumentert til barn
   - [X] Barn i felles state
-  - [ ] Extra barn fakta synk, alle felt
+  - [X] Extra barn fakta synk, alle felt
 - [X] Skjema - Personalia
 - [X] Skjema - Fritekst
 - [ ] Skjema - Felles
@@ -36,10 +36,23 @@ Funksjonalitet som skal implementeres
 - [ ] Last opp vedlegg (ligger idag i backend)
 - [ ] Send inn
 - [ ] Annet
+  - [ ] Fullfør mapping mellom skjema og faktum-modell
   - [ ] Slette søknad (backend)
-  - [ ] Fjerne ubrukt kode
+  - [ ] Fjerne ubrukt kode (mye er fjernet allerede)
   - [ ] Sette opp pipelines
   - [ ] Tilgang til backend (sendsoknad-boot) i test (og prod)
+
+### Tasks next up
+- Write mapping faktum -> form to restore form-state from fakta
+- Write remaining form-persistance using existing fakta-api methods. Adding "barn" is finished, annetTiltak, utbetalinger, veiledning and fritekst remains.
+
+### Current "architecture"
+
+Current like in old soknadsdialog (the repo called soknadtiltakspenger). Since it was planned to re-use the sendsoknad-boot backend until a new one is ready this is how it needs to work: 
+- All form-state is persisted on backend (localstorage has been used during development of the new app but should probably be removed)
+- State is synced onBlur for some input-fields (text) and on value-change for some (radio, date, select)
+- State sync is either doing a PUT with given faktum-id or creating a new faktum using POST. The full form state can then be fetched from backend with a GET om ``soknader/:behandlingsId/fakta``
+- ``behandlingsId`` and ``soknadId`` is the same thing in new implementation
 
 First, run the development server:
 

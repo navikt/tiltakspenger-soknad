@@ -1,8 +1,9 @@
 import React, { ReactNode, useContext, useEffect, useState } from "react";
-import { getFormValues } from "../../../components/skjema/useFormState";
+import { getFormValues } from "../../../components/skjema/formPersistance";
 import { VeiledningFormValues } from "../../veiledning/Veiledning";
 import { Loader } from "@navikt/ds-react";
 import { SkjemaWithFormProvider } from "./SoknadSkjemaFormProvider";
+import { useSoknadId } from "../../../components/useSoknadId";
 
 export type PersistedFormValues = {
   Tiltak: Record<string, string | undefined | number>;
@@ -26,14 +27,17 @@ const FormPersistContext =
   React.createContext<PersistedFormValues>(initialForm);
 
 const SkjemaPersistanceProvider = ({ children }: { children: ReactNode }) => {
+  const soknadId = useSoknadId();
   const [{ formValues, isLoaded }, setFormValues] = useState<{
     formValues: PersistedFormValues;
     isLoaded: boolean;
   }>({ isLoaded: false, formValues: initialForm });
   useEffect(() => {
-    setFormValues({
-      formValues: getFormValues(),
-      isLoaded: true,
+    getFormValues(soknadId).then((values) => {
+      setFormValues({
+        formValues: values,
+        isLoaded: true,
+      });
     });
   }, []);
 

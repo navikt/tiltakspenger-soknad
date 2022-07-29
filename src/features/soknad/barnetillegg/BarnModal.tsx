@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Alert, Modal } from "@navikt/ds-react";
+import { Modal } from "@navikt/ds-react";
 import Skjema from "../../../components/skjema/Skjema";
 import { useI18n } from "../../../i18n/i18n";
 import { fetchLand } from "../../../api/land";
 import FooterButtons from "../../../components/FooterButtons";
-import { BarnType } from "./BarnetilleggSkjema";
+import { BarnType, BrukerRegistrertBarn } from "./BarnetilleggSkjema";
 import {
   SubmitErrorHandler,
   SubmitHandler,
@@ -18,46 +18,38 @@ interface Props {
   onClose: () => void;
   open: boolean;
   isEditing: boolean;
-  onAddBarn: (barn: UndocumentedBarn) => void;
+  onSaveBarn: (barn: BrukerRegistrertBarn) => void;
 }
 
-export interface UndocumentedBarn {
-  fornavn: string;
-  etternavn: string;
-  fodselsdato: Date;
-  land: string;
-}
+type FormValues = BrukerRegistrertBarn & { child: BarnType[] };
 
-type FormValues = UndocumentedBarn & { child: BarnType[] };
-
-const BarnModal = ({ onClose, open, onAddBarn, isEditing }: Props) => {
+const BarnModal = ({ onClose, open, onSaveBarn, isEditing }: Props) => {
   const t = useI18n();
   const [landOptions, setLandOptions] = useState([]);
   const { handleSubmit, resetField } = useFormContext<FormValues>();
   const [fornavn, etternavn, fodselsdato, land] = useWatch({
     name: ["fornavn", "etternavn", "fodselsdato", "land"],
   });
-  const barn = { fornavn, etternavn, fodselsdato, land };
+  const barn = { fornavn, etternavn, fodselsdato, land, faktumId: 0 };
   const resetModalForm = () => {
     resetField("land");
     resetField("fornavn");
     resetField("etternavn");
     resetField("fodselsdato");
   };
-  const onSubmit: SubmitHandler<FormValues> = ({
+  const onSubmit: SubmitHandler<FormValues> = async ({
     fornavn,
     etternavn,
     fodselsdato,
     land,
-  }: UndocumentedBarn) => {
-    // TODO: Need to know barn-index, either to set existing child or create new
-    const barn = { fornavn, etternavn, fodselsdato, land };
-    onAddBarn(barn);
+  }: BrukerRegistrertBarn) => {
+    const barn = { fornavn, etternavn, fodselsdato, land, faktumId: 0 };
+    onSaveBarn(barn);
     resetModalForm();
   };
   const onError: SubmitErrorHandler<FormValues> = (err) => {
     if (Object.keys(err).length === 1 && err.child) {
-      return onAddBarn(barn);
+      return onSaveBarn(barn);
     }
   };
   const submit = handleSubmit(onSubmit, onError);

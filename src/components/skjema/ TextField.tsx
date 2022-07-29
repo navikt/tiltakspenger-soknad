@@ -49,8 +49,6 @@ const TextField: FC<InternalProps> = ({
 
   const widthStyle = type === "number" ? "w-42" : "flex-1";
 
-  console.log({ errorKey });
-
   return (
     <div className={`mb-8 flex`}>
       <DSTextField

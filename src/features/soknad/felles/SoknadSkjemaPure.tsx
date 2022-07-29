@@ -9,7 +9,7 @@ import {
   clearFormValues,
   getFormValues,
   setFormValues,
-} from "../../../components/skjema/useFormState";
+} from "../../../components/skjema/formPersistance";
 import { startRoute } from "../../../components/useRoutes";
 import Header from "../../../components/Header";
 import SideTabs from "./SideTabs";

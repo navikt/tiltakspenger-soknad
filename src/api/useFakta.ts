@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSoknadId } from "../components/useSoknadId";
-import { Faktum, fetchFakta } from "./fakta";
+import { Faktum, getFakta } from "./fakta";
 import { BarnType } from "../features/soknad/barnetillegg/BarnetilleggSkjema";
 
 export const useFakta = () => {
@@ -9,7 +9,7 @@ export const useFakta = () => {
 
   useEffect(() => {
     if (!soknadId) return;
-    fetchFakta(soknadId).then((fakta) => {
+    getFakta(soknadId).then((fakta) => {
       setFakta(fakta);
     });
   }, []);
@@ -17,10 +17,15 @@ export const useFakta = () => {
   return fakta;
 };
 
+export const getBarn = (fakta: Faktum[]) =>
+  fakta
+    .filter((fakta) => fakta.key === "barn")
+    .map((barnFakta) => ({
+      ...(barnFakta.properties as unknown as BarnType),
+      faktumId: barnFakta.faktumId,
+    }));
+
 export const useBarn = () => {
   const fakta = useFakta();
-  const barn = fakta
-    .filter((fakta) => fakta.key === "barn")
-    .map((barnFakta) => barnFakta.properties as unknown as BarnType);
-  return barn;
+  return getBarn(fakta);
 };
