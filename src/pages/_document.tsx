@@ -23,6 +23,8 @@ class PageDocument extends Document<PageDocumentProps> {
         context: "privatperson",
         simple: true,
         chatbot: false,
+        level: "Level4",
+        enforceLogin: true,
       });
       return fragments;
     } catch (error) {
