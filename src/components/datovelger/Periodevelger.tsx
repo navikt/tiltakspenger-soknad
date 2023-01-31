@@ -2,20 +2,12 @@ import { UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from "@navikt/ds-react";
 import { DateRange } from "react-day-picker";
 
 interface PeriodevelgerProps {
-  fromDate: Date;
-  toDate: Date;
   onRangeChange: (periode: DateRange | undefined) => void;
 }
 
-export default function Periodevelger({
-  fromDate,
-  toDate,
-  onRangeChange,
-}: PeriodevelgerProps) {
+export default function Periodevelger({ onRangeChange }: PeriodevelgerProps) {
   const { datepickerProps, toInputProps, fromInputProps } =
     UNSAFE_useRangeDatepicker({
-      fromDate,
-      toDate,
       onRangeChange,
     });
 

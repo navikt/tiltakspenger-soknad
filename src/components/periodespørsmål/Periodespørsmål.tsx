@@ -21,8 +21,6 @@ export default function Periodespørsmål({
         defaultValue={{ fra: "", til: "" }}
         render={({ field: { value, onChange } }) => (
           <Periodevelger
-            fromDate={value.fra}
-            toDate={value.til}
             onRangeChange={(periode) => {
               if (periode) {
                 const { from: fra, to: til } = periode;
