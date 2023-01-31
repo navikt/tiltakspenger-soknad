@@ -19,7 +19,7 @@ export default function Periodespørsmål({
         name={name}
         control={control}
         defaultValue={{ fra: "", til: "" }}
-        render={({ field: { value, onChange } }) => (
+        render={({ field: { onChange } }) => (
           <Periodevelger
             onRangeChange={(periode) => {
               if (periode) {
