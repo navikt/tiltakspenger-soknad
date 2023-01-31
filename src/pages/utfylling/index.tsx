@@ -4,11 +4,15 @@ import JaNeiSpørsmål from "@/components/ja-nei-spørsmål/JaNeiSpørsmål";
 import Flervalgsspørsmål from "@/components/flervalgsspørsmål/Flervalgsspørsmål";
 import { GuidePanel } from "@navikt/ds-react";
 import Periodespørsmål from "@/components/periodespørsmål/Periodespørsmål";
+import Fritekstspørsmål from "@/components/fritekstspørsmål/Fritekstspørsmål";
 
 export default function Utfylling() {
   const formMethods = useForm();
   const { handleSubmit, watch } = formMethods;
   const watchBorPåInstitusjon = watch("borPåInstitusjon");
+  const watchPensjonsordningEllerEtterlønn = watch(
+    "mottarEllerSøktPensjonsordningEllerEtterlønn"
+  );
   const onSubmit = console.log;
 
   return (
@@ -51,11 +55,67 @@ export default function Utfylling() {
         >
           Hvilken type tiltak søker du tiltakspenger for?
         </Flervalgsspørsmål>
-
         <Periodespørsmål name="tiltaksperiode">
           I hvilken periode skal du delta på tiltaket?
         </Periodespørsmål>
+        <Fritekstspørsmål
+          name="tiltaksarrangør.navn"
+          textFieldProps={{ htmlSize: 45 }}
+        >
+          Oppgi tiltaksarrangørens navn
+        </Fritekstspørsmål>
+        <Fritekstspørsmål
+          name="tiltaksarrangør.adresse"
+          textFieldProps={{ htmlSize: 45 }}
+        >
+          Oppgi tiltaksarrangørens adresse
+        </Fritekstspørsmål>
+        <Fritekstspørsmål
+          name="tiltaksarrangør.postnummer"
+          textFieldProps={{ htmlSize: 10 }}
+        >
+          Oppgi tiltaksarrangørens postnummer
+        </Fritekstspørsmål>
+        <Flervalgsspørsmål
+          name="antallDagerMedTiltakPerUke"
+          alternativer={[
+            { tekst: "1 dag i uken", value: "1" },
+            { tekst: "2 dager i uken", value: "2" },
+            { tekst: "3 dager i uken", value: "3" },
+            { tekst: "4 dager i uken", value: "4" },
+            { tekst: "5 dager i uken", value: "5" },
+          ]}
+        >
+          Hvor mange dager i uken deltar du på tiltaket?
+        </Flervalgsspørsmål>
+        <JaNeiSpørsmål name="mottarEllerSøktPensjonsordningEllerEtterlønn">
+          Har du søkt om eller mottar pensjonsordning eller etterlønn fra en
+          arbeidsgiver?
+        </JaNeiSpørsmål>
+        {watchPensjonsordningEllerEtterlønn && (
+          <>
+            <Fritekstspørsmål
+              name="pensjonEllerEtterlønn.utbetaler"
+              textFieldProps={{ htmlSize: 45 }}
+            >
+              Hvem utbetaler pensjon eller etterlønn?
+            </Fritekstspørsmål>
+            <Fritekstspørsmål
+              name="pensjonEllerEtterlønn.prosentandel"
+              textFieldProps={{ htmlSize: 5 }}
+            >
+              Oppgi prosentandel (valgfritt)
+            </Fritekstspørsmål>
+            <Periodespørsmål name="pensjonEllerEtterlønn.periode">
+              Oppgi periode
+            </Periodespørsmål>
+          </>
+        )}
       </form>
+      <JaNeiSpørsmål name="søkerOmBarnetillegg">
+        Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år
+        som du forsørger?
+      </JaNeiSpørsmål>
     </FormProvider>
   );
 }

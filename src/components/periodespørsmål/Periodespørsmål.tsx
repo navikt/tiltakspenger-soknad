@@ -13,7 +13,7 @@ export default function Periodespørsmål({
 }: PeriodespørsmålProps) {
   const { control } = useFormContext();
   return (
-    <fieldset>
+    <fieldset style={{ marginTop: "1rem" }}>
       <legend>{children}</legend>
       <Controller
         name={name}
