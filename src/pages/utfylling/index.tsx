@@ -1,20 +1,15 @@
 import React from "react";
-import { Controller, FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import JaNeiSpørsmål from "@/components/ja-nei-spørsmål/JaNeiSpørsmål";
 import Flervalgsspørsmål from "@/components/flervalgsspørsmål/Flervalgsspørsmål";
-import {
-  GuidePanel,
-  UNSAFE_DatePicker,
-  UNSAFE_useRangeDatepicker,
-} from "@navikt/ds-react";
+import { GuidePanel } from "@navikt/ds-react";
+import Periodespørsmål from "@/components/periodespørsmål/Periodespørsmål";
 
 export default function Utfylling() {
   const formMethods = useForm();
-  const { handleSubmit, watch, control } = formMethods;
+  const { handleSubmit, watch } = formMethods;
   const watchBorPåInstitusjon = watch("borPåInstitusjon");
   const onSubmit = console.log;
-  const { datepickerProps, toInputProps, fromInputProps } =
-    UNSAFE_useRangeDatepicker({});
 
   return (
     <FormProvider {...formMethods}>
@@ -57,36 +52,9 @@ export default function Utfylling() {
           Hvilken type tiltak søker du tiltakspenger for?
         </Flervalgsspørsmål>
 
-        <Controller
-          control={control}
-          defaultValue={{ fra: "", til: "" }}
-          render={({ field: { onChange, value } }) => (
-            <UNSAFE_DatePicker
-              {...datepickerProps}
-              onSelect={(periode: any) => {
-                onChange({ fra: periode.from || "", til: periode.til || "" });
-              }}
-            >
-              <div className="flex flex-wrap justify-center gap-4">
-                <UNSAFE_DatePicker.Input
-                  {...fromInputProps}
-                  label="Fra"
-                  value={value.fra}
-                  onChange={(fra) => {
-                    onChange({ fra, til: value.til });
-                  }}
-                />
-                <UNSAFE_DatePicker.Input
-                  {...toInputProps}
-                  label="Til"
-                  value={value.til}
-                  onChange={(til) => onChange({ til, fra: value.fra })}
-                />
-              </div>
-            </UNSAFE_DatePicker>
-          )}
-          name="tiltaksperiode"
-        ></Controller>
+        <Periodespørsmål name="tiltaksperiode">
+          I hvilken periode skal du delta på tiltaket?
+        </Periodespørsmål>
       </form>
     </FormProvider>
   );
