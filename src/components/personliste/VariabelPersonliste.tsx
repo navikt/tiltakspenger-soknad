@@ -32,9 +32,8 @@ export default function VariabelPersonliste({name}: VariabelPersonlisteProps) {
         <>
             <Button icon={<Add aria-hidden />} iconPosition="left" size={"small"} onClick={() => append({})}>Legg til barn</Button>
             {fields.map((item, index) => (
-                <fieldset style={{ marginTop: "1rem" }}>
+                <fieldset style={{ marginTop: "1rem" }} key={item.id}>
                     <legend>{`Barn ${index + 1}`}</legend>
-                    <div key={item.id}>
                         <Controller
                             name={`${name}.${index}`}
                             control={control}
@@ -67,9 +66,8 @@ export default function VariabelPersonliste({name}: VariabelPersonlisteProps) {
                             )}
                         />
                         <Button icon={<Close aria-hidden />} iconPosition="left" variant={"danger"} size={"small"} onClick={() => remove(index)}>Fjern barn</Button>
-                    </div>
                 </fieldset>
-                ))}
+            ))}
         </>
     );
 }
