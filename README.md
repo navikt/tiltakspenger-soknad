@@ -1,11 +1,11 @@
-Søknad om tiltakspenger
-================
+# Søknad om tiltakspenger
 
 Frontend-kode for søknad om tiltakspenger
 
 # Komme i gang
 
 For å kjøre opp appen i dev:
+
 ```
 npm install
 npm run dev
