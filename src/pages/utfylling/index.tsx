@@ -1,10 +1,13 @@
 import React from "react";
-import { FormProvider, useForm } from "react-hook-form";
+import {Controller, FormProvider, useFieldArray, useForm} from "react-hook-form";
 import JaNeiSpørsmål from "@/components/ja-nei-spørsmål/JaNeiSpørsmål";
 import Flervalgsspørsmål from "@/components/flervalgsspørsmål/Flervalgsspørsmål";
-import { GuidePanel } from "@navikt/ds-react";
+import {Button, GuidePanel} from "@navikt/ds-react";
 import Periodespørsmål from "@/components/periodespørsmål/Periodespørsmål";
 import Fritekstspørsmål from "@/components/fritekstspørsmål/Fritekstspørsmål";
+import { Add } from "@navikt/ds-icons";
+import Feltliste from "@/components/personliste/VariabelPersonliste";
+import VariabelPersonliste from "@/components/personliste/VariabelPersonliste";
 
 export default function Utfylling() {
   const formMethods = useForm();
@@ -13,6 +16,9 @@ export default function Utfylling() {
   const watchPensjonsordningEllerEtterlønn = watch(
     "mottarEllerSøktPensjonsordningEllerEtterlønn"
   );
+    const watchSøkerOmBarnetillegg = watch(
+        "søkerOmBarnetillegg"
+    );
   const onSubmit = console.log;
 
   return (
@@ -111,11 +117,21 @@ export default function Utfylling() {
             </Periodespørsmål>
           </>
         )}
+        <JaNeiSpørsmål name="søkerOmBarnetillegg">
+          Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år
+          som du forsørger?
+        </JaNeiSpørsmål>
+        {watchSøkerOmBarnetillegg && (
+            <VariabelPersonliste name="barnUnderSeksten"/>
+        )}
+        <Fritekstspørsmål
+            name="andreOpplysninger"
+            textFieldProps={{ htmlSize: 100 }}
+        >
+          Andre opplysninger
+        </Fritekstspørsmål>
+        <Button type={"submit"}>Send inn</Button>
       </form>
-      <JaNeiSpørsmål name="søkerOmBarnetillegg">
-        Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år
-        som du forsørger?
-      </JaNeiSpørsmål>
     </FormProvider>
   );
 }
