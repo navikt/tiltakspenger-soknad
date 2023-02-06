@@ -74,3 +74,4 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yaml
           VAR: image=${{ env.IMAGE }},name=${{ github.event.repository.name }}
+          VARS: .nais/vars/dev.yaml
