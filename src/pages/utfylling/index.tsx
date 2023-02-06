@@ -1,24 +1,29 @@
 import React from "react";
-import {Controller, FormProvider, useFieldArray, useForm} from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import JaNeiSpørsmål from "@/components/ja-nei-spørsmål/JaNeiSpørsmål";
 import Flervalgsspørsmål from "@/components/flervalgsspørsmål/Flervalgsspørsmål";
-import {Button, GuidePanel} from "@navikt/ds-react";
+import { Button, GuidePanel } from "@navikt/ds-react";
 import Periodespørsmål from "@/components/periodespørsmål/Periodespørsmål";
 import Fritekstspørsmål from "@/components/fritekstspørsmål/Fritekstspørsmål";
-import { Add } from "@navikt/ds-icons";
-import Feltliste from "@/components/personliste/VariabelPersonliste";
 import VariabelPersonliste from "@/components/personliste/VariabelPersonliste";
 
 export default function Utfylling() {
-  const formMethods = useForm();
+  const formMethods = useForm({
+    defaultValues: {
+      barnUnderSeksten: [
+        { fornavn: "", etternavn: "", fdato: "", bostedsland: "" },
+      ],
+      borPåInstitusjon: undefined,
+      mottarEllerSøktPensjonsordningEllerEtterlønn: undefined,
+      søkerOmBarnetillegg: undefined,
+    },
+  });
   const { handleSubmit, watch } = formMethods;
   const watchBorPåInstitusjon = watch("borPåInstitusjon");
   const watchPensjonsordningEllerEtterlønn = watch(
     "mottarEllerSøktPensjonsordningEllerEtterlønn"
   );
-    const watchSøkerOmBarnetillegg = watch(
-        "søkerOmBarnetillegg"
-    );
+  const watchSøkerOmBarnetillegg = watch("søkerOmBarnetillegg");
   const onSubmit = console.log;
 
   return (
@@ -122,11 +127,11 @@ export default function Utfylling() {
           som du forsørger?
         </JaNeiSpørsmål>
         {watchSøkerOmBarnetillegg && (
-            <VariabelPersonliste name="barnUnderSeksten"/>
+          <VariabelPersonliste name="barnUnderSeksten" />
         )}
         <Fritekstspørsmål
-            name="andreOpplysninger"
-            textFieldProps={{ htmlSize: 100 }}
+          name="andreOpplysninger"
+          textFieldProps={{ htmlSize: 100 }}
         >
           Andre opplysninger
         </Fritekstspørsmål>
