@@ -14,18 +14,40 @@ export default function Utfylling() {
             borPåInstitusjon: undefined,
             mottarEllerSøktPensjonsordningEllerEtterlønn: undefined,
             søkerOmBarnetillegg: undefined,
+            deltarIKvp: undefined,
+            deltarIIntroprogrammet: undefined,
         },
     });
+
     const { handleSubmit, watch } = formMethods;
+
+    const watchDeltarIKvp = watch('deltarIKvp');
+    const watchDeltarIIntroprogrammet = watch('deltarIIntroprogrammet');
     const watchBorPåInstitusjon = watch('borPåInstitusjon');
     const watchPensjonsordningEllerEtterlønn = watch('mottarEllerSøktPensjonsordningEllerEtterlønn');
     const watchSøkerOmBarnetillegg = watch('søkerOmBarnetillegg');
+
     const onSubmit = console.log;
 
     return (
         <FormProvider {...formMethods}>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <JaNeiSpørsmål name="deltarIKvp">Deltar du i kvalifiseringsprogrammet?</JaNeiSpørsmål>
+                <JaNeiSpørsmål name="deltarIKvp">
+                    Deltar du i kvalifiseringsprogrammet i perioden du søker tiltakspenger for?
+                </JaNeiSpørsmål>
+                {watchDeltarIKvp && (
+                    <Periodespørsmål name="periodeMedKvp">
+                        I hvilken periode deltar du i kvalifiseringsprogrammet?
+                    </Periodespørsmål>
+                )}
+                <JaNeiSpørsmål name="deltarIIntroprogrammet">
+                    Deltar du i introduksjonsprogrammet i perioden du søker tiltakspenger for?
+                </JaNeiSpørsmål>
+                {watchDeltarIIntroprogrammet && (
+                    <Periodespørsmål name="periodeMedIntroprogrammet">
+                        I hvilken periode deltar du i introduksjonsprogrammet?
+                    </Periodespørsmål>
+                )}
                 <JaNeiSpørsmål name="borPåInstitusjon">
                     Bor du på institusjon i tiltaksperioden med fri kost og losji?
                 </JaNeiSpørsmål>
@@ -62,12 +84,6 @@ export default function Utfylling() {
                 <Periodespørsmål name="tiltaksperiode">I hvilken periode skal du delta på tiltaket?</Periodespørsmål>
                 <Fritekstspørsmål name="tiltaksarrangør.navn" textFieldProps={{ htmlSize: 45 }}>
                     Oppgi tiltaksarrangørens navn
-                </Fritekstspørsmål>
-                <Fritekstspørsmål name="tiltaksarrangør.adresse" textFieldProps={{ htmlSize: 45 }}>
-                    Oppgi tiltaksarrangørens adresse
-                </Fritekstspørsmål>
-                <Fritekstspørsmål name="tiltaksarrangør.postnummer" textFieldProps={{ htmlSize: 10 }}>
-                    Oppgi tiltaksarrangørens postnummer
                 </Fritekstspørsmål>
                 <Flervalgsspørsmål
                     name="antallDagerMedTiltakPerUke"
