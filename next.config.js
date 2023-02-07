@@ -1,20 +1,23 @@
+const { buildCspHeader } = require('@navikt/nav-dekoratoren-moduler/ssr');
+
 let isDevelopment = process.env.NODE_ENV === 'development';
+
+const appDirectives = {
+    'script-src-elem': ["'self'"],
+    'style-src-elem': ["'self'"],
+    'connect-src': isDevelopment ? ["'self'"] : [],
+};
 
 /** @type {import('next').NextConfig} */
 module.exports = {
     output: 'standalone',
     async headers() {
-        const ContentSecurityPolicy = `
-          default-src 'self';
-          script-src 'self' ${isDevelopment ? "'unsafe-eval'" : ''};
-          style-src 'self' 'unsafe-inline';
-          font-src 'self' cdn.nav.no;
-        `;
-
+        const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+        const csp = await buildCspHeader(appDirectives, { env: environment });
         const securityHeaders = [
             {
                 key: 'Content-Security-Policy',
-                value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim(),
+                value: csp,
             },
             {
                 key: 'X-Frame-Options',
