@@ -14,7 +14,10 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
+          registry-url: "https://npm.pkg.github.com"
       - run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
       - run: npm run test:ci
 
   build:
@@ -29,6 +32,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '16.x'
+
+      - name: Build app
+        run: npm run build
 
       - name: Set up Docker Buildx
         if: github.ref == 'refs/heads/main'
