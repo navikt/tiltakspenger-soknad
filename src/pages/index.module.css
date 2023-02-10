@@ -1,0 +1,15 @@
+.søknadstittel {
+    text-align: center;
+}
+
+.bekreftelsespanel {
+    margin-top: 2rem;
+}
+
+.knappeseksjon {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 4rem;
+}
