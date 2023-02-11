@@ -17,7 +17,7 @@ export default function App() {
 
     const startSøknad = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        router.push('/utfylling');
+        router.push('/utfylling/innledning');
     };
 
     return (
