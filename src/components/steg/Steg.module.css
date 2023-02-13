@@ -1,0 +1,5 @@
+.steg__knappeseksjon {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
