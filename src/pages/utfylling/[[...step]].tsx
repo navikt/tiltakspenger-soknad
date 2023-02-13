@@ -91,7 +91,9 @@ export default function Utfylling() {
                         onGoToPreviousStep={navigerBrukerTilAndreUtbetalingerSteg}
                     />
                 )}
-                {step && step[0] === 'oppsummering' && <Oppsummeringssteg onCompleted={sendSøknad} />}
+                {step && step[0] === 'oppsummering' && (
+                    <Oppsummeringssteg onCompleted={sendSøknad} onGoToPreviousStep={navigerBrukerTilBarnetilleggSteg} />
+                )}
             </FormProvider>
         </>
     );
