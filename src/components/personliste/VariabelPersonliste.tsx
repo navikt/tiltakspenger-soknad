@@ -27,7 +27,7 @@ export default function VariabelPersonliste({ name }: VariabelPersonlisteProps) 
     });
     return (
         <>
-            <Button icon={<Add aria-hidden />} iconPosition="left" size={'small'} onClick={() => append({})}>
+            <Button type={"button"} icon={<Add aria-hidden />} iconPosition="left" size={'small'} onClick={() => append({})}>
                 Legg til barn
             </Button>
             {fields.map((item, index) => (
