@@ -15,6 +15,10 @@ spec:
     max: 1
   tokenx:
     enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - tiltakspengesoknad-api
   idporten:
     enabled: true
     sidecar:
