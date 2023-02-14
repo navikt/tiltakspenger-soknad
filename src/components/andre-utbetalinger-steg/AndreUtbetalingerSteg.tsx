@@ -12,21 +12,30 @@ interface AndreUtbetalingerStegProps {
 
 export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
     const { watch } = useFormContext();
-    const watchPensjonsordningEllerEtterlønn = watch('mottarEllerSøktPensjonsordningEllerEtterlønn');
+    const watchPensjonsordning = watch('mottarEllerSøktPensjonsordning');
+    const watchEtterlønn = watch('mottarEllerSøktEtterlønn');
     return (
         <Steg tittel="Andre utbetalinger" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep}>
-            <JaNeiSpørsmål name="mottarEllerSøktPensjonsordningEllerEtterlønn">
-                Har du søkt om eller mottar pensjonsordning eller etterlønn fra en arbeidsgiver?
+            <JaNeiSpørsmål name="mottarEllerSøktPensjonsordning">
+                Har du søkt om eller mottar pensjonsordning fra en arbeidsgiver?
             </JaNeiSpørsmål>
-            {watchPensjonsordningEllerEtterlønn && (
+            {watchPensjonsordning && (
                 <>
-                    <Fritekstspørsmål name="pensjonEllerEtterlønn.utbetaler" textFieldProps={{ htmlSize: 45 }}>
-                        Hvem utbetaler pensjon eller etterlønn?
+                    <Fritekstspørsmål name="pensjon.utbetaler" textFieldProps={{ htmlSize: 45 }}>
+                        Hvem utbetaler etterlønn?
                     </Fritekstspørsmål>
-                    <Fritekstspørsmål name="pensjonEllerEtterlønn.prosentandel" textFieldProps={{ htmlSize: 5 }}>
-                        Oppgi prosentandel (valgfritt)
+                    <Periodespørsmål name="pensjon.periode">Oppgi periode</Periodespørsmål>
+                </>
+            )}
+            <JaNeiSpørsmål name="mottarEllerSøktEtterlønn">
+                Har du søkt om eller mottar etterlønn fra en arbeidsgiver?
+            </JaNeiSpørsmål>
+            {watchEtterlønn && (
+                <>
+                    <Fritekstspørsmål name="etterlønn.utbetaler" textFieldProps={{ htmlSize: 45 }}>
+                        Hvem utbetaler etterlønn?
                     </Fritekstspørsmål>
-                    <Periodespørsmål name="pensjonEllerEtterlønn.periode">Oppgi periode</Periodespørsmål>
+                    <Periodespørsmål name="etterlønn.periode">Oppgi periode</Periodespørsmål>
                 </>
             )}
         </Steg>

@@ -23,13 +23,13 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
                     { tekst: 'Jobbsøkerkurs', value: 'jobbsøkerkurs' },
                     { tekst: 'Annet type tiltak', value: 'annet' },
                 ]}
-                name="tiltakstype"
+                name="tiltak.type"
             >
                 Hvilken type tiltak søker du tiltakspenger for?
             </Flervalgsspørsmål>
-            <Periodespørsmål name="tiltaksperiode">I hvilken periode skal du delta på tiltaket?</Periodespørsmål>
+            <Periodespørsmål name="tiltak.periode">I hvilken periode skal du delta på tiltaket?</Periodespørsmål>
             <Flervalgsspørsmål
-                name="antallDagerMedTiltakPerUke"
+                name="tiltak.antallDagerIUken"
                 alternativer={[
                     { tekst: '1 dag i uken', value: '1' },
                     { tekst: '2 dager i uken', value: '2' },

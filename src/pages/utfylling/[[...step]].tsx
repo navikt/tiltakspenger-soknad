@@ -7,15 +7,17 @@ import Innledningssteg from '@/components/innledningssteg/Innledningssteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
+import Søknad from '@/types/Søknad';
 
 export default function Utfylling() {
     const router = useRouter();
     const { step } = router.query;
-    const formMethods = useForm({
+    const formMethods = useForm<Søknad>({
         defaultValues: {
-            barnUnderSeksten: [{ fornavn: '', etternavn: '', fdato: '', bostedsland: '' }],
+            barnSøktBarnetilleggFor: [{ fornavn: '', etternavn: '', fdato: '', bostedsland: '' }],
             borPåInstitusjon: undefined,
-            mottarEllerSøktPensjonsordningEllerEtterlønn: undefined,
+            mottarEllerSøktPensjonsordning: undefined,
+            mottarEllerSøktEtterlønn: undefined,
             søkerOmBarnetillegg: undefined,
             deltarIKvp: undefined,
             deltarIIntroprogrammet: undefined,

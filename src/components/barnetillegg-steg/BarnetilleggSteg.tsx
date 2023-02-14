@@ -17,7 +17,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
             <JaNeiSpørsmål name="søkerOmBarnetillegg">
                 Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år som du forsørger?
             </JaNeiSpørsmål>
-            {watchSøkerOmBarnetillegg && <VariabelPersonliste name="barnUnderSeksten" />}
+            {watchSøkerOmBarnetillegg && <VariabelPersonliste name="barnSøktBarnetilleggFor" />}
         </Steg>
     );
 }
