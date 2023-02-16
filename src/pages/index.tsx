@@ -10,6 +10,12 @@ export default function App() {
     const [brukerHarBekreftet, setBrukerHarBekreftet] = React.useState(false);
 
     React.useEffect(() => {
+        fetch('/api/isready').then((response) => {
+            console.log(response);
+        });
+    }, []);
+
+    React.useEffect(() => {
         if (brukerHarBekreftet && markerBekreftelsesboksSomRød) {
             setMarkerBekreftelsesboksSomRød(false);
         }

@@ -1,0 +1,59 @@
+version: "3.7"
+
+services:
+  backend:
+    build:
+      context: ../../tiltakspengesoknad-api
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - auth
+    ports:
+      - 8080:8080
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - 6379:6379
+
+  auth:
+    image: "ghcr.io/navikt/mock-oauth2-server:0.5.1"
+    container_name: auth
+    ports:
+      - "6969:6969"
+    environment:
+      SERVER_PORT: 6969
+      JSON_CONFIG: >
+        {
+            "interactiveLogin": true,
+            "httpServer": "NettyWrapper",
+            "tokenCallbacks": [
+                {
+                    "issuerId": "idporten",
+                    "tokenExpiry": 3600,
+                    "requestMappings": [
+                        {
+                            "requestParam": "grant_type",
+                            "match": "*",
+                            "claims": {
+                                "sub": "12345678901",
+                                "pid": "12345678901"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+
+  wonderwall:
+    image: "ghcr.io/nais/wonderwall:latest"
+    container_name: wonderwall
+    env_file:
+      - .env
+    depends_on:
+      - auth
+    ports:
+      - 2222:2222
+    restart: on-failure
