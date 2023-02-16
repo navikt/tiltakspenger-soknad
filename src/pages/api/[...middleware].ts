@@ -25,14 +25,16 @@ function createClientAssertion(key: any) {
         alg: 'RS256',
     };
 
+    const now = Math.floor(Date.now() / 1000);
+
     const assertionClaims = {
         sub: process.env.TOKEN_X_CLIENT_ID,
         iss: process.env.TOKEN_X_CLIENT_ID,
         aud: process.env.TOKEN_X_TOKEN_ENDPOINT,
         jti: uuidv4(),
-        nbf: 1597783152,
-        iat: 1597783152,
-        exp: 1597783272,
+        nbf: now,
+        iat: now,
+        exp: now + 10,
     };
 
     return jwt.sign(assertionClaims, key.toPEM(true), { header: assertionHeaders, algorithm: 'RS256' });
