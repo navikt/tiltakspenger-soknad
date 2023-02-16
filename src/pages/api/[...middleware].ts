@@ -42,6 +42,7 @@ async function exchangeToken(subjectToken: string) {
     const key = await getKey(process.env.TOKEN_X_PRIVATE_JWK);
     const clientAssertion = createClientAssertion(key);
     const tokenEndpoint = process.env.TOKEN_X_TOKEN_ENDPOINT;
+    const cluster = process.env.NAIS_CLUSTER_NAME;
 
     const params = new URLSearchParams();
     params.append('grant_type', 'urn:ietf:params:oauth:grant-type:token-exchange');
@@ -50,7 +51,7 @@ async function exchangeToken(subjectToken: string) {
     params.append('client_assertion', clientAssertion);
     params.append('subject_token_type', 'urn:ietf:params:oauth:token-type:jwt');
     params.append('subject_token', subjectToken);
-    params.append('audience', `local:tpts:tiltakspengesoknad-api`);
+    params.append('audience', `${cluster}:tpts:tiltakspengesoknad-api`);
 
     const response = await nodeFetch(tokenEndpoint || '', {
         method: 'post',

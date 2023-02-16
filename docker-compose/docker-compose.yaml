@@ -50,6 +50,14 @@ services:
   wonderwall:
     image: "ghcr.io/nais/wonderwall:latest"
     container_name: wonderwall
+    environment:
+      WONDERWALL_OPENID_CLIENT_ID: "localhost:tpts:tiltakspengesoknad"
+      WONDERWALL_OPENID_WELL_KNOWN_URL: "http://host.docker.internal:6969/idporten/.well-known/openid-configuration"
+      WONDERWALL_INGRESS: "http://localhost:2222"
+      WONDERWALL_BIND_ADDRESS: "0.0.0.0:2222"
+      WONDERWALL_UPSTREAM_HOST: "host.docker.internal:3000"
+      WONDERWALL_AUTO_LOGIN: "true"
+      WONDERWALL_LOG_FORMAT: "text"
     env_file:
       - .env
     depends_on:
