@@ -18,7 +18,8 @@ class PageDocument extends Document<PageDocumentProps> {
                 simple: true,
                 chatbot: false,
                 level: 'Level4',
-                enforceLogin: true,
+                // todo: hvordan løse dette i dev?
+                enforceLogin: process.env.NODE_ENV === 'production',
             });
             return fragments;
         } catch (error) {

@@ -1,2 +1,3 @@
 ingress:
   - https://tiltakspengesoknad.dev.nav.no
+TILTAKSPENGESOKNAD_API_URL: https://tiltakspengesoknad-api.dev.nav.no

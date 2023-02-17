@@ -8,6 +8,9 @@ metadata:
 spec:
   image: {{ image }}
   port: 3000
+  env:
+      - name: TILTAKSPENGESOKNAD_API_URL
+        value: {{ TILTAKSPENGESOKNAD_API_URL }}
   ingresses:
     - {{ ingress }}
   replicas:
@@ -18,7 +21,7 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - tiltakspengesoknad-api
+        - application: tiltakspengesoknad-api
   idporten:
     enabled: true
     sidecar:

@@ -1,15 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import logger from './../../utils/serverLogger';
-import TokenXClient from '@/utils/api';
+import { getOnBehalfOfToken } from '@/utils/authentication';
 
 const backendUrl = process.env.TILTAKSPENGESOKNAD_API_URL;
-
-async function getToken(request: NextApiRequest) {
-    const idportenToken = request.headers['authorization'];
-    const tokenXClient = await new TokenXClient();
-    const oboToken = await tokenXClient.exchangeToken(idportenToken);
-    return oboToken;
-}
 
 function getUrl(req: NextApiRequest): string {
     const path = req?.url?.replace('/api', '');
@@ -29,20 +22,13 @@ async function makeApiRequest(request: NextApiRequest, oboToken: string): Promis
     });
 }
 
-type SimpleResponse = {
-    status: number;
-    content: string;
-    body: string;
-};
-
-export async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
+export default async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
     let oboToken = null;
     try {
-        oboToken = await getToken(request);
-    } catch (error: any) {
-        const simpleResponse = error as SimpleResponse;
-        logger.error('Bruker har ikke tilgang, kall mot Azure feilet', error);
-        response.status(simpleResponse.status).json({ message: 'Bruker har ikke tilgang' });
+        oboToken = await getOnBehalfOfToken(request);
+    } catch (error) {
+        logger.error('Bruker har ikke tilgang', error);
+        response.status(401).json({ message: 'Bruker har ikke tilgang' });
     }
     if (oboToken) {
         try {
