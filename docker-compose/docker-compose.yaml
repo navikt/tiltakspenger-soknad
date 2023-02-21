@@ -43,6 +43,22 @@ services:
                             }
                         }
                     ]
+                },
+                {
+                    "issuerId": "tokendings",
+                    "tokenExpiry": 3600,
+                    "requestMappings": [
+                        {
+                            "requestParam": "grant_type",
+                            "match": "*",
+                            "claims": {
+                                "sub": "12345678901",
+                                "pid": "12345678901",
+                                "aud": ["localhost:tpts:tiltakspengesoknad-api"],
+                                "acr": "Level4"
+                            }
+                        }
+                    ]
                 }
             ]
         }

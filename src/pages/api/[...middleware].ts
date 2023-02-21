@@ -34,8 +34,7 @@ export default async function middleware(request: NextApiRequest, response: Next
         try {
             const res = await makeApiRequest(request, oboToken as string);
             if (res.ok) {
-                const body = await res.json();
-                response.status(res.status).json(body);
+                response.status(res.status).send(null);
             } else {
                 const error = await res.text();
                 response.status(res.status).json({ error: !error ? res.statusText : error });
