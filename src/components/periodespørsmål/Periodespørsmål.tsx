@@ -1,6 +1,7 @@
 import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import Periodevelger from '@/components/datovelger/Periodevelger';
+import styles from './Periodespørsmål.module.css';
 
 interface PeriodespørsmålProps {
     name: string;
@@ -10,8 +11,8 @@ interface PeriodespørsmålProps {
 export default function Periodespørsmål({ name, children }: PeriodespørsmålProps) {
     const { control } = useFormContext();
     return (
-        <fieldset style={{ marginTop: '1rem' }}>
-            <legend>{children}</legend>
+        <fieldset className={styles.periodespørsmål}>
+            <legend className={styles.periodespørsmål__legend}>{children}</legend>
             <Controller
                 name={name}
                 control={control}

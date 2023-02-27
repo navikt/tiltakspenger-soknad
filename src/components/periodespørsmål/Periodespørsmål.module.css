@@ -1,0 +1,9 @@
+.periodespørsmål {
+    border: 0;
+    margin-top: 2rem;
+    padding: 0;
+}
+
+.periodespørsmål__legend {
+    font-weight: bold;
+}

@@ -7,5 +7,15 @@
 
 .navds-fieldset,
 .navds-form-field {
-    margin-top: 1rem;
+    margin-top: 2rem;
+}
+
+.navds-date__wrapper {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.navds-date__field {
+    margin-top: 0.5rem;
 }
