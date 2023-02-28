@@ -4,8 +4,9 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Steg from '@/components/steg/Steg';
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
+import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/validators';
 import { GuidePanel } from '@navikt/ds-react';
+import { FormPeriode } from '@/types/FormPeriode';
 
 interface InnledningsstegProps {
     onCompleted: () => void;
@@ -22,6 +23,14 @@ function deltarIIntroprogrammetValidator(verdi: boolean) {
 
 function borPåInstitusjonValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du bor på institusjon');
+}
+
+function påkrevdKvpPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i kvalifiseringsprogrammet');
+}
+
+function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
 export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: InnledningsstegProps) {
@@ -54,7 +63,10 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                     Deltar du i kvalifiseringsprogrammet i perioden du søker tiltakspenger for?
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
-                    <Periodespørsmål name="periodeMedKvp">
+                    <Periodespørsmål
+                        name="periodeMedKvp"
+                        validate={[gyldigPeriodeValidator, påkrevdKvpPeriodeValidator]}
+                    >
                         I hvilken periode deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
                 )}
@@ -62,7 +74,10 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                     Deltar du i introduksjonsprogrammet i perioden du søker tiltakspenger for?
                 </JaNeiSpørsmål>
                 {watchDeltarIIntroprogrammet && (
-                    <Periodespørsmål name="periodeMedIntroprogrammet">
+                    <Periodespørsmål
+                        name="periodeMedIntroprogrammet"
+                        validate={[gyldigPeriodeValidator, påkrevdIntroprogramPeriodeValidator]}
+                    >
                         I hvilken periode deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}

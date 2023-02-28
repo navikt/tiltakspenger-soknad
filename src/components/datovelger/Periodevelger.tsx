@@ -4,9 +4,10 @@ import { DateRange } from 'react-day-picker';
 interface PeriodevelgerProps {
     onRangeChange: (periode: DateRange | undefined) => void;
     defaultValue?: DateRange | null;
+    errorMessage?: string;
 }
 
-export default function Periodevelger({ onRangeChange, defaultValue }: PeriodevelgerProps) {
+export default function Periodevelger({ onRangeChange, defaultValue, errorMessage }: PeriodevelgerProps) {
     function getRangepickerProps() {
         if (defaultValue)
             return {
@@ -25,8 +26,8 @@ export default function Periodevelger({ onRangeChange, defaultValue }: Periodeve
 
     return (
         <UNSAFE_DatePicker {...datepickerProps}>
-            <UNSAFE_DatePicker.Input {...fromInputProps} size="small" label="Fra" />
-            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" />
+            <UNSAFE_DatePicker.Input {...fromInputProps} size="small" label="Fra" error={errorMessage} />
+            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} />
         </UNSAFE_DatePicker>
     );
 }
