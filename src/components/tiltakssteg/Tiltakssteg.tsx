@@ -9,6 +9,18 @@ interface TiltaksstegProps {
     onGoToPreviousStep: () => void;
 }
 
+function påkrevdTiltakstypeValidator(verdi: string) {
+    if (verdi !== 'AMO' && verdi !== 'arbeidstrening' && verdi !== 'jobbsøkerkurs' && verdi !== 'annet') {
+        return 'Du må oppgi hvilken type tiltak du går på';
+    }
+}
+
+function påkrevdAntallDagerIUkenValidator(verdi: string) {
+    if (verdi !== '1' && verdi !== '2' && verdi !== '3' && verdi !== '4' && verdi !== '5') {
+        return 'Du må oppgi hvor mange dager i uken du deltar på tiltaket';
+    }
+}
+
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
     return (
         <Steg tittel="Tiltak" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={2}>
@@ -24,6 +36,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
                     { tekst: 'Annet type tiltak', value: 'annet' },
                 ]}
                 name="tiltak.type"
+                validate={påkrevdTiltakstypeValidator}
             >
                 Hvilken type tiltak søker du tiltakspenger for?
             </Flervalgsspørsmål>
@@ -37,6 +50,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
                     { tekst: '4 dager i uken', value: '4' },
                     { tekst: '5 dager i uken', value: '5' },
                 ]}
+                validate={påkrevdAntallDagerIUkenValidator}
             >
                 Hvor mange dager i uken deltar du på tiltaket?
             </Flervalgsspørsmål>

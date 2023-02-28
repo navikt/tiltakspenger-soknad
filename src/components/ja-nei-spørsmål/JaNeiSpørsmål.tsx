@@ -1,5 +1,5 @@
 import React from 'react';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller, get, useFormContext } from 'react-hook-form';
 import { Radio, RadioGroup } from '@navikt/ds-react';
 
 interface JaNeiSpørsmålProps {
@@ -10,7 +10,7 @@ interface JaNeiSpørsmålProps {
 
 export default function JaNeiSpørsmål({ children, name, validate }: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
-    const errorMessage = formState.errors[name]?.message;
+    const errorMessage = get(formState.errors, name)?.message;
     const errorObject = errorMessage ? { error: <>{errorMessage}</> } : {};
     return (
         <Controller

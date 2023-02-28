@@ -33,6 +33,12 @@ function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
+function påkrevdInstitusjonstypeValidator(verdi: string) {
+    if (verdi !== 'barnevernsinstitusjon' && verdi !== 'overgangsbolig' && verdi !== 'annen') {
+        return 'Du må oppgi hvilken type institusjon du bor på';
+    }
+}
+
 export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: InnledningsstegProps) {
     const { watch } = useFormContext();
 
@@ -95,6 +101,7 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                             { tekst: 'Overgangsbolig', value: 'overgangsbolig' },
                             { tekst: 'Annen type institusjon', value: 'annen' },
                         ]}
+                        validate={påkrevdInstitusjonstypeValidator}
                     >
                         Hvilken type institusjon bor du på?
                     </Flervalgsspørsmål>
