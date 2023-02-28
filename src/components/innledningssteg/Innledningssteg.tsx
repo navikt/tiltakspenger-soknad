@@ -4,10 +4,23 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Steg from '@/components/steg/Steg';
+import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
 
 interface InnledningsstegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
+}
+
+function deltarIKvpValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i kvalifiseringsprogrammet');
+}
+
+function deltarIIntroprogrammetValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i introduksjonsprogrammet');
+}
+
+function borPåInstitusjonValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du bor på institusjon');
 }
 
 export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: InnledningsstegProps) {
@@ -25,7 +38,7 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
             stepNumber={1}
         >
             <>
-                <JaNeiSpørsmål name="deltarIKvp">
+                <JaNeiSpørsmål name="deltarIKvp" validate={deltarIKvpValidator}>
                     Deltar du i kvalifiseringsprogrammet i perioden du søker tiltakspenger for?
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
@@ -33,7 +46,7 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                         I hvilken periode deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
                 )}
-                <JaNeiSpørsmål name="deltarIIntroprogrammet">
+                <JaNeiSpørsmål name="deltarIIntroprogrammet" validate={deltarIIntroprogrammetValidator}>
                     Deltar du i introduksjonsprogrammet i perioden du søker tiltakspenger for?
                 </JaNeiSpørsmål>
                 {watchDeltarIIntroprogrammet && (
@@ -41,7 +54,7 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                         I hvilken periode deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}
-                <JaNeiSpørsmål name="borPåInstitusjon">
+                <JaNeiSpørsmål name="borPåInstitusjon" validate={borPåInstitusjonValidator}>
                     Bor du på institusjon i tiltaksperioden med fri kost og losji?
                 </JaNeiSpørsmål>
                 {watchBorPåInstitusjon && (
