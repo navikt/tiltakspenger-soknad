@@ -10,8 +10,8 @@ interface PeriodespørsmålProps {
 }
 
 export default function Periodespørsmål({ name, children }: PeriodespørsmålProps) {
-    const { control, getValues } = useFormContext();
-    const verdi = getValues()[name];
+    const { control, watch } = useFormContext();
+    const verdi = watch(name);
     const defaultValue = verdi ? { from: dayjs(verdi.fra).toDate(), to: dayjs(verdi.til).toDate() } : null;
     return (
         <fieldset className={styles.periodespørsmål}>
