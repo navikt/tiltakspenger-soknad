@@ -5,6 +5,7 @@ import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål'
 import Fritekstspørsmål from '@/components/fritekstspørsmål/Fritekstspørsmål';
 import Steg from '@/components/steg/Steg';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
+import { GuidePanel } from '@navikt/ds-react';
 
 interface AndreUtbetalingerStegProps {
     onCompleted: () => void;
@@ -30,6 +31,11 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={3}
         >
+            <GuidePanel poster>
+                Hvis du mottar utbetalinger fra en offentlig eller privat pensjonsordning eller mottar etterlønn fra en
+                arbeidsgiver, kan det ha betydning for hva du får utbetalt i tiltakspenger. Du trenger ikke oppgi
+                eventuelle ytelser du mottar fra NAV.
+            </GuidePanel>
             <JaNeiSpørsmål name="mottarEllerSøktPensjonsordning" validate={pensjonsordningValidator}>
                 Har du søkt om eller mottar pensjonsordning fra en arbeidsgiver?
             </JaNeiSpørsmål>
