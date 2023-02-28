@@ -13,7 +13,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
     const { watch } = useFormContext();
     const watchSøkerOmBarnetillegg = watch('søkerOmBarnetillegg');
     return (
-        <Steg tittel="Barnetillegg" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep}>
+        <Steg tittel="Barnetillegg" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={4}>
             <JaNeiSpørsmål name="søkerOmBarnetillegg">
                 Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år som du forsørger?
             </JaNeiSpørsmål>

@@ -18,7 +18,12 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
     const watchBorPåInstitusjon = watch('borPåInstitusjon');
 
     return (
-        <Steg tittel="Innledningsspørsmål" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep}>
+        <Steg
+            tittel="Innledningsspørsmål"
+            onCompleted={onCompleted}
+            onGoToPreviousStep={onGoToPreviousStep}
+            stepNumber={1}
+        >
             <>
                 <JaNeiSpørsmål name="deltarIKvp">
                     Deltar du i kvalifiseringsprogrammet i perioden du søker tiltakspenger for?

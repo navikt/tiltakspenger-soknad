@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Accordion, Button, ConfirmationPanel, GuidePanel } from '@navikt/ds-react';
+import Steg from '@/components/steg/Steg';
 
 interface OppsummeringsstegProps {
     onCompleted: (data: any) => void;
@@ -11,12 +12,25 @@ export default function Oppsummeringssteg({ onCompleted, onGoToPreviousStep }: O
     const { getValues } = useFormContext();
     const data = getValues();
     return (
-        <div>
-            <h2>Oppsummering</h2>
+        <Steg
+            tittel="Oppsummering"
+            onCompleted={() => onCompleted(data)}
+            onGoToPreviousStep={onGoToPreviousStep}
+            stepNumber={5}
+            submitSectionRenderer={() => (
+                <div style={{ marginTop: '2rem' }}>
+                    <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
+                        Forrige steg
+                    </Button>
+                    <Button type="button" onClick={onCompleted} size="small" style={{ marginLeft: '1rem' }}>
+                        Send inn søknad
+                    </Button>
+                </div>
+            )}
+        >
             <GuidePanel poster>
                 Her kan du se over at alt er riktig, og ved behov endre opplysninger, før du sender inn søknaden
             </GuidePanel>
-
             <Accordion style={{ marginTop: '2rem' }}>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Innledningsspørsmål</Accordion.Header>
@@ -56,22 +70,12 @@ export default function Oppsummeringssteg({ onCompleted, onGoToPreviousStep }: O
                     <Accordion.Content>Test</Accordion.Content>
                 </Accordion.Item>
             </Accordion>
-
             <ConfirmationPanel
                 label="Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte"
                 style={{ marginTop: '2rem' }}
             >
                 <b>Vi stoler på deg</b>
             </ConfirmationPanel>
-
-            <div style={{ marginTop: '2rem' }}>
-                <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
-                    Forrige steg
-                </Button>
-                <Button type="button" onClick={onCompleted} size="small" style={{ marginLeft: '1rem' }}>
-                    Send inn søknad
-                </Button>
-            </div>
-        </div>
+        </Steg>
     );
 }

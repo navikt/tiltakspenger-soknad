@@ -15,7 +15,12 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
     const watchPensjonsordning = watch('mottarEllerSøktPensjonsordning');
     const watchEtterlønn = watch('mottarEllerSøktEtterlønn');
     return (
-        <Steg tittel="Andre utbetalinger" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep}>
+        <Steg
+            tittel="Andre utbetalinger"
+            onCompleted={onCompleted}
+            onGoToPreviousStep={onGoToPreviousStep}
+            stepNumber={3}
+        >
             <JaNeiSpørsmål name="mottarEllerSøktPensjonsordning">
                 Har du søkt om eller mottar pensjonsordning fra en arbeidsgiver?
             </JaNeiSpørsmål>

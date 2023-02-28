@@ -11,7 +11,7 @@ interface TiltaksstegProps {
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
     return (
-        <Steg tittel="Tiltak" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep}>
+        <Steg tittel="Tiltak" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={2}>
             <GuidePanel poster>
                 Fyll ut informasjon om tiltaket du vil delta på i feltene under. Hvis du ikke har avtalt tiltaket med
                 NAV, vil vi kontakte deg for å avklare om vi kan godkjenne tiltaket.
