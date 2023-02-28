@@ -2,6 +2,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Accordion, Button, ConfirmationPanel, GuidePanel } from '@navikt/ds-react';
 import Steg from '@/components/steg/Steg';
+import styles from './../steg/Steg.module.css';
 
 interface OppsummeringsstegProps {
     onCompleted: (data: any) => void;
@@ -18,7 +19,7 @@ export default function Oppsummeringssteg({ onCompleted, onGoToPreviousStep }: O
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={5}
             submitSectionRenderer={() => (
-                <div style={{ marginTop: '2rem' }}>
+                <div className={styles.steg__knappeseksjon}>
                     <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
                         Forrige steg
                     </Button>

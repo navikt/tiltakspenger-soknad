@@ -24,8 +24,8 @@ export default function Steg({
     const shouldRenderCustomSubmitSection = !!submitSectionRenderer;
     return (
         <>
-            <h2 style={{ textAlign: 'center' }}>{tittel}</h2>
-            <span style={{ fontWeight: 'bold' }}>Steg {stepNumber} av 5</span>
+            <h2 className={styles.steg__tittel}>{tittel}</h2>
+            <span className={styles.steg__stegindikator}>Steg {stepNumber} av 5</span>
             {shouldRenderCustomSubmitSection && (
                 <>
                     {children}

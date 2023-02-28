@@ -1,5 +1,14 @@
+.steg__tittel {
+    text-align: center;
+}
+
+.steg__stegindikator {
+    font-weight: bold;
+}
+
 .steg__knappeseksjon {
     display: flex;
-    gap: 0.5rem;
-    margin-top: 2rem;
+    gap: 4rem;
+    margin-top: 4rem;
+    justify-content: center;
 }
