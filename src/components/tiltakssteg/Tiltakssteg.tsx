@@ -3,6 +3,8 @@ import { GuidePanel } from '@navikt/ds-react';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Steg from '@/components/steg/Steg';
+import { gyldigPeriodeValidator, påkrevdPeriodeValidator } from '@/utils/validators';
+import { FormPeriode } from '@/types/FormPeriode';
 
 interface TiltaksstegProps {
     onCompleted: () => void;
@@ -19,6 +21,10 @@ function påkrevdAntallDagerIUkenValidator(verdi: string) {
     if (verdi !== '1' && verdi !== '2' && verdi !== '3' && verdi !== '4' && verdi !== '5') {
         return 'Du må oppgi hvor mange dager i uken du deltar på tiltaket';
     }
+}
+
+function påkrevdTiltaksperiodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar på tiltaket');
 }
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
@@ -40,7 +46,9 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
             >
                 Hvilken type tiltak søker du tiltakspenger for?
             </Flervalgsspørsmål>
-            <Periodespørsmål name="tiltak.periode">I hvilken periode skal du delta på tiltaket?</Periodespørsmål>
+            <Periodespørsmål name="tiltak.periode" validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeValidator]}>
+                I hvilken periode skal du delta på tiltaket?
+            </Periodespørsmål>
             <Flervalgsspørsmål
                 name="tiltak.antallDagerIUken"
                 alternativer={[
