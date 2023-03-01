@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import VariabelPersonliste from '@/components/personliste/VariabelPersonliste';
-import Steg from '@/components/steg/Steg';
+import Step from '@/components/step/Step';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
 
 interface BarnetilleggStegProps {
@@ -18,11 +18,11 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
     const { watch } = useFormContext();
     const watchSøkerOmBarnetillegg = watch('søkerOmBarnetillegg');
     return (
-        <Steg tittel="Barnetillegg" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={4}>
+        <Step title="Barnetillegg" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={4}>
             <JaNeiSpørsmål name="søkerOmBarnetillegg" validate={søkerBarnetilleggValidator}>
                 Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år som du forsørger?
             </JaNeiSpørsmål>
             {watchSøkerOmBarnetillegg && <VariabelPersonliste name="barnSøktBarnetilleggFor" />}
-        </Steg>
+        </Step>
     );
 }

@@ -3,9 +3,8 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
-import Steg from '@/components/steg/Steg';
+import Step from '@/components/step/Step';
 import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/validators';
-import { GuidePanel } from '@navikt/ds-react';
 import { FormPeriode } from '@/types/FormPeriode';
 
 interface InnledningsstegProps {
@@ -47,23 +46,25 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
     const watchBorPåInstitusjon = watch('borPåInstitusjon');
 
     return (
-        <Steg
-            tittel="Innledningsspørsmål"
+        <Step
+            title="Innledningsspørsmål"
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={1}
+            guide={
+                <React.Fragment>
+                    <p>
+                        Hvis du deltar på tiltak gjennom kvalifiseringsprogrammet, vil du får kvalifiseringsstønad i
+                        stedet for tiltakspenger. Du kan allikevel få tiltakspenger hvis perioden du har
+                        kvalifiseringsstønad overlapper med perioden du er i tiltak.
+                    </p>
+                    <p>
+                        Bor du på en institusjon med fri kost og losji i perioden du deltar på tiltak, har du som regel
+                        ikke rett til tiltakspenger. Dette gjelder ikke for barnevernsinstitusjon og overgangsbolig.
+                    </p>
+                </React.Fragment>
+            }
         >
-            <GuidePanel poster>
-                <p>
-                    Hvis du deltar på tiltak gjennom kvalifiseringsprogrammet, vil du får kvalifiseringsstønad i stedet
-                    for tiltakspenger. Du kan allikevel få tiltakspenger hvis perioden du har kvalifiseringsstønad
-                    overlapper med perioden du er i tiltak.
-                </p>
-                <p>
-                    Bor du på en institusjon med fri kost og losji i perioden du deltar på tiltak, har du som regel ikke
-                    rett til tiltakspenger. Dette gjelder ikke for barnevernsinstitusjon og overgangsbolig.
-                </p>
-            </GuidePanel>
             <>
                 <JaNeiSpørsmål name="deltarIKvp" validate={deltarIKvpValidator}>
                     Deltar du i kvalifiseringsprogrammet i perioden du søker tiltakspenger for?
@@ -107,6 +108,6 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                     </Flervalgsspørsmål>
                 )}
             </>
-        </Steg>
+        </Step>
     );
 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { GuidePanel } from '@navikt/ds-react';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
-import Steg from '@/components/steg/Steg';
+import Step from '@/components/step/Step';
 import { gyldigPeriodeValidator, påkrevdPeriodeValidator } from '@/utils/validators';
 import { FormPeriode } from '@/types/FormPeriode';
 
@@ -29,7 +29,7 @@ function påkrevdTiltaksperiodeValidator(periode: FormPeriode) {
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
     return (
-        <Steg tittel="Tiltak" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={2}>
+        <Step title="Tiltak" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={2}>
             <GuidePanel poster>
                 Fyll ut informasjon om tiltaket du vil delta på i feltene under. Hvis du ikke har avtalt tiltaket med
                 NAV, vil vi kontakte deg for å avklare om vi kan godkjenne tiltaket.
@@ -62,6 +62,6 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
             >
                 Hvor mange dager i uken deltar du på tiltaket?
             </Flervalgsspørsmål>
-        </Steg>
+        </Step>
     );
 }

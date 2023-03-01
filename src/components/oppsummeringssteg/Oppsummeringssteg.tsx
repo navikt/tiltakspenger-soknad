@@ -1,8 +1,8 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Accordion, Button, ConfirmationPanel, GuidePanel } from '@navikt/ds-react';
-import Steg from '@/components/steg/Steg';
-import styles from './../steg/Steg.module.css';
+import { Accordion, Button, ConfirmationPanel } from '@navikt/ds-react';
+import Step from '@/components/step/Step';
+import styles from '../step/Step.module.css';
 
 interface OppsummeringsstegProps {
     onCompleted: (data: any) => void;
@@ -13,13 +13,13 @@ export default function Oppsummeringssteg({ onCompleted, onGoToPreviousStep }: O
     const { getValues } = useFormContext();
     const data = getValues();
     return (
-        <Steg
-            tittel="Oppsummering"
+        <Step
+            title="Oppsummering"
             onCompleted={() => onCompleted(data)}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={5}
             submitSectionRenderer={() => (
-                <div className={styles.steg__knappeseksjon}>
+                <div className={styles.step__buttonsection}>
                     <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
                         Forrige steg
                     </Button>
@@ -28,10 +28,8 @@ export default function Oppsummeringssteg({ onCompleted, onGoToPreviousStep }: O
                     </Button>
                 </div>
             )}
+            guide="Her kan du se over at alt er riktig, og ved behov endre opplysninger, før du sender inn søknaden"
         >
-            <GuidePanel poster>
-                Her kan du se over at alt er riktig, og ved behov endre opplysninger, før du sender inn søknaden
-            </GuidePanel>
             <Accordion style={{ marginTop: '2rem' }}>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Innledningsspørsmål</Accordion.Header>
@@ -77,6 +75,6 @@ export default function Oppsummeringssteg({ onCompleted, onGoToPreviousStep }: O
             >
                 <b>Vi stoler på deg</b>
             </ConfirmationPanel>
-        </Steg>
+        </Step>
     );
 }

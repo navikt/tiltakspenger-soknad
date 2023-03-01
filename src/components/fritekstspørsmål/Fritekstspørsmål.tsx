@@ -20,6 +20,7 @@ export default function Fritekstspørsmål({ name, children, textFieldProps, val
             rules={{ validate }}
             render={({ field }) => (
                 <TextField
+                    id={name}
                     label={children}
                     {...textFieldProps}
                     {...field}

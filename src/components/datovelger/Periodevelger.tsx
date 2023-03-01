@@ -5,9 +5,10 @@ interface PeriodevelgerProps {
     onRangeChange: (periode: DateRange | undefined) => void;
     defaultValue?: DateRange | null;
     errorMessage?: string;
+    id?: string;
 }
 
-export default function Periodevelger({ onRangeChange, defaultValue, errorMessage }: PeriodevelgerProps) {
+export default function Periodevelger({ onRangeChange, defaultValue, errorMessage, id }: PeriodevelgerProps) {
     function getRangepickerProps() {
         if (defaultValue)
             return {
@@ -25,9 +26,15 @@ export default function Periodevelger({ onRangeChange, defaultValue, errorMessag
     });
 
     return (
-        <UNSAFE_DatePicker {...datepickerProps}>
-            <UNSAFE_DatePicker.Input {...fromInputProps} size="small" label="Fra" error={errorMessage} />
-            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} />
+        <UNSAFE_DatePicker {...datepickerProps} id={id}>
+            <UNSAFE_DatePicker.Input
+                {...fromInputProps}
+                size="small"
+                label="Fra"
+                error={errorMessage}
+                id={`${id}.fra`}
+            />
+            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} id={`${id}.til`} />
         </UNSAFE_DatePicker>
     );
 }

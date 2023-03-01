@@ -38,6 +38,7 @@ export default function Periodespørsmål({ name, children, validate }: Periodes
                 rules={{ validate: setupValidation(validate) }}
                 render={({ field: { onChange } }) => (
                     <Periodevelger
+                        id={name}
                         defaultValue={defaultValue}
                         onRangeChange={(periode) => {
                             if (periode) {

@@ -24,6 +24,7 @@ export default function Flervalgsspørsmål({ name, alternativer, children, vali
             rules={{ validate }}
             render={({ field: { value, name, onBlur, onChange } }) => (
                 <RadioGroup
+                    id={name}
                     legend={children}
                     value={value || ''}
                     name={name}

@@ -1,14 +1,18 @@
-.steg__tittel {
+.step__title {
     text-align: center;
 }
 
-.steg__stegindikator {
+.step__stepindicator {
     font-weight: bold;
 }
 
-.steg__knappeseksjon {
+.step__buttonsection {
     display: flex;
     gap: 4rem;
     margin-top: 4rem;
     justify-content: center;
+}
+
+.step__errorsummary {
+    margin-bottom: 1rem;
 }

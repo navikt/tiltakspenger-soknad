@@ -19,6 +19,7 @@ export default function JaNeiSpørsmål({ children, name, validate }: JaNeiSpør
             rules={{ validate }}
             render={({ field: { value, name, onBlur, onChange } }) => (
                 <RadioGroup
+                    id={name}
                     legend={children}
                     value={value === true ? 'ja' : value === false ? 'nei' : ''}
                     name={name}
