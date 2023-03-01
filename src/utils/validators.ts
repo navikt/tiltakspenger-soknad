@@ -21,3 +21,9 @@ export function påkrevdPeriodeValidator(periode: FormPeriode, feilmelding: stri
         return feilmelding;
     }
 }
+
+export function påkrevdFritekstfeltValidator(verdi: string, feilmelding: string) {
+    if (!verdi || verdi.length === 0) {
+        return feilmelding;
+    }
+}

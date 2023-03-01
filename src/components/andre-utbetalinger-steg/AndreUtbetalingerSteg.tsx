@@ -4,7 +4,7 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Fritekstspørsmål from '@/components/fritekstspørsmål/Fritekstspørsmål';
 import Steg from '@/components/steg/Steg';
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
+import { påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
 import { GuidePanel } from '@navikt/ds-react';
 
 interface AndreUtbetalingerStegProps {
@@ -18,6 +18,14 @@ function pensjonsordningValidator(verdi: boolean) {
 
 function etterlønnValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar etterlønn');
+}
+
+function pensjonsutbetalerValidator(verdi: string) {
+    return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi hvem som utbetaler pensjon');
+}
+
+function etterlønnutbetalerValidator(verdi: string) {
+    return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi hvem som utbetaler etterlønn');
 }
 
 export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
@@ -41,8 +49,12 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             </JaNeiSpørsmål>
             {watchPensjonsordning && (
                 <>
-                    <Fritekstspørsmål name="pensjon.utbetaler" textFieldProps={{ htmlSize: 45 }}>
-                        Hvem utbetaler etterlønn?
+                    <Fritekstspørsmål
+                        name="pensjon.utbetaler"
+                        textFieldProps={{ htmlSize: 45 }}
+                        validate={pensjonsutbetalerValidator}
+                    >
+                        Hvem utbetaler pensjonsordningen?
                     </Fritekstspørsmål>
                     <Periodespørsmål name="pensjon.periode">Oppgi periode</Periodespørsmål>
                 </>
@@ -52,7 +64,11 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             </JaNeiSpørsmål>
             {watchEtterlønn && (
                 <>
-                    <Fritekstspørsmål name="etterlønn.utbetaler" textFieldProps={{ htmlSize: 45 }}>
+                    <Fritekstspørsmål
+                        name="etterlønn.utbetaler"
+                        textFieldProps={{ htmlSize: 45 }}
+                        validate={etterlønnutbetalerValidator}
+                    >
                         Hvem utbetaler etterlønn?
                     </Fritekstspørsmål>
                     <Periodespørsmål name="etterlønn.periode">Oppgi periode</Periodespørsmål>
