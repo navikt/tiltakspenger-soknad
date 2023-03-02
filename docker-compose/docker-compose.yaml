@@ -5,6 +5,14 @@ services:
     build:
       context: ../../tiltakspengesoknad-api
       dockerfile: Dockerfile
+    environment:
+      AZURE_APP_WELL_KNOWN_URL: "http://host.docker.internal:6969/azure/.well-known/openid-configuration"
+      AZURE_APP_CLIENT_SECRET: mocked_secret
+      AZURE_APP_CLIENT_ID: mocked_client_id
+      TOKEN_X_WELL_KNOWN_URL: "http://host.docker.internal:6969/tokendings/.well-known/openid-configuration"
+      TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspengesoknad-api
+      PDL_AUDIENCE: mock_audience
+      PDL_SCOPE: mock_scope
     env_file:
       - .env
     depends_on:
@@ -46,6 +54,22 @@ services:
                 },
                 {
                     "issuerId": "tokendings",
+                    "tokenExpiry": 3600,
+                    "requestMappings": [
+                        {
+                            "requestParam": "grant_type",
+                            "match": "*",
+                            "claims": {
+                                "sub": "12345678901",
+                                "pid": "12345678901",
+                                "aud": ["localhost:tpts:tiltakspengesoknad-api"],
+                                "acr": "Level4"
+                            }
+                        }
+                    ]
+                },
+                {
+                    "issuerId": "azure",
                     "tokenExpiry": 3600,
                     "requestMappings": [
                         {

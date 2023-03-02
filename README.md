@@ -31,6 +31,8 @@ miljøvariabel for [Wonderwall](https://github.com/nais/wonderwall) som er mocke
 2. Og opprett en fil på `./docker-compose/.env` med følgende innhold:
     ```
     WONDERWALL_OPENID_CLIENT_JWK=<generert JWK>
+    TOKEN_X_PRIVATE_JWK=<generert JWK>
+    PDL_ENDPOINT_URL=<en eller annen baseurl>
     ```
 3. Sørg for at tiltakspengesoknad-api ligger på `../` relativt til tiltakspengesoknad repoet.
 4. Spinn opp containere med 
