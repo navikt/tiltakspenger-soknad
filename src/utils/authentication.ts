@@ -51,7 +51,7 @@ async function exchangeToken(subjectToken: string) {
     params.append('client_assertion', clientAssertion);
     params.append('subject_token_type', 'urn:ietf:params:oauth:token-type:jwt');
     params.append('subject_token', subjectToken);
-    params.append('audience', `${cluster}:tpts:tiltakspengesoknad-api`);
+    params.append('audience', `${cluster}:tpts:tiltakspenger-soknad-api`);
 
     const response = await nodeFetch(tokenEndpoint || '', {
         method: 'post',
