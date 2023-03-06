@@ -34,10 +34,10 @@ export default async function middleware(request: NextApiRequest, response: Next
         try {
             const res = await makeApiRequest(request, oboToken as string);
             if (res.ok) {
-                logger.info('Returnerer respons');
-                response.status(res.status).send(null);
+                console.info('Returnerer respons');
+                response.status(res.status).json(res.body || {});
             } else {
-                logger.info('Respons var ikke OK');
+                console.info('Respons var ikke OK');
                 const error = await res.text();
                 response.status(res.status).json({ error: !error ? res.statusText : error });
             }
