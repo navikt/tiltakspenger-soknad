@@ -25,26 +25,31 @@ async function makeApiRequest(request: NextApiRequest, oboToken: string): Promis
 export default async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
     let oboToken = null;
     try {
-        console.info('Henter token');
+        logger.info('Henter token');
         oboToken = await getOnBehalfOfToken(request);
     } catch (error) {
-        console.info('Bruker har ikke tilgang', error);
+        logger.info('Bruker har ikke tilgang', error);
         response.status(401).json({ message: 'Bruker har ikke tilgang' });
     }
     if (oboToken) {
-        console.info('Starter http kall');
+        logger.info('Starter http kall');
         try {
             const res = await makeApiRequest(request, oboToken as string);
             if (res.ok) {
-                console.info('Returnerer respons');
-                response.status(res.status).json(res.body || {});
+                try {
+                    const body = await res.json();
+                    logger.info('Returnerer respons');
+                    response.status(res.status).json(body);
+                } catch (error) {
+                    response.status(502).json({ message: 'Bad Gateway' });
+                }
             } else {
-                console.info('Respons var ikke OK');
+                logger.info('Respons var ikke OK');
                 const error = await res.text();
                 response.status(res.status).json({ error: !error ? res.statusText : error });
             }
         } catch (error) {
-            console.info('Fikk ikke kontakt med APIet, returnerer 502', error);
+            logger.info('Fikk ikke kontakt med APIet, returnerer 502', error);
             response.status(502).json({ message: 'Bad Gateway' });
         }
     }
