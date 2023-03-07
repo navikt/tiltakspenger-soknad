@@ -22,7 +22,13 @@ export default function VariabelPersonliste({ name }: VariabelPersonlisteProps) 
     });
     return (
         <>
-            <Button type={"button"} icon={<Add aria-hidden />} iconPosition="left" size={'small'} onClick={() => append({})}>
+            <Button
+                type={'button'}
+                icon={<Add aria-hidden />}
+                iconPosition="left"
+                size={'small'}
+                onClick={() => append({})}
+            >
                 Legg til barn
             </Button>
             {fields.map((item, index) => (
@@ -40,7 +46,7 @@ export default function VariabelPersonliste({ name }: VariabelPersonlisteProps) 
                         render={({ field }) => (
                             <>
                                 <TextField
-                                    label={'Barnets fornavn'}
+                                    label="Barnets fornavn"
                                     value={field.value.fornavn || ''}
                                     onChange={(event) =>
                                         field.onChange({
@@ -50,7 +56,7 @@ export default function VariabelPersonliste({ name }: VariabelPersonlisteProps) 
                                     }
                                 />
                                 <TextField
-                                    label={'Barnets etternavn'}
+                                    label="Barnets etternavn"
                                     value={field.value.etternavn || ''}
                                     onChange={(event) =>
                                         field.onChange({
@@ -66,10 +72,10 @@ export default function VariabelPersonliste({ name }: VariabelPersonlisteProps) 
                                             fdato: dato?.toISOString().split('T')[0] ?? '',
                                         })
                                     }
-                                    label={'Test'}
+                                    label="Fødselsdato"
                                 />
                                 <TextField
-                                    label={'Bostedsland'}
+                                    label="Bostedsland"
                                     value={field.value.bostedsland || ''}
                                     onChange={(event) =>
                                         field.onChange({
