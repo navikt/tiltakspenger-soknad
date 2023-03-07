@@ -29,6 +29,8 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
 
     const [barnFraApi, setBarnFraApi] = React.useState([]);
 
+    const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
+
     React.useEffect(() => {
         fetch('/api/personalia').then(async (response) => {
             const personalia = await response.json();
@@ -60,7 +62,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
                     Hvilke barn ønsker du å søke barnetillegg for?
                 </Checkboxgruppespørsmål>
             )}
-            {(!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg && (
+            {harIngenBarnÅViseFraApi && (
                 <GuidePanel style={{ marginTop: '2rem', marginBottom: '2rem' }}>
                     <p>
                         Vi kunne ikke finne noen barn registrert på deg. Litt lengre ned på siden kan du registrere barn
@@ -77,10 +79,9 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
                     Har du andre barn du ønsker å søke barnetillegg for?
                 </JaNeiSpørsmål>
             )}
-            {watchØnskerÅSøkeBarnetilleggForAndreBarn ||
-                ((!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg && (
-                    <VariabelPersonliste name="manueltRegistrerteBarnSøktBarnetilleggFor" />
-                ))}
+            {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
+                <VariabelPersonliste name="manueltRegistrerteBarnSøktBarnetilleggFor" />
+            )}
         </Step>
     );
 }
