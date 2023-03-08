@@ -66,7 +66,14 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
             }
         >
             <>
-                <JaNeiSpørsmål name="deltarIKvp" validate={deltarIKvpValidator}>
+                <JaNeiSpørsmål
+                    name="deltarIKvp"
+                    validate={deltarIKvpValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er kvalifiseringsprogrammet?',
+                        tekst: 'Kvalifiseringsprogrammet er en kommunal ytelse som ....',
+                    }}
+                >
                     Deltar du i kvalifiseringsprogrammet i perioden du søker tiltakspenger for?
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
@@ -77,7 +84,14 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                         I hvilken periode deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
                 )}
-                <JaNeiSpørsmål name="deltarIIntroprogrammet" validate={deltarIIntroprogrammetValidator}>
+                <JaNeiSpørsmål
+                    name="deltarIIntroprogrammet"
+                    validate={deltarIIntroprogrammetValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er introduksjonsprogrammet?',
+                        tekst: 'Introduksjonsprogrammet er en kommunal ytelse som ....',
+                    }}
+                >
                     Deltar du i introduksjonsprogrammet i perioden du søker tiltakspenger for?
                 </JaNeiSpørsmål>
                 {watchDeltarIIntroprogrammet && (

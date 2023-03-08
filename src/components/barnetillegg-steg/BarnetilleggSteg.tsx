@@ -48,7 +48,11 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
 
     return (
         <Step title="Barnetillegg" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={4}>
-            <JaNeiSpørsmål name="søkerOmBarnetillegg" validate={søkerBarnetilleggValidator}>
+            <JaNeiSpørsmål
+                name="søkerOmBarnetillegg"
+                validate={søkerBarnetilleggValidator}
+                hjelpetekst={{ tittel: 'Når kan man få barnetillegg?', tekst: 'Her kommer det noe hjelpetekst' }}
+            >
                 Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år som du forsørger?
             </JaNeiSpørsmål>
             {watchSøkerOmBarnetillegg && barnFraApi && barnFraApi.length > 0 && (

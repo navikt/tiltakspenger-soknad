@@ -43,6 +43,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
                 ]}
                 name="tiltak.type"
                 validate={påkrevdTiltakstypeValidator}
+                hjelpetekst={{
+                    tittel: 'Hvordan vet jeg hvilken type tiltak jeg går på?',
+                    tekst: 'Her kommer det noe hjelpetekst',
+                }}
             >
                 Hvilken type tiltak søker du tiltakspenger for?
             </Flervalgsspørsmål>

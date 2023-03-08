@@ -1,14 +1,16 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import { Radio, RadioGroup } from '@navikt/ds-react';
+import { Radio, RadioGroup, ReadMore } from '@navikt/ds-react';
+import { Hjelpetekst } from '@/types/Hjelpetekst';
 
 interface JaNeiSpørsmålProps {
     children: string;
     name: string;
     validate?: (value: any) => string | undefined;
+    hjelpetekst?: Hjelpetekst;
 }
 
-export default function JaNeiSpørsmål({ children, name, validate }: JaNeiSpørsmålProps) {
+export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst }: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     const errorObject = errorMessage ? { error: <>{errorMessage}</> } : {};
@@ -27,6 +29,7 @@ export default function JaNeiSpørsmål({ children, name, validate }: JaNeiSpør
                     onChange={(value) => onChange(value === 'ja')}
                     {...errorObject}
                 >
+                    {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
                     <Radio value="ja">Ja</Radio>
                     <Radio value="nei">Nei</Radio>
                 </RadioGroup>

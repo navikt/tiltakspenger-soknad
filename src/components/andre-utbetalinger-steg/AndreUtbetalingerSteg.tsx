@@ -41,7 +41,11 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
                 arbeidsgiver, kan det ha betydning for hva du får utbetalt i tiltakspenger. Du trenger ikke oppgi
                 eventuelle ytelser du mottar fra NAV."
         >
-            <JaNeiSpørsmål name="mottarEllerSøktPensjonsordning" validate={pensjonsordningValidator}>
+            <JaNeiSpørsmål
+                name="mottarEllerSøktPensjonsordning"
+                validate={pensjonsordningValidator}
+                hjelpetekst={{ tittel: 'Hva er en pensjonsordning?', tekst: 'Her kommer det noe hjelpetekst' }}
+            >
                 Har du søkt om eller mottar pensjonsordning fra en arbeidsgiver?
             </JaNeiSpørsmål>
             {watchPensjonsordning && (
@@ -56,7 +60,11 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
                     <Periodespørsmål name="pensjon.periode">Oppgi periode</Periodespørsmål>
                 </>
             )}
-            <JaNeiSpørsmål name="mottarEllerSøktEtterlønn" validate={etterlønnValidator}>
+            <JaNeiSpørsmål
+                name="mottarEllerSøktEtterlønn"
+                validate={etterlønnValidator}
+                hjelpetekst={{ tittel: 'Hva er etterlønn?', tekst: 'Her kommer det noe hjelpetekst' }}
+            >
                 Har du søkt om eller mottar etterlønn fra en arbeidsgiver?
             </JaNeiSpørsmål>
             {watchEtterlønn && (

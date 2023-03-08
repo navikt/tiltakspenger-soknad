@@ -1,7 +1,8 @@
 import React from 'react';
 import { Controller, useFormContext, get } from 'react-hook-form';
-import { RadioGroup, Radio } from '@navikt/ds-react';
+import { RadioGroup, Radio, ReadMore } from '@navikt/ds-react';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
+import { Hjelpetekst } from '@/types/Hjelpetekst';
 
 interface Svaralternativ {
     tekst: string;
@@ -13,8 +14,15 @@ interface FlervalgsspørsmålProps {
     name: string;
     children: string;
     validate?: ValidatorFunction;
+    hjelpetekst?: Hjelpetekst;
 }
-export default function Flervalgsspørsmål({ name, alternativer, children, validate }: FlervalgsspørsmålProps) {
+export default function Flervalgsspørsmål({
+    name,
+    alternativer,
+    children,
+    validate,
+    hjelpetekst,
+}: FlervalgsspørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
@@ -32,6 +40,7 @@ export default function Flervalgsspørsmål({ name, alternativer, children, vali
                     onChange={onChange}
                     error={errorMessage}
                 >
+                    {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
                     {alternativer.map((alternativ) => (
                         <Radio value={alternativ.value} key={alternativ.value}>
                             {alternativ.tekst}
