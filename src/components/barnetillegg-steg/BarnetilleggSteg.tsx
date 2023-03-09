@@ -47,7 +47,13 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
     }
 
     return (
-        <Step title="Barnetillegg" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={4}>
+        <Step
+            title="Barnetillegg"
+            onCompleted={onCompleted}
+            onGoToPreviousStep={onGoToPreviousStep}
+            stepNumber={4}
+            guide="Placeholder veiledertekst"
+        >
             <JaNeiSpørsmål
                 name="søkerOmBarnetillegg"
                 validate={søkerBarnetilleggValidator}

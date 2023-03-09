@@ -102,7 +102,11 @@ export default function Innledningssteg({ onCompleted, onGoToPreviousStep }: Inn
                         I hvilken periode deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}
-                <JaNeiSpørsmål name="borPåInstitusjon" validate={borPåInstitusjonValidator}>
+                <JaNeiSpørsmål
+                    name="borPåInstitusjon"
+                    validate={borPåInstitusjonValidator}
+                    hjelpetekst={{ tittel: 'Placeholder tittel', tekst: 'Placeholder hjelpetekst' }}
+                >
                     Bor du på institusjon i tiltaksperioden med fri kost og losji?
                 </JaNeiSpørsmål>
                 {watchBorPåInstitusjon && (
