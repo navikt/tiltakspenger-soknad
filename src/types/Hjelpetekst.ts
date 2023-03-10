@@ -1,4 +1,4 @@
 export interface Hjelpetekst {
     tittel: string;
-    tekst: string;
+    tekst: string | React.ReactNode;
 }

@@ -30,8 +30,8 @@ export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst 
                     {...errorObject}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
-                    <Radio value="ja">Ja</Radio>
                     <Radio value="nei">Nei</Radio>
+                    <Radio value="ja">Ja</Radio>
                 </RadioGroup>
             )}
         />

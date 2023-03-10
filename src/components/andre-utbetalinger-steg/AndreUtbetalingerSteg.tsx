@@ -37,9 +37,20 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={3}
-            guide="Hvis du mottar utbetalinger fra en offentlig eller privat pensjonsordning eller mottar etterlønn fra en
-                arbeidsgiver, kan det ha betydning for hva du får utbetalt i tiltakspenger. Du trenger ikke oppgi
-                eventuelle ytelser du mottar fra NAV."
+            guide={
+                <>
+                    <p>
+                        Vi trenger å vite om du har annen pengestøtte som helt eller delvis skal dekke dine daglige
+                        utgifter. Derfor spør vi deg om dette.
+                    </p>
+                    <p>
+                        Du må fortelle oss om pengestøtte fra offentlige eller private trygde- og pensjonsordninger.
+                        Dette gjelder også hvis du får støtten fra et annet land.
+                    </p>
+                    <p>Det har ikke betydning hvor mye du mottar i annen pengestøtte.</p>
+                    <p>Du trenger ikke å fortelle oss om barnepensjon, barnetrygd eller sosialstønad fra kommunen.</p>
+                </>
+            }
         >
             <JaNeiSpørsmål
                 name="mottarEllerSøktPensjonsordning"

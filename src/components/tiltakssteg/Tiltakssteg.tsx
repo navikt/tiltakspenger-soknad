@@ -1,5 +1,4 @@
 import React from 'react';
-import { GuidePanel } from '@navikt/ds-react';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
@@ -29,11 +28,22 @@ function påkrevdTiltaksperiodeValidator(periode: FormPeriode) {
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
     return (
-        <Step title="Tiltak" onCompleted={onCompleted} onGoToPreviousStep={onGoToPreviousStep} stepNumber={2}>
-            <GuidePanel poster>
-                Fyll ut informasjon om tiltaket du vil delta på i feltene under. Hvis du ikke har avtalt tiltaket med
-                NAV, vil vi kontakte deg for å avklare om vi kan godkjenne tiltaket.
-            </GuidePanel>
+        <Step
+            title="Tiltak"
+            onCompleted={onCompleted}
+            onGoToPreviousStep={onGoToPreviousStep}
+            stepNumber={1}
+            guide={
+                <>
+                    <p>For å ha rett til tiltakspenger må du delta i et arbeidsmarkedstiltak som er godkjent av NAV.</p>
+                    <p>
+                        Det er ikke registrert noen aktuelle tiltak for deg. Hvis du har avtalt tiltak med veilederen
+                        din, kan du legge det inn i søknaden. Veilederen din vil da bli kontaktet.
+                    </p>
+                    <p>Du kan vanligvis se hvilke arbeidsmarkedstiltak som har blitt avtalt i aktivitetsplanen din.</p>
+                </>
+            }
+        >
             <Flervalgsspørsmål
                 alternativer={[
                     { tekst: 'AMO', value: 'AMO' },

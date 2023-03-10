@@ -2,7 +2,7 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '@/components/oppsummeringssteg/Oppsummeringssteg';
-import Innledningssteg from '@/components/innledningssteg/Innledningssteg';
+import KvpSteg from '@/components/innledningssteg/KvpSteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
@@ -24,8 +24,8 @@ export default function Utfylling() {
     });
 
     const navigerBrukerTilIntroside = () => router.push('/');
-    const navigerBrukerTilInnledningssteg = () => router.push('/utfylling/innledning');
     const navigerBrukerTilTiltakssteg = () => router.push('/utfylling/tiltak');
+    const navigerBrukerTilKvpSteg = () => router.push('/utfylling/kvp');
     const navigerBrukerTilAndreUtbetalingerSteg = () => router.push('/utfylling/andreutbetalinger');
     const navigerBrukerTilBarnetilleggSteg = () => router.push('/utfylling/barnetillegg');
     const navigerBrukerTilOppsummeringssteg = () => router.push('/utfylling/oppsummering');
@@ -34,22 +34,19 @@ export default function Utfylling() {
 
     return (
         <FormProvider {...formMethods}>
-            {step && step[0] === 'innledning' && (
-                <Innledningssteg
-                    onCompleted={navigerBrukerTilTiltakssteg}
-                    onGoToPreviousStep={navigerBrukerTilIntroside}
-                />
-            )}
             {step && step[0] === 'tiltak' && (
-                <Tiltakssteg
+                <Tiltakssteg onCompleted={navigerBrukerTilKvpSteg} onGoToPreviousStep={navigerBrukerTilIntroside} />
+            )}
+            {step && step[0] === 'kvp' && (
+                <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
-                    onGoToPreviousStep={navigerBrukerTilInnledningssteg}
+                    onGoToPreviousStep={navigerBrukerTilTiltakssteg}
                 />
             )}
             {step && step[0] === 'andreutbetalinger' && (
                 <AndreUtbetalingerSteg
                     onCompleted={navigerBrukerTilBarnetilleggSteg}
-                    onGoToPreviousStep={navigerBrukerTilTiltakssteg}
+                    onGoToPreviousStep={navigerBrukerTilKvpSteg}
                 />
             )}
             {step && step[0] === 'barnetillegg' && (
