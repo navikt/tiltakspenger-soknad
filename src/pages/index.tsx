@@ -40,17 +40,15 @@ export default function App() {
                     </ul>
                     <span>Det har ikke betydning hvor mye du får i annen pengestøtte eller lønn.</span>
                 </Accordion>
-                <Accordion header="Plikter">
-                    <span>Hvis du får tiltakspenger må du</span>
+                <Accordion header="Hvis du får tiltakspenger, gjelder dette">
                     <ul>
-                        <li>Møte som avtalt i tiltaket</li>
-                        <li>Sende inn meldekortet ditt hver 14. dag</li>
-                        <li>Gi beskjed hvis situasjonen din endrer seg</li>
-                        <li>Betale tilbake hvis du får tiltakspenger du ikke har rett på</li>
+                        <li>Du må møte som avtalt i tiltaket</li>
+                        <li>Du må sende inn meldekortet ditt hver 14. dag</li>
+                        <li>Du må gi beskjed hvis situasjonen din endrer seg</li>
+                        <li>Du må betale tilbake hvis du får tiltakspenger du ikke har rett på</li>
                     </ul>
                 </Accordion>
-                <Accordion header="Personvern">
-                    <span>Vi henter og bruker informasjon om deg</span>
+                <Accordion header="Vi henter og bruker informasjon om deg">
                     <p>I tillegg til den informasjonen du oppgir i søknaden, henter vi:</p>
                     <ul>
                         <li>Personinformasjon om deg fra Folkeregisteret.</li>
