@@ -9,6 +9,7 @@ export default function App() {
 
     const [markerBekreftelsesboksSomRød, setMarkerBekreftelsesboksSomRød] = React.useState(false);
     const [brukerHarBekreftet, setBrukerHarBekreftet] = React.useState(false);
+    const [test, setTest] = React.useState();
 
     React.useEffect(() => {
         if (brukerHarBekreftet && markerBekreftelsesboksSomRød) {
@@ -20,6 +21,82 @@ export default function App() {
         event.preventDefault();
         router.push('/utfylling/tiltak');
     };
+
+    const sendSøknad = () => {
+        fetch("/api/pdftest", {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            mode: "cors", // no-cors, *cors, same-origin
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            credentials: "same-origin", // include, *same-origin, omit
+            headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            redirect: "follow", // manual, *follow, error
+            referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+            body: JSON.stringify({
+                    "deltarIKvp": true,
+                    "periodeMedKvp": {
+                        "fra": "2023-01-01",
+                        "til": "2023-01-02"
+                    },
+                    "deltarIIntroprogrammet": true,
+                    "periodeMedIntroprogrammet": {
+                        "fra": "2024-01-01",
+                        "til": "2024-01-02"
+                    },
+                    "borPåInstitusjon": true,
+                    "institusjonstype" : "fengsel",
+                    "tiltak": {
+                        "type": "foo",
+                        "periode": {
+                            "fra": "2025-01-01",
+                            "til": "2025-01-02"
+                        },
+                        "antallDagerIUken": 5
+                    },
+                    "mottarEllerSøktPensjonsordning": true,
+                    "pensjon": {
+                        "utbetaler": "Noen som betaler ut pensjon",
+                        "periode": {
+                            "fra": "2026-01-01",
+                            "til": "2026-01-02"
+                        }
+                    },
+                    "mottarEllerSøktEtterlønn": true,
+                    "etterlønn": {
+                        "utbetaler": "Noen som betaler ut pensjon",
+                        "periode": {
+                            "fra": "2027-01-01",
+                            "til": "2027-01-02"
+                        }
+                    },
+                    "søkerOmBarnetillegg": true,
+                    "barnSøktBarnetilleggFor": [
+                        {
+                            "fornavn": "Anna",
+                            "etternavn": "Filledokke",
+                            "fdato": "2020-05-05",
+                            "bostedsland": "NO"
+                        },
+                        {
+                            "fornavn": "Titten",
+                            "etternavn": "Tei",
+                            "fdato": "2018-04-09",
+                            "bostedsland": "NO"
+                        }
+                    ]
+                }
+            ),
+        }).then( value =>
+            value.blob()
+        ).then( value => {
+            setTest(value as any)
+                console.log(test)
+        }
+
+        )
+    }
 
     return (
         <div>
@@ -102,6 +179,11 @@ export default function App() {
                     size="small"
                 >
                     Start søknaden
+                </Button>
+                <Button
+                    onClick={sendSøknad}
+                >
+                    Test Søknad
                 </Button>
             </div>
         </div>

@@ -3,14 +3,14 @@ version: "3.7"
 services:
   backend:
     build:
-      context: ../../tiltakspengesoknad-api
+      context: ../../tiltakspenger-soknad-api
       dockerfile: Dockerfile
     environment:
       AZURE_APP_WELL_KNOWN_URL: "http://host.docker.internal:6969/azure/.well-known/openid-configuration"
       AZURE_APP_CLIENT_SECRET: mocked_secret
       AZURE_APP_CLIENT_ID: mocked_client_id
       TOKEN_X_WELL_KNOWN_URL: "http://host.docker.internal:6969/tokendings/.well-known/openid-configuration"
-      TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspengesoknad-api
+      TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspenger-soknad-api
       PDL_AUDIENCE: mock_audience
       PDL_SCOPE: mock_scope
     env_file:
@@ -62,7 +62,7 @@ services:
                             "claims": {
                                 "sub": "12345678901",
                                 "pid": "12345678901",
-                                "aud": ["localhost:tpts:tiltakspengesoknad-api"],
+                                "aud": ["localhost:tpts:tiltakspenger-soknad-api"],
                                 "acr": "Level4"
                             }
                         }
@@ -78,7 +78,7 @@ services:
                             "claims": {
                                 "sub": "12345678901",
                                 "pid": "12345678901",
-                                "aud": ["localhost:tpts:tiltakspengesoknad-api"],
+                                "aud": ["localhost:tpts:tiltakspenger-soknad-api"],
                                 "acr": "Level4"
                             }
                         }
