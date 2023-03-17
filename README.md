@@ -25,7 +25,7 @@ miljøvariabel for [Wonderwall](https://github.com/nais/wonderwall) som er mocke
     TILTAKSPENGESOKNAD_API_URL=http://localhost:8080
     TOKEN_X_CLIENT_ID=localhost:tpts:tiltakspengesoknad
     TOKEN_X_PRIVATE_JWK='<generert JWK>'
-    TOKEN_X_TOKEN_ENDPOINT=http://host.docker.internal:6969/idporten/token
+    TOKEN_X_TOKEN_ENDPOINT=http://host.docker.internal:6969/tokendings/token
     NAIS_CLUSTER_NAME=localhost
     ```
 2. Og opprett en fil på `./docker-compose/.env` med følgende innhold:

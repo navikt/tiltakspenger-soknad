@@ -24,70 +24,60 @@ export default function App() {
 
     const sendSøknad = () => {
         fetch("/api/soknad", {
-            method: "POST", // *GET, POST, PUT, DELETE, etc.
-            mode: "cors", // no-cors, *cors, same-origin
-            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-            credentials: "same-origin", // include, *same-origin, omit
-            headers: {
-                "Content-Type": "application/json",
-                // 'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            redirect: "follow", // manual, *follow, error
-            referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-            body: JSON.stringify({
-                    "deltarIKvp": true,
-                    "periodeMedKvp": {
-                        "fra": "2023-01-01",
-                        "til": "2023-01-02"
-                    },
-                    "deltarIIntroprogrammet": true,
-                    "periodeMedIntroprogrammet": {
-                        "fra": "2024-01-01",
-                        "til": "2024-01-02"
-                    },
-                    "borPåInstitusjon": true,
-                    "institusjonstype" : "fengsel",
-                    "tiltak": {
-                        "type": "foo",
-                        "periode": {
-                            "fra": "2025-01-01",
-                            "til": "2025-01-02"
-                        },
-                        "antallDagerIUken": 5
-                    },
-                    "mottarEllerSøktPensjonsordning": true,
-                    "pensjon": {
-                        "utbetaler": "Noen som betaler ut pensjon",
-                        "periode": {
-                            "fra": "2026-01-01",
-                            "til": "2026-01-02"
-                        }
-                    },
-                    "mottarEllerSøktEtterlønn": true,
-                    "etterlønn": {
-                        "utbetaler": "Noen som betaler ut pensjon",
-                        "periode": {
-                            "fra": "2027-01-01",
-                            "til": "2027-01-02"
-                        }
-                    },
-                    "søkerOmBarnetillegg": true,
-                    "barnSøktBarnetilleggFor": [
-                        {
-                            "fornavn": "Anna",
-                            "etternavn": "Filledokke",
-                            "fdato": "2020-05-05",
-                            "bostedsland": "NO"
-                        },
-                        {
-                            "fornavn": "Titten",
-                            "etternavn": "Tei",
-                            "fdato": "2018-04-09",
-                            "bostedsland": "NO"
-                        }
-                    ]
-                }
-            ),
+            method: 'POST',
+            body: '{\n' +
+                '  "deltarIKvp": true,\n' +
+                '  "periodeMedKvp": {\n' +
+                '    "fra": "2023-01-01",\n' +
+                '    "til": "2023-01-02"\n' +
+                '  },\n' +
+                '  "deltarIIntroprogrammet": true,\n' +
+                '  "periodeMedIntroprogrammet": {\n' +
+                '    "fra": "2024-01-01",\n' +
+                '    "til": "2024-01-02"\n' +
+                '  },\n' +
+                '  "borPåInstitusjon": true,\n' +
+                '  "institusjonstype": "fengsel",\n' +
+                '  "tiltak": {\n' +
+                '    "type": "foo",\n' +
+                '    "periode": {\n' +
+                '      "fra": "2025-01-01",\n' +
+                '      "til": "2025-01-02"\n' +
+                '    },\n' +
+                '    "antallDagerIUken": 5\n' +
+                '  },\n' +
+                '  "mottarEllerSøktPensjonsordning": true,\n' +
+                '  "pensjon": {\n' +
+                '    "utbetaler": "Noen som betaler ut pensjon",\n' +
+                '    "periode": {\n' +
+                '      "fra": "2026-01-01",\n' +
+                '      "til": "2026-01-02"\n' +
+                '    }\n' +
+                '  },\n' +
+                '  "mottarEllerSøktEtterlønn": true,\n' +
+                '  "etterlønn": {\n' +
+                '    "utbetaler": "Noen som betaler ut pensjon",\n' +
+                '    "periode": {\n' +
+                '      "fra": "2027-01-01",\n' +
+                '      "til": "2027-01-02"\n' +
+                '    }\n' +
+                '  },\n' +
+                '  "søkerOmBarnetillegg": true,\n' +
+                '  "barnSøktBarnetilleggFor": [\n' +
+                '    {\n' +
+                '      "fornavn": "Anna",\n' +
+                '      "etternavn": "Filledokke",\n' +
+                '      "fdato": "2020-05-05",\n' +
+                '      "bostedsland": "NO"\n' +
+                '    },\n' +
+                '    {\n' +
+                '      "fornavn": "Titten",\n' +
+                '      "etternavn": "Tei",\n' +
+                '      "fdato": "2018-04-09",\n' +
+                '      "bostedsland": "NO"\n' +
+                '    }\n' +
+                '  ]\n' +
+                '}',
         }).then( value =>
             value.blob()
         ).then( value => {

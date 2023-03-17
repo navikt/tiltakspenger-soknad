@@ -13,6 +13,10 @@ services:
       TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspenger-soknad-api
       PDL_AUDIENCE: mock_audience
       PDL_SCOPE: mock_scope
+      PDF_ENDPOINT_URL: "http://localhost:8081"
+      JOARK_ENDPOINT_URL: "http://localhost"
+      JOARK_AUDIENCE: "mock_audience"
+      JOARK_SCOPE: "mock_scope"
     env_file:
       - .env
     depends_on:
