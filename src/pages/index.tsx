@@ -17,15 +17,20 @@ export default function App() {
         }
     }, [brukerHarBekreftet]);
 
+    React.useEffect(() => {
+        fetch('/api/tiltak');
+    }, []);
+
     const startSøknad = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         router.push('/utfylling/tiltak');
     };
 
     const sendSøknad = () => {
-        fetch("/api/soknad", {
+        fetch('/api/soknad', {
             method: 'POST',
-            body: '{\n' +
+            body:
+                '{\n' +
                 '  "deltarIKvp": true,\n' +
                 '  "periodeMedKvp": {\n' +
                 '    "fra": "2023-01-01",\n' +
@@ -78,15 +83,13 @@ export default function App() {
                 '    }\n' +
                 '  ]\n' +
                 '}',
-        }).then( value =>
-            value.blob()
-        ).then( value => {
-            setTest(value as any)
-                console.log(test)
-        }
-
-        )
-    }
+        })
+            .then((value) => value.blob())
+            .then((value) => {
+                setTest(value as any);
+                console.log(test);
+            });
+    };
 
     return (
         <div>
@@ -170,11 +173,7 @@ export default function App() {
                 >
                     Start søknaden
                 </Button>
-                <Button
-                    onClick={sendSøknad}
-                >
-                    Test Søknad
-                </Button>
+                <Button onClick={sendSøknad}>Test Søknad</Button>
             </div>
         </div>
     );
