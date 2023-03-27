@@ -7,6 +7,7 @@ import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
 import Søknad from '@/types/Søknad';
+import toSøknadJson from '@/utils/toSøknadJson';
 
 export default function Utfylling() {
     const router = useRouter();
@@ -30,7 +31,13 @@ export default function Utfylling() {
     const navigerBrukerTilBarnetilleggSteg = () => router.push('/utfylling/barnetillegg');
     const navigerBrukerTilOppsummeringssteg = () => router.push('/utfylling/oppsummering');
 
-    const sendSøknad = console.log;
+    const sendSøknad = (data: Søknad) => {
+        const søknadJson = toSøknadJson(data);
+        fetch('/api/soknad', {
+            method: 'POST',
+            body: søknadJson as string,
+        });
+    };
 
     return (
         <FormProvider {...formMethods}>

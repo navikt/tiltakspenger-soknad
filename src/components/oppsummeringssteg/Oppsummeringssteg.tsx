@@ -23,7 +23,7 @@ export default function Oppsummeringssteg({ onCompleted, onGoToPreviousStep }: O
                     <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
                         Forrige steg
                     </Button>
-                    <Button type="button" onClick={onCompleted} size="small" style={{ marginLeft: '1rem' }}>
+                    <Button type="button" onClick={() => onCompleted(data)} size="small" style={{ marginLeft: '1rem' }}>
                         Send inn søknad
                     </Button>
                 </div>

@@ -25,16 +25,16 @@ interface AnnenUtbetaling {
 
 interface Søknad {
     deltarIKvp: boolean;
-    periodeMedKvp?: string;
+    periodeMedKvp?: Periode;
     deltarIIntroprogrammet: boolean;
-    periodeMedIntroprogrammet?: string;
+    periodeMedIntroprogrammet?: Periode;
     borPåInstitusjon: boolean;
     institusjonstype?: string;
     tiltak: Tiltak;
     søkerOmBarnetillegg: boolean;
     barnSøktBarnetilleggFor: Barn[];
     mottarEllerSøktPensjonsordning: boolean;
-    pensjonsordning: AnnenUtbetaling;
+    pensjon: AnnenUtbetaling;
     mottarEllerSøktEtterlønn: boolean;
     etterlønn: AnnenUtbetaling;
 }
