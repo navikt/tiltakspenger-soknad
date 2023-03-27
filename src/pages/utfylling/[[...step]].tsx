@@ -91,10 +91,11 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     }
 
     const backendUrl = process.env.TILTAKSPENGESOKNAD_API_URL;
-    const tiltak = await makeGetRequest(`${backendUrl}/tiltak`, token);
+    const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
+    const tiltakJson = await tiltakResponse.json();
     return {
         props: {
-            tiltak,
+            tiltak: tiltakJson,
         },
     };
 }
