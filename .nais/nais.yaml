@@ -21,7 +21,7 @@ spec:
   accessPolicy:
     outbound:
       rules:
-        - application: tiltakspengesoknad-api
+        - application: tiltakspenger-soknad-api
   idporten:
     enabled: true
     sidecar:
