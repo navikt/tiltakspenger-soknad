@@ -32,12 +32,19 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
         },
     });
 
-    const navigerBrukerTilIntroside = () => router.push('/');
-    const navigerBrukerTilTiltakssteg = () => router.push('/utfylling/tiltak');
-    const navigerBrukerTilKvpSteg = () => router.push('/utfylling/kvp');
-    const navigerBrukerTilAndreUtbetalingerSteg = () => router.push('/utfylling/andreutbetalinger');
-    const navigerBrukerTilBarnetilleggSteg = () => router.push('/utfylling/barnetillegg');
-    const navigerBrukerTilOppsummeringssteg = () => router.push('/utfylling/oppsummering');
+    function navigateToPath(path: string, shallow: boolean) {
+        return router.push(path, undefined, { shallow });
+    }
+
+    const navigerBrukerTilIntroside = (shallow: boolean = true) => navigateToPath('/', shallow);
+    const navigerBrukerTilTiltakssteg = (shallow: boolean = true) => navigateToPath('/utfylling/tiltak', shallow);
+    const navigerBrukerTilKvpSteg = (shallow: boolean = true) => navigateToPath('/utfylling/kvp', shallow);
+    const navigerBrukerTilAndreUtbetalingerSteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/andreutbetalinger', shallow);
+    const navigerBrukerTilBarnetilleggSteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/barnetillegg', shallow);
+    const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/oppsummering', shallow);
 
     const sendSøknad = async (data: Søknad) => {
         const søknadJson = toSøknadJson(data);
@@ -58,7 +65,10 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
     return (
         <FormProvider {...formMethods}>
             {step && step[0] === 'tiltak' && (
-                <Tiltakssteg onCompleted={navigerBrukerTilKvpSteg} onGoToPreviousStep={navigerBrukerTilIntroside} />
+                <Tiltakssteg
+                    onCompleted={navigerBrukerTilKvpSteg}
+                    onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
+                />
             )}
             {step && step[0] === 'kvp' && (
                 <KvpSteg
