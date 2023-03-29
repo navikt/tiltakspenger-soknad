@@ -39,12 +39,20 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
     const navigerBrukerTilBarnetilleggSteg = () => router.push('/utfylling/barnetillegg');
     const navigerBrukerTilOppsummeringssteg = () => router.push('/utfylling/oppsummering');
 
-    const sendSøknad = (data: Søknad) => {
+    const sendSøknad = async (data: Søknad) => {
         const søknadJson = toSøknadJson(data);
-        fetch('/api/soknad', {
-            method: 'POST',
-            body: søknadJson as string,
-        });
+        try {
+            const response = await fetch('/api/soknad', {
+                method: 'POST',
+                body: søknadJson as string,
+            });
+            if (response.status !== 201) {
+                return router.push('/feil');
+            }
+            return router.push('/kvittering');
+        } catch {
+            return router.push('/feil');
+        }
     };
 
     return (

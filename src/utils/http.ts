@@ -3,7 +3,7 @@ import logger from '@/utils/serverLogger';
 export async function makeGetRequest(url: string, token: string): Promise<Response> {
     logger.info(`Making request to ${url}`);
     const controller = new AbortController();
-    setTimeout(() => controller.abort(), 3000);
+    setTimeout(() => controller.abort(), 1000);
     return await fetch(url, {
         method: 'GET',
         signal: controller.signal,
