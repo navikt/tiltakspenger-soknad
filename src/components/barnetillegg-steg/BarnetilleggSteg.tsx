@@ -6,6 +6,7 @@ import Step from '@/components/step/Step';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
 import { GuidePanel } from '@navikt/ds-react';
 import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Checkboxgruppespørsmål';
+import { formatDate } from '@/utils/formatDate';
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -43,7 +44,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
         if (fornavn && etternavn) {
             return `${fornavn} ${etternavn}`;
         }
-        return `Barn født ${fødselsdato}`;
+        return `Barn født ${formatDate(fødselsdato)}`;
     }
 
     return (
