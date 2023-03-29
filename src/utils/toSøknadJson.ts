@@ -53,10 +53,12 @@ function etterlønn({ mottarEllerSøktEtterlønn, etterlønn }: Søknad) {
 }
 
 function barnSøktBarnetilleggFor({ barnSøktBarnetilleggFor }: Søknad) {
-    return barnSøktBarnetilleggFor.map((barn) => ({
-        ...barn,
-        fdato: formatDate(barn.fdato),
-    }));
+    return barnSøktBarnetilleggFor
+        .filter(({ fornavn, etternavn, fdato, bostedsland }) => fornavn && etternavn && fdato && bostedsland)
+        .map((barn) => ({
+            ...barn,
+            fdato: formatDate(barn.fdato),
+        }));
 }
 
 export default function toSøknadJson(søknad: Søknad): String {
