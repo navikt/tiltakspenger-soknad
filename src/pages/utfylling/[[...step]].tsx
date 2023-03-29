@@ -11,6 +11,7 @@ import { getOnBehalfOfToken } from '@/utils/authentication';
 import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
+import toSøknadJson from '@/utils/toSøknadJson';
 
 interface UtfyllingProps {
     tiltak: any;
@@ -31,20 +32,43 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
         },
     });
 
-    const navigerBrukerTilIntroside = () => router.push('/');
-    const navigerBrukerTilTiltakssteg = () => router.push('/utfylling/tiltak');
-    const navigerBrukerTilKvpSteg = () => router.push('/utfylling/kvp');
-    const navigerBrukerTilAndreUtbetalingerSteg = () => router.push('/utfylling/andreutbetalinger');
-    const navigerBrukerTilBarnetilleggSteg = () => router.push('/utfylling/barnetillegg');
-    const navigerBrukerTilOppsummeringssteg = () => router.push('/utfylling/oppsummering');
+    function navigateToPath(path: string, shallow: boolean) {
+        return router.push(path, undefined, { shallow });
+    }
 
-    const sendSøknad = console.log;
-    console.log(tiltak);
+    const navigerBrukerTilIntroside = (shallow: boolean = true) => navigateToPath('/', shallow);
+    const navigerBrukerTilTiltakssteg = (shallow: boolean = true) => navigateToPath('/utfylling/tiltak', shallow);
+    const navigerBrukerTilKvpSteg = (shallow: boolean = true) => navigateToPath('/utfylling/kvp', shallow);
+    const navigerBrukerTilAndreUtbetalingerSteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/andreutbetalinger', shallow);
+    const navigerBrukerTilBarnetilleggSteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/barnetillegg', shallow);
+    const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/oppsummering', shallow);
+
+    const sendSøknad = async (data: Søknad) => {
+        const søknadJson = toSøknadJson(data);
+        try {
+            const response = await fetch('/api/soknad', {
+                method: 'POST',
+                body: søknadJson as string,
+            });
+            if (response.status !== 201) {
+                return router.push('/feil');
+            }
+            return router.push('/kvittering');
+        } catch {
+            return router.push('/feil');
+        }
+    };
 
     return (
         <FormProvider {...formMethods}>
             {step && step[0] === 'tiltak' && (
-                <Tiltakssteg onCompleted={navigerBrukerTilKvpSteg} onGoToPreviousStep={navigerBrukerTilIntroside} />
+                <Tiltakssteg
+                    onCompleted={navigerBrukerTilKvpSteg}
+                    onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
+                />
             )}
             {step && step[0] === 'kvp' && (
                 <KvpSteg
@@ -91,11 +115,20 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     }
 
     const backendUrl = process.env.TILTAKSPENGESOKNAD_API_URL;
-    const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
-    const tiltakJson = await tiltakResponse.json();
-    return {
-        props: {
-            tiltak: tiltakJson,
-        },
-    };
+    try {
+        const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
+        const tiltakJson = await tiltakResponse.json();
+        return {
+            props: {
+                tiltak: tiltakJson,
+            },
+        };
+    } catch (error) {
+        logger.error((error as Error).message);
+        return {
+            props: {
+                tiltak: [],
+            },
+        };
+    }
 }
