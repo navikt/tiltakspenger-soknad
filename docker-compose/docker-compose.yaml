@@ -17,6 +17,8 @@ services:
       JOARK_ENDPOINT_URL: "http://localhost"
       JOARK_AUDIENCE: "mock_audience"
       JOARK_SCOPE: "mock_scope"
+      TILTAKSPENGER_ARENA_URL: "http://localhost:8080"
+      TILTAKSPENGER_ARENA_AUDIENCE: "mock-audience"
     env_file:
       - .env
     depends_on:

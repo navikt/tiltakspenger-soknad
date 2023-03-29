@@ -81,8 +81,7 @@ function validateAuthorizationHeader(authorizationHeader: string | undefined) {
     }
 }
 
-export async function getOnBehalfOfToken(request: NextApiRequest) {
-    const authorizationHeader = request.headers['authorization'];
+export async function getOnBehalfOfToken(authorizationHeader: string) {
     validateAuthorizationHeader(authorizationHeader);
     const subjectToken = removeBearer(authorizationHeader || '');
     const accessToken = await exchangeToken(subjectToken);

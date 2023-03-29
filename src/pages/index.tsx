@@ -17,10 +17,6 @@ export default function App() {
         }
     }, [brukerHarBekreftet]);
 
-    React.useEffect(() => {
-        fetch('/api/tiltak');
-    }, []);
-
     const startSøknad = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         router.push('/utfylling/tiltak');

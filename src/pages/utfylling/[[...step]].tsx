@@ -7,9 +7,17 @@ import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
 import Søknad from '@/types/Søknad';
+import { getOnBehalfOfToken } from '@/utils/authentication';
+import { GetServerSidePropsContext } from 'next';
+import logger from './../../utils/serverLogger';
+import { makeGetRequest } from '@/utils/http';
 import toSøknadJson from '@/utils/toSøknadJson';
 
-export default function Utfylling() {
+interface UtfyllingProps {
+    tiltak: any;
+}
+
+export default function Utfylling({ tiltak }: UtfyllingProps) {
     const router = useRouter();
     const { step } = router.query;
     const formMethods = useForm<Søknad>({
@@ -67,4 +75,33 @@ export default function Utfylling() {
             )}
         </FormProvider>
     );
+}
+
+export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+    let token = null;
+    try {
+        logger.info('Henter token');
+        const authorizationHeader = req.headers.authorization;
+        if (!authorizationHeader) {
+            throw new Error('Mangler token');
+        }
+        token = await getOnBehalfOfToken(authorizationHeader);
+    } catch (error) {
+        logger.info('Bruker har ikke tilgang', error);
+        return {
+            redirect: {
+                destination: '/oauth2/login',
+                permanent: false,
+            },
+        };
+    }
+
+    const backendUrl = process.env.TILTAKSPENGESOKNAD_API_URL;
+    const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
+    const tiltakJson = await tiltakResponse.json();
+    return {
+        props: {
+            tiltak: tiltakJson,
+        },
+    };
 }

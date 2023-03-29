@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import logger from './../../utils/serverLogger';
 import { getOnBehalfOfToken } from '@/utils/authentication';
+import { makeGetRequest, makePostRequest } from '@/utils/http';
 
 const backendUrl = process.env.TILTAKSPENGESOKNAD_API_URL;
 
@@ -11,24 +12,24 @@ function getUrl(req: NextApiRequest): string {
 
 async function makeApiRequest(request: NextApiRequest, oboToken: string): Promise<Response> {
     const url = getUrl(request);
-    logger.info(`Making request to ${url}`);
-    logger.info(oboToken); // TODO husk å fjerne denne
-    return await fetch(url, {
-        method: request.method,
-        body: request.method === 'GET' ? undefined : request.body,
-        headers: {
-            'content-type': 'application/json',
-            authorization: `Bearer ${oboToken}`,
-        },
-    });
+    if (request.method!.toUpperCase() === 'GET') {
+        return makeGetRequest(url, oboToken);
+    }
+    if (request.method!.toUpperCase() === 'POST') {
+        return makePostRequest(url, oboToken, request.body);
+    }
+    return Promise.reject(`Unsupported method ${request.method}`);
 }
 
 export default async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
     let oboToken = null;
     try {
         logger.info('Henter token');
-        oboToken = await getOnBehalfOfToken(request);
-        console.log(oboToken); // TODO husk å fjerne denne
+        const authorizationHeader = request.headers['authorization'];
+        if (!authorizationHeader) {
+            throw Error('Mangler token');
+        }
+        oboToken = await getOnBehalfOfToken(authorizationHeader);
     } catch (error) {
         logger.info('Bruker har ikke tilgang', error);
         response.status(401).json({ message: 'Bruker har ikke tilgang' });
