@@ -52,7 +52,7 @@ export default async function middleware(request: NextApiRequest, response: Next
                 response.status(res.status).json({ error: !error ? res.statusText : error });
             }
         } catch (error) {
-            logger.info('Fikk ikke kontakt med APIet, returnerer 502', error);
+            logger.error(`Fikk ikke kontakt med APIet, returnerer 502. Message: ${(error as Error).message}`);
             response.status(502).json({ message: 'Bad Gateway' });
         }
     }
