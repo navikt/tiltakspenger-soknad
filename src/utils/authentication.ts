@@ -3,7 +3,6 @@ import nodeJose from 'node-jose';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import nodeFetch from 'node-fetch';
-import { NextApiRequest } from 'next';
 
 async function getKey(jwk: any) {
     if (!jwk) {
