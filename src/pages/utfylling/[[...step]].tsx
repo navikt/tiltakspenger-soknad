@@ -68,6 +68,7 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
                 <Tiltakssteg
                     onCompleted={navigerBrukerTilKvpSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
+                    tiltak={tiltak}
                 />
             )}
             {step && step[0] === 'kvp' && (
@@ -127,7 +128,15 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         logger.error((error as Error).message);
         return {
             props: {
-                tiltak: [],
+                tiltak: [
+                    {
+                        aktivitetId: '123',
+                        type: 'Annen utdanning',
+                        deltakelsePeriode: { fom: '2025-04-01', tom: '2025-04-10' },
+                        arrangør: 'Testarrangør',
+                        status: 'Aktuell',
+                    },
+                ],
             },
         };
     }

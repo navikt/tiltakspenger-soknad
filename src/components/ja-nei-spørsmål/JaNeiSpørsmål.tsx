@@ -4,13 +4,14 @@ import { Radio, RadioGroup, ReadMore } from '@navikt/ds-react';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
 
 interface JaNeiSpørsmålProps {
-    children: string;
+    children: string | React.ReactNode;
     name: string;
     validate?: (value: any) => string | undefined;
     hjelpetekst?: Hjelpetekst;
+    reverse?: boolean;
 }
 
-export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst }: JaNeiSpørsmålProps) {
+export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst, reverse }: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     const errorObject = errorMessage ? { error: <>{errorMessage}</> } : {};
@@ -30,8 +31,9 @@ export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst 
                     {...errorObject}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
-                    <Radio value="nei">Nei</Radio>
+                    {!reverse && <Radio value="nei">Nei</Radio>}
                     <Radio value="ja">Ja</Radio>
+                    {reverse && <Radio value="nei">Nei</Radio>}
                 </RadioGroup>
             )}
         />

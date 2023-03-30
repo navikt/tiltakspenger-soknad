@@ -6,9 +6,18 @@ interface PeriodevelgerProps {
     defaultValue?: DateRange | null;
     errorMessage?: string;
     id?: string;
+    minDate?: Date;
+    maxDate?: Date;
 }
 
-export default function Periodevelger({ onRangeChange, defaultValue, errorMessage, id }: PeriodevelgerProps) {
+export default function Periodevelger({
+    onRangeChange,
+    defaultValue,
+    errorMessage,
+    id,
+    minDate,
+    maxDate,
+}: PeriodevelgerProps) {
     function getRangepickerProps() {
         if (defaultValue)
             return {
@@ -23,6 +32,8 @@ export default function Periodevelger({ onRangeChange, defaultValue, errorMessag
     const { datepickerProps, toInputProps, fromInputProps } = UNSAFE_useRangeDatepicker({
         onRangeChange,
         ...getRangepickerProps(),
+        fromDate: minDate,
+        toDate: maxDate,
     });
 
     return (

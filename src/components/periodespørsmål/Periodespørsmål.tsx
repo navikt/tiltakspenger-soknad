@@ -9,6 +9,8 @@ interface PeriodespørsmålProps {
     name: string;
     children: string;
     validate?: ValidatorFunction | ValidatorFunction[];
+    minDate?: Date;
+    maxDate?: Date;
 }
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
@@ -24,7 +26,7 @@ function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
     return validate;
 }
 
-export default function Periodespørsmål({ name, children, validate }: PeriodespørsmålProps) {
+export default function Periodespørsmål({ name, children, validate, minDate, maxDate }: PeriodespørsmålProps) {
     const { control, watch, formState } = useFormContext();
     const verdi = watch(name);
     const defaultValue = verdi ? { from: dayjs(verdi.fra).toDate(), to: dayjs(verdi.til).toDate() } : null;
@@ -47,6 +49,8 @@ export default function Periodespørsmål({ name, children, validate }: Periodes
                             }
                         }}
                         errorMessage={errorMessage}
+                        minDate={minDate}
+                        maxDate={maxDate}
                     />
                 )}
             />

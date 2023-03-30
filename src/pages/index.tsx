@@ -83,7 +83,6 @@ export default function App() {
             .then((value) => value.blob())
             .then((value) => {
                 setTest(value as any);
-                console.log(test);
             });
     };
 
