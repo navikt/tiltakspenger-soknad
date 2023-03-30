@@ -31,13 +31,6 @@ function periodeMedIntro({ deltarIIntroprogrammet, periodeMedIntroprogrammet }: 
     return null;
 }
 
-function tiltak({ tiltak: { periode, ...rest } }: Søknad) {
-    return {
-        ...rest,
-        periode: formatPeriod(periode),
-    };
-}
-
 function pensjon({ mottarEllerSøktPensjonsordning, pensjon }: Søknad) {
     if (mottarEllerSøktPensjonsordning) {
         return { ...pensjon, periode: formatPeriod(pensjon.periode) };
@@ -66,7 +59,6 @@ export default function toSøknadJson(søknad: Søknad): String {
         ...søknad,
         periodeMedKvp: periodeMedKvp(søknad),
         periodeMedIntroprogrammet: periodeMedIntro(søknad),
-        tiltak: tiltak(søknad),
         barnSøktBarnetilleggFor: barnSøktBarnetilleggFor(søknad),
         pensjon: pensjon(søknad),
         etterlønn: etterlønn(søknad),

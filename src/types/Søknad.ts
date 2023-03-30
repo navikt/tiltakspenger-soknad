@@ -10,14 +10,6 @@ interface Periode {
     til: string;
 }
 
-type Tiltakstype = 'AMO' | 'ARBEIDSTRENING' | 'JOBBSØKERKURS' | 'ANNET';
-
-interface Tiltak {
-    type: Tiltakstype;
-    periode: Periode;
-    antallDagerIUken: number;
-}
-
 interface AnnenUtbetaling {
     utbetaler: string;
     periode: Periode;
@@ -30,7 +22,9 @@ interface Søknad {
     periodeMedIntroprogrammet?: Periode;
     borPåInstitusjon: boolean;
     institusjonstype?: string;
-    tiltak: Tiltak;
+    valgtAktivitetId: string;
+    søkerHeleTiltaksperioden: boolean;
+    overskrevetTiltaksperiode?: Periode;
     søkerOmBarnetillegg: boolean;
     barnSøktBarnetilleggFor: Barn[];
     mottarEllerSøktPensjonsordning: boolean;
