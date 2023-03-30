@@ -12,6 +12,8 @@ interface StepProps {
     stepNumber: number;
     submitSectionRenderer?: () => React.ReactNode;
     guide?: string | React.ReactNode;
+    hideStepIndicator?: boolean;
+    hideTitle?: boolean;
 }
 
 export default function Step({
@@ -22,6 +24,8 @@ export default function Step({
     stepNumber,
     submitSectionRenderer,
     guide,
+    hideStepIndicator,
+    hideTitle,
 }: StepProps) {
     const {
         clearErrors,
@@ -48,7 +52,7 @@ export default function Step({
 
     return (
         <>
-            <h2 className={styles.step__title}>{title}</h2>
+            {!hideTitle && <h2 className={styles.step__title}>{title}</h2>}
             {shouldShowErrorSummary && (
                 <ErrorSummary className={styles.step__errorsummary} ref={errorRef}>
                     {allErrors.map(({ message, ref, type, types, root }) => {
@@ -60,7 +64,7 @@ export default function Step({
                     })}
                 </ErrorSummary>
             )}
-            <span className={styles.step__stepindicator}>Steg {stepNumber} av 5</span>
+            {!hideStepIndicator && <span className={styles.step__stepindicator}>Steg {stepNumber} av 5</span>}
             {guide && <GuidePanel poster>{guide}</GuidePanel>}
             {shouldRenderCustomSubmitSection && (
                 <>
