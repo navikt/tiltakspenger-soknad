@@ -121,7 +121,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         const tiltakJson = await tiltakResponse.json();
         return {
             props: {
-                tiltak: tiltakJson,
+                tiltak: tiltakJson.tiltak,
             },
         };
     } catch (error) {
