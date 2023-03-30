@@ -10,7 +10,7 @@ interface StepProps {
     onGoToPreviousStep: () => void;
     children: React.ReactNode;
     stepNumber: number;
-    submitSectionRenderer?: () => React.ReactNode;
+    submitSectionRenderer?: undefined | (() => React.ReactNode);
     guide?: string | React.ReactNode;
     hideStepIndicator?: boolean;
     hideTitle?: boolean;

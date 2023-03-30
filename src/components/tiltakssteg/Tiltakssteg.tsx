@@ -103,6 +103,14 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }:
         resetFormValues();
     }, [valgtAktivitetId]);
 
+    const submitSectionRenderer = !brukerHarRegistrerteTiltak
+        ? () => (
+              <Button style={{ margin: '1rem auto', display: 'block' }} type="button">
+                  Avbryt søknaden og gå til Min side
+              </Button>
+          )
+        : undefined;
+
     return (
         <Step
             title="Tiltak"
@@ -110,11 +118,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }:
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={1}
             guide={veiledningstekst()}
-            submitSectionRenderer={() => (
-                <Button style={{ margin: '1rem auto', display: 'block' }} type="button">
-                    Avbryt søknaden og gå til Min side
-                </Button>
-            )}
+            submitSectionRenderer={submitSectionRenderer}
             hideStepIndicator={!brukerHarRegistrerteTiltak}
             hideTitle={!brukerHarRegistrerteTiltak}
         >
