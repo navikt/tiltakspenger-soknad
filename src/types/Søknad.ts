@@ -1,19 +1,6 @@
-export interface Barn {
-    fornavn: string;
-    etternavn: string;
-    fdato: string;
-    bostedsland: string;
-}
-
-interface Periode {
-    fra: string;
-    til: string;
-}
-
-interface AnnenUtbetaling {
-    utbetaler: string;
-    periode: Periode;
-}
+import { Periode } from '@/types/Periode';
+import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
+import { SelvregistrertBarn } from '@/types/Barn';
 
 interface Søknad {
     deltarIKvp: boolean;
@@ -26,7 +13,8 @@ interface Søknad {
     søkerHeleTiltaksperioden: boolean;
     overskrevetTiltaksperiode?: Periode;
     søkerOmBarnetillegg: boolean;
-    barnSøktBarnetilleggFor: Barn[];
+    manueltRegistrerteBarnSøktBarnetilleggFor: SelvregistrertBarn[];
+    registrerteBarnSøktBarnetilleggFor: string[];
     mottarEllerSøktPensjonsordning: boolean;
     pensjon: AnnenUtbetaling;
     mottarEllerSøktEtterlønn: boolean;

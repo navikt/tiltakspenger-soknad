@@ -12,17 +12,22 @@ import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
 import toSøknadJson from '@/utils/toSøknadJson';
+import { Tiltak } from '@/types/Tiltak';
+import { Personalia } from '@/types/Personalia';
 
 interface UtfyllingProps {
-    tiltak: any;
+    tiltak: Tiltak[];
+    personalia: Personalia;
 }
 
-export default function Utfylling({ tiltak }: UtfyllingProps) {
+export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
     const { step } = router.query;
     const formMethods = useForm<Søknad>({
         defaultValues: {
-            barnSøktBarnetilleggFor: [{ fornavn: '', etternavn: '', fdato: '', bostedsland: '' }],
+            manueltRegistrerteBarnSøktBarnetilleggFor: [
+                { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
+            ],
             borPåInstitusjon: undefined,
             mottarEllerSøktPensjonsordning: undefined,
             mottarEllerSøktEtterlønn: undefined,
@@ -87,10 +92,16 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
                 <BarnetilleggSteg
                     onCompleted={navigerBrukerTilOppsummeringssteg}
                     onGoToPreviousStep={navigerBrukerTilAndreUtbetalingerSteg}
+                    personalia={personalia}
                 />
             )}
             {step && step[0] === 'oppsummering' && (
-                <Oppsummeringssteg onCompleted={sendSøknad} onGoToPreviousStep={navigerBrukerTilBarnetilleggSteg} />
+                <Oppsummeringssteg
+                    onCompleted={sendSøknad}
+                    onGoToPreviousStep={navigerBrukerTilBarnetilleggSteg}
+                    personalia={personalia}
+                    tiltak={tiltak}
+                />
             )}
         </FormProvider>
     );
@@ -119,9 +130,12 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     try {
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();
+        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
+        const personaliaJson = await personaliaResponse.json();
         return {
             props: {
                 tiltak: tiltakJson.tiltak,
+                personalia: personaliaJson,
             },
         };
     } catch (error) {
@@ -137,6 +151,13 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                         status: 'Aktuell',
                     },
                 ],
+                personalia: {
+                    fornavn: 'Foo',
+                    mellomnavn: 'Bar',
+                    etternavn: 'Baz',
+                    fødselsnummer: '123',
+                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01' }],
+                },
             },
         };
     }

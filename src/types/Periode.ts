@@ -1,4 +1,4 @@
 export interface Periode {
-    fom: string;
-    tom: string;
+    fra: string;
+    til: string;
 }

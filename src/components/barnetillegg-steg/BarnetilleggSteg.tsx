@@ -7,10 +7,12 @@ import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
 import { GuidePanel } from '@navikt/ds-react';
 import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Checkboxgruppespørsmål';
 import { formatDate } from '@/utils/formatDate';
+import { Personalia } from '@/types/Personalia';
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
+    personalia: Personalia;
 }
 
 function søkerBarnetilleggValidator(verdi: boolean) {
@@ -23,26 +25,17 @@ interface Barn {
     fødselsdato: string;
 }
 
-export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: BarnetilleggStegProps) {
+export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
     const { watch } = useFormContext();
     const watchSøkerOmBarnetillegg = watch('søkerOmBarnetillegg');
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('ønskerÅSøkeBarnetilleggForAndreBarn');
-
-    const [barnFraApi, setBarnFraApi] = React.useState([]);
-
+    const barnFraApi = personalia.barn;
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
-
-    React.useEffect(() => {
-        fetch('/api/personalia').then(async (response) => {
-            const personalia = await response.json();
-            setBarnFraApi(personalia.barn);
-        });
-    }, []);
 
     function lagCheckboksTekstForBarn(barn: Barn) {
         const { fornavn, etternavn, fødselsdato } = barn;
         if (fornavn && etternavn) {
-            return `${fornavn} ${etternavn}`;
+            return `${fornavn} ${etternavn} født ${formatDate(fødselsdato)}`;
         }
         return `Barn født ${formatDate(fødselsdato)}`;
     }
