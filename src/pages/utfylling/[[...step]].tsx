@@ -132,6 +132,12 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         const tiltakJson = await tiltakResponse.json();
         const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
         const personaliaJson = await personaliaResponse.json();
+
+        // midlertidig fiks for å kunne trykke seg gjennom søknader i test
+        if (!tiltakJson.tiltak || tiltakJson.tiltak.length === 0) {
+            throw Error('Bruker har ingen tiltak, fallback til testdata');
+        }
+
         return {
             props: {
                 tiltak: tiltakJson.tiltak,

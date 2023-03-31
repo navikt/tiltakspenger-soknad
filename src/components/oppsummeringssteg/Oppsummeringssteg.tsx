@@ -106,7 +106,7 @@ export default function Oppsummeringssteg({
     const tiltaksperiode = overskrevetTiltaksperiode || valgtTiltak!.deltakelsePeriode;
     const alleBarnSøktBarnetilleggFor = [
         ...manueltRegistrerteBarnSøktBarnetilleggFor,
-        ...registrerteBarnSøktBarnetilleggFor.map((jsonString) => JSON.parse(jsonString)),
+        ...(registrerteBarnSøktBarnetilleggFor || []).map((jsonString) => JSON.parse(jsonString)),
     ];
     return (
         <Step
