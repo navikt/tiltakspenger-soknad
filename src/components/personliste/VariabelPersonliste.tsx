@@ -3,11 +3,11 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { Button, TextField } from '@navikt/ds-react';
 import { Add, Close } from '@navikt/ds-icons';
 import Datovelger from '@/components/datovelger/Datovelger';
-import { Barn } from '@/types/Søknad';
+import { SelvregistrertBarn } from '@/types/Barn';
 
 interface VariabelPersonlisteProps {
     name: string;
-    initialList?: Barn[];
+    initialList?: SelvregistrertBarn[];
 }
 
 /**
@@ -69,7 +69,7 @@ export default function VariabelPersonliste({ name }: VariabelPersonlisteProps) 
                                     onDateChange={(dato) =>
                                         field.onChange({
                                             ...field.value,
-                                            fdato: dato?.toISOString().split('T')[0] ?? '',
+                                            fødselsdato: dato?.toISOString().split('T')[0] ?? '',
                                         })
                                     }
                                     label="Fødselsdato"

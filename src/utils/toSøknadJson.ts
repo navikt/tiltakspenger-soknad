@@ -45,12 +45,14 @@ function etterlønn({ mottarEllerSøktEtterlønn, etterlønn }: Søknad) {
     return etterlønn;
 }
 
-function barnSøktBarnetilleggFor({ barnSøktBarnetilleggFor }: Søknad) {
-    return barnSøktBarnetilleggFor
-        .filter(({ fornavn, etternavn, fdato, bostedsland }) => fornavn && etternavn && fdato && bostedsland)
+function barnSøktBarnetilleggFor({ manueltRegistrerteBarnSøktBarnetilleggFor }: Søknad) {
+    return manueltRegistrerteBarnSøktBarnetilleggFor
+        .filter(
+            ({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland
+        )
         .map((barn) => ({
             ...barn,
-            fdato: formatDate(barn.fdato),
+            fdato: formatDate(barn.fødselsdato),
         }));
 }
 

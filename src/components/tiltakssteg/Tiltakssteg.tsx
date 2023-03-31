@@ -145,8 +145,8 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }:
             {!søkerHeleTiltaksperioden && søkerHeleTiltaksperioden !== undefined && (
                 <Periodespørsmål
                     name="overskrevetTiltaksperiode"
-                    minDate={new Date(valgtTiltak!.deltakelsePeriode.fom)}
-                    maxDate={new Date(valgtTiltak!.deltakelsePeriode.tom)}
+                    minDate={new Date(valgtTiltak!.deltakelsePeriode.fra)}
+                    maxDate={new Date(valgtTiltak!.deltakelsePeriode.til)}
                 >
                     Hvilken periode søker du tiltakspenger for?
                 </Periodespørsmål>
