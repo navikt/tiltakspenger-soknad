@@ -3,6 +3,11 @@ import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
 import { SelvregistrertBarn } from '@/types/Barn';
 
 interface Søknad {
+    svar: Spørsmålsbesvarelser;
+    vedlegg: File[];
+}
+
+export interface Spørsmålsbesvarelser {
     deltarIKvp: boolean;
     periodeMedKvp?: Periode;
     deltarIIntroprogrammet: boolean;

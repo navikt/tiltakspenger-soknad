@@ -25,15 +25,18 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const { step } = router.query;
     const formMethods = useForm<Søknad>({
         defaultValues: {
-            manueltRegistrerteBarnSøktBarnetilleggFor: [
-                { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
-            ],
-            borPåInstitusjon: undefined,
-            mottarEllerSøktPensjonsordning: undefined,
-            mottarEllerSøktEtterlønn: undefined,
-            søkerOmBarnetillegg: undefined,
-            deltarIKvp: undefined,
-            deltarIIntroprogrammet: undefined,
+            svar: {
+                manueltRegistrerteBarnSøktBarnetilleggFor: [
+                    { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
+                ],
+                borPåInstitusjon: undefined,
+                mottarEllerSøktPensjonsordning: undefined,
+                mottarEllerSøktEtterlønn: undefined,
+                søkerOmBarnetillegg: undefined,
+                deltarIKvp: undefined,
+                deltarIIntroprogrammet: undefined,
+            },
+            vedlegg: [],
         },
     });
 
@@ -52,11 +55,14 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         navigateToPath('/utfylling/oppsummering', shallow);
 
     const sendSøknad = async (data: Søknad) => {
-        const søknadJson = toSøknadJson(data);
+        const søknadJson = toSøknadJson(data.svar);
+        const formData = new FormData();
+        formData.append('søknad', søknadJson as string);
+        formData.append('vedlegg', data.vedlegg[0]);
         try {
             const response = await fetch('/api/soknad', {
                 method: 'POST',
-                body: søknadJson as string,
+                body: formData,
             });
             if (response.status !== 201) {
                 return router.push('/feil');
@@ -107,7 +113,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     );
 }
 
-export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
     let token = null;
     try {
         logger.info('Henter token');

@@ -8,6 +8,7 @@ import { GuidePanel } from '@navikt/ds-react';
 import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Checkboxgruppespørsmål';
 import { formatDate } from '@/utils/formatDate';
 import { Personalia } from '@/types/Personalia';
+import FileUploader from '@/components/file-uploader/FIleUploader';
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -26,7 +27,7 @@ interface Barn {
 }
 
 export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
-    const { watch } = useFormContext();
+    const { watch, control } = useFormContext();
     const watchSøkerOmBarnetillegg = watch('søkerOmBarnetillegg');
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('ønskerÅSøkeBarnetilleggForAndreBarn');
     const barnFraApi = personalia.barn;
@@ -85,6 +86,11 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
             )}
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
                 <VariabelPersonliste name="manueltRegistrerteBarnSøktBarnetilleggFor" />
+            )}
+            {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
+                <div style={{ marginTop: '2rem' }}>
+                    <FileUploader name="vedlegg" kategori="fødselsattest" control={control} />
+                </div>
             )}
         </Step>
     );
