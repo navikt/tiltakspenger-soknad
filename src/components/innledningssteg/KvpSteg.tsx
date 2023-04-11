@@ -5,10 +5,13 @@ import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål'
 import Step from '@/components/step/Step';
 import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/validators';
 import { FormPeriode } from '@/types/FormPeriode';
+import { formatPeriode } from '@/utils/formatPeriode';
+import { Tiltak } from '@/types/Tiltak';
 
 interface KvpStegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
+    valgtTiltak: Tiltak;
 }
 
 function deltarIKvpValidator(verdi: boolean) {
@@ -31,8 +34,15 @@ function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
-export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProps) {
+export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
     const { watch } = useFormContext();
+
+    const søkerHeleTiltaksperioden = watch('søkerHeleTiltaksperioden');
+    const overskrevetTiltaksperiode = watch('overskrevetTiltaksperiode');
+    const tiltaksperiodeTekst =
+        søkerHeleTiltaksperioden === false
+            ? formatPeriode(overskrevetTiltaksperiode)
+            : formatPeriode(valgtTiltak!.deltakelsePeriode);
 
     const watchDeltarIKvp = watch('deltarIKvp');
     const watchDeltarIIntroprogrammet = watch('deltarIIntroprogrammet');
@@ -84,7 +94,7 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
                         ),
                     }}
                 >
-                    Deltar du i kvalifiseringsprogrammet?
+                    Deltar du i kvalifiseringsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
                     <Periodespørsmål
@@ -114,7 +124,7 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
                         ),
                     }}
                 >
-                    Deltar du i introduksjonsprogrammet?
+                    Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
                 {watchDeltarIIntroprogrammet && (
                     <Periodespørsmål
@@ -132,7 +142,7 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
                         tekst: 'Bor du på barnevernsinstitusjon eller i en overgangsbolig har du likevel rett til å få tiltakspenger. Da kan du krysse «nei» på spørsmålet.',
                     }}
                 >
-                    Bor du i en institusjon med gratis opphold, mat og drikke i perioden du søker om tiltakspenger for?
+                    Bor du i en institusjon med gratis opphold, mat og drikke i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
             </>
         </Step>
