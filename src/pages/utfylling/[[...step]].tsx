@@ -40,6 +40,15 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         },
     });
 
+    const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
+    const valgtAktivitetId = formMethods.watch('valgtAktivitetId');
+    React.useEffect(() => {
+        const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
+        if (matchendeTiltak) {
+            setValgtTiltak(matchendeTiltak);
+        }
+    }, [valgtAktivitetId]);
+
     function navigateToPath(path: string, shallow: boolean) {
         return router.push(path, undefined, { shallow });
     }
@@ -86,6 +95,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                 <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                     onGoToPreviousStep={navigerBrukerTilTiltakssteg}
+                    valgtTiltak={valgtTiltak!}
                 />
             )}
             {step && step[0] === 'andreutbetalinger' && (
@@ -106,7 +116,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                     onCompleted={sendSøknad}
                     onGoToPreviousStep={navigerBrukerTilBarnetilleggSteg}
                     personalia={personalia}
-                    tiltak={tiltak}
+                    valgtTiltak={valgtTiltak!}
                 />
             )}
         </FormProvider>
