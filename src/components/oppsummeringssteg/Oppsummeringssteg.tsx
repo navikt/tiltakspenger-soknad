@@ -17,7 +17,7 @@ interface OppsummeringsstegProps {
     onCompleted: (data: any) => void;
     onGoToPreviousStep: () => void;
     personalia: Personalia;
-    tiltak: Tiltak[];
+    valgtTiltak: Tiltak;
 }
 
 function oppsummeringDeltarIKvp(deltarIKvp: boolean, periodeMedKvp: Periode | undefined) {
@@ -82,7 +82,7 @@ export default function Oppsummeringssteg({
     onCompleted,
     onGoToPreviousStep,
     personalia,
-    tiltak,
+    valgtTiltak,
 }: OppsummeringsstegProps) {
     const { getValues } = useFormContext();
     const data: Søknad = getValues() as Søknad;
@@ -92,7 +92,6 @@ export default function Oppsummeringssteg({
         borPåInstitusjon,
         periodeMedKvp,
         periodeMedIntroprogrammet,
-        valgtAktivitetId,
         mottarEllerSøktPensjonsordning,
         pensjon,
         mottarEllerSøktEtterlønn,
@@ -102,7 +101,6 @@ export default function Oppsummeringssteg({
         manueltRegistrerteBarnSøktBarnetilleggFor,
         overskrevetTiltaksperiode,
     } = data;
-    const valgtTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
     const tiltaksperiode = overskrevetTiltaksperiode || valgtTiltak!.deltakelsePeriode;
     const alleBarnSøktBarnetilleggFor = [
         ...manueltRegistrerteBarnSøktBarnetilleggFor,
