@@ -41,7 +41,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     });
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
-    const valgtAktivitetId = formMethods.watch('valgtAktivitetId');
+    const valgtAktivitetId = formMethods.watch('svar.valgtAktivitetId');
     React.useEffect(() => {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
