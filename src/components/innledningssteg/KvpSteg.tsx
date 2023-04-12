@@ -37,15 +37,15 @@ function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
 export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
     const { watch } = useFormContext();
 
-    const søkerHeleTiltaksperioden = watch('søkerHeleTiltaksperioden');
-    const overskrevetTiltaksperiode = watch('overskrevetTiltaksperiode');
+    const søkerHeleTiltaksperioden = watch('svar.søkerHeleTiltaksperioden');
+    const overskrevetTiltaksperiode = watch('svar.overskrevetTiltaksperiode');
     const tiltaksperiodeTekst =
         søkerHeleTiltaksperioden === false
             ? formatPeriode(overskrevetTiltaksperiode)
             : formatPeriode(valgtTiltak!.deltakelsePeriode);
 
-    const watchDeltarIKvp = watch('deltarIKvp');
-    const watchDeltarIIntroprogrammet = watch('deltarIIntroprogrammet');
+    const watchDeltarIKvp = watch('svar.deltarIKvp');
+    const watchDeltarIIntroprogrammet = watch('svar.deltarIIntroprogrammet');
 
     return (
         <Step
@@ -64,13 +64,12 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                         arbeidsmarkedstiltak, har du som regel ikke rett til tiltakspenger. En institusjon kan for
                         eksempel være et sykehus eller et fengsel.
                     </p>
-                    <p></p>
                 </React.Fragment>
             }
         >
             <>
                 <JaNeiSpørsmål
-                    name="deltarIKvp"
+                    name="svar.deltarIKvp"
                     validate={deltarIKvpValidator}
                     hjelpetekst={{
                         tittel: 'Hva er kvalifiseringsprogrammet?',
@@ -98,14 +97,14 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
                     <Periodespørsmål
-                        name="periodeMedKvp"
+                        name="svar.periodeMedKvp"
                         validate={[gyldigPeriodeValidator, påkrevdKvpPeriodeValidator]}
                     >
                         Når deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
                 )}
                 <JaNeiSpørsmål
-                    name="deltarIIntroprogrammet"
+                    name="svar.deltarIIntroprogrammet"
                     validate={deltarIIntroprogrammetValidator}
                     hjelpetekst={{
                         tittel: 'Hva er introduksjonsprogrammet?',
@@ -128,14 +127,14 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                 </JaNeiSpørsmål>
                 {watchDeltarIIntroprogrammet && (
                     <Periodespørsmål
-                        name="periodeMedIntroprogrammet"
+                        name="svar.periodeMedIntroprogrammet"
                         validate={[gyldigPeriodeValidator, påkrevdIntroprogramPeriodeValidator]}
                     >
                         Når deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}
                 <JaNeiSpørsmål
-                    name="borPåInstitusjon"
+                    name="svar.borPåInstitusjon"
                     validate={borPåInstitusjonValidator}
                     hjelpetekst={{
                         tittel: 'Unntak for barnevernsinstitusjoner og overgangsbolig',

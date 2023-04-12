@@ -16,8 +16,8 @@ interface TiltaksstegProps {
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }: TiltaksstegProps) {
     const { watch, resetField } = useFormContext();
-    const valgtAktivitetId = watch('valgtAktivitetId');
-    const søkerHeleTiltaksperioden = watch('søkerHeleTiltaksperioden');
+    const valgtAktivitetId = watch('svar.valgtAktivitetId');
+    const søkerHeleTiltaksperioden = watch('svar.søkerHeleTiltaksperioden');
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak>();
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
 
@@ -130,13 +130,13 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }:
                             value: aktivitetId,
                         };
                     })}
-                    name="valgtAktivitetId"
+                    name="svar.valgtAktivitetId"
                 >
                     Hvilket tiltak ønsker du å søke tiltakspenger for?
                 </Flervalgsspørsmål>
             )}
             {valgtTiltak && (
-                <JaNeiSpørsmål name="søkerHeleTiltaksperioden" reverse>
+                <JaNeiSpørsmål name="svar.søkerHeleTiltaksperioden" reverse>
                     Vi har registrert at du deltar på dette tiltaket i perioden{' '}
                     {formatPeriode(valgtTiltak!.deltakelsePeriode)}. Ønsker du å søke tiltakspenger i hele denne
                     perioden?
@@ -144,7 +144,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }:
             )}
             {!søkerHeleTiltaksperioden && søkerHeleTiltaksperioden !== undefined && (
                 <Periodespørsmål
-                    name="overskrevetTiltaksperiode"
+                    name="svar.overskrevetTiltaksperiode"
                     minDate={new Date(valgtTiltak!.deltakelsePeriode.fra)}
                     maxDate={new Date(valgtTiltak!.deltakelsePeriode.til)}
                 >
