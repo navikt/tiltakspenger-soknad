@@ -83,6 +83,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                     onCompleted={navigerBrukerTilKvpSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
                     tiltak={tiltak}
+                    valgtTiltak={valgtTiltak}
                 />
             )}
             {step && step[0] === 'kvp' && (
@@ -162,7 +163,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     {
                         aktivitetId: '123',
                         type: 'Annen utdanning',
-                        deltakelsePeriode: { fom: '2025-04-01', tom: '2025-04-10' },
+                        deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
                         arrangør: 'Testarrangør',
                         status: 'Aktuell',
                     },
