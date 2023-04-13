@@ -95,10 +95,7 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                         value={''}
                         onChange={(e) => {
                             const file = e?.target?.files?.[0];
-                            append({
-                                name: file?.name,
-                                size: file?.size,
-                            });
+                            append(file);
                         }}
                         className={styles.visuallyHidden}
                         tabIndex={-1}

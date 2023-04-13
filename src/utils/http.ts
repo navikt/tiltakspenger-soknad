@@ -15,11 +15,33 @@ export async function makeGetRequest(url: string, token: string): Promise<Respon
     });
 }
 
+async function readRequestAsStream(request: NextApiRequest): Promise<Buffer> {
+    const requestAsStream: Uint8Array[] = [];
+    return new Promise((resolve, reject) => {
+        request
+            .on('readable', () => {
+                const chunk = request.read();
+                if (chunk !== null) {
+                    requestAsStream.push(chunk);
+                }
+            })
+            .on('end', () => {
+                const buffer = Buffer.concat(requestAsStream);
+                return resolve(buffer);
+            })
+            .on('error', (error) => {
+                logger.error(`Error occured reading buffer ${JSON.stringify(error)}`);
+                return reject(error);
+            });
+    });
+}
+
 export async function makePostRequest(url: string, token: string, request: NextApiRequest): Promise<Response> {
     logger.info(`Making request to ${url}`);
+    const requestBuffer = await readRequestAsStream(request);
     return await fetch(url, {
         method: 'POST',
-        body: request.body,
+        body: requestBuffer,
         headers: {
             authorization: `Bearer ${token}`,
             'content-type': request.headers['content-type'],
