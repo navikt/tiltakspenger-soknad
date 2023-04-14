@@ -37,6 +37,15 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         },
     });
 
+    const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
+    const valgtAktivitetId = formMethods.watch('valgtAktivitetId');
+    React.useEffect(() => {
+        const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
+        if (matchendeTiltak) {
+            setValgtTiltak(matchendeTiltak);
+        }
+    }, [valgtAktivitetId]);
+
     function navigateToPath(path: string, shallow: boolean) {
         return router.push(path, undefined, { shallow });
     }
@@ -74,12 +83,14 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                     onCompleted={navigerBrukerTilKvpSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
                     tiltak={tiltak}
+                    valgtTiltak={valgtTiltak}
                 />
             )}
             {step && step[0] === 'kvp' && (
                 <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                     onGoToPreviousStep={navigerBrukerTilTiltakssteg}
+                    valgtTiltak={valgtTiltak!}
                 />
             )}
             {step && step[0] === 'andreutbetalinger' && (
@@ -100,7 +111,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                     onCompleted={sendSøknad}
                     onGoToPreviousStep={navigerBrukerTilBarnetilleggSteg}
                     personalia={personalia}
-                    tiltak={tiltak}
+                    valgtTiltak={valgtTiltak!}
                 />
             )}
         </FormProvider>
@@ -152,7 +163,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     {
                         aktivitetId: '123',
                         type: 'Annen utdanning',
-                        deltakelsePeriode: { fom: '2025-04-01', tom: '2025-04-10' },
+                        deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
                         arrangør: 'Testarrangør',
                         status: 'Aktuell',
                     },

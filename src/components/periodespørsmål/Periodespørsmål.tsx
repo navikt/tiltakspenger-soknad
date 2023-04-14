@@ -1,9 +1,11 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 import dayjs from 'dayjs';
+import { ReadMore } from '@navikt/ds-react';
 import Periodevelger from '@/components/datovelger/Periodevelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Periodespørsmål.module.css';
+import { Hjelpetekst } from '@/types/Hjelpetekst';
 
 interface PeriodespørsmålProps {
     name: string;
@@ -11,6 +13,7 @@ interface PeriodespørsmålProps {
     validate?: ValidatorFunction | ValidatorFunction[];
     minDate?: Date;
     maxDate?: Date;
+    hjelpetekst?: Hjelpetekst;
 }
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
@@ -26,7 +29,14 @@ function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
     return validate;
 }
 
-export default function Periodespørsmål({ name, children, validate, minDate, maxDate }: PeriodespørsmålProps) {
+export default function Periodespørsmål({
+    name,
+    children,
+    validate,
+    minDate,
+    maxDate,
+    hjelpetekst,
+}: PeriodespørsmålProps) {
     const { control, watch, formState } = useFormContext();
     const verdi = watch(name);
     const defaultValue = verdi ? { from: dayjs(verdi.fra).toDate(), to: dayjs(verdi.til).toDate() } : null;
@@ -34,6 +44,7 @@ export default function Periodespørsmål({ name, children, validate, minDate, m
     return (
         <fieldset className={styles.periodespørsmål}>
             <legend className={styles.periodespørsmål__legend}>{children}</legend>
+            {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
                 name={name}
                 control={control}
