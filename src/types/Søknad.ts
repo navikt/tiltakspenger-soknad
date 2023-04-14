@@ -4,7 +4,9 @@ import { SelvregistrertBarn } from '@/types/Barn';
 
 interface Søknad {
     svar: Spørsmålsbesvarelser;
-    vedlegg: File[];
+    vedlegg: {
+        file: File,
+    }[]
 }
 
 export interface Spørsmålsbesvarelser {
@@ -19,6 +21,7 @@ export interface Spørsmålsbesvarelser {
     overskrevetTiltaksperiode?: Periode;
     søkerOmBarnetillegg: boolean;
     manueltRegistrerteBarnSøktBarnetilleggFor: SelvregistrertBarn[];
+    ønskerÅSøkeBarnetilleggForAndreBarn: boolean;
     registrerteBarnSøktBarnetilleggFor: string[];
     mottarEllerSøktPensjonsordning: boolean;
     pensjon: AnnenUtbetaling;

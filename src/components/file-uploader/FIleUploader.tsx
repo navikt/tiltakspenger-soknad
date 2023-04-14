@@ -5,10 +5,11 @@ import { UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
 import { Delete, FileSuccess } from '@navikt/ds-icons';
+import Søknad, {Spørsmålsbesvarelser} from "@/types/Søknad";
 
 interface FileUploaderProps {
-    name: string;
-    control: Control;
+    name: "vedlegg"; // TODO: Kan dele opp i flere vedleggskategorier, feks "vedleggBarn" | "vedkeggKVP"
+    control: Control<Søknad>;
     kategori: string;
 }
 
@@ -59,8 +60,8 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                                 <FileSuccess color={'var(--a-icon-success)'} />
                             </div>
                             <div className={styles.fileInputText}>
-                                <span>{(attachment as any).name}</span>
-                                <Detail>{fileSizeString((attachment as any).size)}</Detail>
+                                <span>{attachment.file.name}</span>
+                                <Detail>{fileSizeString(attachment.file.size)}</Detail>
                             </div>
                         </div>
                         <button
@@ -95,10 +96,12 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                         value={''}
                         onChange={(e) => {
                             const file = e?.target?.files?.[0];
-                            append({
-                                name: file?.name,
-                                size: file?.size,
-                            });
+                            if (file)
+                            {
+                                append({
+                                    file
+                                });
+                            }
                         }}
                         className={styles.visuallyHidden}
                         tabIndex={-1}

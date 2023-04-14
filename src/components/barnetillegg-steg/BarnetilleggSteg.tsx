@@ -9,6 +9,7 @@ import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Chec
 import { formatDate } from '@/utils/formatDate';
 import { Personalia } from '@/types/Personalia';
 import FileUploader from '@/components/file-uploader/FIleUploader';
+import Søknad, {Spørsmålsbesvarelser} from "@/types/Søknad";
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -27,7 +28,7 @@ interface Barn {
 }
 
 export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
-    const { watch, control } = useFormContext();
+    const { watch, control } = useFormContext<Søknad>();
     const watchSøkerOmBarnetillegg = watch('svar.søkerOmBarnetillegg');
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.ønskerÅSøkeBarnetilleggForAndreBarn');
     const barnFraApi = personalia.barn;
