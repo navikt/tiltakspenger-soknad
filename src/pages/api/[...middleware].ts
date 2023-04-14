@@ -57,3 +57,10 @@ export default async function middleware(request: NextApiRequest, response: Next
         }
     }
 }
+
+// sørger for at NextJS sin default bodyParser ikke ødelegger for vedleggsopplastning
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};
