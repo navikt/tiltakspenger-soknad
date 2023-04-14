@@ -7,7 +7,7 @@ import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt'
 import { Personalia } from '@/types/Personalia';
 import { Periode } from '@/types/Periode';
 import { formatPeriode } from '@/utils/formatPeriode';
-import Søknad from '@/types/Søknad';
+import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
@@ -85,7 +85,7 @@ export default function Oppsummeringssteg({
     valgtTiltak,
 }: OppsummeringsstegProps) {
     const { getValues } = useFormContext();
-    const data: Søknad = getValues() as Søknad;
+    const data: Spørsmålsbesvarelser = getValues() as Spørsmålsbesvarelser;
     const {
         deltarIKvp,
         deltarIIntroprogrammet,

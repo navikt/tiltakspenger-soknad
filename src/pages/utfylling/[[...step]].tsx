@@ -6,7 +6,7 @@ import KvpSteg from '@/components/innledningssteg/KvpSteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
-import Søknad from '@/types/Søknad';
+import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
@@ -23,7 +23,7 @@ interface UtfyllingProps {
 export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
     const { step } = router.query;
-    const formMethods = useForm<Søknad>({
+    const formMethods = useForm<Spørsmålsbesvarelser>({
         defaultValues: {
             manueltRegistrerteBarnSøktBarnetilleggFor: [
                 { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
@@ -60,7 +60,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/oppsummering', shallow);
 
-    const sendSøknad = async (data: Søknad) => {
+    const sendSøknad = async (data: Spørsmålsbesvarelser) => {
         const søknadJson = toSøknadJson(data);
         try {
             const response = await fetch('/api/soknad', {

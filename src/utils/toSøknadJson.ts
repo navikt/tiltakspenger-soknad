@@ -1,4 +1,4 @@
-import Søknad from '@/types/Søknad';
+import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
 
 interface Periode {
@@ -17,35 +17,35 @@ function formatPeriod(period: Periode): Periode {
     };
 }
 
-function periodeMedKvp({ deltarIKvp, periodeMedKvp }: Søknad) {
+function periodeMedKvp({ deltarIKvp, periodeMedKvp }: Spørsmålsbesvarelser) {
     if (deltarIKvp) {
         return formatPeriod(periodeMedKvp as Periode);
     }
     return null;
 }
 
-function periodeMedIntro({ deltarIIntroprogrammet, periodeMedIntroprogrammet }: Søknad) {
+function periodeMedIntro({ deltarIIntroprogrammet, periodeMedIntroprogrammet }: Spørsmålsbesvarelser) {
     if (deltarIIntroprogrammet) {
         return formatPeriod(periodeMedIntroprogrammet as Periode);
     }
     return null;
 }
 
-function pensjon({ mottarEllerSøktPensjonsordning, pensjon }: Søknad) {
+function pensjon({ mottarEllerSøktPensjonsordning, pensjon }: Spørsmålsbesvarelser) {
     if (mottarEllerSøktPensjonsordning) {
         return { ...pensjon, periode: formatPeriod(pensjon.periode) };
     }
     return pensjon;
 }
 
-function etterlønn({ mottarEllerSøktEtterlønn, etterlønn }: Søknad) {
+function etterlønn({ mottarEllerSøktEtterlønn, etterlønn }: Spørsmålsbesvarelser) {
     if (mottarEllerSøktEtterlønn) {
         return { ...etterlønn, periode: formatPeriod(etterlønn.periode) };
     }
     return etterlønn;
 }
 
-function barnSøktBarnetilleggFor({ manueltRegistrerteBarnSøktBarnetilleggFor }: Søknad) {
+function barnSøktBarnetilleggFor({ manueltRegistrerteBarnSøktBarnetilleggFor }: Spørsmålsbesvarelser) {
     return manueltRegistrerteBarnSøktBarnetilleggFor
         .filter(
             ({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland
@@ -56,7 +56,7 @@ function barnSøktBarnetilleggFor({ manueltRegistrerteBarnSøktBarnetilleggFor }
         }));
 }
 
-export default function toSøknadJson(søknad: Søknad): String {
+export default function toSøknadJson(søknad: Spørsmålsbesvarelser): String {
     return JSON.stringify({
         ...søknad,
         periodeMedKvp: periodeMedKvp(søknad),
