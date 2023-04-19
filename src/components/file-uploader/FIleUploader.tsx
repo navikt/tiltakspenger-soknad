@@ -106,7 +106,7 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                         className={styles.visuallyHidden}
                         tabIndex={-1}
                         ref={fileUploadInputElement}
-                        accept="image/*,.pdf"
+                        accept="image/jpg,image/png,.pdf"
                     />
                     <BodyShort>{'Dra og slipp'}</BodyShort>
                     <BodyShort>{'eller'}</BodyShort>
