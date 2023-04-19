@@ -67,7 +67,10 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         const søknadJson = toSøknadJson(data.svar);
         const formData = new FormData();
         formData.append('søknad', søknadJson as string);
-        formData.append('vedlegg', data.vedlegg[0].file);
+
+        data.vedlegg.forEach((vedlegg, index) => {
+            formData.append(`vedlegg-${index}`, vedlegg.file);
+        })
         try {
             const response = await fetch('/api/soknad', {
                 method: 'POST',
