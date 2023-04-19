@@ -36,9 +36,9 @@ function oppsummeringDeltarIIntroprogram(deltarIIntroprogrammet: boolean, period
     }
 }
 
-function oppsummeringInstitusjon(borPåInstitusjon: boolean) {
+function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusjon?: Periode) {
     if (borPåInstitusjon === true) {
-        return 'Ja, jeg bor på institusjon med fri kost og losji i perioden jeg går på tiltak';
+        return `Ja, jeg bor på institusjon med fri kost og losji i perioden ${formatPeriode(periodePåInstitusjon!)}`;
     } else {
         return 'Nei, jeg bor ikke på institusjon med fri kost og losji i perioden jeg går på tiltak';
     }
@@ -87,23 +87,18 @@ export default function Oppsummeringssteg({
     const { getValues } = useFormContext();
     const data: Spørsmålsbesvarelser = getValues() as Spørsmålsbesvarelser;
     const {
-        deltarIKvp,
-        deltarIIntroprogrammet,
-        borPåInstitusjon,
-        periodeMedKvp,
-        periodeMedIntroprogrammet,
-        mottarEllerSøktPensjonsordning,
-        pensjon,
-        mottarEllerSøktEtterlønn,
+        kvalifiseringsprogram,
+        introduksjonsprogram,
+        pensjonsordning,
         etterlønn,
-        søkerOmBarnetillegg,
-        registrerteBarnSøktBarnetilleggFor,
-        manueltRegistrerteBarnSøktBarnetilleggFor,
-        overskrevetTiltaksperiode,
+        institusjonsopphold,
+        tiltak,
+        barnetillegg,
     } = data;
-    const tiltaksperiode = overskrevetTiltaksperiode || valgtTiltak!.deltakelsePeriode;
+
+    const registrerteBarnSøktBarnetilleggFor = barnetillegg.registrerteBarnSøktBarnetilleggFor;
     const alleBarnSøktBarnetilleggFor = [
-        ...manueltRegistrerteBarnSøktBarnetilleggFor,
+        ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor,
         ...(registrerteBarnSøktBarnetilleggFor || []).map((jsonString) => JSON.parse(jsonString)),
     ];
     return (
@@ -142,10 +137,10 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt feltNavn="Tiltak" feltVerdi={valgtTiltak?.arrangør || ''} />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode!.fra)} />
+                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltak!.periode.fra)} />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
+                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltak!.periode.til)} />
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>
@@ -156,21 +151,27 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Kvalifiseringsprogrammet"
-                            feltVerdi={oppsummeringDeltarIKvp(deltarIKvp, periodeMedKvp)}
+                            feltVerdi={oppsummeringDeltarIKvp(
+                                kvalifiseringsprogram.deltar,
+                                kvalifiseringsprogram.periode
+                            )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Introduksjonsprogrammet"
                                 feltVerdi={oppsummeringDeltarIIntroprogram(
-                                    deltarIIntroprogrammet,
-                                    periodeMedIntroprogrammet
+                                    introduksjonsprogram.deltar,
+                                    introduksjonsprogram.periode
                                 )}
                             />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Opphold på institusjon"
-                                feltVerdi={oppsummeringInstitusjon(borPåInstitusjon)}
+                                feltVerdi={oppsummeringInstitusjon(
+                                    institusjonsopphold.borPåInstitusjon,
+                                    institusjonsopphold.periode
+                                )}
                             />
                         </div>
                     </Accordion.Content>
@@ -180,12 +181,15 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Pensjonsordninger"
-                            feltVerdi={oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning, pensjon)}
+                            feltVerdi={oppsummeringPensjonsordninger(
+                                pensjonsordning.mottarEllerSøktPensjonsordning,
+                                pensjonsordning
+                            )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Etterlønn"
-                                feltVerdi={oppsummeringEtterlønn(mottarEllerSøktEtterlønn, etterlønn)}
+                                feltVerdi={oppsummeringEtterlønn(etterlønn.mottarEllerSøktEtterlønn, etterlønn)}
                             />
                         </div>
                     </Accordion.Content>
@@ -195,7 +199,7 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Barnetillegg"
-                            feltVerdi={oppsummeringBarnetillegg(søkerOmBarnetillegg)}
+                            feltVerdi={oppsummeringBarnetillegg(barnetillegg.søkerOmBarnetillegg)}
                         />
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
                             <div style={{ marginTop: '2rem' }}>

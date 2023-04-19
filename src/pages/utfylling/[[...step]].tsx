@@ -14,6 +14,7 @@ import { makeGetRequest } from '@/utils/http';
 import toSøknadJson from '@/utils/toSøknadJson';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
+import Søknad from '@/types/Søknad';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -23,22 +24,26 @@ interface UtfyllingProps {
 export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
     const { step } = router.query;
-    const formMethods = useForm<Spørsmålsbesvarelser>({
+    const formMethods = useForm<Søknad>({
         defaultValues: {
-            manueltRegistrerteBarnSøktBarnetilleggFor: [
-                { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
-            ],
-            borPåInstitusjon: undefined,
-            mottarEllerSøktPensjonsordning: undefined,
-            mottarEllerSøktEtterlønn: undefined,
-            søkerOmBarnetillegg: undefined,
-            deltarIKvp: undefined,
-            deltarIIntroprogrammet: undefined,
+            svar: {
+                tiltak: {},
+                barnetillegg: {
+                    manueltRegistrerteBarnSøktBarnetilleggFor: [
+                        { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
+                    ],
+                },
+                etterlønn: {},
+                institusjonsopphold: {},
+                introduksjonsprogram: {},
+                kvalifiseringsprogram: {},
+                pensjonsordning: {},
+            },
         },
     });
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
-    const valgtAktivitetId = formMethods.watch('valgtAktivitetId');
+    const valgtAktivitetId = formMethods.watch('svar.tiltak.aktivitetId');
     React.useEffect(() => {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
@@ -90,7 +95,6 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                 <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                     onGoToPreviousStep={navigerBrukerTilTiltakssteg}
-                    valgtTiltak={valgtTiltak!}
                 />
             )}
             {step && step[0] === 'andreutbetalinger' && (

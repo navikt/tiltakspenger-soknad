@@ -29,8 +29,8 @@ function etterlønnutbetalerValidator(verdi: string) {
 
 export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
     const { watch } = useFormContext();
-    const watchPensjonsordning = watch('mottarEllerSøktPensjonsordning');
-    const watchEtterlønn = watch('mottarEllerSøktEtterlønn');
+    const watchPensjonsordning = watch('svar.pensjonsordning.mottarEllerSøktPensjonsordning');
+    const watchEtterlønn = watch('svar.etterlønn.mottarEllerSøktEtterlønn');
     return (
         <Step
             title="Andre utbetalinger"
@@ -53,7 +53,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             }
         >
             <JaNeiSpørsmål
-                name="mottarEllerSøktPensjonsordning"
+                name="svar.pensjonsordning.mottarEllerSøktPensjonsordning"
                 validate={pensjonsordningValidator}
                 hjelpetekst={{ tittel: 'Hva er en pensjonsordning?', tekst: 'Her kommer det noe hjelpetekst' }}
             >
@@ -62,17 +62,17 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             {watchPensjonsordning && (
                 <>
                     <Fritekstspørsmål
-                        name="pensjon.utbetaler"
+                        name="svar.pensjonsordning.utbetaler"
                         textFieldProps={{ htmlSize: 45 }}
                         validate={pensjonsutbetalerValidator}
                     >
                         Hvem utbetaler pensjonsordningen?
                     </Fritekstspørsmål>
-                    <Periodespørsmål name="pensjon.periode">Oppgi periode</Periodespørsmål>
+                    <Periodespørsmål name="svar.pensjonsordning.periode">Oppgi periode</Periodespørsmål>
                 </>
             )}
             <JaNeiSpørsmål
-                name="mottarEllerSøktEtterlønn"
+                name="svar.etterlønn.mottarEllerSøktEtterlønn"
                 validate={etterlønnValidator}
                 hjelpetekst={{ tittel: 'Hva er etterlønn?', tekst: 'Her kommer det noe hjelpetekst' }}
             >
@@ -81,13 +81,13 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             {watchEtterlønn && (
                 <>
                     <Fritekstspørsmål
-                        name="etterlønn.utbetaler"
+                        name="svar.etterlønn.utbetaler"
                         textFieldProps={{ htmlSize: 45 }}
                         validate={etterlønnutbetalerValidator}
                     >
                         Hvem utbetaler etterlønn?
                     </Fritekstspørsmål>
-                    <Periodespørsmål name="etterlønn.periode">Oppgi periode</Periodespørsmål>
+                    <Periodespørsmål name="svar.etterlønn.periode">Oppgi periode</Periodespørsmål>
                 </>
             )}
         </Step>
