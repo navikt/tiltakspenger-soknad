@@ -7,11 +7,11 @@ import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt'
 import { Personalia } from '@/types/Personalia';
 import { Periode } from '@/types/Periode';
 import { formatPeriode } from '@/utils/formatPeriode';
-import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
 import { BarnFraAPI, SelvregistrertBarn } from '@/types/Barn';
+import Søknad from '@/types/Søknad';
 
 interface OppsummeringsstegProps {
     onCompleted: (data: any) => void;
@@ -85,7 +85,8 @@ export default function Oppsummeringssteg({
     valgtTiltak,
 }: OppsummeringsstegProps) {
     const { getValues } = useFormContext();
-    const data: Spørsmålsbesvarelser = getValues() as Spørsmålsbesvarelser;
+    const søknad: Søknad = getValues() as Søknad;
+    const svar = søknad.svar;
     const {
         kvalifiseringsprogram,
         introduksjonsprogram,
@@ -94,7 +95,9 @@ export default function Oppsummeringssteg({
         institusjonsopphold,
         tiltak,
         barnetillegg,
-    } = data;
+    } = svar;
+
+    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.deltakelsePeriode : tiltak.periode;
 
     const registrerteBarnSøktBarnetilleggFor = barnetillegg.registrerteBarnSøktBarnetilleggFor;
     const alleBarnSøktBarnetilleggFor = [
@@ -104,7 +107,7 @@ export default function Oppsummeringssteg({
     return (
         <Step
             title="Oppsummering"
-            onCompleted={() => onCompleted(data)}
+            onCompleted={() => onCompleted(søknad)}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={5}
             submitSectionRenderer={() => (
@@ -112,7 +115,12 @@ export default function Oppsummeringssteg({
                     <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
                         Forrige steg
                     </Button>
-                    <Button type="button" onClick={() => onCompleted(data)} size="small" style={{ marginLeft: '1rem' }}>
+                    <Button
+                        type="button"
+                        onClick={() => onCompleted(søknad)}
+                        size="small"
+                        style={{ marginLeft: '1rem' }}
+                    >
                         Send inn søknad
                     </Button>
                 </div>
@@ -137,10 +145,10 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt feltNavn="Tiltak" feltVerdi={valgtTiltak?.arrangør || ''} />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltak!.periode.fra)} />
+                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode.fra)} />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltak!.periode.til)} />
+                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode.til)} />
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>

@@ -1,17 +1,17 @@
 import { Periode } from '@/types/Periode';
 import { SelvregistrertBarn } from '@/types/Barn';
 
-interface Introduksjonsprogram {
+export interface Introduksjonsprogram {
     deltar: boolean;
     periode?: Periode;
 }
 
-interface Kvalifiseringsprogram {
+export interface Kvalifiseringsprogram {
     deltar: boolean;
     periode?: Periode;
 }
 
-interface Institusjonsopphold {
+export interface Institusjonsopphold {
     borPåInstitusjon: boolean;
     periode?: Periode;
 }
@@ -22,20 +22,20 @@ interface Tiltak {
     søkerHeleTiltaksperioden: boolean;
 }
 
-interface Barnetillegg {
+export interface Barnetillegg {
     søkerOmBarnetillegg: boolean;
     ønskerÅSøkeBarnetilleggForAndreBarn: boolean;
     manueltRegistrerteBarnSøktBarnetilleggFor: SelvregistrertBarn[];
     registrerteBarnSøktBarnetilleggFor: string[];
 }
 
-interface Pensjonsordning {
+export interface Pensjonsordning {
     mottarEllerSøktPensjonsordning: boolean;
     utbetaler: string;
     periode: Periode;
 }
 
-interface Etterlønn {
+export interface Etterlønn {
     mottarEllerSøktEtterlønn: boolean;
     utbetaler: string;
     periode: Periode;

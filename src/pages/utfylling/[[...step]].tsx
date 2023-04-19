@@ -65,8 +65,8 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/oppsummering', shallow);
 
-    const sendSøknad = async (data: Spørsmålsbesvarelser) => {
-        const søknadJson = toSøknadJson(data);
+    const sendSøknad = async (søknad: Søknad) => {
+        const søknadJson = toSøknadJson(søknad.svar);
         try {
             const response = await fetch('/api/soknad', {
                 method: 'POST',
@@ -95,6 +95,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                 <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                     onGoToPreviousStep={navigerBrukerTilTiltakssteg}
+                    valgtTiltak={valgtTiltak!}
                 />
             )}
             {step && step[0] === 'andreutbetalinger' && (

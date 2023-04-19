@@ -6,10 +6,12 @@ import Step from '@/components/step/Step';
 import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/validators';
 import { FormPeriode } from '@/types/FormPeriode';
 import { formatPeriode } from '@/utils/formatPeriode';
+import { Tiltak } from '@/types/Tiltak';
 
 interface KvpStegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
+    valgtTiltak: Tiltak;
 }
 
 function deltarIKvpValidator(verdi: boolean) {
@@ -36,11 +38,11 @@ function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du bor på institusjon');
 }
 
-export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProps) {
+export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
     const { watch } = useFormContext();
 
     const tiltaksperiode = watch('svar.tiltak.periode');
-    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
+    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode || valgtTiltak?.deltakelsePeriode);
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
