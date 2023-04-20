@@ -6,7 +6,6 @@ import KvpSteg from '@/components/innledningssteg/KvpSteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
-import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
