@@ -99,11 +99,15 @@ export default function Oppsummeringssteg({
 
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.deltakelsePeriode : tiltak.periode;
 
-    const registrerteBarnSøktBarnetilleggFor = barnetillegg.registrerteBarnSøktBarnetilleggFor;
+    const registrerteBarnSøktBarnetilleggFor = personalia.barn.filter(
+        ({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0
+    );
+
     const alleBarnSøktBarnetilleggFor = [
         ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor,
-        ...(registrerteBarnSøktBarnetilleggFor || []).map((jsonString) => JSON.parse(jsonString)),
+        ...registrerteBarnSøktBarnetilleggFor,
     ];
+
     return (
         <Step
             title="Oppsummering"
@@ -145,10 +149,10 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt feltNavn="Tiltak" feltVerdi={valgtTiltak?.arrangør || ''} />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode.fra)} />
+                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode!.fra)} />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode.til)} />
+                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>

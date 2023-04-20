@@ -16,9 +16,9 @@ export interface Institusjonsopphold {
     periode?: Periode;
 }
 
-interface Tiltak {
+export interface FormTiltak {
     aktivitetId: string;
-    periode: Periode;
+    periode?: Periode;
     søkerHeleTiltaksperioden: boolean;
 }
 
@@ -45,7 +45,7 @@ interface Spørsmålsbesvarelser {
     kvalifiseringsprogram: Kvalifiseringsprogram;
     introduksjonsprogram: Introduksjonsprogram;
     institusjonsopphold: Institusjonsopphold;
-    tiltak: Tiltak;
+    tiltak: FormTiltak;
     barnetillegg: Barnetillegg;
     pensjonsordning: Pensjonsordning;
     etterlønn: Etterlønn;

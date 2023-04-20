@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '@/components/oppsummeringssteg/Oppsummeringssteg';
@@ -65,7 +66,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         navigateToPath('/utfylling/oppsummering', shallow);
 
     const sendSøknad = async (søknad: Søknad) => {
-        const søknadJson = toSøknadJson(søknad.svar);
+        const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
         try {
             const response = await fetch('/api/soknad', {
                 method: 'POST',
@@ -156,7 +157,13 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         return {
             props: {
                 tiltak: tiltakJson.tiltak,
-                personalia: personaliaJson,
+                personalia: {
+                    ...personaliaJson,
+                    barn: personaliaJson.barn.map((barn: any) => ({
+                        ...barn,
+                        uuid: uuidv4(),
+                    })),
+                },
             },
         };
     } catch (error) {
@@ -177,7 +184,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     mellomnavn: 'Bar',
                     etternavn: 'Baz',
                     fødselsnummer: '123',
-                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01' }],
+                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() }],
                 },
             },
         };

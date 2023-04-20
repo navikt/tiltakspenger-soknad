@@ -58,7 +58,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
             {watchSøkerOmBarnetillegg && barnFraApi && barnFraApi.length > 0 && (
                 <Checkboxgruppespørsmål
                     alternativer={barnFraApi.map((barn) => ({
-                        value: JSON.stringify(barn),
+                        value: barn.uuid,
                         tekst: lagCheckboksTekstForBarn(barn),
                     }))}
                     name="svar.barnetillegg.registrerteBarnSøktBarnetilleggFor"
