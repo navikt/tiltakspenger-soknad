@@ -29,6 +29,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
             svar: {
                 tiltak: {},
                 barnetillegg: {
+                    registrerteBarnSøktBarnetilleggFor: [],
                     manueltRegistrerteBarnSøktBarnetilleggFor: [
                         { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
                     ],

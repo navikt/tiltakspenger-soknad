@@ -104,7 +104,9 @@ export default function Oppsummeringssteg({
     );
 
     const alleBarnSøktBarnetilleggFor = [
-        ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor,
+        ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
+            ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
+        ),
         ...registrerteBarnSøktBarnetilleggFor,
     ];
 

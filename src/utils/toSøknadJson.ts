@@ -86,12 +86,12 @@ function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[])
                 mellomnavn,
                 etternavn,
             })),
-        manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.map(
-            (barn) => ({
+        manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+            .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
+            .map((barn) => ({
                 ...barn,
                 fødselsdato: formatDate(barn.fødselsdato),
-            })
-        ),
+            })),
     };
 }
 
