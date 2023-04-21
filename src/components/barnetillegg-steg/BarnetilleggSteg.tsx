@@ -27,8 +27,8 @@ interface Barn {
 
 export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
     const { watch } = useFormContext();
-    const watchSøkerOmBarnetillegg = watch('søkerOmBarnetillegg');
-    const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('ønskerÅSøkeBarnetilleggForAndreBarn');
+    const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
+    const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn');
     const barnFraApi = personalia.barn;
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
 
@@ -66,16 +66,16 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 </p>
             }
         >
-            <JaNeiSpørsmål name="søkerOmBarnetillegg" validate={søkerBarnetilleggValidator} reverse>
+            <JaNeiSpørsmål name="svar.barnetillegg.søkerOmBarnetillegg" validate={søkerBarnetilleggValidator} reverse>
                 Ønsker du å søke om barnetillegg for ett eller flere barn som du forsørger?
             </JaNeiSpørsmål>
             {watchSøkerOmBarnetillegg && barnFraApi && barnFraApi.length > 0 && (
                 <Checkboxgruppespørsmål
                     alternativer={barnFraApi.map((barn) => ({
-                        value: JSON.stringify(barn),
+                        value: barn.uuid,
                         tekst: lagCheckboksTekstForBarn(barn),
                     }))}
-                    name="registrerteBarnSøktBarnetilleggFor"
+                    name="svar.barnetillegg.registrerteBarnSøktBarnetilleggFor"
                     hjelpetekst={{
                         tittel: 'Hvilke barn vises?',
                         tekst: 'Vi viser dine barn under 16 år som er registrert i Folkeregisteret.',
@@ -93,9 +93,9 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
             )}
             {barnFraApi && barnFraApi.length > 0 && watchSøkerOmBarnetillegg && (
                 <JaNeiSpørsmål
-                    name="ønskerÅSøkeBarnetilleggForAndreBarn"
+                    name="svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn"
                     validate={søkerBarnetilleggValidator}
-                    hjelpetekst={{
+                hjelpetekst={{
                         tittel: 'Hvilke barn kan du legge til?',
                         tekst: (
                             <>
@@ -114,7 +114,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 </JaNeiSpørsmål>
             )}
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
-                <VariabelPersonliste name="manueltRegistrerteBarnSøktBarnetilleggFor" />
+                <VariabelPersonliste name="svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor" />
             )}
         </Step>
     );

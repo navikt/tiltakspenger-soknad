@@ -17,14 +17,14 @@ interface TiltaksstegProps {
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
     const { watch, resetField } = useFormContext();
-    const valgtAktivitetId = watch('valgtAktivitetId');
-    const søkerHeleTiltaksperioden = watch('søkerHeleTiltaksperioden');
+    const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
+    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
     const brukerHarValgtEtTiltak = !!valgtTiltak;
 
     const resetFormValues = () => {
-        resetField('søkerHeleTiltaksperioden');
-        resetField('overskrevetTiltaksperiode');
+        resetField('svar.tiltak.søkerHeleTiltaksperioden');
+        resetField('svar.tiltak.periode');
     };
 
     const veiledningstekstForBrukerUtenTiltak = () => {
@@ -126,13 +126,13 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
                             value: aktivitetId,
                         };
                     })}
-                    name="valgtAktivitetId"
+                    name="svar.tiltak.aktivitetId"
                 >
                     Hvilket tiltak ønsker du å søke tiltakspenger for?
                 </Flervalgsspørsmål>
             )}
             {brukerHarValgtEtTiltak && (
-                <JaNeiSpørsmål name="søkerHeleTiltaksperioden" reverse>
+                <JaNeiSpørsmål name="svar.tiltak.søkerHeleTiltaksperioden" reverse>
                     Vi har registrert at du deltar på dette tiltaket i perioden{' '}
                     {formatPeriode(valgtTiltak.deltakelsePeriode)}. Ønsker du å søke tiltakspenger i hele denne
                     perioden?
@@ -140,7 +140,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
             )}
             {brukerHarValgtEtTiltak && søkerHeleTiltaksperioden === false && (
                 <Periodespørsmål
-                    name="overskrevetTiltaksperiode"
+                    name="svar.tiltak.periode"
                     minDate={new Date(valgtTiltak.deltakelsePeriode.fra)}
                     maxDate={new Date(valgtTiltak.deltakelsePeriode.til)}
                 >

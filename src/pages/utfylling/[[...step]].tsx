@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '@/components/oppsummeringssteg/Oppsummeringssteg';
@@ -6,7 +7,6 @@ import KvpSteg from '@/components/innledningssteg/KvpSteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
-import Søknad from '@/types/Søknad';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
@@ -14,6 +14,7 @@ import { makeGetRequest } from '@/utils/http';
 import toSøknadJson from '@/utils/toSøknadJson';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
+import Søknad from '@/types/Søknad';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -25,20 +26,25 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const { step } = router.query;
     const formMethods = useForm<Søknad>({
         defaultValues: {
-            manueltRegistrerteBarnSøktBarnetilleggFor: [
-                { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
-            ],
-            borPåInstitusjon: undefined,
-            mottarEllerSøktPensjonsordning: undefined,
-            mottarEllerSøktEtterlønn: undefined,
-            søkerOmBarnetillegg: undefined,
-            deltarIKvp: undefined,
-            deltarIIntroprogrammet: undefined,
+            svar: {
+                tiltak: {},
+                barnetillegg: {
+                    registrerteBarnSøktBarnetilleggFor: [],
+                    manueltRegistrerteBarnSøktBarnetilleggFor: [
+                        { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
+                    ],
+                },
+                etterlønn: {},
+                institusjonsopphold: {},
+                introduksjonsprogram: {},
+                kvalifiseringsprogram: {},
+                pensjonsordning: {},
+            },
         },
     });
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
-    const valgtAktivitetId = formMethods.watch('valgtAktivitetId');
+    const valgtAktivitetId = formMethods.watch('svar.tiltak.aktivitetId');
     React.useEffect(() => {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
@@ -60,8 +66,8 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/oppsummering', shallow);
 
-    const sendSøknad = async (data: Søknad) => {
-        const søknadJson = toSøknadJson(data);
+    const sendSøknad = async (søknad: Søknad) => {
+        const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
         try {
             const response = await fetch('/api/soknad', {
                 method: 'POST',
@@ -152,7 +158,13 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         return {
             props: {
                 tiltak: tiltakJson.tiltak,
-                personalia: personaliaJson,
+                personalia: {
+                    ...personaliaJson,
+                    barn: personaliaJson.barn.map((barn: any) => ({
+                        ...barn,
+                        uuid: uuidv4(),
+                    })),
+                },
             },
         };
     } catch (error) {
@@ -173,7 +185,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     mellomnavn: 'Bar',
                     etternavn: 'Baz',
                     fødselsnummer: '123',
-                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01' }],
+                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() }],
                 },
             },
         };
