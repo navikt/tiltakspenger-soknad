@@ -4,12 +4,12 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import VariabelPersonliste from '@/components/personliste/VariabelPersonliste';
 import Step from '@/components/step/Step';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
-import { GuidePanel } from '@navikt/ds-react';
+import { Alert } from '@navikt/ds-react';
 import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Checkboxgruppespørsmål';
 import { formatDate } from '@/utils/formatDate';
 import { Personalia } from '@/types/Personalia';
 import FileUploader from '@/components/file-uploader/FIleUploader';
-import Søknad, {Spørsmålsbesvarelser} from "@/types/Søknad";
+import Søknad from "@/types/Søknad";
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -29,8 +29,8 @@ interface Barn {
 
 export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
     const { watch, control } = useFormContext<Søknad>();
-    const watchSøkerOmBarnetillegg = watch('svar.søkerOmBarnetillegg');
-    const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.ønskerÅSøkeBarnetilleggForAndreBarn');
+    const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
+    const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn');
     const barnFraApi = personalia.barn;
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
 
@@ -48,45 +48,75 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={4}
-            guide="Placeholder veiledertekst"
+            guide={
+                <p>
+                    Når du har rett til tiltakspenger, kan du også ha rett på barnetillegg.
+                    <ul>
+                        <li>
+                            Du kan få barnetillegg for egne barn under 16 år som du forsørger. Dette gjelder også for
+                            barn du har bidragsplikt for, selv om du ikke betaler bidrag akkurat nå.
+                        </li>
+                        <li style={{ marginTop: '1rem' }}>
+                            Hvis både du og den andre forelderen mottar tiltakspenger, gis barnetillegget bare til en av
+                            dere.
+                        </li>
+                        <li style={{ marginTop: '1rem' }}>
+                            Du får ikke barnetillegg hvis barnet oppholder seg utenfor EØS i over 90 dager i løpet av en
+                            tolvmånedersperiode eller er bosatt utenfor EØS.
+                        </li>
+                    </ul>
+                </p>
+            }
         >
-            <JaNeiSpørsmål
-                name="svar.søkerOmBarnetillegg"
-                validate={søkerBarnetilleggValidator}
-                hjelpetekst={{ tittel: 'Når kan man få barnetillegg?', tekst: 'Her kommer det noe hjelpetekst' }}
-            >
-                Ønsker du å søke om barnetillegg for ett eller flere barn under 16 år som du forsørger?
+            <JaNeiSpørsmål name="svar.barnetillegg.søkerOmBarnetillegg" validate={søkerBarnetilleggValidator} reverse>
+                Ønsker du å søke om barnetillegg for ett eller flere barn som du forsørger?
             </JaNeiSpørsmål>
             {watchSøkerOmBarnetillegg && barnFraApi && barnFraApi.length > 0 && (
                 <Checkboxgruppespørsmål
                     alternativer={barnFraApi.map((barn) => ({
-                        value: JSON.stringify(barn),
+                        value: barn.uuid,
                         tekst: lagCheckboksTekstForBarn(barn),
                     }))}
-                    name="svar.registrerteBarnSøktBarnetilleggFor"
+                    name="svar.barnetillegg.registrerteBarnSøktBarnetilleggFor"
+                    hjelpetekst={{
+                        tittel: 'Hvilke barn vises?',
+                        tekst: 'Vi viser dine barn under 16 år som er registrert i Folkeregisteret.',
+                    }}
                 >
                     Hvilke barn ønsker du å søke barnetillegg for?
                 </Checkboxgruppespørsmål>
             )}
             {harIngenBarnÅViseFraApi && (
-                <GuidePanel style={{ marginTop: '2rem', marginBottom: '2rem' }}>
-                    <p>
-                        Vi kunne ikke finne noen barn registrert på deg. Litt lengre ned på siden kan du registrere barn
-                        du ønsker å søke barnetillegg for.
-                    </p>{' '}
-                    <p>
-                        Litt senere i søknaden vil du få anledning til å laste opp vedlegg som dokumenterer at du
-                        forsørger barnet.
-                    </p>
-                </GuidePanel>
+                <Alert variant="info" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+                    Vi har ikke registrert at du har et barn under 16 år. Hvis du likevel har barn, for eksempel hvis du
+                    nylig har adoptert, kan du legge dem til her. Vær oppmerksom på at du ikke får barnetillegg for
+                    stebarn eller fosterbarn.
+                </Alert>
             )}
             {barnFraApi && barnFraApi.length > 0 && watchSøkerOmBarnetillegg && (
-                <JaNeiSpørsmål name="svar.ønskerÅSøkeBarnetilleggForAndreBarn" validate={søkerBarnetilleggValidator}>
+                <JaNeiSpørsmål
+                    name="svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn"
+                    validate={søkerBarnetilleggValidator}
+                    hjelpetekst={{
+                            tittel: 'Hvilke barn kan du legge til?',
+                            tekst: (
+                                <>
+                                    <span>
+                                        Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for
+                                        eksempel hvis du nylig har adoptert, kan du legge dem til her.
+                                    </span>
+                                    <span style={{ display: 'block', marginTop: '1rem' }}>
+                                        Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
+                                    </span>
+                                </>
+                            ),
+                        }}
+                >
                     Har du andre barn du ønsker å søke barnetillegg for?
                 </JaNeiSpørsmål>
             )}
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
-                <VariabelPersonliste name="svar.manueltRegistrerteBarnSøktBarnetilleggFor" />
+                <VariabelPersonliste name="svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor" />
             )}
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
                 <div style={{ marginTop: '2rem' }}>

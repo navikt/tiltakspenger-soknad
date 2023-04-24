@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '@/components/oppsummeringssteg/Oppsummeringssteg';
@@ -6,7 +7,6 @@ import KvpSteg from '@/components/innledningssteg/KvpSteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
-import Søknad from '@/types/Søknad';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
@@ -14,6 +14,7 @@ import { makeGetRequest } from '@/utils/http';
 import toSøknadJson from '@/utils/toSøknadJson';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
+import Søknad from '@/types/Søknad';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -26,22 +27,25 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const formMethods = useForm<Søknad>({
         defaultValues: {
             svar: {
-                manueltRegistrerteBarnSøktBarnetilleggFor: [
-                    { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
-                ],
-                borPåInstitusjon: undefined,
-                mottarEllerSøktPensjonsordning: undefined,
-                mottarEllerSøktEtterlønn: undefined,
-                søkerOmBarnetillegg: undefined,
-                deltarIKvp: undefined,
-                deltarIIntroprogrammet: undefined,
+                tiltak: {},
+                barnetillegg: {
+                    registrerteBarnSøktBarnetilleggFor: [],
+                    manueltRegistrerteBarnSøktBarnetilleggFor: [
+                        { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
+                    ],
+                },
+                etterlønn: {},
+                institusjonsopphold: {},
+                introduksjonsprogram: {},
+                kvalifiseringsprogram: {},
+                pensjonsordning: {},
             },
             vedlegg: [],
         },
     });
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
-    const valgtAktivitetId = formMethods.watch('svar.valgtAktivitetId');
+    const valgtAktivitetId = formMethods.watch('svar.tiltak.aktivitetId');
     React.useEffect(() => {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
@@ -63,14 +67,13 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/oppsummering', shallow);
 
-    const sendSøknad = async (data: Søknad) => {
-        const søknadJson = toSøknadJson(data.svar);
+    const sendSøknad = async (søknad: Søknad) => {
+        const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
         const formData = new FormData();
         formData.append('søknad', søknadJson as string);
-
-        data.vedlegg.forEach((vedlegg, index) => {
+        søknad.vedlegg.forEach((vedlegg, index) => {
             formData.append(`vedlegg-${index}`, vedlegg.file);
-        })
+        });
         try {
             const response = await fetch('/api/soknad', {
                 method: 'POST',
@@ -92,6 +95,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                     onCompleted={navigerBrukerTilKvpSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
                     tiltak={tiltak}
+                    valgtTiltak={valgtTiltak}
                 />
             )}
             {step && step[0] === 'kvp' && (
@@ -126,7 +130,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     );
 }
 
-export async function getServerSideProps({ req, res }: GetServerSidePropsContext) {
+export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     let token = null;
     try {
         logger.info('Henter token');
@@ -160,7 +164,13 @@ export async function getServerSideProps({ req, res }: GetServerSidePropsContext
         return {
             props: {
                 tiltak: tiltakJson.tiltak,
-                personalia: personaliaJson,
+                personalia: {
+                    ...personaliaJson,
+                    barn: personaliaJson.barn.map((barn: any) => ({
+                        ...barn,
+                        uuid: uuidv4(),
+                    })),
+                },
             },
         };
     } catch (error) {
@@ -171,7 +181,7 @@ export async function getServerSideProps({ req, res }: GetServerSidePropsContext
                     {
                         aktivitetId: '123',
                         type: 'Annen utdanning',
-                        deltakelsePeriode: { fom: '2025-04-01', tom: '2025-04-10' },
+                        deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
                         arrangør: 'Testarrangør',
                         status: 'Aktuell',
                     },
@@ -181,7 +191,7 @@ export async function getServerSideProps({ req, res }: GetServerSidePropsContext
                     mellomnavn: 'Bar',
                     etternavn: 'Baz',
                     fødselsnummer: '123',
-                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01' }],
+                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() }],
                 },
             },
         };

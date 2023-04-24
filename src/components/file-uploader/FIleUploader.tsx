@@ -5,10 +5,10 @@ import { UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
 import { Delete, FileSuccess } from '@navikt/ds-icons';
-import Søknad, {Spørsmålsbesvarelser} from "@/types/Søknad";
+import Søknad from '@/types/Søknad';
 
 interface FileUploaderProps {
-    name: "vedlegg"; // TODO: Kan dele opp i flere vedleggskategorier, feks "vedleggBarn" | "vedkeggKVP"
+    name: 'vedlegg'; // TODO: Kan dele opp i flere vedleggskategorier, feks "vedleggBarn" | "vedkeggKVP"
     control: Control<Søknad>;
     kategori: string;
 }
@@ -96,10 +96,9 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                         value={''}
                         onChange={(e) => {
                             const file = e?.target?.files?.[0];
-                            if (file)
-                            {
+                            if (file) {
                                 append({
-                                    file
+                                    file,
                                 });
                             }
                         }}

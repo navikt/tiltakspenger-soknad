@@ -1,5 +1,14 @@
-import { Spørsmålsbesvarelser } from '@/types/Søknad';
+import Spørsmålsbesvarelser, {
+    Barnetillegg,
+    Etterlønn,
+    FormTiltak,
+    Institusjonsopphold,
+    Introduksjonsprogram,
+    Kvalifiseringsprogram,
+    Pensjonsordning,
+} from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
+import { BarnFraAPI } from '@/types/Barn';
 
 interface Periode {
     fra: string;
@@ -17,52 +26,84 @@ function formatPeriod(period: Periode): Periode {
     };
 }
 
-function periodeMedKvp({ deltarIKvp, periodeMedKvp }: Spørsmålsbesvarelser) {
-    if (deltarIKvp) {
-        return formatPeriod(periodeMedKvp as Periode);
+function kvalifiseringsprogram({ deltar, periode }: Kvalifiseringsprogram) {
+    if (deltar) {
+        return { deltar, periode: formatPeriod(periode as Periode) };
     }
-    return null;
+    return { deltar };
 }
 
-function periodeMedIntro({ deltarIIntroprogrammet, periodeMedIntroprogrammet }: Spørsmålsbesvarelser) {
-    if (deltarIIntroprogrammet) {
-        return formatPeriod(periodeMedIntroprogrammet as Periode);
+function introduksjonsprogram({ deltar, periode }: Introduksjonsprogram) {
+    if (deltar) {
+        return { deltar, periode: formatPeriod(periode as Periode) };
     }
-    return null;
+    return { deltar };
 }
 
-function pensjon({ mottarEllerSøktPensjonsordning, pensjon }: Spørsmålsbesvarelser) {
+function pensjon(pensjonsornding: Pensjonsordning) {
+    const { mottarEllerSøktPensjonsordning, periode, utbetaler } = pensjonsornding;
     if (mottarEllerSøktPensjonsordning) {
-        return { ...pensjon, periode: formatPeriod(pensjon.periode) };
+        return { utbetaler, mottarEllerSøktPensjonsordning, periode: formatPeriod(periode) };
     }
-    return pensjon;
+    return pensjonsornding;
 }
 
-function etterlønn({ mottarEllerSøktEtterlønn, etterlønn }: Spørsmålsbesvarelser) {
+function etterlønn(etterlønn: Etterlønn) {
+    const { periode, mottarEllerSøktEtterlønn, utbetaler } = etterlønn;
     if (mottarEllerSøktEtterlønn) {
-        return { ...etterlønn, periode: formatPeriod(etterlønn.periode) };
+        return { mottarEllerSøktEtterlønn, utbetaler, periode: formatPeriod(periode) };
     }
     return etterlønn;
 }
 
-function barnSøktBarnetilleggFor({ manueltRegistrerteBarnSøktBarnetilleggFor }: Spørsmålsbesvarelser) {
-    return manueltRegistrerteBarnSøktBarnetilleggFor
-        .filter(
-            ({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland
-        )
-        .map((barn) => ({
-            ...barn,
-            fdato: formatDate(barn.fødselsdato),
-        }));
+function institusjon(institusjonsopphold: Institusjonsopphold) {
+    const { periode, borPåInstitusjon } = institusjonsopphold;
+    if (borPåInstitusjon) {
+        return { borPåInstitusjon, periode: formatPeriod(periode!) };
+    }
+    return institusjonsopphold;
 }
 
-export default function toSøknadJson(svar: Spørsmålsbesvarelser): String {
+function tiltak(formTiltak: FormTiltak) {
+    if (formTiltak.periode) {
+        return {
+            ...formTiltak,
+            periode: formatPeriod(formTiltak.periode),
+        };
+    }
+    return formTiltak;
+}
+
+function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[]) {
+    return {
+        ...barnetillegg,
+        registrerteBarnSøktBarnetilleggFor: registrerteBarn
+            .filter(({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0)
+            // sørger for å fjerne uuid i post
+            .map(({ fornavn, fødselsdato, mellomnavn, etternavn }) => ({
+                fornavn,
+                fødselsdato,
+                mellomnavn,
+                etternavn,
+            })),
+        manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+            .filter(({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland)
+            .map((barn) => ({
+                ...barn,
+                fødselsdato: formatDate(barn.fødselsdato),
+            })),
+    };
+}
+
+export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvarelser, barnFraApi: BarnFraAPI[]): String {
     return JSON.stringify({
-        ...svar,
-        periodeMedKvp: periodeMedKvp(svar),
-        periodeMedIntroprogrammet: periodeMedIntro(svar),
-        barnSøktBarnetilleggFor: barnSøktBarnetilleggFor(svar),
-        pensjon: pensjon(svar),
-        etterlønn: etterlønn(svar),
+        ...spørsmålsbesvarelser,
+        kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),
+        introduksjonsprogram: introduksjonsprogram(spørsmålsbesvarelser.introduksjonsprogram),
+        barnetillegg: barnetillegg(spørsmålsbesvarelser.barnetillegg, barnFraApi),
+        pensjonsordning: pensjon(spørsmålsbesvarelser.pensjonsordning),
+        etterlønn: etterlønn(spørsmålsbesvarelser.etterlønn),
+        institusjonsopphold: institusjon(spørsmålsbesvarelser.institusjonsopphold),
+        tiltak: tiltak(spørsmålsbesvarelser.tiltak),
     });
 }

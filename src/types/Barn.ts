@@ -11,4 +11,5 @@ export interface BarnFraAPI {
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
+    uuid: string;
 }

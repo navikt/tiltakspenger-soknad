@@ -12,25 +12,19 @@ interface TiltaksstegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     tiltak: Tiltak[];
+    valgtTiltak: Tiltak | null;
 }
 
-export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }: TiltaksstegProps) {
+export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
     const { watch, resetField } = useFormContext();
-    const valgtAktivitetId = watch('svar.valgtAktivitetId');
-    const søkerHeleTiltaksperioden = watch('svar.søkerHeleTiltaksperioden');
-    const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak>();
+    const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
+    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
-
-    const velgTiltak = () => {
-        const valgtTiltaksobjekt = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
-        if (valgtTiltaksobjekt) {
-            setValgtTiltak(valgtTiltaksobjekt);
-        }
-    };
+    const brukerHarValgtEtTiltak = !!valgtTiltak;
 
     const resetFormValues = () => {
-        resetField('søkerHeleTiltaksperioden');
-        resetField('overskrevetTiltaksperiode');
+        resetField('svar.tiltak.søkerHeleTiltaksperioden');
+        resetField('svar.tiltak.periode');
     };
 
     const veiledningstekstForBrukerUtenTiltak = () => {
@@ -99,8 +93,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }:
     };
 
     React.useEffect(() => {
-        velgTiltak();
-        resetFormValues();
+        const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
+        if (valgtTiltakHarEndretSeg) {
+            resetFormValues();
+        }
     }, [valgtAktivitetId]);
 
     const submitSectionRenderer = !brukerHarRegistrerteTiltak
@@ -130,23 +126,23 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak }:
                             value: aktivitetId,
                         };
                     })}
-                    name="svar.valgtAktivitetId"
+                    name="svar.tiltak.aktivitetId"
                 >
                     Hvilket tiltak ønsker du å søke tiltakspenger for?
                 </Flervalgsspørsmål>
             )}
-            {valgtTiltak && (
-                <JaNeiSpørsmål name="svar.søkerHeleTiltaksperioden" reverse>
+            {brukerHarValgtEtTiltak && (
+                <JaNeiSpørsmål name="svar.tiltak.søkerHeleTiltaksperioden" reverse>
                     Vi har registrert at du deltar på dette tiltaket i perioden{' '}
-                    {formatPeriode(valgtTiltak!.deltakelsePeriode)}. Ønsker du å søke tiltakspenger i hele denne
+                    {formatPeriode(valgtTiltak.deltakelsePeriode)}. Ønsker du å søke tiltakspenger i hele denne
                     perioden?
                 </JaNeiSpørsmål>
             )}
-            {!søkerHeleTiltaksperioden && søkerHeleTiltaksperioden !== undefined && (
+            {brukerHarValgtEtTiltak && søkerHeleTiltaksperioden === false && (
                 <Periodespørsmål
-                    name="svar.overskrevetTiltaksperiode"
-                    minDate={new Date(valgtTiltak!.deltakelsePeriode.fra)}
-                    maxDate={new Date(valgtTiltak!.deltakelsePeriode.til)}
+                    name="svar.tiltak.periode"
+                    minDate={new Date(valgtTiltak.deltakelsePeriode.fra)}
+                    maxDate={new Date(valgtTiltak.deltakelsePeriode.til)}
                 >
                     Hvilken periode søker du tiltakspenger for?
                 </Periodespørsmål>

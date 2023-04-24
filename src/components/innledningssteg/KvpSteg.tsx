@@ -34,18 +34,19 @@ function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
+function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du bor på institusjon');
+}
+
 export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
     const { watch } = useFormContext();
 
-    const søkerHeleTiltaksperioden = watch('svar.søkerHeleTiltaksperioden');
-    const overskrevetTiltaksperiode = watch('svar.overskrevetTiltaksperiode');
-    const tiltaksperiodeTekst =
-        søkerHeleTiltaksperioden === false
-            ? formatPeriode(overskrevetTiltaksperiode)
-            : formatPeriode(valgtTiltak!.deltakelsePeriode);
+    const tiltaksperiode = watch('svar.tiltak.periode');
+    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode || valgtTiltak?.deltakelsePeriode);
 
-    const watchDeltarIKvp = watch('svar.deltarIKvp');
-    const watchDeltarIIntroprogrammet = watch('svar.deltarIIntroprogrammet');
+    const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
+    const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
+    const watchBorPåInstitusjon = watch('svar.institusjonsopphold.borPåInstitusjon');
 
     return (
         <Step
@@ -69,7 +70,7 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
         >
             <>
                 <JaNeiSpørsmål
-                    name="svar.deltarIKvp"
+                    name="svar.kvalifiseringsprogram.deltar"
                     validate={deltarIKvpValidator}
                     hjelpetekst={{
                         tittel: 'Hva er kvalifiseringsprogrammet?',
@@ -97,14 +98,14 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
                     <Periodespørsmål
-                        name="svar.periodeMedKvp"
+                        name="svar.kvalifiseringsprogram.periode"
                         validate={[gyldigPeriodeValidator, påkrevdKvpPeriodeValidator]}
                     >
                         Når deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
                 )}
                 <JaNeiSpørsmål
-                    name="svar.deltarIIntroprogrammet"
+                    name="svar.introduksjonsprogram.deltar"
                     validate={deltarIIntroprogrammetValidator}
                     hjelpetekst={{
                         tittel: 'Hva er introduksjonsprogrammet?',
@@ -127,14 +128,14 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                 </JaNeiSpørsmål>
                 {watchDeltarIIntroprogrammet && (
                     <Periodespørsmål
-                        name="svar.periodeMedIntroprogrammet"
+                        name="svar.introduksjonsprogram.periode"
                         validate={[gyldigPeriodeValidator, påkrevdIntroprogramPeriodeValidator]}
                     >
                         Når deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}
                 <JaNeiSpørsmål
-                    name="svar.borPåInstitusjon"
+                    name="svar.institusjonsopphold.borPåInstitusjon"
                     validate={borPåInstitusjonValidator}
                     hjelpetekst={{
                         tittel: 'Unntak for barnevernsinstitusjoner og overgangsbolig',
@@ -143,6 +144,14 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                 >
                     Bor du i en institusjon med gratis opphold, mat og drikke i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
+                {watchBorPåInstitusjon && (
+                    <Periodespørsmål
+                        name="svar.institusjonsopphold.periode"
+                        validate={[gyldigPeriodeValidator, påkrevdInstitusjonsoppholdPeriodeValidator]}
+                    >
+                        I hvilken periode bor du på institusjon med gratis opphold, mat og drikke?
+                    </Periodespørsmål>
+                )}
             </>
         </Step>
     );

@@ -7,11 +7,11 @@ import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt'
 import { Personalia } from '@/types/Personalia';
 import { Periode } from '@/types/Periode';
 import { formatPeriode } from '@/utils/formatPeriode';
-import Søknad from '@/types/Søknad';
 import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
 import { BarnFraAPI, SelvregistrertBarn } from '@/types/Barn';
+import Søknad from '@/types/Søknad';
 
 interface OppsummeringsstegProps {
     onCompleted: (data: any) => void;
@@ -36,9 +36,9 @@ function oppsummeringDeltarIIntroprogram(deltarIIntroprogrammet: boolean, period
     }
 }
 
-function oppsummeringInstitusjon(borPåInstitusjon: boolean) {
+function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusjon?: Periode) {
     if (borPåInstitusjon) {
-        return 'Ja, jeg bor på institusjon med fri kost og losji i perioden jeg går på tiltak';
+        return `Ja, jeg bor på institusjon med fri kost og losji i perioden ${formatPeriode(periodePåInstitusjon!)}`;
     } else {
         return 'Nei, jeg bor ikke på institusjon med fri kost og losji i perioden jeg går på tiltak';
     }
@@ -85,32 +85,35 @@ export default function Oppsummeringssteg({
     valgtTiltak,
 }: OppsummeringsstegProps) {
     const { getValues } = useFormContext();
-    const data: Søknad = getValues() as Søknad;
-    const svar = data.svar
+    const søknad: Søknad = getValues() as Søknad;
+    const svar = søknad.svar;
     const {
-        deltarIKvp,
-        deltarIIntroprogrammet,
-        borPåInstitusjon,
-        periodeMedKvp,
-        periodeMedIntroprogrammet,
-        mottarEllerSøktPensjonsordning,
-        pensjon,
-        mottarEllerSøktEtterlønn,
+        kvalifiseringsprogram,
+        introduksjonsprogram,
+        pensjonsordning,
         etterlønn,
-        søkerOmBarnetillegg,
-        registrerteBarnSøktBarnetilleggFor,
-        manueltRegistrerteBarnSøktBarnetilleggFor,
-        overskrevetTiltaksperiode,
+        institusjonsopphold,
+        tiltak,
+        barnetillegg,
     } = svar;
-    const tiltaksperiode = overskrevetTiltaksperiode || valgtTiltak!.deltakelsePeriode;
+
+    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.deltakelsePeriode : tiltak.periode;
+
+    const registrerteBarnSøktBarnetilleggFor = personalia.barn.filter(
+        ({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0
+    );
+
     const alleBarnSøktBarnetilleggFor = [
-        ...manueltRegistrerteBarnSøktBarnetilleggFor,
-        ...(registrerteBarnSøktBarnetilleggFor || []).map((jsonString) => JSON.parse(jsonString)),
+        ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
+            ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
+        ),
+        ...registrerteBarnSøktBarnetilleggFor,
     ];
+
     return (
         <Step
             title="Oppsummering"
-            onCompleted={() => onCompleted(data)}
+            onCompleted={() => onCompleted(søknad)}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={5}
             submitSectionRenderer={() => (
@@ -118,7 +121,12 @@ export default function Oppsummeringssteg({
                     <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
                         Forrige steg
                     </Button>
-                    <Button type="button" onClick={() => onCompleted(data)} size="small" style={{ marginLeft: '1rem' }}>
+                    <Button
+                        type="button"
+                        onClick={() => onCompleted(søknad)}
+                        size="small"
+                        style={{ marginLeft: '1rem' }}
+                    >
                         Send inn søknad
                     </Button>
                 </div>
@@ -157,21 +165,27 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Kvalifiseringsprogrammet"
-                            feltVerdi={oppsummeringDeltarIKvp(deltarIKvp, periodeMedKvp)}
+                            feltVerdi={oppsummeringDeltarIKvp(
+                                kvalifiseringsprogram.deltar,
+                                kvalifiseringsprogram.periode
+                            )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Introduksjonsprogrammet"
                                 feltVerdi={oppsummeringDeltarIIntroprogram(
-                                    deltarIIntroprogrammet,
-                                    periodeMedIntroprogrammet
+                                    introduksjonsprogram.deltar,
+                                    introduksjonsprogram.periode
                                 )}
                             />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Opphold på institusjon"
-                                feltVerdi={oppsummeringInstitusjon(borPåInstitusjon)}
+                                feltVerdi={oppsummeringInstitusjon(
+                                    institusjonsopphold.borPåInstitusjon,
+                                    institusjonsopphold.periode
+                                )}
                             />
                         </div>
                     </Accordion.Content>
@@ -181,12 +195,15 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Pensjonsordninger"
-                            feltVerdi={oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning, pensjon)}
+                            feltVerdi={oppsummeringPensjonsordninger(
+                                pensjonsordning.mottarEllerSøktPensjonsordning,
+                                pensjonsordning
+                            )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Etterlønn"
-                                feltVerdi={oppsummeringEtterlønn(mottarEllerSøktEtterlønn, etterlønn)}
+                                feltVerdi={oppsummeringEtterlønn(etterlønn.mottarEllerSøktEtterlønn, etterlønn)}
                             />
                         </div>
                     </Accordion.Content>
@@ -196,7 +213,7 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Barnetillegg"
-                            feltVerdi={oppsummeringBarnetillegg(søkerOmBarnetillegg)}
+                            feltVerdi={oppsummeringBarnetillegg(barnetillegg.søkerOmBarnetillegg)}
                         />
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
                             <div style={{ marginTop: '2rem' }}>
