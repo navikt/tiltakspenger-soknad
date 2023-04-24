@@ -16,7 +16,7 @@ async function makeApiRequest(request: NextApiRequest, oboToken: string): Promis
         return makeGetRequest(url, oboToken);
     }
     if (request.method!.toUpperCase() === 'POST') {
-        return makePostRequest(url, oboToken, request.body);
+        return makePostRequest(url, oboToken, request);
     }
     return Promise.reject(`Unsupported method ${request.method}`);
 }
@@ -57,3 +57,10 @@ export default async function middleware(request: NextApiRequest, response: Next
         }
     }
 }
+
+// sørger for at NextJS sin default bodyParser ikke ødelegger for vedleggsopplastning
+export const config = {
+    api: {
+        bodyParser: false,
+    },
+};

@@ -40,6 +40,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                 kvalifiseringsprogram: {},
                 pensjonsordning: {},
             },
+            vedlegg: [],
         },
     });
 
@@ -68,10 +69,15 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
 
     const sendSøknad = async (søknad: Søknad) => {
         const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
+        const formData = new FormData();
+        formData.append('søknad', søknadJson as string);
+        søknad.vedlegg.forEach((vedlegg, index) => {
+            formData.append(`vedlegg-${index}`, vedlegg.file);
+        });
         try {
             const response = await fetch('/api/soknad', {
                 method: 'POST',
-                body: søknadJson as string,
+                body: formData,
             });
             if (response.status !== 201) {
                 return router.push('/feil');

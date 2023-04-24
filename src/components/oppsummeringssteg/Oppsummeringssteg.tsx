@@ -21,7 +21,7 @@ interface OppsummeringsstegProps {
 }
 
 function oppsummeringDeltarIKvp(deltarIKvp: boolean, periodeMedKvp: Periode | undefined) {
-    if (deltarIKvp === true) {
+    if (deltarIKvp) {
         return `Ja, jeg deltar i kvalifiseringsprogrammet i perioden ${formatPeriode(periodeMedKvp!)}`;
     } else {
         return 'Nei, jeg deltar ikke i kvalifiseringsprogrammet i perioden jeg deltar på tiltaket';
@@ -29,7 +29,7 @@ function oppsummeringDeltarIKvp(deltarIKvp: boolean, periodeMedKvp: Periode | un
 }
 
 function oppsummeringDeltarIIntroprogram(deltarIIntroprogrammet: boolean, periodeMedIntro?: Periode) {
-    if (deltarIIntroprogrammet === true) {
+    if (deltarIIntroprogrammet) {
         return `Ja, jeg deltar i introduksjonsprogrammet i perioden ${formatPeriode(periodeMedIntro!)}`;
     } else {
         return 'Nei, jeg deltar ikke i introduksjonsprogrammet i perioden jeg deltar på tiltaket';
@@ -37,7 +37,7 @@ function oppsummeringDeltarIIntroprogram(deltarIIntroprogrammet: boolean, period
 }
 
 function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusjon?: Periode) {
-    if (borPåInstitusjon === true) {
+    if (borPåInstitusjon) {
         return `Ja, jeg bor på institusjon med fri kost og losji i perioden ${formatPeriode(periodePåInstitusjon!)}`;
     } else {
         return 'Nei, jeg bor ikke på institusjon med fri kost og losji i perioden jeg går på tiltak';
@@ -45,7 +45,7 @@ function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusj
 }
 
 function oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning: boolean, pensjon: AnnenUtbetaling) {
-    if (mottarEllerSøktPensjonsordning === true) {
+    if (mottarEllerSøktPensjonsordning) {
         return `Ja, jeg mottar etterlønn fra ${pensjon.utbetaler} i perioden ${formatPeriode(pensjon.periode)}`;
     } else {
         return 'Nei, jeg har verken søkt om eller mottar utbetalinger fra en pensjonsordning';
@@ -53,7 +53,7 @@ function oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning: boolean,
 }
 
 function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn: AnnenUtbetaling) {
-    if (mottarEllerSøktEtterlønn === true) {
+    if (mottarEllerSøktEtterlønn) {
         return `Ja, jeg mottar etterlønn fra ${etterlønn.utbetaler} i perioden ${formatPeriode(etterlønn.periode)}`;
     } else {
         return 'Nei, jeg har verken søkt eller mottar etterlønn fra en arbeidsgiver';
@@ -61,7 +61,7 @@ function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn:
 }
 
 function oppsummeringBarnetillegg(harSøktBarnetillegg: boolean) {
-    if (harSøktBarnetillegg === true) {
+    if (harSøktBarnetillegg) {
         return `Ja, jeg søker om barnetillegg for følgende barn`;
     } else {
         return 'Nei, jeg søker ikke om barnetillegg';

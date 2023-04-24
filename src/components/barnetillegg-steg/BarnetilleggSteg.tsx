@@ -8,6 +8,8 @@ import { Alert } from '@navikt/ds-react';
 import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Checkboxgruppespørsmål';
 import { formatDate } from '@/utils/formatDate';
 import { Personalia } from '@/types/Personalia';
+import FileUploader from '@/components/file-uploader/FIleUploader';
+import Søknad from "@/types/Søknad";
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -26,7 +28,7 @@ interface Barn {
 }
 
 export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
-    const { watch } = useFormContext();
+    const { watch, control } = useFormContext<Søknad>();
     const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn');
     const barnFraApi = personalia.barn;
@@ -95,26 +97,31 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 <JaNeiSpørsmål
                     name="svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn"
                     validate={søkerBarnetilleggValidator}
-                hjelpetekst={{
-                        tittel: 'Hvilke barn kan du legge til?',
-                        tekst: (
-                            <>
-                                <span>
-                                    Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for
-                                    eksempel hvis du nylig har adoptert, kan du legge dem til her.
-                                </span>
-                                <span style={{ display: 'block', marginTop: '1rem' }}>
-                                    Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
-                                </span>
-                            </>
-                        ),
-                    }}
+                    hjelpetekst={{
+                            tittel: 'Hvilke barn kan du legge til?',
+                            tekst: (
+                                <>
+                                    <span>
+                                        Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for
+                                        eksempel hvis du nylig har adoptert, kan du legge dem til her.
+                                    </span>
+                                    <span style={{ display: 'block', marginTop: '1rem' }}>
+                                        Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
+                                    </span>
+                                </>
+                            ),
+                        }}
                 >
                     Har du andre barn du ønsker å søke barnetillegg for?
                 </JaNeiSpørsmål>
             )}
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
                 <VariabelPersonliste name="svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor" />
+            )}
+            {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
+                <div style={{ marginTop: '2rem' }}>
+                    <FileUploader name="vedlegg" kategori="fødselsattest" control={control} />
+                </div>
             )}
         </Step>
     );

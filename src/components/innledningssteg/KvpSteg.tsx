@@ -65,7 +65,6 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                         arbeidsmarkedstiltak, har du som regel ikke rett til tiltakspenger. En institusjon kan for
                         eksempel være et sykehus eller et fengsel.
                     </p>
-                    <p></p>
                 </React.Fragment>
             }
         >
