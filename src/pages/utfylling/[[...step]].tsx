@@ -150,20 +150,25 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     }
 
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
+    const mocketTiltak = [
+        {
+            aktivitetId: '123',
+            type: 'Annen utdanning',
+            deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
+            arrangør: 'Testarrangør',
+            status: 'Aktuell',
+        },
+    ];
+
     try {
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();
         const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
         const personaliaJson = await personaliaResponse.json();
-
-        // midlertidig fiks for å kunne trykke seg gjennom søknader i test
-        if (!tiltakJson.tiltak || tiltakJson.tiltak.length === 0) {
-            throw Error('Bruker har ingen tiltak, fallback til testdata');
-        }
-
+        const svarMedMocketTiltak = !tiltakJson.tiltak || tiltakJson.tiltak.length === 0;
         return {
             props: {
-                tiltak: tiltakJson.tiltak,
+                tiltak: svarMedMocketTiltak ? mocketTiltak : tiltakJson.tiltak,
                 personalia: {
                     ...personaliaJson,
                     barn: personaliaJson.barn.map((barn: any) => ({
@@ -177,15 +182,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         logger.error((error as Error).message);
         return {
             props: {
-                tiltak: [
-                    {
-                        aktivitetId: '123',
-                        type: 'Annen utdanning',
-                        deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
-                        arrangør: 'Testarrangør',
-                        status: 'Aktuell',
-                    },
-                ],
+                tiltak: mocketTiltak,
                 personalia: {
                     fornavn: 'Foo',
                     mellomnavn: 'Bar',
