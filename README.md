@@ -14,16 +14,16 @@ npm run dev
 ### Kjøre opp docker-compose lokalt
 
 Autentisering og TokenX er mocket ut med docker-compose i `./docker-compose` på rot av repoet. 
-Dette oppsettet antar at man har [tiltakspengesoknad-api](https://github.com/navikt/tiltakspengesoknad-api)
-liggende på `../` relativt til tiltakspengesoknad.
+Dette oppsettet antar at man har [tiltakspenger-soknad-api](https://github.com/navikt/tiltakspenger-soknad-api)
+liggende på `../` relativt til tiltakspenger-soknad.
 
 For at det skal kunne kjøres opp lokalt må man også sette opp noen miljøvariabler for selve NextJS-appen, i tillegg til en
 miljøvariabel for [Wonderwall](https://github.com/nais/wonderwall) som er mocket ut i docker-compose oppsettet.
 
 1. Opprett en `.env.local` fil på rot av repoet, og legg inn følgende miljøvariabler:
     ```
-    TILTAKSPENGESOKNAD_API_URL=http://localhost:8080
-    TOKEN_X_CLIENT_ID=localhost:tpts:tiltakspengesoknad
+    TILTAKSPENGER_SOKNAD_API_URL=http://localhost:8080
+    TOKEN_X_CLIENT_ID=localhost:tpts:tiltakspenger-soknad
     TOKEN_X_PRIVATE_JWK='<generert JWK>'
     TOKEN_X_TOKEN_ENDPOINT=http://host.docker.internal:6969/tokendings/token
     NAIS_CLUSTER_NAME=localhost
@@ -34,7 +34,7 @@ miljøvariabel for [Wonderwall](https://github.com/nais/wonderwall) som er mocke
     TOKEN_X_PRIVATE_JWK=<generert JWK>
     PDL_ENDPOINT_URL=<en eller annen baseurl>
     ```
-3. Sørg for at tiltakspengesoknad-api ligger på `../` relativt til tiltakspengesoknad repoet.
+3. Sørg for at tiltakspenger-soknad-api ligger på `../` relativt til tiltakspenger-soknad repoet.
 4. Spinn opp containere med 
     ```
     cd ./docker-compose

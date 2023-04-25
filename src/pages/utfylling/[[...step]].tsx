@@ -149,7 +149,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         };
     }
 
-    const backendUrl = process.env.TILTAKSPENGESOKNAD_API_URL;
+    const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
     try {
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();

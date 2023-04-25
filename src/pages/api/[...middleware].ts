@@ -3,7 +3,7 @@ import logger from './../../utils/serverLogger';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { makeGetRequest, makePostRequest } from '@/utils/http';
 
-const backendUrl = process.env.TILTAKSPENGESOKNAD_API_URL;
+const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
 function getUrl(req: NextApiRequest): string {
     const path = req?.url?.replace('/api', '');

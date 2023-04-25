@@ -97,7 +97,7 @@ services:
     image: "ghcr.io/nais/wonderwall:latest"
     container_name: wonderwall
     environment:
-      WONDERWALL_OPENID_CLIENT_ID: "localhost:tpts:tiltakspengesoknad"
+      WONDERWALL_OPENID_CLIENT_ID: "localhost:tpts:tiltakspenger-soknad"
       WONDERWALL_OPENID_WELL_KNOWN_URL: "http://host.docker.internal:6969/idporten/.well-known/openid-configuration"
       WONDERWALL_INGRESS: "http://localhost:2222"
       WONDERWALL_BIND_ADDRESS: "0.0.0.0:2222"

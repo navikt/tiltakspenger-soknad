@@ -1,3 +1,3 @@
 ingress:
-  - https://tiltakspengesoknad.intern.dev.nav.no
-TILTAKSPENGESOKNAD_API_URL: http://tiltakspenger-soknad-api
+  - https://tiltakspenger-soknad.intern.dev.nav.no
+TILTAKSPENGER_SOKNAD_API_URL: http://tiltakspenger-soknad-api

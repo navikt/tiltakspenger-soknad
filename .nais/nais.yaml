@@ -1,7 +1,7 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: tiltakspengesoknad
+  name: tiltakspenger-soknad
   namespace: tpts
   labels:
     team: tpts
@@ -9,8 +9,8 @@ spec:
   image: {{ image }}
   port: 3000
   env:
-      - name: TILTAKSPENGESOKNAD_API_URL
-        value: {{ TILTAKSPENGESOKNAD_API_URL }}
+      - name: TILTAKSPENGER_SOKNAD_API_URL
+        value: {{ TILTAKSPENGER_SOKNAD_API_URL }}
   ingresses:
     - {{ ingress }}
   replicas:
