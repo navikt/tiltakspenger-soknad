@@ -1,0 +1,22 @@
+.bekreftkvittering {
+    text-align: center;
+}
+
+.checkmark {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 2.5rem;
+    color: green;
+}
+
+.brukerKontaktInfoTekst {
+    font-size: small;
+}
+
+.button {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width:fit-content;
+}

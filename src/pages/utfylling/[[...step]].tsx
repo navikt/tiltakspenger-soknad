@@ -19,10 +19,16 @@ import Søknad from '@/types/Søknad';
 interface UtfyllingProps {
     tiltak: Tiltak[];
     personalia: Personalia;
+    setPersonaliaData: (personalia: Personalia) => void;
 }
 
-export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
+export default function Utfylling({ tiltak, personalia, setPersonaliaData }: UtfyllingProps) {
     const router = useRouter();
+
+    React.useEffect(()=> {
+        setPersonaliaData(personalia);
+    }, [personalia]);
+
     const { step } = router.query;
     const formMethods = useForm<Søknad>({
         defaultValues: {
