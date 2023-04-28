@@ -48,7 +48,7 @@ export default function Kvittering(props: KvitteringProps)
                 </Link>
             </p>
 
-            <Link href={"www.nav.no/minside"} target="_blank" className={styles.button}>
+            <Link href="https://www.nav.no/minside" target="_blank" className={styles.button}>
                 <Button as="a" >Følg saken på Min Side</Button>
             </Link>
         </div>
