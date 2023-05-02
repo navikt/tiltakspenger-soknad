@@ -25,7 +25,7 @@ interface UtfyllingProps {
 export default function Utfylling({ tiltak, personalia, setPersonaliaData }: UtfyllingProps) {
     const router = useRouter();
 
-    React.useEffect(()=> {
+    React.useEffect(() => {
         setPersonaliaData(personalia);
     }, [personalia]);
 
@@ -63,8 +63,11 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         return router.push(path, undefined, { shallow });
     }
 
+    function goBack() {
+        return router.back();
+    }
+
     const navigerBrukerTilIntroside = (shallow: boolean = true) => navigateToPath('/', shallow);
-    const navigerBrukerTilTiltakssteg = (shallow: boolean = true) => navigateToPath('/utfylling/tiltak', shallow);
     const navigerBrukerTilKvpSteg = (shallow: boolean = true) => navigateToPath('/utfylling/kvp', shallow);
     const navigerBrukerTilAndreUtbetalingerSteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/andreutbetalinger', shallow);
@@ -107,27 +110,24 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             {step && step[0] === 'kvp' && (
                 <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
-                    onGoToPreviousStep={navigerBrukerTilTiltakssteg}
+                    onGoToPreviousStep={goBack}
                     valgtTiltak={valgtTiltak!}
                 />
             )}
             {step && step[0] === 'andreutbetalinger' && (
-                <AndreUtbetalingerSteg
-                    onCompleted={navigerBrukerTilBarnetilleggSteg}
-                    onGoToPreviousStep={navigerBrukerTilKvpSteg}
-                />
+                <AndreUtbetalingerSteg onCompleted={navigerBrukerTilBarnetilleggSteg} onGoToPreviousStep={goBack} />
             )}
             {step && step[0] === 'barnetillegg' && (
                 <BarnetilleggSteg
                     onCompleted={navigerBrukerTilOppsummeringssteg}
-                    onGoToPreviousStep={navigerBrukerTilAndreUtbetalingerSteg}
+                    onGoToPreviousStep={goBack}
                     personalia={personalia}
                 />
             )}
             {step && step[0] === 'oppsummering' && (
                 <Oppsummeringssteg
                     onCompleted={sendSøknad}
-                    onGoToPreviousStep={navigerBrukerTilBarnetilleggSteg}
+                    onGoToPreviousStep={goBack}
                     personalia={personalia}
                     valgtTiltak={valgtTiltak!}
                 />
