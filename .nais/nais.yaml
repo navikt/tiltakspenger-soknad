@@ -5,6 +5,8 @@ metadata:
   namespace: tpts
   labels:
     team: tpts
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
   image: {{ image }}
   port: 3000
