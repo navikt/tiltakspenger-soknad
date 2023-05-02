@@ -11,7 +11,6 @@ import { getOnBehalfOfToken } from '@/utils/authentication';
 import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
-import toSøknadJson from '@/utils/toSøknadJson';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
@@ -25,7 +24,7 @@ interface UtfyllingProps {
 export default function Utfylling({ tiltak, personalia, setPersonaliaData }: UtfyllingProps) {
     const router = useRouter();
 
-    React.useEffect(()=> {
+    React.useEffect(() => {
         setPersonaliaData(personalia);
     }, [personalia]);
 
@@ -73,27 +72,6 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/oppsummering', shallow);
 
-    const sendSøknad = async (søknad: Søknad) => {
-        const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
-        const formData = new FormData();
-        formData.append('søknad', søknadJson as string);
-        søknad.vedlegg.forEach((vedlegg, index) => {
-            formData.append(`vedlegg-${index}`, vedlegg.file);
-        });
-        try {
-            const response = await fetch('/api/soknad', {
-                method: 'POST',
-                body: formData,
-            });
-            if (response.status !== 201) {
-                return router.push('/feil');
-            }
-            return router.push('/kvittering');
-        } catch {
-            return router.push('/feil');
-        }
-    };
-
     return (
         <FormProvider {...formMethods}>
             {step && step[0] === 'tiltak' && (
@@ -126,7 +104,6 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             )}
             {step && step[0] === 'oppsummering' && (
                 <Oppsummeringssteg
-                    onCompleted={sendSøknad}
                     onGoToPreviousStep={navigerBrukerTilBarnetilleggSteg}
                     personalia={personalia}
                     valgtTiltak={valgtTiltak!}

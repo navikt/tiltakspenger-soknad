@@ -12,9 +12,10 @@ import { formatDate } from '@/utils/formatDate';
 import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
 import { BarnFraAPI, SelvregistrertBarn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
+import toSøknadJson from '@/utils/toSøknadJson';
+import { useRouter } from 'next/router';
 
 interface OppsummeringsstegProps {
-    onCompleted: (data: any) => void;
     onGoToPreviousStep: () => void;
     personalia: Personalia;
     valgtTiltak: Tiltak;
@@ -78,12 +79,27 @@ function oppsummeringBarn(barn: BarnFraAPI | SelvregistrertBarn) {
     }
 }
 
-export default function Oppsummeringssteg({
-    onCompleted,
-    onGoToPreviousStep,
-    personalia,
-    valgtTiltak,
-}: OppsummeringsstegProps) {
+function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia): FormData {
+    const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
+    const formData = new FormData();
+    formData.append('søknad', søknadJson as string);
+    søknad.vedlegg.forEach((vedlegg, index) => {
+        formData.append(`vedlegg-${index}`, vedlegg.file);
+    });
+    return formData;
+}
+
+function postSøknadMultipart(formData: FormData) {
+    return fetch('/api/soknad', {
+        method: 'POST',
+        body: formData,
+    });
+}
+
+export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valgtTiltak }: OppsummeringsstegProps) {
+    const router = useRouter();
+    const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
+
     const { getValues } = useFormContext();
     const søknad: Søknad = getValues() as Søknad;
     const svar = søknad.svar;
@@ -110,22 +126,44 @@ export default function Oppsummeringssteg({
         ...registrerteBarnSøktBarnetilleggFor,
     ];
 
+    async function sendInnSøknad() {
+        const formData = lagFormDataForInnsending(søknad, personalia);
+        try {
+            setSøknadsinnsendingInProgress(true);
+            const response = await postSøknadMultipart(formData);
+            if (response.status !== 201) {
+                return router.push('/feil');
+            }
+            return router.push('/kvittering');
+        } catch {
+            return router.push('/feil');
+        }
+    }
+
     return (
         <Step
             title="Oppsummering"
-            onCompleted={() => onCompleted(søknad)}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={5}
             submitSectionRenderer={() => (
                 <div className={styles.step__buttonsection}>
-                    <Button type="button" onClick={onGoToPreviousStep} size="small" variant="secondary">
+                    <Button
+                        type="button"
+                        onClick={onGoToPreviousStep}
+                        size="small"
+                        variant="secondary"
+                        disabled={søknadsinnsendingInProgress}
+                        loading={søknadsinnsendingInProgress}
+                    >
                         Forrige steg
                     </Button>
                     <Button
                         type="button"
-                        onClick={() => onCompleted(søknad)}
+                        onClick={sendInnSøknad}
                         size="small"
                         style={{ marginLeft: '1rem' }}
+                        disabled={søknadsinnsendingInProgress}
+                        loading={søknadsinnsendingInProgress}
                     >
                         Send inn søknad
                     </Button>

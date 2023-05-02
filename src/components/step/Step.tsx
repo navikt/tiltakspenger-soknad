@@ -6,7 +6,7 @@ import findAllErrors from '@/utils/errorState';
 
 interface StepProps {
     title: string;
-    onCompleted: () => void;
+    onCompleted?: () => void;
     onGoToPreviousStep: () => void;
     children: React.ReactNode;
     stepNumber: number;
@@ -73,7 +73,7 @@ export default function Step({
                 </>
             )}
             {!shouldRenderCustomSubmitSection && (
-                <form onSubmit={handleSubmit(onCompleted)}>
+                <form onSubmit={onCompleted ? handleSubmit(onCompleted) : () => {}}>
                     <>
                         {children}
                         <div className={styles.step__buttonsection}>
