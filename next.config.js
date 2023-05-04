@@ -5,9 +5,11 @@ let isDevelopment = process.env.NODE_ENV === 'development';
 const appDirectives = {
     'script-src-elem': ["'self'"],
     'style-src-elem': ["'self'"],
-    'connect-src': isDevelopment
-        ? ["'self'", process.env.NEXT_PUBLIC_TELEMETRY_URL]
-        : [process.env.NEXT_PUBLIC_TELEMETRY_URL],
+    'connect-src': isDevelopment ? ["'self'"] : [],
+    // TODO: Vi mangler å få satt miljøvariabelen her riktig
+    // 'connect-src': isDevelopment
+    //     ? ["'self'", process.env.NEXT_PUBLIC_TELEMETRY_URL]
+    //     : [process.env.NEXT_PUBLIC_TELEMETRY_URL],
 };
 
 /** @type {import('next').NextConfig} */
