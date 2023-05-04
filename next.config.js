@@ -1,4 +1,5 @@
 const { buildCspHeader } = require('@navikt/nav-dekoratoren-moduler/ssr');
+const { i18n } = require('./next-i18next.config')
 
 let isDevelopment = process.env.NODE_ENV === 'development';
 
@@ -10,6 +11,7 @@ const appDirectives = {
 
 /** @type {import('next').NextConfig} */
 module.exports = {
+    i18n,
     output: 'standalone',
     async headers() {
         const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';

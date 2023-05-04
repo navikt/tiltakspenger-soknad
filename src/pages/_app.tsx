@@ -4,6 +4,7 @@ import '../styles/global.css';
 import {useState} from "react";
 import {v4 as uuidv4} from "uuid";
 import {Personalia} from "@/types/Personalia";
+import { appWithTranslation } from 'next-i18next'
 
 export const defaultPersonalia = {
     fornavn: 'Foo',
@@ -19,5 +20,5 @@ function App({ Component, pageProps }: AppProps) {
     return (<Component {...pageProps} setPersonaliaData={setPersonaliaData} personalia={personaliaData}/>);
 }
 
-export default App;
+export default appWithTranslation(App);
 

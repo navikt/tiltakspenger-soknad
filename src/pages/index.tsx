@@ -3,9 +3,15 @@ import { Button, ConfirmationPanel, GuidePanel, Link } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import styles from './index.module.css';
 import Accordion from '@/components/accordion/Accordion';
+import { useTranslation } from 'next-i18next';
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {GetServerSidePropsContext} from "next";
+import {onLanguageSelect} from "@navikt/nav-dekoratoren-moduler";
 
 export default function App() {
     const router = useRouter();
+    const { pathname, asPath, query } = router;
+    const { t } = useTranslation('common', {keyPrefix: 'index'});
 
     const [markerBekreftelsesboksSomRød, setMarkerBekreftelsesboksSomRød] = React.useState(false);
     const [brukerHarBekreftet, setBrukerHarBekreftet] = React.useState(false);
@@ -16,6 +22,14 @@ export default function App() {
             setMarkerBekreftelsesboksSomRød(false);
         }
     }, [brukerHarBekreftet]);
+
+    const settSpråkvariant = (locale: string) => {
+        router.push({ pathname, query }, asPath, { locale: locale });
+    }
+
+    onLanguageSelect((language) => {
+        settSpråkvariant(language.locale)
+    });
 
     const startSøknad = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
@@ -88,62 +102,55 @@ export default function App() {
 
     return (
         <div>
-            <h2 className={styles.søknadstittel}>Søknad om tiltakspenger</h2>
+            <h2 className={styles.søknadstittel}>{t('søknadstittel')}</h2>
             <GuidePanel poster>
-                <p>Hei! Jeg er her for å veilede deg gjennom søknaden.</p>
-                <p>Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.</p>
-                <p>
-                    OBS: Hvis du tar pause på mer enn X minutter, slettes skjemaet på grunn av sikkerhetsinnstillinger.
-                </p>
+                <p>{t('veiledning.p1')}</p>
+                <p>{t('veiledning.p2')}</p>
+                <p>{t('veiledning.p3')}</p>
             </GuidePanel>
             <div className={styles.accordions}>
-                <Accordion header="Tiltakspenger og annen inntekt">
-                    <span>Du kan ikke få tiltakspenger hvis du</span>
+                <Accordion header={t('nedtrekk1.header')}>
+                    <span>{t('nedtrekk1.span1')}</span>
                     <ul>
-                        <li>får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter</li>
-                        <li>får lønn samtidig som du deltar i tiltaket</li>
+                        <li>{t('nedtrekk1.li1')}</li>
+                        <li>{t('nedtrekk1.li2')}</li>
                     </ul>
-                    <span>Det har ikke betydning hvor mye du får i annen pengestøtte eller lønn.</span>
+                    <span>{t('nedtrekk1.span2')}</span>
                 </Accordion>
-                <Accordion header="Hvis du får tiltakspenger, gjelder dette">
+                <Accordion header={t('nedtrekk2.header')}>
                     <ul>
-                        <li>Du må møte som avtalt i tiltaket</li>
-                        <li>Du må sende inn meldekortet ditt hver 14. dag</li>
-                        <li>Du må gi beskjed hvis situasjonen din endrer seg</li>
-                        <li>Du må betale tilbake hvis du får tiltakspenger du ikke har rett på</li>
+                        <li>{t('nedtrekk2.li1')}</li>
+                        <li>{t('nedtrekk2.li2')}</li>
+                        <li>{t('nedtrekk2.li3')}</li>
+                        <li>{t('nedtrekk2.li3')}</li>
                     </ul>
                 </Accordion>
-                <Accordion header="Vi henter og bruker informasjon om deg">
-                    <p>I tillegg til den informasjonen du oppgir i søknaden, henter vi:</p>
+                <Accordion header={t('nedtrekk3.header')}>
+                    <p>{t('nedtrekk3.p1')}</p>
                     <ul>
-                        <li>Personinformasjon om deg fra Folkeregisteret.</li>
-                        <li>Personinformasjon om barna dine hvis du søker om barnetillegg</li>
-                        <li>Inntektsinformasjon fra Skatteetaten</li>
-                        <li>Opplysninger om hvilket arbeidsmarkedstiltak du deltar på</li>
-                        <li>Opplysninger om du får andre utbetalinger fra NAV</li>
-                        <li>Hvis du har barn, sjekker vi om barnets andre forelder har barnetillegg</li>
+                        <li>{t('nedtrekk3.li1')}</li>
+                        <li>{t('nedtrekk3.li2')}</li>
+                        <li>{t('nedtrekk3.li3')}</li>
+                        <li>{t('nedtrekk3.li4')}</li>
+                        <li>{t('nedtrekk3.li5')}</li>
+                        <li>{t('nedtrekk3.li6')}</li>
                     </ul>
-                    <p>Dette gjør vi for å vurdere om du har rett til tiltakspenger.</p>
-                    <p>
-                        Vi deler opplysninger om hva du får utbetalt i tiltakspenger med Skatteetaten og Statistisk
-                        sentralbyrå. Vi kan bruke opplysninger om deg til å forbedre våre tjenester.
-                    </p>
+                    <p>{t('nedtrekk3.p2')}</p>
+                    <p>{t('nedtrekk3.p3')}</p>
                     <Link
                         href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten"
                         target="_blank"
-                    >
-                        Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane).
-                    </Link>
+                    >{t('nedtrekk3.link')}</Link>
                 </Accordion>
             </div>
             <ConfirmationPanel
                 className={styles.bekreftelsespanel}
-                label="Jeg vil svare så godt jeg kan på spørsmålene i søknaden"
+                label={t('bekreftelse.label')}
                 value={brukerHarBekreftet}
                 onChange={() => setBrukerHarBekreftet(!brukerHarBekreftet)}
                 error={
                     markerBekreftelsesboksSomRød
-                        ? 'Du må bekrefte at du vil svare så godt du kan på spørsmålene i søknaden'
+                        ? t('bekreftelse.error')
                         : null
                 }
             >
@@ -173,3 +180,10 @@ export default function App() {
         </div>
     );
 }
+
+export const getServerSideProps = async ({ locale }: GetServerSidePropsContext) => ({
+    props: {
+        ...await serverSideTranslations(locale ?? 'nb', ['common'])
+    },
+})
+

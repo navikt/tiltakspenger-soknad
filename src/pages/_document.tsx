@@ -20,6 +20,7 @@ class PageDocument extends Document<PageDocumentProps> {
                 level: 'Level4',
                 // todo: hvordan løse dette i dev?
                 enforceLogin: process.env.NODE_ENV === 'production',
+                availableLanguages: [{locale: "nb", url: "/", handleInApp: true}, {locale: "nn", url: "/nn", handleInApp: true}]
             });
             return fragments;
         } catch (error) {

@@ -1,0 +1,45 @@
+{
+  "index": {
+    "søknadstittel": "Søknad om tiltakspenger - NYNORSK-TEST",
+    "veiledning": {
+      "p1": "Hei! Jeg er her for å veilede deg gjennom søknaden. NYNORSK",
+      "p2": "Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.",
+      "p3": "OBS: Hvis du tar pause på mer enn X minutter, slettes skjemaet på grunn av sikkerhetsinnstillinger."
+    },
+    "nedtrekk1": {
+      "header": "Tiltakspenger og annen inntekt",
+      "span1": "Du kan ikke få tiltakspenger hvis du",
+      "li1": "får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter",
+      "li2": "får lønn samtidig som du deltar i tiltaket",
+      "span2": "Det har ikke betydning hvor mye du får i annen pengestøtte eller lønn."
+    },
+    "nedtrekk2": {
+      "header": "Hvis du får tiltakspenger, gjelder dette",
+      "li1": "Du må møte som avtalt i tiltaket",
+      "li2": "Du må sende inn meldekortet ditt hver 14. dag",
+      "li3": "Du må gi beskjed hvis situasjonen din endrer seg",
+      "li4": "Du må betale tilbake hvis du får tiltakspenger du ikke har rett på"
+    },
+    "nedtrekk3": {
+      "header": "Vi henter og bruker informasjon om deg",
+      "p1": "I tillegg til den informasjonen du oppgir i søknaden, henter vi:",
+      "li1": "Personinformasjon om deg fra Folkeregisteret.",
+      "li2": "Personinformasjon om barna dine hvis du søker om barnetillegg",
+      "li3": "Inntektsinformasjon fra Skatteetaten",
+      "li4": "Opplysninger om hvilket arbeidsmarkedstiltak du deltar på",
+      "li5": "Opplysninger om du får andre utbetalinger fra NAV",
+      "li6": "Hvis du har barn, sjekker vi om barnets andre forelder har barnetillegg",
+      "p2": "Dette gjør vi for å vurdere om du har rett til tiltakspenger.",
+      "p3": "Vi deler opplysninger om hva du får utbetalt i tiltakspenger med Skatteetaten og Statistisk sentralbyrå. Vi kan bruke opplysninger om deg til å forbedre våre tjenester.",
+      "link": "Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane)."
+
+    },
+    "bekreftelse": {
+      "label": "Jeg vil svare så godt jeg kan på spørsmålene i søknaden",
+      "error": "Du må bekrefte at du vil svare så godt du kan på spørsmålene i søknaden"
+    }
+  },
+  "tiltakssteg": {
+    "tittel": "Tiltak - NYNORSK"
+  }
+}

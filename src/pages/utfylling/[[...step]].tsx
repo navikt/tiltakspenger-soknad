@@ -15,6 +15,8 @@ import toSøknadJson from '@/utils/toSøknadJson';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import {onLanguageSelect} from "@navikt/nav-dekoratoren-moduler";
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -24,6 +26,16 @@ interface UtfyllingProps {
 
 export default function Utfylling({ tiltak, personalia, setPersonaliaData }: UtfyllingProps) {
     const router = useRouter();
+    //TODO: Vi bør nok gjøre noe med hvordan appen er strukturert, slik at vi ikke må replisere kode i index og ...step.
+
+    const { pathname, asPath, query } = router;
+    const settSpråkvariant = (locale: string) => {
+        router.push({ pathname, query }, asPath, { locale: locale });
+    }
+
+    onLanguageSelect((language) => {
+        settSpråkvariant(language.locale)
+    });
 
     React.useEffect(()=> {
         setPersonaliaData(personalia);
@@ -136,7 +148,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
     );
 }
 
-export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+export async function getServerSideProps({ req, locale }: GetServerSidePropsContext) {
     let token = null;
     try {
         logger.info('Henter token');
@@ -166,6 +178,14 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         },
     ];
 
+    const translations = await serverSideTranslations(locale ?? 'nb', ['common']).then((translations) => {
+        logger.info('Laster språklag ')
+        return translations
+    }, (error) => {
+        logger.info('Kunne ikke laste språklag', error)
+        //TODO: Håndtere?
+    })
+
     try {
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();
@@ -182,6 +202,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                         uuid: uuidv4(),
                     })),
                 },
+                ...translations
             },
         };
     } catch (error) {
@@ -196,6 +217,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     fødselsnummer: '123',
                     barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() }],
                 },
+                ...translations
             },
         };
     }

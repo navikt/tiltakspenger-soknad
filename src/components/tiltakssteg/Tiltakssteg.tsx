@@ -7,6 +7,7 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { useFormContext } from 'react-hook-form';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import { Button, Link } from '@navikt/ds-react';
+import {useTranslation} from "next-i18next";
 
 interface TiltaksstegProps {
     onCompleted: () => void;
@@ -21,6 +22,8 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
     const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
     const brukerHarValgtEtTiltak = !!valgtTiltak;
+
+    const { t } = useTranslation('common',{keyPrefix: 'tiltakssteg'})
 
     const resetFormValues = () => {
         resetField('svar.tiltak.søkerHeleTiltaksperioden');
@@ -109,7 +112,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
 
     return (
         <Step
-            title="Tiltak"
+            title={t('tittel')}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={1}
