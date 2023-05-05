@@ -8,7 +8,7 @@ import Spørsmålsbesvarelser, {
     Pensjonsordning,
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
-import { BarnFraAPI } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 
 interface Periode {
     fra: string;
@@ -74,7 +74,7 @@ function tiltak(formTiltak: FormTiltak) {
     return formTiltak;
 }
 
-function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: BarnFraAPI[]) {
+function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
     const oppholdUtenforEØSDict = barnetillegg.registrerteBarn.oppholdUtenforEØS
     return {
         ...barnetillegg,
@@ -95,7 +95,7 @@ function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: BarnFraAPI[]) {
     };
 }
 
-export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvarelser, barnFraApi: BarnFraAPI[]): String {
+export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvarelser, barnFraApi: Barn[]): String {
     return JSON.stringify({
         ...spørsmålsbesvarelser,
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),

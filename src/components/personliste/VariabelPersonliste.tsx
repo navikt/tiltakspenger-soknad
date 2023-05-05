@@ -3,11 +3,11 @@ import { Controller, useFieldArray, useFormContext } from 'react-hook-form';
 import { Button, TextField } from '@navikt/ds-react';
 import { Add, Close } from '@navikt/ds-icons';
 import Datovelger from '@/components/datovelger/Datovelger';
-import { SelvregistrertBarn } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 
 interface VariabelPersonlisteProps {
     name: string;
-    initialList?: SelvregistrertBarn[];
+    initialList?: Barn[];
 }
 
 /**

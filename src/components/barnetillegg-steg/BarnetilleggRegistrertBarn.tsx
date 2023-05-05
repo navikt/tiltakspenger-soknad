@@ -1,4 +1,4 @@
-import {BarnFraAPI} from "@/types/Barn";
+import {Barn} from "@/types/Barn";
 import React from "react";
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import {påkrevdJaNeiSpørsmålValidator} from "@/utils/validators";
@@ -7,7 +7,7 @@ import {ExternalLinkIcon} from "@navikt/aksel-icons";
 import styles from "./BarnetilleggRegistrertBarn.module.css";
 
 interface props {
-    barn: BarnFraAPI
+    barn: Barn
 }
 
 function barnUtenforEØSValidator(verdi: boolean) {

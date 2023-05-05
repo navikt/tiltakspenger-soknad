@@ -1,9 +1,9 @@
-import { BarnFraAPI } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 
 export interface Personalia {
     fornavn: string;
     mellomnavn?: string;
     etternavn: string;
     fødselsnummer: string;
-    barn: BarnFraAPI[];
+    barn: Barn[];
 }

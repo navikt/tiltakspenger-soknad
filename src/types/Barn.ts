@@ -1,15 +1,8 @@
-export interface SelvregistrertBarn {
-    fornavn: string;
-    mellomnavn?: string;
-    etternavn: string;
-    fødselsdato: string;
-    bostedsland: string;
-}
-
-export interface BarnFraAPI {
+export interface Barn {
     fornavn?: string;
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
+    bostedsland?: string;
     uuid: string;
 }

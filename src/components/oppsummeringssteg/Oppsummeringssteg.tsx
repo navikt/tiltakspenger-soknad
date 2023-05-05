@@ -10,10 +10,11 @@ import { formatPeriode } from '@/utils/formatPeriode';
 import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
-import { BarnFraAPI, SelvregistrertBarn } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
 import toSøknadJson from '@/utils/toSøknadJson';
 import { useRouter } from 'next/router';
+import BarneInfo from "@/components/barnetillegg-steg/BarneInfo";
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
@@ -61,19 +62,11 @@ function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn:
     }
 }
 
-function oppsummeringBarnetillegg(harSøktBarnetillegg: boolean) {
-    if (harSøktBarnetillegg) {
-        return `Ja, jeg søker om barnetillegg for følgende barn`;
-    } else {
-        return 'Nei, jeg søker ikke om barnetillegg';
-    }
-}
-
-function oppsummeringBarn(barn: BarnFraAPI | SelvregistrertBarn) {
+function oppsummeringBarn(barn: Barn ) {
     if (barn.fornavn && barn.etternavn) {
         return `${barn.fornavn} ${barn.mellomnavn ? `${barn.mellomnavn} ` : ''}${barn.etternavn}, født ${formatDate(
             barn.fødselsdato
-        )}`;
+        )}, barn.`;
     } else {
         return `Barn født ${formatDate(barn.fødselsdato)}`;
     }
@@ -115,12 +108,11 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
 
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.deltakelsePeriode : tiltak.periode;
 
-    const alleBarnSøktBarnetilleggFor = [
-        ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
+    const alleBarnSøktBarnetilleggFor =
+        barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
             ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
-        ),
-        ...personalia.barn,
-    ];
+        ).concat(personalia.barn)
+    ;
 
     async function sendInnSøknad() {
         const formData = lagFormDataForInnsending(søknad, personalia);
@@ -245,13 +237,10 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
-                        <Oppsummeringsfelt
-                            feltNavn="Barnetillegg"
-                            feltVerdi={oppsummeringBarnetillegg(barnetillegg.søkerOmBarnetillegg)}
-                        />
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
-                            <div style={{ marginTop: '2rem' }}>
-                                <Oppsummeringsfelt feltNavn={`Barn ${index + 1}`} feltVerdi={oppsummeringBarn(barn)} />
+                            <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
+                                <BarneInfo barn={barn} utenforEØS={barnetillegg.registrerteBarn.oppholdUtenforEØS[barn.uuid]}/>
+                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
                             </div>
                         ))}
                     </Accordion.Content>
