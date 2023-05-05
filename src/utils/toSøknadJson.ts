@@ -74,17 +74,17 @@ function tiltak(formTiltak: FormTiltak) {
     return formTiltak;
 }
 
-function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[]) {
+function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: BarnFraAPI[]) {
+    const oppholdUtenforEØSDict = barnetillegg.registrerteBarn.oppholdUtenforEØS
     return {
         ...barnetillegg,
-        registrerteBarnSøktBarnetilleggFor: registrerteBarn
-            .filter(({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0)
-            // sørger for å fjerne uuid i post
-            .map(({ fornavn, fødselsdato, mellomnavn, etternavn }) => ({
+        registrerteBarn: barnFraAPI
+            .map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
                 fornavn,
                 fødselsdato,
                 mellomnavn,
                 etternavn,
+                oppholdUtenforEØS: oppholdUtenforEØSDict[uuid],
             })),
         manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
             .filter(({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland)

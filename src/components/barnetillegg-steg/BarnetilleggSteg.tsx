@@ -1,15 +1,15 @@
 import React from 'react';
-import { useFormContext } from 'react-hook-form';
+import {useFormContext} from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import VariabelPersonliste from '@/components/personliste/VariabelPersonliste';
 import Step from '@/components/step/Step';
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
-import { Alert } from '@navikt/ds-react';
-import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Checkboxgruppespørsmål';
-import { formatDate } from '@/utils/formatDate';
-import { Personalia } from '@/types/Personalia';
+import {påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
+import {Alert} from '@navikt/ds-react';
+import {Personalia} from '@/types/Personalia';
 import FileUploader from '@/components/file-uploader/FIleUploader';
 import Søknad from "@/types/Søknad";
+
+import BarnInfo from "@/components/barnetillegg-steg/BarnetilleggRegistrertBarn";
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -27,20 +27,13 @@ interface Barn {
     fødselsdato: string;
 }
 
-export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
-    const { watch, control } = useFormContext<Søknad>();
+export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
+    const {watch, control} = useFormContext<Søknad>();
     const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn');
     const barnFraApi = personalia.barn;
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
 
-    function lagCheckboksTekstForBarn(barn: Barn) {
-        const { fornavn, etternavn, fødselsdato } = barn;
-        if (fornavn && etternavn) {
-            return `${fornavn} ${etternavn} født ${formatDate(fødselsdato)}`;
-        }
-        return `Barn født ${formatDate(fødselsdato)}`;
-    }
 
     return (
         <Step
@@ -56,11 +49,11 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                             Du kan få barnetillegg for egne barn under 16 år som du forsørger. Dette gjelder også for
                             barn du har bidragsplikt for, selv om du ikke betaler bidrag akkurat nå.
                         </li>
-                        <li style={{ marginTop: '1rem' }}>
+                        <li style={{marginTop: '1rem'}}>
                             Hvis både du og den andre forelderen mottar tiltakspenger, gis barnetillegget bare til en av
                             dere.
                         </li>
-                        <li style={{ marginTop: '1rem' }}>
+                        <li style={{marginTop: '1rem'}}>
                             Du får ikke barnetillegg hvis barnet oppholder seg utenfor EØS i over 90 dager i løpet av en
                             tolvmånedersperiode eller er bosatt utenfor EØS.
                         </li>
@@ -68,26 +61,16 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 </p>
             }
         >
-            <JaNeiSpørsmål name="svar.barnetillegg.søkerOmBarnetillegg" validate={søkerBarnetilleggValidator} reverse>
-                Ønsker du å søke om barnetillegg for ett eller flere barn som du forsørger?
-            </JaNeiSpørsmål>
-            {watchSøkerOmBarnetillegg && barnFraApi && barnFraApi.length > 0 && (
-                <Checkboxgruppespørsmål
-                    alternativer={barnFraApi.map((barn) => ({
-                        value: barn.uuid,
-                        tekst: lagCheckboksTekstForBarn(barn),
-                    }))}
-                    name="svar.barnetillegg.registrerteBarnSøktBarnetilleggFor"
-                    hjelpetekst={{
-                        tittel: 'Hvilke barn vises?',
-                        tekst: 'Vi viser dine barn under 16 år som er registrert i Folkeregisteret.',
-                    }}
-                >
-                    Hvilke barn ønsker du å søke barnetillegg for?
-                </Checkboxgruppespørsmål>
+            {barnFraApi && barnFraApi.length > 0 && (
+                <>
+                    <h3>Barn vi har funnet registrert på deg</h3>
+                    {barnFraApi.map(barn => (
+                        <BarnInfo barn={barn}/>
+                    ))}
+                </>
             )}
             {harIngenBarnÅViseFraApi && (
-                <Alert variant="info" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+                <Alert variant="info" style={{marginTop: '2rem', marginBottom: '2rem'}}>
                     Vi har ikke registrert at du har et barn under 16 år. Hvis du likevel har barn, for eksempel hvis du
                     nylig har adoptert, kan du legge dem til her. Vær oppmerksom på at du ikke får barnetillegg for
                     stebarn eller fosterbarn.
@@ -116,11 +99,11 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 </JaNeiSpørsmål>
             )}
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
-                <VariabelPersonliste name="svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor" />
+                <VariabelPersonliste name="svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor"/>
             )}
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
-                <div style={{ marginTop: '2rem' }}>
-                    <FileUploader name="vedlegg" kategori="fødselsattest" control={control} />
+                <div style={{marginTop: '2rem'}}>
+                    <FileUploader name="vedlegg" kategori="fødselsattest" control={control}/>
                 </div>
             )}
         </Step>

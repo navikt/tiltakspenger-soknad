@@ -34,7 +34,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             svar: {
                 tiltak: {},
                 barnetillegg: {
-                    registrerteBarnSøktBarnetilleggFor: [],
+                    registrerteBarn: {},
                     manueltRegistrerteBarnSøktBarnetilleggFor: [
                         { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
                     ],
@@ -171,7 +171,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     mellomnavn: 'Bar',
                     etternavn: 'Baz',
                     fødselsnummer: '123',
-                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() }],
+                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },{ fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() }],
                 },
             },
         };

@@ -115,15 +115,11 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
 
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.deltakelsePeriode : tiltak.periode;
 
-    const registrerteBarnSøktBarnetilleggFor = personalia.barn.filter(
-        ({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0
-    );
-
     const alleBarnSøktBarnetilleggFor = [
         ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
             ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
         ),
-        ...registrerteBarnSøktBarnetilleggFor,
+        ...personalia.barn,
     ];
 
     async function sendInnSøknad() {
