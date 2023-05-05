@@ -9,6 +9,7 @@ import Spørsmålsbesvarelser, {
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
 import { BarnFraAPI } from '@/types/Barn';
+import {Tiltak} from "@/types/Tiltak";
 
 interface Periode {
     fra: string;
@@ -64,14 +65,21 @@ function institusjon(institusjonsopphold: Institusjonsopphold) {
     return institusjonsopphold;
 }
 
-function tiltak(formTiltak: FormTiltak) {
+function tiltak(formTiltak: FormTiltak, arrangør: string, type: string) {
     if (formTiltak.periode) {
         return {
             ...formTiltak,
+            arrangør,
+            type,
             periode: formatPeriod(formTiltak.periode),
         };
     }
-    return formTiltak;
+
+    return {
+        ...formTiltak,
+        arrangør,
+        type
+    }
 }
 
 function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[]) {
@@ -95,7 +103,7 @@ function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[])
     };
 }
 
-export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvarelser, barnFraApi: BarnFraAPI[]): String {
+export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvarelser, barnFraApi: BarnFraAPI[], {arrangør, type}: Tiltak): String {
     return JSON.stringify({
         ...spørsmålsbesvarelser,
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),
@@ -104,6 +112,6 @@ export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvare
         pensjonsordning: pensjon(spørsmålsbesvarelser.pensjonsordning),
         etterlønn: etterlønn(spørsmålsbesvarelser.etterlønn),
         institusjonsopphold: institusjon(spørsmålsbesvarelser.institusjonsopphold),
-        tiltak: tiltak(spørsmålsbesvarelser.tiltak),
+        tiltak: tiltak(spørsmålsbesvarelser.tiltak, arrangør, type),
     });
 }

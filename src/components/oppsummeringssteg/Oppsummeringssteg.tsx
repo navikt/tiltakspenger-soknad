@@ -79,8 +79,8 @@ function oppsummeringBarn(barn: BarnFraAPI | SelvregistrertBarn) {
     }
 }
 
-function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia): FormData {
-    const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
+function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
+    const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
     const formData = new FormData();
     formData.append('søknad', søknadJson as string);
     søknad.vedlegg.forEach((vedlegg, index) => {
@@ -127,7 +127,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
     ];
 
     async function sendInnSøknad() {
-        const formData = lagFormDataForInnsending(søknad, personalia);
+        const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak);
         try {
             setSøknadsinnsendingInProgress(true);
             const response = await postSøknadMultipart(formData);
