@@ -42,7 +42,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={4}
             guide={
-                <p>
+                <>
                     Når du har rett til tiltakspenger, kan du også ha rett på barnetillegg.
                     <ul>
                         <li>
@@ -58,14 +58,14 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                             tolvmånedersperiode eller er bosatt utenfor EØS.
                         </li>
                     </ul>
-                </p>
+                </>
             }
         >
             {barnFraApi && barnFraApi.length > 0 && (
                 <>
                     <h3>Barn vi har funnet registrert på deg</h3>
                     {barnFraApi.map(barn => (
-                        <BarnInfo barn={barn}/>
+                        <BarnInfo key={barn.uuid} barn={barn}/>
                     ))}
                 </>
             )}
