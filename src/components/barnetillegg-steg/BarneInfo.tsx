@@ -14,7 +14,7 @@ export default function BarneInfo({barn, utenforEØS}: props) {
             <p><strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}</p>
             <p><strong>Fødselsdato:</strong> {fødselsdato}</p>
             <p><strong>Bosted:</strong>Norge</p>
-            <p><strong>Bosatt utenfor EØS:</strong>{utenforEØS ? " Ja" : " Nei"}</p>
+            <p><strong>Oppholder seg utenfor EØS:</strong>{utenforEØS ? " Ja" : " Nei"}</p>
         </div>
     )
 }

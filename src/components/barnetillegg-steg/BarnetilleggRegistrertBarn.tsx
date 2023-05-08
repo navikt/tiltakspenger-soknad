@@ -34,7 +34,7 @@ export default function BarnInfo({barn}: props) {
                                         betydning for din rett til barnetillegg.
                                     </span>
                             <span style={{display: 'block', marginTop: '1rem'}}>
-                                        <Link href="www..no" target="_blank">Du kan lese mer om hvile land som er med i EØS her.
+                                        <Link href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene" target="_blank">Du kan lese mer om hvile land som er med i EØS her.
                                         <ExternalLinkIcon title="a11y-title" />
                                         </Link>
                                     </span>
