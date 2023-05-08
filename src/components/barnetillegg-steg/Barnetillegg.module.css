@@ -1,12 +1,25 @@
 .barnetillegg {
     background-color: var(--a-gray-100);
+    width: 100%;
     border: 0;
-    margin: 2rem;
+    margin-bottom: 1rem;
     padding: 1rem 1rem 1rem 2rem;
 }
 
 .knappLeggTilBarn{
     width: 100%;
+    margin-top: 1rem;
+}
+
+.knappAvbrytModal{
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.knappLagreModal{
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .modalLeggTilBarn {

@@ -87,15 +87,6 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 </BodyLong>
             </div>
             <LeggTilBarnModal />
-
-            {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
-                <VariabelPersonliste name="svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor" />
-            )}
-            {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
-                <div style={{ marginTop: '2rem' }}>
-                    <FileUploader name="vedlegg" kategori="fødselsattest" control={control} />
-                </div>
-            )}
         </Step>
     );
 }

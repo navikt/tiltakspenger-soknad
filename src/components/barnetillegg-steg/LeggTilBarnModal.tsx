@@ -1,16 +1,22 @@
-import { Add } from '@navikt/ds-icons';
-import { BodyLong, Button, Heading, Link, Modal, TextField } from '@navikt/ds-react';
-import { useEffect, useRef, useState } from 'react';
+import {Add} from '@navikt/ds-icons';
+import {Alert, BodyLong, Button, Heading, Link, Modal, TextField} from '@navikt/ds-react';
+import React, {useEffect, useRef, useState} from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 import Datovelger from '../datovelger/Datovelger';
 
 import styles from './Barnetillegg.module.css';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
+import {ExternalLinkIcon} from '@navikt/aksel-icons';
+import {påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
+import FileUploader from "@/components/file-uploader/FIleUploader";
+import {useFormContext} from "react-hook-form";
+import Søknad from "@/types/Søknad";
+import Image from "next/image"
 
 export const LeggTilBarnModal = () => {
+    const {control} = useFormContext<Søknad>();
+
     const [open, setOpen] = useState(false);
     const uuid = useRef('');
 
@@ -32,7 +38,7 @@ export const LeggTilBarnModal = () => {
                 onClick={() => setOpen(true)}
                 className={styles.knappLeggTilBarn}
                 variant="secondary"
-                icon={<Add aria-hidden />}
+                icon={<Add aria-hidden/>}
             >
                 Legg til barn
             </Button>
@@ -48,9 +54,10 @@ export const LeggTilBarnModal = () => {
                     <Heading spacing level="1" size="large" id="modal-heading">
                         Andre barn
                     </Heading>
-                    <TextField label="Fornavn og mellomnavn" />
-                    <TextField label="Etternavn" />
-                    <Datovelger onDateChange={() => {}} label="Fødselsdato" />
+                    <TextField label="Fornavn og mellomnavn"/>
+                    <TextField label="Etternavn"/>
+                    <Datovelger onDateChange={() => {
+                    }} label="Fødselsdato"/>
                     <JaNeiSpørsmål
                         reverse
                         name={`svar.barnetillegg.selvregistrertBarn.${uuid.current}.oppholdUtenforEØS`}
@@ -63,13 +70,13 @@ export const LeggTilBarnModal = () => {
                                         Hvis barnet ditt oppholder seg utenfor EØS i tiltaksperioden kan det ha
                                         betydning for din rett til barnetillegg.
                                     </span>
-                                    <span style={{ display: 'block', marginTop: '1rem' }}>
+                                    <span style={{display: 'block', marginTop: '1rem'}}>
                                         <Link
                                             href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
                                             target="_blank"
                                         >
                                             Du kan lese mer om hvile land som er med i EØS her.
-                                            <ExternalLinkIcon title="a11y-title" />
+                                            <ExternalLinkIcon title="a11y-title"/>
                                         </Link>
                                     </span>
                                 </>
@@ -80,21 +87,37 @@ export const LeggTilBarnModal = () => {
                     </JaNeiSpørsmål>
                     <Button
                         onClick={() => setOpen(true)}
-                        className={styles.knappLeggTilBarn}
+                        className={styles.knappAvbrytModal}
                         variant="secondary"
-                        icon={<Add aria-hidden />}
                     >
                         Avbryt
                     </Button>
-                    <div />
+                    <div/>
                     <Button
                         onClick={() => setOpen(true)}
-                        className={styles.knappLeggTilBarn}
+                        className={styles.knappLagreModal}
                         variant="primary"
-                        icon={<Add aria-hidden />}
                     >
                         Lagre
                     </Button>
+
+                    <Alert variant="info">
+                        Du må legge ved:
+                        <ul>
+                            <li>
+                                Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller
+                                adopsjonstidspunkt). Dette kan for eksempel være fødselsattest eller
+                                adopsjonsdokumenter.
+                            </li>
+                        </ul>
+                        Dersom du må ettersende vedlegg kan du sende disse pr post.
+                    </Alert>
+
+                    <Image alt="" width={100} height={100} src="/veiledning/vedleggsveiledning.png" />
+
+                    <div style={{marginTop: '2rem'}}>
+                        <FileUploader name="vedlegg" kategori="fødselsattest" control={control}/>
+                    </div>
                 </Modal.Content>
             </Modal>
         </>
