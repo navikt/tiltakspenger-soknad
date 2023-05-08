@@ -5,6 +5,7 @@ import {påkrevdJaNeiSpørsmålValidator} from "@/utils/validators";
 import {Link} from "@navikt/ds-react";
 import {ExternalLinkIcon} from "@navikt/aksel-icons";
 import styles from "./BarnetilleggRegistrertBarn.module.css";
+import {formatDate} from "@/utils/formatDate";
 
 interface props {
     barn: Barn
@@ -19,7 +20,7 @@ export default function BarnInfo({barn}: props) {
     return (
         <div className={styles.barnetillegg}>
             <p>Navn: {fornavn} {mellomnavn} {etternavn}</p>
-            <p>Fødselsdato: {fødselsdato}</p>
+            <p>Fødselsdato: {formatDate(fødselsdato)}</p>
             <p>Bosted: Norge</p>
             <JaNeiSpørsmål
                 reverse
