@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useFormContext} from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import VariabelPersonliste from '@/components/personliste/VariabelPersonliste';
 import Step from '@/components/step/Step';
 import {påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
-import {Alert} from '@navikt/ds-react';
+import {Alert, BodyLong, Heading} from '@navikt/ds-react';
 import {Personalia} from '@/types/Personalia';
 import FileUploader from '@/components/file-uploader/FIleUploader';
 import Søknad from "@/types/Søknad";
@@ -30,7 +30,7 @@ interface Barn {
 export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
     const {watch, control} = useFormContext<Søknad>();
     const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
-    const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn');
+    const watchØnskerÅSøkeBarnetilleggForAndreBarn = useState()
     const barnFraApi = personalia.barn;
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
 
@@ -76,28 +76,21 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                     stebarn eller fosterbarn.
                 </Alert>
             )}
-            {barnFraApi && barnFraApi.length > 0 && watchSøkerOmBarnetillegg && (
-                <JaNeiSpørsmål
-                    name="svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn"
-                    validate={søkerBarnetilleggValidator}
-                    hjelpetekst={{
-                            tittel: 'Hvilke barn kan du legge til?',
-                            tekst: (
-                                <>
-                                    <span>
-                                        Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for
-                                        eksempel hvis du nylig har adoptert, kan du legge dem til her.
-                                    </span>
-                                    <span style={{ display: 'block', marginTop: '1rem' }}>
-                                        Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
-                                    </span>
-                                </>
-                            ),
-                        }}
-                >
-                    Har du andre barn du ønsker å søke barnetillegg for?
-                </JaNeiSpørsmål>
-            )}
+
+            <div>
+                <Heading level="3" size="medium">
+                    Andre barn
+                </Heading>
+                <BodyLong>
+                    Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for
+                    eksempel hvis du nylig har adoptert, kan du legge dem til her.
+                    <br/>
+                    <br/>
+                    Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
+                </BodyLong>
+
+            </div>
+
             {(watchØnskerÅSøkeBarnetilleggForAndreBarn || harIngenBarnÅViseFraApi) && (
                 <VariabelPersonliste name="svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor"/>
             )}
