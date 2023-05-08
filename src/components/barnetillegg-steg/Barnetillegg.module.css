@@ -4,3 +4,12 @@
     margin: 2rem;
     padding: 1rem 1rem 1rem 2rem;
 }
+
+.knappLeggTilBarn{
+    width: 100%;
+}
+
+.modalLeggTilBarn {
+    width: 70%;
+    padding: 5px;
+}
