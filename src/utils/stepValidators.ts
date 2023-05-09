@@ -9,7 +9,7 @@ export function brukerHarFyltUtTiltakssteg({
     } else if (søkerHeleTiltaksperioden) {
         return !!aktivitetId;
     } else {
-        return !!aktivitetId && !periode;
+        return !!aktivitetId && !!periode;
     }
 }
 
@@ -27,19 +27,19 @@ export function brukerHarFyltUtKvpSteg({
     }
 
     if (kvalifiseringsprogram.deltar) {
-        if (!!kvalifiseringsprogram.periode) {
+        if (!kvalifiseringsprogram.periode) {
             return false;
         }
     }
 
     if (introduksjonsprogram.deltar) {
-        if (!!introduksjonsprogram.periode) {
+        if (!introduksjonsprogram.periode) {
             return false;
         }
     }
 
     if (institusjonsopphold.borPåInstitusjon) {
-        if (!!institusjonsopphold.periode) {
+        if (!institusjonsopphold.periode) {
             return false;
         }
     }
@@ -53,6 +53,20 @@ export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlø
     ) {
         return false;
     }
+
+    if (pensjonsordning.mottarEllerSøktPensjonsordning) {
+        if (!pensjonsordning.periode) {
+            return false;
+        }
+    }
+
+    if (etterlønn.mottarEllerSøktEtterlønn) {
+        if (!etterlønn.periode) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg) {
