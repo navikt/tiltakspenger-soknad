@@ -25,7 +25,6 @@ if (typeof window !== 'undefined') {
 
 function App({ Component, pageProps }: AppProps) {
     const [personaliaData, setPersonaliaData] = useState<Personalia>(defaultPersonalia);
-    console.error('Test av feilmelding');
     return <Component {...pageProps} setPersonaliaData={setPersonaliaData} personalia={personaliaData} />;
 }
 
