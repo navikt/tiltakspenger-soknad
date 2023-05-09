@@ -104,11 +104,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 />
             )}
             {step && step[0] === 'oppsummering' && (
-                <Oppsummeringssteg
-                    onGoToPreviousStep={goBack}
-                    personalia={personalia}
-                    valgtTiltak={valgtTiltak!}
-                />
+                <Oppsummeringssteg onGoToPreviousStep={goBack} personalia={personalia} valgtTiltak={valgtTiltak!} />
             )}
         </FormProvider>
     );
