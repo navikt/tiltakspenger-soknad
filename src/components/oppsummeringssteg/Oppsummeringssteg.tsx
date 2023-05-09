@@ -16,7 +16,7 @@ import { useRouter } from 'next/router';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
 import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../step/Step.module.css';
-import { påkrevdBekreftelsesspørsmål } from '@/utils/validators';
+import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;

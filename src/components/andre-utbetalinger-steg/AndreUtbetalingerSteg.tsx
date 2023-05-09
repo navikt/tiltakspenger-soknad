@@ -4,7 +4,7 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Fritekstspørsmål from '@/components/fritekstspørsmål/Fritekstspørsmål';
 import Step from '@/components/step/Step';
-import { påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
+import { påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 
 interface AndreUtbetalingerStegProps {
     onCompleted: () => void;

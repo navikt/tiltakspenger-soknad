@@ -14,7 +14,7 @@ export const defaultPersonalia = {
     barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() }],
 };
 
-if (typeof window !== 'undefined') {
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
     initializeFaro({
         url: process.env.NEXT_PUBLIC_TELEMETRY_URL,
         app: {
