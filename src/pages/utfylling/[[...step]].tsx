@@ -44,6 +44,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 introduksjonsprogram: {},
                 kvalifiseringsprogram: {},
                 pensjonsordning: {},
+                harBekreftetAlleOpplysninger: false,
             },
             vedlegg: [],
         },

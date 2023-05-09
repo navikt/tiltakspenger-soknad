@@ -66,16 +66,12 @@ export default function Step({
             )}
             {!hideStepIndicator && <span className={styles.step__stepindicator}>Steg {stepNumber} av 5</span>}
             {guide && <GuidePanel poster>{guide}</GuidePanel>}
-            {shouldRenderCustomSubmitSection && (
+            <form onSubmit={onCompleted ? handleSubmit(onCompleted) : () => {}}>
                 <>
                     {children}
-                    {submitSectionRenderer()}
-                </>
-            )}
-            {!shouldRenderCustomSubmitSection && (
-                <form onSubmit={onCompleted ? handleSubmit(onCompleted) : () => {}}>
-                    <>
-                        {children}
+                    {shouldRenderCustomSubmitSection ? (
+                        (submitSectionRenderer as any)()
+                    ) : (
                         <div className={styles.step__buttonsection}>
                             <Button type="button" size="small" variant="secondary" onClick={goToPreviousStepHandler}>
                                 Forrige steg
@@ -84,9 +80,9 @@ export default function Step({
                                 Neste steg
                             </Button>
                         </div>
-                    </>
-                </form>
-            )}
+                    )}
+                </>
+            </form>
         </>
     );
 }

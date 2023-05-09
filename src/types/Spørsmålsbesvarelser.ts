@@ -49,6 +49,7 @@ interface Spørsmålsbesvarelser {
     barnetillegg: Barnetillegg;
     pensjonsordning: Pensjonsordning;
     etterlønn: Etterlønn;
+    harBekreftetAlleOpplysninger: boolean;
 }
 
 export default Spørsmålsbesvarelser;

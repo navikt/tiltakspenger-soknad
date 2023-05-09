@@ -7,6 +7,12 @@ export function påkrevdJaNeiSpørsmålValidator(verdi: boolean, feilmelding: st
     }
 }
 
+export function påkrevdBekreftelsesspørsmål(verdi: boolean, feilmelding: string) {
+    if (verdi !== true) {
+        return feilmelding;
+    }
+}
+
 export function gyldigPeriodeValidator(periode: FormPeriode) {
     const fraDato = dayjs(periode?.fra);
     const tilDato = dayjs(periode?.til);

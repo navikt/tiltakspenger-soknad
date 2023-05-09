@@ -9,7 +9,7 @@ import Spørsmålsbesvarelser, {
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
 import { BarnFraAPI } from '@/types/Barn';
-import {Tiltak} from "@/types/Tiltak";
+import { Tiltak } from '@/types/Tiltak';
 
 interface Periode {
     fra: string;
@@ -65,21 +65,15 @@ function institusjon(institusjonsopphold: Institusjonsopphold) {
     return institusjonsopphold;
 }
 
-function tiltak(formTiltak: FormTiltak, arrangør: string, type: string) {
-    if (formTiltak.periode) {
-        return {
-            ...formTiltak,
-            arrangør,
-            type,
-            periode: formatPeriod(formTiltak.periode),
-        };
-    }
-
+function tiltak(formTiltak: FormTiltak, { arrangør, type, deltakelsePeriode }: Tiltak) {
+    const { søkerHeleTiltaksperioden } = formTiltak;
+    const periode = søkerHeleTiltaksperioden ? deltakelsePeriode : formTiltak.periode;
     return {
         ...formTiltak,
         arrangør,
-        type
-    }
+        type,
+        periode: formatPeriod(periode!),
+    };
 }
 
 function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[]) {
@@ -95,7 +89,9 @@ function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[])
                 etternavn,
             })),
         manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
-            .filter(({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland)
+            .filter(
+                ({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland
+            )
             .map((barn) => ({
                 ...barn,
                 fødselsdato: formatDate(barn.fødselsdato),
@@ -103,7 +99,11 @@ function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[])
     };
 }
 
-export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvarelser, barnFraApi: BarnFraAPI[], {arrangør, type}: Tiltak): String {
+export default function toSøknadJson(
+    spørsmålsbesvarelser: Spørsmålsbesvarelser,
+    barnFraApi: BarnFraAPI[],
+    valgtTiltak: Tiltak
+): String {
     return JSON.stringify({
         ...spørsmålsbesvarelser,
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),
@@ -112,6 +112,6 @@ export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvare
         pensjonsordning: pensjon(spørsmålsbesvarelser.pensjonsordning),
         etterlønn: etterlønn(spørsmålsbesvarelser.etterlønn),
         institusjonsopphold: institusjon(spørsmålsbesvarelser.institusjonsopphold),
-        tiltak: tiltak(spørsmålsbesvarelser.tiltak, arrangør, type),
+        tiltak: tiltak(spørsmålsbesvarelser.tiltak, valgtTiltak),
     });
 }
