@@ -27,9 +27,6 @@ jobs:
       - name: Run tests
         run: npm run test:ci
 
-      - name: Build app
-        run: npm run build
-
       - name: Set up Docker Buildx
         if: github.ref == 'refs/heads/main'
         uses: docker/setup-buildx-action@v2
@@ -42,6 +39,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Copy appropriate env file
+        run: cp .env.test .env.production
+
+      - name: Build app
+        run: npm run build
+
       - name: Docker build and push image for dev-gcp
         if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v3
@@ -51,8 +54,6 @@ jobs:
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args: |
-            ENVIRONMENT=test
 
 #      - name: Docker build and push for prod-gcp
 #        if: github.ref == 'refs/heads/main'

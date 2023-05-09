@@ -11,7 +11,6 @@ COPY package.json .
 COPY next.config.js .
 COPY .next/standalone ./
 COPY .next/static ./.next/static
-COPY .env.${ENVIRONMENT:?} .env.production
 
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV PORT 3000
