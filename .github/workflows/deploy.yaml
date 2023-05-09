@@ -42,15 +42,27 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker build and push
+      - name: Docker build and push image for dev-gcp
         if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: ${{ env.IMAGE }}
+          tags: ${{ env.IMAGE }}-test
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          environment: test
+
+#      - name: Docker build and push for prod-gcp
+#        if: github.ref == 'refs/heads/main'
+#        uses: docker/build-push-action@v3
+#        with:
+#          context: .
+#          tags: ${{ env.IMAGE }}-production
+#          push: true
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=max
+#          environment: production
 
       - name: Notify Slack in case of build failure
         if: ${{ failure() && (github.ref == 'refs/heads/main') }}
@@ -73,5 +85,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yaml
-          VAR: image=${{ env.IMAGE }},name=${{ github.event.repository.name }}
+          VAR: image=${{ env.IMAGE }}-test,name=${{ github.event.repository.name }}
           VARS: .nais/vars/dev.yaml
