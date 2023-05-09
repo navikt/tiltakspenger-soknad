@@ -66,3 +66,9 @@ export default function Kvittering(props: KvitteringProps)
         </div>
     );
 }
+
+export async function getServerSideProps() {
+    return {
+        props: {},
+    };
+}
