@@ -13,6 +13,7 @@ import FileUploader from "@/components/file-uploader/FIleUploader";
 import {useFormContext} from "react-hook-form";
 import Søknad from "@/types/Søknad";
 import Image from "next/image"
+import veiledningsBilde from "../../public/veiledning/vedleggsveiledning.png"
 
 export const LeggTilBarnModal = () => {
     const {control} = useFormContext<Søknad>();
@@ -112,9 +113,9 @@ export const LeggTilBarnModal = () => {
                         </ul>
                         Dersom du må ettersende vedlegg kan du sende disse pr post.
                     </Alert>
-
-                    <Image alt="" width={100} height={100} src="/veiledning/vedleggsveiledning.png" />
-
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <Image alt="veiledning-vedlegg" style={{width: '90%', height: 'auto'}} src={veiledningsBilde} />
+                    </div>
                     <div style={{marginTop: '2rem'}}>
                         <FileUploader name="vedlegg" kategori="fødselsattest" control={control}/>
                     </div>
