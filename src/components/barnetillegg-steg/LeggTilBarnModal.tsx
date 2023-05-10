@@ -1,5 +1,5 @@
 import {Add} from '@navikt/ds-icons';
-import {Alert, BodyLong, Button, Heading, Link, Modal, TextField} from '@navikt/ds-react';
+import {Alert, Button, Heading, Link, Modal, ReadMore, TextField} from '@navikt/ds-react';
 import React, {useEffect, useRef, useState} from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import {v4 as uuidv4} from 'uuid';
@@ -113,9 +113,15 @@ export const LeggTilBarnModal = () => {
                         </ul>
                         Dersom du må ettersende vedlegg kan du sende disse pr post.
                     </Alert>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                    <p>
+                        Hvis du har vedlegg på papir, kan du skanne det inn og laste det opp. Hvis du ikke har skanner,
+                        kan du i stedet ta bilde av dokumentet med mobiltelefonen din.
+                    </p>
+                    <ReadMore header="Slik tar du et godt bilde av dokumentet">
+
                         <Image alt="veiledning-vedlegg" style={{width: '90%', height: 'auto'}} src={veiledningsBilde} />
-                    </div>
+                    </ReadMore>
+
                     <div style={{marginTop: '2rem'}}>
                         <FileUploader name="vedlegg" kategori="fødselsattest" control={control}/>
                     </div>
