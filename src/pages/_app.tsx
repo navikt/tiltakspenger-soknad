@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Personalia } from '@/types/Personalia';
 import { initializeFaro } from '@grafana/faro-web-sdk';
+import SøknadResponse from '@/types/SøknadResponse';
 
 export const defaultPersonalia = {
     fornavn: 'Foo',
@@ -25,7 +26,17 @@ if (typeof window !== 'undefined') {
 
 function App({ Component, pageProps }: AppProps) {
     const [personaliaData, setPersonaliaData] = useState<Personalia>(defaultPersonalia);
-    return <Component {...pageProps} setPersonaliaData={setPersonaliaData} personalia={personaliaData} />;
+    const [søknadResponse, setSøknadResponse] = useState<SøknadResponse>();
+
+    return (
+        <Component
+            {...pageProps}
+            setPersonaliaData={setPersonaliaData}
+            personalia={personaliaData}
+            setSøknadResponse={setSøknadResponse}
+            søknadResponse={søknadResponse}
+        />
+    );
 }
 
 export default App;

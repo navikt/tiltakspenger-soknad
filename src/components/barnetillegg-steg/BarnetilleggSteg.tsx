@@ -9,7 +9,7 @@ import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Chec
 import { formatDate } from '@/utils/formatDate';
 import { Personalia } from '@/types/Personalia';
 import FileUploader from '@/components/file-uploader/FIleUploader';
-import Søknad from "@/types/Søknad";
+import Søknad from '@/types/Søknad';
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -98,19 +98,19 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                     name="svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn"
                     validate={søkerBarnetilleggValidator}
                     hjelpetekst={{
-                            tittel: 'Hvilke barn kan du legge til?',
-                            tekst: (
-                                <>
-                                    <span>
-                                        Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for
-                                        eksempel hvis du nylig har adoptert, kan du legge dem til her.
-                                    </span>
-                                    <span style={{ display: 'block', marginTop: '1rem' }}>
-                                        Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
-                                    </span>
-                                </>
-                            ),
-                        }}
+                        tittel: 'Hvilke barn kan du legge til?',
+                        tekst: (
+                            <>
+                                <span>
+                                    Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for
+                                    eksempel hvis du nylig har adoptert, kan du legge dem til her.
+                                </span>
+                                <span style={{ display: 'block', marginTop: '1rem' }}>
+                                    Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
+                                </span>
+                            </>
+                        ),
+                    }}
                 >
                     Har du andre barn du ønsker å søke barnetillegg for?
                 </JaNeiSpørsmål>
