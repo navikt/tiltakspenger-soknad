@@ -73,7 +73,7 @@ export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) 
                     </div>
                 </div>
                 <div>
-                    <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem'}}>
+                    <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem', paddingBottom: '0.5rem'}}>
                         <ScanningIcon status={'shadow'} title={tekster?.alert?.exampleLabelBad} />
                         <div style={{padding: '0.5rem'}}>
                         <span className={'scanning-example-status'}>

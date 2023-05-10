@@ -1,5 +1,5 @@
 .barnetillegg {
-    background-color: var(--a-gray-100);
+    background-color: var(--a-gray-50);
     width: 100%;
     border: 0;
     margin-bottom: 1rem;
@@ -23,7 +23,7 @@
 }
 
 .modalLeggTilBarn {
-    background-color: var(--a-gray-100);
+    background-color: var(--a-gray-50);
     width: 70%;
     padding: 5px;
 }

@@ -119,10 +119,10 @@ export const LeggTilBarnModal = () => {
                         kan du i stedet ta bilde av dokumentet med mobiltelefonen din.
                     </p>
                     <ReadMore header="Slik tar du et godt bilde av dokumentet">
-
-                        <div style={{display: 'flex', justifyContent: 'center', width: '80%'}}>
+                        <div style={{display: 'flex', justifyContent: 'center', backgroundColor: 'white'}}>
                             <ScanningGuide/>
-                        </div>                    </ReadMore>
+                        </div>
+                    </ReadMore>
 
                     <div style={{marginTop: '2rem'}}>
                         <FileUploader name="vedlegg" kategori="fødselsattest" control={control}/>
