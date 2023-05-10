@@ -14,6 +14,7 @@ import {useFormContext} from "react-hook-form";
 import Søknad from "@/types/Søknad";
 import Image from "next/image"
 import veiledningsBilde from "../../public/veiledning/vedleggsveiledning.png"
+import {ScanningGuide} from "@/components/veiledning/ScanningGuide";
 
 export const LeggTilBarnModal = () => {
     const {control} = useFormContext<Søknad>();
@@ -119,8 +120,9 @@ export const LeggTilBarnModal = () => {
                     </p>
                     <ReadMore header="Slik tar du et godt bilde av dokumentet">
 
-                        <Image alt="veiledning-vedlegg" style={{width: '90%', height: 'auto'}} src={veiledningsBilde} />
-                    </ReadMore>
+                        <div style={{display: 'flex', justifyContent: 'center', width: '80%'}}>
+                            <ScanningGuide/>
+                        </div>                    </ReadMore>
 
                     <div style={{marginTop: '2rem'}}>
                         <FileUploader name="vedlegg" kategori="fødselsattest" control={control}/>
