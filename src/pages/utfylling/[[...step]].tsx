@@ -14,6 +14,8 @@ import { makeGetRequest } from '@/utils/http';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
+import { Søknadssteg } from '@/types/Søknadssteg';
+import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -59,6 +61,34 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         }
     }, [valgtAktivitetId]);
 
+    function utledSøknadsstegFraRoute(route: string | undefined): Søknadssteg | null {
+        switch (route) {
+            case Søknadssteg.TILTAK:
+                return Søknadssteg.TILTAK;
+            case Søknadssteg.KVP:
+                return Søknadssteg.KVP;
+            case Søknadssteg.ANDRE_UTBETALINGER:
+                return Søknadssteg.ANDRE_UTBETALINGER;
+            case Søknadssteg.BARNETILLEGG:
+                return Søknadssteg.BARNETILLEGG;
+            case Søknadssteg.OPPSUMMERING:
+                return Søknadssteg.OPPSUMMERING;
+            default:
+                return null;
+        }
+    }
+
+    const svar = formMethods.getValues().svar;
+    const aktivtSøknadssteg = utledSøknadsstegFraRoute(step && step[0]);
+    React.useEffect(() => {
+        if (aktivtSøknadssteg == null) {
+            navigateToPath('/404', false);
+        }
+        if (!brukerHarFyltUtNødvendigeOpplysninger(svar, aktivtSøknadssteg!)) {
+            navigateToPath('/', false);
+        }
+    }, [step]);
+
     function navigateToPath(path: string, shallow: boolean) {
         return router.push(path, undefined, { shallow });
     }
@@ -76,9 +106,37 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/oppsummering', shallow);
 
+    const brukerErPåTiltakssteg = () => {
+        const formStateErPåTiltakssteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.TILTAK);
+        return step && step[0] === Søknadssteg.TILTAK && formStateErPåTiltakssteg;
+    };
+
+    const brukerErPåKvpSteg = () => {
+        const formStateErPåKvpsteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVP);
+        return step && step[0] === Søknadssteg.KVP && formStateErPåKvpsteg;
+    };
+
+    const brukerErPåAndreUtbetalingerSteg = () => {
+        const formStateErPåAndreUtbetalingerSteg = brukerHarFyltUtNødvendigeOpplysninger(
+            svar,
+            Søknadssteg.ANDRE_UTBETALINGER
+        );
+        return step && step[0] === Søknadssteg.ANDRE_UTBETALINGER && formStateErPåAndreUtbetalingerSteg;
+    };
+
+    const brukerErPåBarnetilleggSteg = () => {
+        const formStateErPåBarnetilleggSteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.BARNETILLEGG);
+        return step && step[0] === Søknadssteg.BARNETILLEGG && formStateErPåBarnetilleggSteg;
+    };
+
+    const brukerErPåOppsummeringssteg = () => {
+        const formStateErPåOppsummeringssteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.OPPSUMMERING);
+        return step && step[0] === Søknadssteg.OPPSUMMERING && formStateErPåOppsummeringssteg;
+    };
+
     return (
         <FormProvider {...formMethods}>
-            {step && step[0] === 'tiltak' && (
+            {brukerErPåTiltakssteg() && (
                 <Tiltakssteg
                     onCompleted={navigerBrukerTilKvpSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
@@ -86,24 +144,24 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                     valgtTiltak={valgtTiltak}
                 />
             )}
-            {step && step[0] === 'kvp' && (
+            {brukerErPåKvpSteg() && (
                 <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                     onGoToPreviousStep={goBack}
                     valgtTiltak={valgtTiltak!}
                 />
             )}
-            {step && step[0] === 'andreutbetalinger' && (
+            {brukerErPåAndreUtbetalingerSteg() && (
                 <AndreUtbetalingerSteg onCompleted={navigerBrukerTilBarnetilleggSteg} onGoToPreviousStep={goBack} />
             )}
-            {step && step[0] === 'barnetillegg' && (
+            {brukerErPåBarnetilleggSteg() && (
                 <BarnetilleggSteg
                     onCompleted={navigerBrukerTilOppsummeringssteg}
                     onGoToPreviousStep={goBack}
                     personalia={personalia}
                 />
             )}
-            {step && step[0] === 'oppsummering' && (
+            {brukerErPåOppsummeringssteg() && (
                 <Oppsummeringssteg onGoToPreviousStep={goBack} personalia={personalia} valgtTiltak={valgtTiltak!} />
             )}
         </FormProvider>

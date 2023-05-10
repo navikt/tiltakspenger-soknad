@@ -3,13 +3,13 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import VariabelPersonliste from '@/components/personliste/VariabelPersonliste';
 import Step from '@/components/step/Step';
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
 import { Alert } from '@navikt/ds-react';
 import Checkboxgruppespørsmål from '@/components/checkboxgruppespørsmål/Checkboxgruppespørsmål';
 import { formatDate } from '@/utils/formatDate';
 import { Personalia } from '@/types/Personalia';
 import FileUploader from '@/components/file-uploader/FIleUploader';
 import Søknad from '@/types/Søknad';
+import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -49,8 +49,8 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={4}
             guide={
-                <p>
-                    Når du har rett til tiltakspenger, kan du også ha rett på barnetillegg.
+                <>
+                    <p>Når du har rett til tiltakspenger, kan du også ha rett på barnetillegg.</p>
                     <ul>
                         <li>
                             Du kan få barnetillegg for egne barn under 16 år som du forsørger. Dette gjelder også for
@@ -65,7 +65,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                             tolvmånedersperiode eller er bosatt utenfor EØS.
                         </li>
                     </ul>
-                </p>
+                </>
             }
         >
             <JaNeiSpørsmål name="svar.barnetillegg.søkerOmBarnetillegg" validate={søkerBarnetilleggValidator} reverse>
