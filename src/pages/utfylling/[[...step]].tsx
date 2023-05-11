@@ -192,6 +192,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         {
             aktivitetId: '123',
             type: 'Annen utdanning',
+            typeNavn: 'Annen utdanning',
             deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
             arrangør: 'Testarrangør',
             status: 'Aktuell',

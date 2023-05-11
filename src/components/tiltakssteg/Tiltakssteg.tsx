@@ -120,9 +120,9 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         >
             {brukerHarRegistrerteTiltak && (
                 <Flervalgsspørsmål
-                    alternativer={tiltak.map(({ arrangør, deltakelsePeriode, aktivitetId }) => {
+                    alternativer={tiltak.map(({ arrangør, deltakelsePeriode, aktivitetId, typeNavn }) => {
                         return {
-                            tekst: `${arrangør}. Periode: ${formatPeriode(deltakelsePeriode)}`,
+                            tekst: `${typeNavn} - ${arrangør}. Periode: ${formatPeriode(deltakelsePeriode)}`,
                             value: aktivitetId,
                         };
                     })}
