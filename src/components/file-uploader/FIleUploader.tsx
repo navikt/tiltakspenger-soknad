@@ -10,10 +10,10 @@ import Søknad from '@/types/Søknad';
 interface FileUploaderProps {
     name: 'vedlegg'; // TODO: Kan dele opp i flere vedleggskategorier, feks "vedleggBarn" | "vedkeggKVP"
     control: Control<Søknad>;
-    kategori: string;
+    knappTekst: string;
 }
 
-export default function FileUploader({ name, control, kategori }: FileUploaderProps) {
+export default function FileUploader({ name, control, knappTekst }: FileUploaderProps) {
     const [dragOver, setDragOver] = React.useState<boolean>(false);
     const fileUploadInputElement = React.useRef<HTMLInputElement>(null);
     const inputId = 'test';
@@ -108,7 +108,7 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                         accept="image/jpg,image/png,.pdf"
                     />
                     <BodyShort>{'Dra og slipp'}</BodyShort>
-                    <BodyShort>{'eller'}</BodyShort>
+                    <BodyShort style={{padding: "1rem"}}>{'eller'}</BodyShort>
                     <label htmlFor={inputId}>
                         <span
                             className={`${styles?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
@@ -122,7 +122,7 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                             }}
                         >
                             <UploadIcon />
-                            Velg dine filer for {kategori}
+                            {knappTekst}
                         </span>
                     </label>
                 </>

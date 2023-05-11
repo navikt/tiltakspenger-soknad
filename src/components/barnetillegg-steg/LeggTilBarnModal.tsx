@@ -10,7 +10,7 @@ import styles from './Barnetillegg.module.css';
 import {ExternalLinkIcon} from '@navikt/aksel-icons';
 import {påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
 import FileUploader from "@/components/file-uploader/FIleUploader";
-import {Controller, useFieldArray, useFormContext} from "react-hook-form";
+import {useFieldArray, useFormContext} from "react-hook-form";
 import Søknad from "@/types/Søknad";
 import {ScanningGuide} from "@/components/veiledning/ScanningGuide";
 import {Barn} from "@/types/Barn";
@@ -60,12 +60,14 @@ export const LeggTilBarnModal = () => {
 
                             <>
                                 <TextField
+                                    className={styles.modalTextField}
                                     label="Fornavn og mellomnavn"
                                     onChange={(event) =>
                                         barn.current.fornavn = event.target.value
                                     }
                                 />
                                 <TextField
+                                    className={styles.modalTextField}
                                     label="Etternavn"
                                     onChange={(event) =>
                                         barn.current.etternavn = event.target.value
@@ -149,8 +151,8 @@ export const LeggTilBarnModal = () => {
                         </div>
                     </ReadMore>
 
-                    <div style={{marginTop: '2rem'}}>
-                        <FileUploader name="vedlegg" kategori="fødselsattest" control={control}/>
+                    <div className={styles.marginTop}>
+                        <FileUploader name="vedlegg" knappTekst="Last opp fødselsattest eller adopsjonsbevis" control={control}/>
                     </div>
                 </Modal.Content>
             </Modal>
