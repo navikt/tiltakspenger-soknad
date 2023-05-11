@@ -65,13 +65,14 @@ function institusjon(institusjonsopphold: Institusjonsopphold) {
     return institusjonsopphold;
 }
 
-function tiltak(formTiltak: FormTiltak, { arrangør, type, deltakelsePeriode }: Tiltak) {
+function tiltak(formTiltak: FormTiltak, { arrangør, type, deltakelsePeriode, typeNavn }: Tiltak) {
     const { søkerHeleTiltaksperioden } = formTiltak;
     const periode = søkerHeleTiltaksperioden ? deltakelsePeriode : formTiltak.periode;
     return {
         ...formTiltak,
         arrangør,
         type,
+        typeNavn,
         periode: formatPeriod(periode!),
     };
 }
