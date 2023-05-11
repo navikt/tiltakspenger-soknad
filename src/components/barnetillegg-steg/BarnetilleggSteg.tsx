@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {useFieldArray, useFormContext} from 'react-hook-form';
-import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
-import VariabelPersonliste from '@/components/personliste/VariabelPersonliste';
 import Step from '@/components/step/Step';
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
-import { Alert, BodyLong, Button, Heading } from '@navikt/ds-react';
-import { Personalia } from '@/types/Personalia';
-import FileUploader from '@/components/file-uploader/FIleUploader';
+import {Alert, BodyLong, Button, Heading, ReadMore} from '@navikt/ds-react';
+import {Personalia} from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
+import styles from './Barnetillegg.module.css';
 
 import BarnetilleggRegistrertBarn from '@/components/barnetillegg-steg/BarnetilleggRegistrertBarn';
-import { Add } from '@navikt/ds-icons';
-import { LeggTilBarnModal } from './LeggTilBarnModal';
+import {LeggTilBarnModal} from './LeggTilBarnModal';
 import BarneInfo from "@/components/barnetillegg-steg/BarneInfo";
 
 interface BarnetilleggStegProps {
@@ -20,15 +16,9 @@ interface BarnetilleggStegProps {
     personalia: Personalia;
 }
 
-interface Barn {
-    fornavn?: string;
-    etternavn?: string;
-    fødselsdato: string;
-}
-
-export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
-    const { watch, control, getValues } = useFormContext<Søknad>();
-    const { fields, remove } = useFieldArray<Søknad>({
+export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
+    const {watch, control, getValues} = useFormContext<Søknad>();
+    const {fields, remove} = useFieldArray<Søknad>({
         name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor',
         control
     });
@@ -52,11 +42,11 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                             Du kan få barnetillegg for egne barn under 16 år som du forsørger. Dette gjelder også for
                             barn du har bidragsplikt for, selv om du ikke betaler bidrag akkurat nå.
                         </li>
-                        <li style={{ marginTop: '1rem' }}>
+                        <li className={styles.marginTop}>
                             Hvis både du og den andre forelderen mottar tiltakspenger, gis barnetillegget bare til en av
                             dere.
                         </li>
-                        <li style={{ marginTop: '1rem' }}>
+                        <li className={styles.marginTop}>
                             Du får ikke barnetillegg hvis barnet oppholder seg utenfor EØS i over 90 dager i løpet av en
                             tolvmånedersperiode eller er bosatt utenfor EØS.
                         </li>
@@ -64,41 +54,60 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 </>
             }
         >
-            {barnFraApi && barnFraApi.length > 0 && (
+            <Heading className={styles.marginTopHeading} level="3" size="small">Barn vi har funnet registrert på
+                deg
+            </Heading>
+            {barnFraApi && barnFraApi.length > 0 ?
                 <>
-                    <h3>Barn vi har funnet registrert på deg</h3>
-                    {barnFraApi.map((barn) => (
-                        <BarnetilleggRegistrertBarn key={barn.uuid} barn={barn} />
-                    ))}
+                    <ReadMore className={styles.marginTop} header={"Hvilke barn viser vi?"}>
+                        Vi viser dine barn under 16år som er registrert i folkeregisteret.
+                    </ReadMore>
+                    <div className={styles.marginTop}>
+                        {barnFraApi.map((barn) => (
+                            <BarnetilleggRegistrertBarn key={barn.uuid} barn={barn}/>
+                        ))}
+                    </div>
                 </>
-            )}
+                :
+                <>
+                    <p className={styles.marginTop}>Vi fant ingen barn under 16 år som er registrert på deg i
+                        Folkeregisteret.</p>
+                </>
+            }
             {harIngenBarnÅViseFraApi && (
-                <Alert variant="info" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+                <Alert variant="info" style={{marginTop: '2rem', marginBottom: '2rem'}}>
                     Vi har ikke registrert at du har et barn under 16 år. Hvis du likevel har barn, for eksempel hvis du
                     nylig har adoptert, kan du legge dem til her. Vær oppmerksom på at du ikke får barnetillegg for
                     stebarn eller fosterbarn.
                 </Alert>
             )}
 
-            <div>
-                <Heading level="3" size="medium">
-                    Andre barn
-                </Heading>
-                <BodyLong>
-                    Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for eksempel hvis du
-                    nylig har adoptert, kan du legge dem til her.
-                    <br />
-                    <br />
-                    Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
-                </BodyLong>
+            <div className={styles.marginTop}>
                 {selvregistrerteBarn && selvregistrerteBarn.length > 0 && (
                     <>
-                        {selvregistrerteBarn.map((barn) => (
-                            <BarneInfo key={barn.uuid} barn={barn} utenforEØS={barn.oppholdUtenforEØS} />
-                        ))}
+                        <Heading className={styles.marginTopHeading} level="3" size="xsmall">
+                            Barn lagt til av deg
+                        </Heading>
+                        <div className={styles.marginTop}>
+                            {selvregistrerteBarn.map((barn) => (
+                                <div className={styles.barnetillegg}>
+                                    <BarneInfo key={barn.uuid} barn={barn} utenforEØS={true}/>
+                                </div>
+                            ))}
+                        </div>
                     </>
                 )}
             </div>
+            <Heading className={styles.marginTopHeading} level="3" size="small">
+                Andre barn
+            </Heading>
+            <BodyLong className={styles.marginTop}>
+                Hvis du ønsker å søke om barnetillegg for andre barn enn de som vises i listen, for eksempel hvis du
+                nylig har adoptert, kan du legge dem til her.
+                <br/>
+                <br/>
+                Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
+            </BodyLong>
             <LeggTilBarnModal />
         </Step>
     );

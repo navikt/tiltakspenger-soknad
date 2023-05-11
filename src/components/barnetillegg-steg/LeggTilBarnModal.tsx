@@ -81,8 +81,8 @@ export const LeggTilBarnModal = () => {
                                 />
                                 <RadioGroup
                                     legend="Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?"
-                                    onChange={(radioSvar) =>
-                                        barn.current.oppholdUtenforEØS = radioSvar
+                                    onChange={(radioSvar) => console.log("f3")
+                                        // barn.current.oppholdUtenforEØS = radioSvar todo: Fikse EØS
                                     }
                                 >
                                     <ReadMore header='Hvorfor spør vi om dette?'>

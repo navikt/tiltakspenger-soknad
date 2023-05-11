@@ -16,15 +16,14 @@ function barnUtenforEØSValidator(verdi: boolean) {
 }
 
 export default function BarnetilleggRegistrertBarn({ barn }: props) {
-    const { fødselsdato, fornavn, etternavn, mellomnavn, uuid, oppholdUtenforEØS } = barn;
+    const { fødselsdato, fornavn, etternavn, mellomnavn, uuid } = barn;
     return (
         <div className={styles.barnetillegg}>
             <p>
-                Navn: {fornavn} {mellomnavn} {etternavn}
+                <strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}
             </p>
-            <p>Fødselsdato: {formatDate(fødselsdato)}</p>
-            <p>Bosted: Norge</p>
-            {oppholdUtenforEØS ? <></> : <JaNeiSpørsmål
+            <p><strong>Fødselsdato:</strong> {formatDate(fødselsdato)}</p>
+            <JaNeiSpørsmål
                 reverse
                 name={`svar.barnetillegg.registrerteBarn.oppholdUtenforEØS.${uuid}`}
                 validate={barnUtenforEØSValidator}
@@ -50,7 +49,7 @@ export default function BarnetilleggRegistrertBarn({ barn }: props) {
                 }}
             >
                 Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
-            </JaNeiSpørsmål>}
+            </JaNeiSpørsmål>
         </div>
     );
 }
