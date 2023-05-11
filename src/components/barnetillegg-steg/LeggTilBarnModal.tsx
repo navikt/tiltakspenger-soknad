@@ -1,5 +1,5 @@
 import {Add} from '@navikt/ds-icons';
-import {Alert, Button, Heading, Link, Modal, ReadMore, TextField} from '@navikt/ds-react';
+import {Alert, Button, Heading, Link, Modal, Radio, RadioGroup, ReadMore, TextField} from '@navikt/ds-react';
 import React, {useEffect, useRef, useState} from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import {v4 as uuidv4} from 'uuid';
@@ -10,25 +10,23 @@ import styles from './Barnetillegg.module.css';
 import {ExternalLinkIcon} from '@navikt/aksel-icons';
 import {påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
 import FileUploader from "@/components/file-uploader/FIleUploader";
-import {useFormContext} from "react-hook-form";
+import {Controller, useFieldArray, useFormContext} from "react-hook-form";
 import Søknad from "@/types/Søknad";
-import Image from "next/image"
-import veiledningsBilde from "../../public/veiledning/vedleggsveiledning.png"
 import {ScanningGuide} from "@/components/veiledning/ScanningGuide";
+import {Barn} from "@/types/Barn";
+import {formatDate} from "@/utils/formatDate";
 
 export const LeggTilBarnModal = () => {
-    const {control} = useFormContext<Søknad>();
+    const {control, getValues} = useFormContext<Søknad>();
+    const {fields, append, remove} = useFieldArray({name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor'})
 
     const [open, setOpen] = useState(false);
+    const barn = useRef<Barn>({fornavn: "", etternavn: "", fødselsdato: "", uuid: ""});
     const uuid = useRef('');
 
     useEffect(() => {
         Modal.setAppElement('#__next');
     }, []);
-
-    useEffect(() => {
-        uuid.current = uuidv4();
-    }, [open]);
 
     function barnUtenforEØSValidator(verdi: boolean) {
         return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker barnetillegg');
@@ -37,7 +35,10 @@ export const LeggTilBarnModal = () => {
     return (
         <>
             <Button
-                onClick={() => setOpen(true)}
+                onClick={() => {
+                    barn.current = {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuidv4()}
+                    setOpen(true)
+                }}
                 className={styles.knappLeggTilBarn}
                 variant="secondary"
                 icon={<Add aria-hidden/>}
@@ -56,23 +57,41 @@ export const LeggTilBarnModal = () => {
                     <Heading spacing level="1" size="large" id="modal-heading">
                         Andre barn
                     </Heading>
-                    <TextField label="Fornavn og mellomnavn"/>
-                    <TextField label="Etternavn"/>
-                    <Datovelger onDateChange={() => {
-                    }} label="Fødselsdato"/>
-                    <JaNeiSpørsmål
-                        reverse
-                        name={`svar.barnetillegg.selvregistrertBarn.${uuid.current}.oppholdUtenforEØS`}
-                        validate={barnUtenforEØSValidator}
-                        hjelpetekst={{
-                            tittel: 'Hvorfor spør vi om dette?',
-                            tekst: (
-                                <>
+
+                            <>
+                                <TextField
+                                    label="Fornavn og mellomnavn"
+                                    onChange={(event) =>
+                                        barn.current.fornavn = event.target.value
+                                    }
+                                />
+                                <TextField
+                                    label="Etternavn"
+                                    onChange={(event) =>
+                                        barn.current.etternavn = event.target.value
+                                    }
+                                />
+                                <Datovelger
+                                    label="Fødselsdato"
+                                    onDateChange={(date) => {
+                                        if (date) {
+                                            barn.current.fødselsdato = formatDate(date.toDateString())
+                                        }
+                                    }}
+                                />
+                                <RadioGroup
+                                    legend="Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?"
+                                    onChange={(radioSvar) =>
+                                        barn.current.oppholdUtenforEØS = radioSvar
+                                    }
+                                >
+                                    <ReadMore header='Hvorfor spør vi om dette?'>
+                                        <>
                                     <span>
                                         Hvis barnet ditt oppholder seg utenfor EØS i tiltaksperioden kan det ha
                                         betydning for din rett til barnetillegg.
                                     </span>
-                                    <span style={{display: 'block', marginTop: '1rem'}}>
+                                            <span style={{display: 'block', marginTop: '1rem'}}>
                                         <Link
                                             href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
                                             target="_blank"
@@ -81,14 +100,16 @@ export const LeggTilBarnModal = () => {
                                             <ExternalLinkIcon title="a11y-title"/>
                                         </Link>
                                     </span>
-                                </>
-                            ),
-                        }}
-                    >
-                        Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
-                    </JaNeiSpørsmål>
+                                        </>
+                                    </ReadMore>
+                                    <Radio value={true}>Ja</Radio>
+                                    <Radio value={false}>Nei</Radio>
+                                </RadioGroup>
+                            </>
                     <Button
-                        onClick={() => setOpen(true)}
+                        onClick={() => {
+                            setOpen(false)
+                        }}
                         className={styles.knappAvbrytModal}
                         variant="secondary"
                     >
@@ -96,7 +117,11 @@ export const LeggTilBarnModal = () => {
                     </Button>
                     <div/>
                     <Button
-                        onClick={() => setOpen(true)}
+                        onClick={() => {
+                            append(barn.current)
+                            setOpen(false)
+                            console.log(getValues())
+                        }}
                         className={styles.knappLagreModal}
                         variant="primary"
                     >

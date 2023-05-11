@@ -35,9 +35,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 tiltak: {},
                 barnetillegg: {
                     registrerteBarn: {},
-                    manueltRegistrerteBarnSøktBarnetilleggFor: [
-                        { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
-                    ],
+                    manueltRegistrerteBarnSøktBarnetilleggFor: [],
                 },
                 etterlønn: {},
                 institusjonsopphold: {},

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
+import {useFieldArray, useFormContext} from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import VariabelPersonliste from '@/components/personliste/VariabelPersonliste';
 import Step from '@/components/step/Step';
@@ -9,9 +9,10 @@ import { Personalia } from '@/types/Personalia';
 import FileUploader from '@/components/file-uploader/FIleUploader';
 import Søknad from '@/types/Søknad';
 
-import BarnInfo from '@/components/barnetillegg-steg/BarnetilleggRegistrertBarn';
+import BarnetilleggRegistrertBarn from '@/components/barnetillegg-steg/BarnetilleggRegistrertBarn';
 import { Add } from '@navikt/ds-icons';
 import { LeggTilBarnModal } from './LeggTilBarnModal';
+import BarneInfo from "@/components/barnetillegg-steg/BarneInfo";
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -26,10 +27,15 @@ interface Barn {
 }
 
 export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
-    const { watch, control } = useFormContext<Søknad>();
+    const { watch, control, getValues } = useFormContext<Søknad>();
+    const { fields, remove } = useFieldArray<Søknad>({
+        name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor',
+        control
+    });
     const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = useState();
     const barnFraApi = personalia.barn;
+    const selvregistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor')
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
 
     return (
@@ -62,7 +68,7 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                 <>
                     <h3>Barn vi har funnet registrert på deg</h3>
                     {barnFraApi.map((barn) => (
-                        <BarnInfo key={barn.uuid} barn={barn} />
+                        <BarnetilleggRegistrertBarn key={barn.uuid} barn={barn} />
                     ))}
                 </>
             )}
@@ -85,6 +91,13 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
                     <br />
                     Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
                 </BodyLong>
+                {selvregistrerteBarn && selvregistrerteBarn.length > 0 && (
+                    <>
+                        {selvregistrerteBarn.map((barn) => (
+                            <BarneInfo key={barn.uuid} barn={barn} utenforEØS={barn.oppholdUtenforEØS} />
+                        ))}
+                    </>
+                )}
             </div>
             <LeggTilBarnModal />
         </Step>

@@ -96,6 +96,7 @@ function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
 }
 
 export default function toSøknadJson(spørsmålsbesvarelser: Spørsmålsbesvarelser, barnFraApi: Barn[]): String {
+    console.log("Spørsmålsbesvarelser", spørsmålsbesvarelser)
     return JSON.stringify({
         ...spørsmålsbesvarelser,
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),

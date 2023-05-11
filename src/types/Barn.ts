@@ -5,4 +5,6 @@ export interface Barn {
     fødselsdato: string;
     bostedsland?: string;
     uuid: string;
+    oppholdUtenforEØS?: boolean
+
 }

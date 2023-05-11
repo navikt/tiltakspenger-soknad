@@ -15,8 +15,8 @@ function barnUtenforEØSValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker barnetillegg');
 }
 
-export default function BarnInfo({ barn }: props) {
-    const { fødselsdato, fornavn, etternavn, mellomnavn, uuid } = barn;
+export default function BarnetilleggRegistrertBarn({ barn }: props) {
+    const { fødselsdato, fornavn, etternavn, mellomnavn, uuid, oppholdUtenforEØS } = barn;
     return (
         <div className={styles.barnetillegg}>
             <p>
@@ -24,7 +24,7 @@ export default function BarnInfo({ barn }: props) {
             </p>
             <p>Fødselsdato: {formatDate(fødselsdato)}</p>
             <p>Bosted: Norge</p>
-            <JaNeiSpørsmål
+            {oppholdUtenforEØS ? <></> : <JaNeiSpørsmål
                 reverse
                 name={`svar.barnetillegg.registrerteBarn.oppholdUtenforEØS.${uuid}`}
                 validate={barnUtenforEØSValidator}
@@ -36,13 +36,13 @@ export default function BarnInfo({ barn }: props) {
                                 Hvis barnet ditt oppholder seg utenfor EØS i tiltaksperioden kan det ha betydning for
                                 din rett til barnetillegg.
                             </span>
-                            <span style={{ display: 'block', marginTop: '1rem' }}>
+                            <span style={{display: 'block', marginTop: '1rem'}}>
                                 <Link
                                     href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
                                     target="_blank"
                                 >
                                     Du kan lese mer om hvile land som er med i EØS her.
-                                    <ExternalLinkIcon title="a11y-title" />
+                                    <ExternalLinkIcon title="a11y-title"/>
                                 </Link>
                             </span>
                         </>
@@ -50,7 +50,7 @@ export default function BarnInfo({ barn }: props) {
                 }}
             >
                 Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
-            </JaNeiSpørsmål>
+            </JaNeiSpørsmål>}
         </div>
     );
 }
