@@ -12,11 +12,12 @@ import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
 import { BarnFraAPI, SelvregistrertBarn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
 import toSøknadJson from '@/utils/toSøknadJson';
-import { useRouter } from 'next/router';
+import {NextRouter, useRouter} from 'next/router';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
 import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
+import SøknadResponse from "@/types/SøknadResponse";
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
@@ -92,11 +93,16 @@ function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valg
     return formData;
 }
 
-function postSøknadMultipart(formData: FormData) {
-    return fetch('/api/soknad', {
+function postSøknadMultipart(formData: FormData, router: NextRouter) {
+     return fetch('/api/soknad', {
         method: 'POST',
         body: formData,
-    });
+    }).then((response) => response.json(),
+            (error: Error) => { router.push('/feil')})
+      .then((json: SøknadResponse) => router.push({
+                pathname: '/kvittering',
+                query: { innsendingsTidspunkt: json.innsendingTidspunkt },
+          }));
 }
 
 function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
@@ -137,11 +143,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
         const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak);
         try {
             setSøknadsinnsendingInProgress(true);
-            const response = await postSøknadMultipart(formData);
-            if (response.status !== 201) {
-                return router.push('/feil');
-            }
-            return router.push('/kvittering');
+            return await postSøknadMultipart(formData, router);
         } catch {
             return router.push('/feil');
         }

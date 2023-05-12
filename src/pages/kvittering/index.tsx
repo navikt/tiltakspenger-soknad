@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { Alert, Button, Link } from '@navikt/ds-react';
 import styles from './kvittering.module.css';
-import { CheckmarkCircleFillIcon, DownloadIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import Show from '@/components/show/show';
 import { Personalia } from '@/types/Personalia';
-import SøknadResponse from "@/types/SøknadResponse";
+import {dateStrWithHourMinute, dateStrWithMonthName} from "@/utils/formatDate";
 
 interface KvitteringProps {
     personalia: Personalia;
-    søknadResponse: SøknadResponse;
 }
 
-export default function Kvittering(props: KvitteringProps)
+export default function Kvittering({ personalia }: KvitteringProps)
 {
     const [visManglendeDokVarsel, setvisManglendeDokVarsel] = useState(false);
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const innsendingsTidspunkt = urlParams.get('innsendingsTidspunkt');
+    const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(innsendingsTidspunkt)}, klokken ${dateStrWithHourMinute(innsendingsTidspunkt)}`
 
     return (
         <div>
@@ -22,12 +26,10 @@ export default function Kvittering(props: KvitteringProps)
             </p>
 
             <h4 className={styles.bekreftkvittering}>
-                Takk for søknadenen, {props.personalia.fornavn} {props.personalia.etternavn}!
+                Takk for søknadenen, {personalia.fornavn} {personalia.etternavn}!
             </h4>
 
-            <p>
-                <h6>Søknaden ble sendt til NAV {props.søknadResponse.innsendingTidspunkt}.</h6>
-            </p>
+            <h6>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
 
             <Alert variant="success">
                 <span>
@@ -65,10 +67,4 @@ export default function Kvittering(props: KvitteringProps)
             </Link>
         </div>
     );
-}
-
-export async function getServerSideProps() {
-    return {
-        props: {},
-    };
 }
