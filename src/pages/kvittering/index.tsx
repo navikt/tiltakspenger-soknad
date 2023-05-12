@@ -4,32 +4,26 @@ import styles from './kvittering.module.css';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import Show from '@/components/show/show';
 import { Personalia } from '@/types/Personalia';
-import {dateStrWithHourMinute, dateStrWithMonthName} from "@/utils/formatDate";
+import { dateStrWithHourMinute, dateStrWithMonthName } from "@/utils/formatDate";
+import { GetServerSidePropsContext } from "next/types";
 
 interface KvitteringProps {
     personalia: Personalia;
+    innsendingsTidspunkt: string;
 }
 
-export default function Kvittering({ personalia }: KvitteringProps)
+export default function Kvittering({ personalia, innsendingsTidspunkt }: KvitteringProps)
 {
     const [visManglendeDokVarsel, setvisManglendeDokVarsel] = useState(false);
-
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const innsendingsTidspunkt = urlParams.get('innsendingsTidspunkt');
     const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(innsendingsTidspunkt)}, klokken ${dateStrWithHourMinute(innsendingsTidspunkt)}`
 
     return (
         <div>
-            <p>
-                <CheckmarkCircleFillIcon title="sendt-søknad-bekreftelse" className={styles.checkmark} />
-            </p>
+            <p> <CheckmarkCircleFillIcon title="sendt-søknad-bekreftelse-icon" className={styles.checkmark}/> </p>
 
-            <h4 className={styles.bekreftkvittering}>
-                Takk for søknadenen, {personalia.fornavn} {personalia.etternavn}!
-            </h4>
+            <h4 className={styles.centerText}>Takk for søknaden, {personalia.fornavn} {personalia.etternavn}!</h4>
 
-            <h6>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
+            <h6 className={styles.centerText}>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
 
             <Alert variant="success">
                 <span>
@@ -67,4 +61,14 @@ export default function Kvittering({ personalia }: KvitteringProps)
             </Link>
         </div>
     );
+}
+
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+    const innsendingsTidspunkt = ctx.query['innsendingsTidspunkt'];
+
+    return {
+        props: {
+            innsendingsTidspunkt: innsendingsTidspunkt,
+        },
+    };
 }
