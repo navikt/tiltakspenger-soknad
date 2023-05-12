@@ -26,6 +26,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = useState();
     const barnFraApi = personalia.barn;
     const selvregistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor')
+    const vedlegg = getValues('vedlegg')
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
 
     return (
@@ -91,7 +92,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                         <div className={styles.marginTop}>
                             {selvregistrerteBarn.map((barn) => (
                                 <div className={styles.barnetillegg}>
-                                    <BarneInfo key={barn.uuid} barn={barn} utenforEØS={true}/>
+                                    <BarneInfo key={barn.uuid} barn={barn} utenforEØS={true} vedlegg={vedlegg.filter((vedlegg) => vedlegg.uuid === barn.uuid).map((vedlegg) => vedlegg.file.name)}/>
                                 </div>
                             ))}
                         </div>
