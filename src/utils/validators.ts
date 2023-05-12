@@ -7,6 +7,12 @@ export function påkrevdJaNeiSpørsmålValidator(verdi: boolean, feilmelding: st
     }
 }
 
+export function validerNavn(verdi: string) {
+    if (!verdi.match(/[A-Z a-zæøåÆØÅ]/g)){
+        return "Kan kun inneholde bokstaver"
+    }
+}
+
 export function gyldigPeriodeValidator(periode: FormPeriode) {
     const fraDato = dayjs(periode?.fra);
     const tilDato = dayjs(periode?.til);

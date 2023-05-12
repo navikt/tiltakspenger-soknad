@@ -2,7 +2,7 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Accordion, Button, ConfirmationPanel } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
-import styles from '../step/Step.module.css';
+import styles from '@/components/step/Step.module.css';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
 import { Personalia } from '@/types/Personalia';
 import { Periode } from '@/types/Periode';
@@ -14,7 +14,7 @@ import { Barn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
 import toSøknadJson from '@/utils/toSøknadJson';
 import { useRouter } from 'next/router';
-import BarneInfo from "@/components/barnetillegg-steg/BarneInfo";
+import BarneInfo from "@/components/barnetillegg/BarneInfo";
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;

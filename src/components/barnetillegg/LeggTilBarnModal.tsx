@@ -4,7 +4,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import {v4 as uuidv4} from 'uuid';
 
-import Datovelger from '../datovelger/Datovelger';
+import Datovelger from "@/components/datovelger/Datovelger";
 
 import styles from './Barnetillegg.module.css';
 import {ExternalLinkIcon} from '@navikt/aksel-icons';
@@ -27,14 +27,12 @@ export const LeggTilBarnModal = () => {
         Modal.setAppElement('#__next');
     }, []);
 
-    function barnUtenforEØSValidator(verdi: boolean) {
-        return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker barnetillegg');
-    }
 
     return (
         <>
             <Button
-                onClick={() => {
+                onClick={e => {
+                    e.preventDefault()
                     barn.current = {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuidv4()}
                     setOpen(true)
                 }}
@@ -60,6 +58,7 @@ export const LeggTilBarnModal = () => {
                             <>
                                 <TextField
                                     className={styles.modalTextField}
+                                    type="text"
                                     label="Fornavn og mellomnavn"
                                     onChange={(event) =>
                                         barn.current.fornavn = event.target.value
