@@ -22,7 +22,6 @@ export const LeggTilBarnModal = () => {
 
     const [open, setOpen] = useState(false);
     const barn = useRef<Barn>({fornavn: "", etternavn: "", fødselsdato: "", uuid: ""});
-    const uuid = useRef('');
 
     useEffect(() => {
         Modal.setAppElement('#__next');
@@ -152,7 +151,7 @@ export const LeggTilBarnModal = () => {
                     </ReadMore>
 
                     <div className={styles.marginTop}>
-                        <FileUploader name="vedlegg" knappTekst="Last opp fødselsattest eller adopsjonsbevis" control={control}/>
+                        <FileUploader name="vedlegg" uuid={barn.current.uuid} knappTekst="Last opp fødselsattest eller adopsjonsbevis" control={control}/>
                     </div>
                 </Modal.Content>
             </Modal>

@@ -4,6 +4,7 @@ interface Søknad {
     svar: Spørsmålsbesvarelser;
     vedlegg: {
         file: File;
+        uuid: string;
     }[];
 }
 

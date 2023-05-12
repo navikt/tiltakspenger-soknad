@@ -11,9 +11,10 @@ interface FileUploaderProps {
     name: 'vedlegg'; // TODO: Kan dele opp i flere vedleggskategorier, feks "vedleggBarn" | "vedkeggKVP"
     control: Control<Søknad>;
     knappTekst: string;
+    uuid: string;
 }
 
-export default function FileUploader({ name, control, knappTekst }: FileUploaderProps) {
+export default function FileUploader({ name, control, knappTekst, uuid }: FileUploaderProps) {
     const [dragOver, setDragOver] = React.useState<boolean>(false);
     const fileUploadInputElement = React.useRef<HTMLInputElement>(null);
     const inputId = 'test';
@@ -52,7 +53,9 @@ export default function FileUploader({ name, control, knappTekst }: FileUploader
 
     return (
         <div className={cls}>
-            {fields?.map((attachment, index) => {
+            {fields?.filter((attachment) =>
+                attachment.uuid ===  uuid
+            ).map((attachment, index) => {
                 return (
                     <Panel className={styles.fileCard} key={attachment.id}>
                         <div className={styles.fileCardLeftContent}>
@@ -99,6 +102,7 @@ export default function FileUploader({ name, control, knappTekst }: FileUploader
                             if (file) {
                                 append({
                                     file,
+                                    uuid
                                 });
                             }
                         }}
