@@ -1,5 +1,8 @@
 import dayjs from 'dayjs';
 import {Nullable} from "@/utils/eller-null";
+import 'dayjs/locale/nb'
+
+dayjs.locale('nb')
 
 export function formatDate(dateString: string) {
     return dayjs(dateString).format('DD.MM.YYYY');
