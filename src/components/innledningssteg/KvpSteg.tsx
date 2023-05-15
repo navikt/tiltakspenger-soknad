@@ -41,8 +41,8 @@ function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
 export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
     const { watch } = useFormContext();
 
-    const tiltaksperiode = watch('svar.tiltak.periode');
-    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode || valgtTiltak?.deltakelsePeriode);
+    const brukerregistrertPeriode = watch('svar.tiltak.periode');
+    const tiltaksperiodeTekst = formatPeriode(brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode);
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');

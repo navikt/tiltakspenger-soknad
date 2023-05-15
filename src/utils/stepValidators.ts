@@ -2,9 +2,10 @@ import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { Søknadssteg } from '@/types/Søknadssteg';
 
 export function brukerHarFyltUtTiltakssteg({
-    tiltak: { aktivitetId, periode, søkerHeleTiltaksperioden },
+    tiltak: { aktivitetId, periode, søkerHeleTiltaksperioden, arenaRegistrertPeriode },
 }: Spørsmålsbesvarelser) {
-    if (søkerHeleTiltaksperioden === undefined) {
+    const tiltaketHarPeriode = arenaRegistrertPeriode && arenaRegistrertPeriode.fra && arenaRegistrertPeriode.til;
+    if (tiltaketHarPeriode && søkerHeleTiltaksperioden === undefined) {
         return false;
     } else if (søkerHeleTiltaksperioden) {
         return !!aktivitetId;

@@ -20,6 +20,7 @@ export interface FormTiltak {
     aktivitetId: string;
     periode?: Periode;
     søkerHeleTiltaksperioden: boolean;
+    arenaRegistrertPeriode?: Periode;
 }
 
 export interface Barnetillegg {
