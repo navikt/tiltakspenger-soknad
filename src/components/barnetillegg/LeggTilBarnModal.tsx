@@ -72,6 +72,7 @@ export const LeggTilBarnModal = () => {
                                     }
                                 />
                                 <Datovelger
+                                    datoMåVæreIFortid={true}
                                     label="Fødselsdato"
                                     onDateChange={(date) => {
                                         if (date) {
