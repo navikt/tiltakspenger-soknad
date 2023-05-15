@@ -17,6 +17,7 @@ import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekrefte
 import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
+import SøknadResponse from "@/types/SøknadResponse";
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
@@ -93,7 +94,7 @@ function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valg
 }
 
 function postSøknadMultipart(formData: FormData) {
-    return fetch('/api/soknad', {
+     return fetch('/api/soknad', {
         method: 'POST',
         body: formData,
     });
@@ -141,7 +142,12 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
             if (response.status !== 201) {
                 return router.push('/feil');
             }
-            return router.push('/kvittering');
+
+            const soknadInnsendingsTidspunkt = await response.json().then((json : SøknadResponse) => json.innsendingTidspunkt);
+            return router.push({
+                pathname: '/kvittering',
+                query: { innsendingsTidspunkt : soknadInnsendingsTidspunkt},
+            });
         } catch {
             return router.push('/feil');
         }

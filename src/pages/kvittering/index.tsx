@@ -1,33 +1,29 @@
 import React, { useState } from 'react';
 import { Alert, Button, Link } from '@navikt/ds-react';
 import styles from './kvittering.module.css';
-import { CheckmarkCircleFillIcon, DownloadIcon } from '@navikt/aksel-icons';
+import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import Show from '@/components/show/show';
 import { Personalia } from '@/types/Personalia';
-import SøknadResponse from "@/types/SøknadResponse";
+import { dateStrWithHourMinute, dateStrWithMonthName } from "@/utils/formatDate";
+import { GetServerSidePropsContext } from "next/types";
 
 interface KvitteringProps {
     personalia: Personalia;
-    søknadResponse: SøknadResponse;
+    innsendingsTidspunkt: string;
 }
 
-export default function Kvittering(props: KvitteringProps)
+export default function Kvittering({ personalia, innsendingsTidspunkt }: KvitteringProps)
 {
     const [visManglendeDokVarsel, setvisManglendeDokVarsel] = useState(false);
+    const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(innsendingsTidspunkt)}, klokken ${dateStrWithHourMinute(innsendingsTidspunkt)}`
 
     return (
         <div>
-            <p>
-                <CheckmarkCircleFillIcon title="sendt-søknad-bekreftelse" className={styles.checkmark} />
-            </p>
+            <p> <CheckmarkCircleFillIcon title="sendt-søknad-bekreftelse-icon" className={styles.checkmark}/> </p>
 
-            <h4 className={styles.bekreftkvittering}>
-                Takk for søknadenen, {props.personalia.fornavn} {props.personalia.etternavn}!
-            </h4>
+            <h4 className={styles.centerText}>Takk for søknaden, {personalia.fornavn} {personalia.etternavn}!</h4>
 
-            <p>
-                <h6>Søknaden ble sendt til NAV {props.søknadResponse.innsendingTidspunkt}.</h6>
-            </p>
+            <h6 className={styles.centerText}>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
 
             <Alert variant="success">
                 <span>
@@ -67,8 +63,12 @@ export default function Kvittering(props: KvitteringProps)
     );
 }
 
-export async function getServerSideProps() {
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+    const innsendingsTidspunkt = ctx.query['innsendingsTidspunkt'];
+
     return {
-        props: {},
+        props: {
+            innsendingsTidspunkt: innsendingsTidspunkt,
+        },
     };
 }
