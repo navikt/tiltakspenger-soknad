@@ -120,7 +120,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
         barnetillegg,
     } = svar;
 
-    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.deltakelsePeriode : tiltak.periode;
+    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
 
     const registrerteBarnSøktBarnetilleggFor = personalia.barn.filter(
         ({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0
@@ -200,6 +200,13 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                         </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
+                        </div>
+
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Jeg søker om tiltakspenger i perioden:"
+                                feltVerdi={formatPeriode(tiltaksperiode!)}
+                            />
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>

@@ -4,7 +4,7 @@ export interface Tiltak {
     aktivitetId: string;
     type: string;
     typeNavn: string;
-    deltakelsePeriode: Periode;
+    arenaRegistrertPeriode?: Periode;
     arrangør: string;
     status: string;
 }

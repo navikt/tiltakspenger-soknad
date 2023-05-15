@@ -65,15 +65,26 @@ function institusjon(institusjonsopphold: Institusjonsopphold) {
     return institusjonsopphold;
 }
 
-function tiltak(formTiltak: FormTiltak, { arrangør, type, deltakelsePeriode, typeNavn }: Tiltak) {
-    const { søkerHeleTiltaksperioden } = formTiltak;
-    const periode = søkerHeleTiltaksperioden ? deltakelsePeriode : formTiltak.periode;
+function brukerregistrertTiltaksperiodeSkalMedVedInnsending({ søkerHeleTiltaksperioden }: FormTiltak, tiltak: Tiltak) {
+    if (søkerHeleTiltaksperioden === false) {
+        return true;
+    }
+    if (!tiltak.arenaRegistrertPeriode?.fra || !tiltak.arenaRegistrertPeriode?.til) {
+        return true;
+    }
+    return false;
+}
+
+function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
     return {
         ...formTiltak,
-        arrangør,
-        type,
-        typeNavn,
-        periode: formatPeriod(periode!),
+        arrangør: tiltak.arrangør,
+        type: tiltak.type,
+        typeNavn: tiltak.typeNavn,
+        arenaRegistrertPeriode: tiltak.arenaRegistrertPeriode,
+        periode: brukerregistrertTiltaksperiodeSkalMedVedInnsending(formTiltak, tiltak)
+            ? formatPeriod(formTiltak.periode!)
+            : tiltak.arenaRegistrertPeriode,
     };
 }
 

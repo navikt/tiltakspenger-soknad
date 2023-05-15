@@ -33,3 +33,9 @@ export function påkrevdFritekstfeltValidator(verdi: string, feilmelding: string
         return feilmelding;
     }
 }
+
+export function påkrevdSvarValidator(verdi: string, feilmelding: string) {
+    if (!verdi) {
+        return feilmelding;
+    }
+}
