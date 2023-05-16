@@ -92,6 +92,7 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
                                 </Fritekstspørsmål>
                                 //TODO: Lar gammel datovelger stå i denne committen for å unngå konflikt.
                                 <Datovelger
+                                    datoMåVæreIFortid={true}
                                     label="Fødselsdato"
                                     onDateChange={(date) => {
                                     }}
