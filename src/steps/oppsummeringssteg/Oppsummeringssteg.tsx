@@ -239,7 +239,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                     <Accordion.Content>
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
                             <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
-                                <BarneInfo barn={barn} utenforEØS={barnetillegg.registrerteBarn.oppholdUtenforEØS[barn.uuid]}/>
+                                <BarneInfo barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.registrerteBarn.oppholdUtenforEØS[barn.uuid]}}/>
                                 {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
                             </div>
                         ))}

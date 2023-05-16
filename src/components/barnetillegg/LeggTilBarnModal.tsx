@@ -1,22 +1,17 @@
 import {Add} from '@navikt/ds-icons';
-import {Alert, Button, Heading, Link, Modal, Radio, RadioGroup, ReadMore, TextField} from '@navikt/ds-react';
+import {Alert, Button, Heading, Link, Modal, ReadMore} from '@navikt/ds-react';
 import React, {useEffect, useRef, useState} from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import {v4 as uuidv4} from 'uuid';
-
-import Datovelger from "@/components/datovelger/Datovelger";
-
 import styles from './Barnetillegg.module.css';
 import {ExternalLinkIcon} from '@navikt/aksel-icons';
-import {påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
+import {påkrevdDatoValidator, påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
 import FileUploader from "@/components/file-uploader/FIleUploader";
 import {UseFieldArrayReturn, useFormContext} from "react-hook-form";
 import Søknad from "@/types/Søknad";
 import {ScanningGuide} from "@/components/veiledning/ScanningGuide";
-import {Barn} from "@/types/Barn";
-import {formatDate} from "@/utils/formatDate";
 import Fritekstspørsmål from "@/components/fritekstspørsmål/Fritekstspørsmål";
-import {Personalia} from "@/types/Personalia";
+import Datospørsmål from "@/components/datospørsmål/Datospørsmål";
 
 interface LeggTilBarnModalProps {
     fieldArray: UseFieldArrayReturn<Søknad>;
@@ -38,8 +33,16 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
         }
     }, [open]);
 
-    function navnefeltValidator(verdi: string) {
-        return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi navn');
+    function fornavnValidator(verdi: string) {
+        return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi fornavn');
+    }
+
+    function etternavnValidator(verdi: string) {
+        return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi etternavn');
+    }
+
+    function datofeltValidator(verdi: Date) {
+        return påkrevdDatoValidator(verdi, 'Du må oppgi fødselsdato');
     }
 
     function barnUtenforEØSValidator(verdi: boolean) {
@@ -79,24 +82,24 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.fornavn`}
                                     textFieldProps={{ htmlSize: 45 }}
-                                    validate={navnefeltValidator}
+                                    validate={fornavnValidator}
                                 >
                                     Fornavn og mellomnavn
                                 </Fritekstspørsmål>
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.etternavn`}
                                     textFieldProps={{ htmlSize: 45 }}
-                                    validate={navnefeltValidator}
+                                    validate={etternavnValidator}
                                 >
                                     Etternavn
                                 </Fritekstspørsmål>
-                                //TODO: Lar gammel datovelger stå i denne committen for å unngå konflikt.
-                                <Datovelger
+                                <Datospørsmål
+                                    name='svar.barnetillegg.kladd.fødselsdato'
                                     datoMåVæreIFortid={true}
-                                    label="Fødselsdato"
-                                    onDateChange={(date) => {
-                                    }}
-                                />
+                                    validate={datofeltValidator}
+                                >
+                                    Fødselsdato
+                                </Datospørsmål>
                                 <JaNeiSpørsmål
                                     reverse
                                     name={`svar.barnetillegg.kladd.oppholdUtenforEØS`}
@@ -147,8 +150,6 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
                                 fieldArray.append(barnLagtTil)
                                 setOpen(false)
                             }
-                            console.log("Valideringsfeil!")
-
                         }}
                         className={styles.knappLagreModal}
                         variant="primary"

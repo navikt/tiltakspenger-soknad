@@ -87,22 +87,18 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                             Barn lagt til av deg
                         </Heading>
                         <div className="marginTop">
-                            {fieldArray.fields.map((field, index) => {
-                                console.log("vedlegg", vedlegg)
-                                console.log("barnid", field.uuid)
-                                return (
+                            {fieldArray.fields.map((field, index) => (
                                     <div className={styles.barnetillegg} key={field.id}>
                                         <BarneInfo
                                             barn={field}
                                             vedlegg={vedlegg.filter(
                                                 (vedlegg) =>
                                                     vedlegg.uuid === field.uuid
-                                                ).map((vedlegg) => vedlegg.file.name)
-                                        }
+                                                )}
                                         />
                                     </div>
                                 )
-                            })}
+                            )}
                         </div>
                     </>
                 )}
