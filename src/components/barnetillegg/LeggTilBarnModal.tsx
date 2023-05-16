@@ -8,36 +8,54 @@ import Datovelger from "@/components/datovelger/Datovelger";
 
 import styles from './Barnetillegg.module.css';
 import {ExternalLinkIcon} from '@navikt/aksel-icons';
-import {påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
+import {påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
 import FileUploader from "@/components/file-uploader/FIleUploader";
-import {useFieldArray, useFormContext} from "react-hook-form";
+import {UseFieldArrayReturn, useFormContext} from "react-hook-form";
 import Søknad from "@/types/Søknad";
 import {ScanningGuide} from "@/components/veiledning/ScanningGuide";
 import {Barn} from "@/types/Barn";
 import {formatDate} from "@/utils/formatDate";
+import Fritekstspørsmål from "@/components/fritekstspørsmål/Fritekstspørsmål";
+import {Personalia} from "@/types/Personalia";
 
-export const LeggTilBarnModal = () => {
-    const {control, getValues} = useFormContext<Søknad>();
-    const {fields, append, remove} = useFieldArray({name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor'})
+interface LeggTilBarnModalProps {
+    fieldArray: UseFieldArrayReturn<Søknad>;
+}
 
+export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
+    const {trigger, getValues, control, setValue} = useFormContext<Søknad>();
     const [open, setOpen] = useState(false);
-    const barn = useRef<Barn>({fornavn: "", etternavn: "", fødselsdato: "", uuid: ""});
+    const uuid = useRef(uuidv4())
 
     useEffect(() => {
         Modal.setAppElement('#__next');
     }, []);
 
+    useEffect(() => {
+        if (open) {
+            uuid.current = uuidv4()
+            setValue('svar.barnetillegg.kladd', {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuid.current})
+        }
+    }, [open]);
+
+    function navnefeltValidator(verdi: string) {
+        return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi navn');
+    }
+
+    function barnUtenforEØSValidator(verdi: boolean) {
+        return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om barnet bor utenfor EØS');
+    }
 
     return (
         <>
             <Button
                 onClick={e => {
                     e.preventDefault()
-                    barn.current = {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuidv4()}
                     setOpen(true)
                 }}
                 className={styles.knappLeggTilBarn}
                 variant="secondary"
+                type="button"
                 icon={<Add aria-hidden/>}
             >
                 Legg til barn
@@ -46,7 +64,9 @@ export const LeggTilBarnModal = () => {
             <Modal
                 open={open}
                 aria-label="Legg til barn"
-                onClose={() => setOpen((x) => !x)}
+                onClose={() => {
+                    setOpen(false)
+                }}
                 aria-labelledby="modal-heading"
                 className={styles.modalLeggTilBarn}
             >
@@ -56,58 +76,57 @@ export const LeggTilBarnModal = () => {
                     </Heading>
 
                             <>
-                                <TextField
-                                    className={styles.modalTextField}
-                                    type="text"
-                                    label="Fornavn og mellomnavn"
-                                    onChange={(event) =>
-                                        barn.current.fornavn = event.target.value
-                                    }
-                                />
-                                <TextField
-                                    className={styles.modalTextField}
-                                    label="Etternavn"
-                                    onChange={(event) =>
-                                        barn.current.etternavn = event.target.value
-                                    }
-                                />
+                                <Fritekstspørsmål
+                                    name={`svar.barnetillegg.kladd.fornavn`}
+                                    textFieldProps={{ htmlSize: 45 }}
+                                    validate={navnefeltValidator}
+                                >
+                                    Fornavn og mellomnavn
+                                </Fritekstspørsmål>
+                                <Fritekstspørsmål
+                                    name={`svar.barnetillegg.kladd.etternavn`}
+                                    textFieldProps={{ htmlSize: 45 }}
+                                    validate={navnefeltValidator}
+                                >
+                                    Etternavn
+                                </Fritekstspørsmål>
+                                //TODO: Lar gammel datovelger stå i denne committen for å unngå konflikt.
                                 <Datovelger
                                     label="Fødselsdato"
                                     onDateChange={(date) => {
-                                        if (date) {
-                                            barn.current.fødselsdato = formatDate(date.toDateString())
-                                        }
                                     }}
                                 />
-                                <RadioGroup
-                                    legend="Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?"
-                                    onChange={(radioSvar) => console.log("f3")
-                                        // barn.current.oppholdUtenforEØS = radioSvar todo: Fikse EØS
-                                    }
+                                <JaNeiSpørsmål
+                                    reverse
+                                    name={`svar.barnetillegg.kladd.oppholdUtenforEØS`}
+                                    validate={barnUtenforEØSValidator}
+                                    hjelpetekst={{
+                                        tittel: 'Hvorfor spør vi om dette?',
+                                        tekst: (
+                                            <>
+                                                <span>
+                                                    Hvis barnet ditt oppholder seg utenfor EØS i tiltaksperioden kan det ha betydning for
+                                                    din rett til barnetillegg.
+                                                </span>
+                                                <span style={{display: 'block', marginTop: '1rem'}}>
+                                                <Link
+                                                    href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
+                                                    target="_blank"
+                                                >
+                                                    Du kan lese mer om hvile land som er med i EØS her.
+                                                    <ExternalLinkIcon title="a11y-title"/>
+                                                </Link>
+                                                </span>
+                                            </>
+                                        ),
+                                    }}
                                 >
-                                    <ReadMore header='Hvorfor spør vi om dette?'>
-                                        <>
-                                    <span>
-                                        Hvis barnet ditt oppholder seg utenfor EØS i tiltaksperioden kan det ha
-                                        betydning for din rett til barnetillegg.
-                                    </span>
-                                            <span style={{display: 'block', marginTop: '1rem'}}>
-                                        <Link
-                                            href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
-                                            target="_blank"
-                                        >
-                                            Du kan lese mer om hvile land som er med i EØS her.
-                                            <ExternalLinkIcon title="a11y-title"/>
-                                        </Link>
-                                    </span>
-                                        </>
-                                    </ReadMore>
-                                    <Radio value={true}>Ja</Radio>
-                                    <Radio value={false}>Nei</Radio>
-                                </RadioGroup>
+                                    Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
+                                </JaNeiSpørsmål>
                             </>
                     <Button
-                        onClick={() => {
+                        onClick={(e) => {
+                            e.preventDefault()
                             setOpen(false)
                         }}
                         className={styles.knappAvbrytModal}
@@ -117,10 +136,18 @@ export const LeggTilBarnModal = () => {
                     </Button>
                     <div/>
                     <Button
-                        onClick={() => {
-                            append(barn.current)
-                            setOpen(false)
-                            console.log(getValues())
+                        onClick={async (e) => {
+                            e.preventDefault()
+                            const harIngenValideringsfeil = await trigger('svar.barnetillegg.kladd')
+                            if (harIngenValideringsfeil) {
+                                  const barnLagtTil = {
+                                    ...getValues('svar.barnetillegg.kladd'), uuid: uuid.current
+                                }
+                                fieldArray.append(barnLagtTil)
+                                setOpen(false)
+                            }
+                            console.log("Valideringsfeil!")
+
                         }}
                         className={styles.knappLagreModal}
                         variant="primary"
@@ -150,7 +177,7 @@ export const LeggTilBarnModal = () => {
                     </ReadMore>
 
                     <div className={styles.marginTop}>
-                        <FileUploader name="vedlegg" uuid={barn.current.uuid} knappTekst="Last opp fødselsattest eller adopsjonsbevis" control={control}/>
+                        <FileUploader name="vedlegg" uuid={uuid.current} knappTekst="Last opp fødselsattest eller adopsjonsbevis" control={control}/>
                     </div>
                 </Modal.Content>
             </Modal>

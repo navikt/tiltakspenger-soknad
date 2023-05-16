@@ -26,7 +26,8 @@ export interface Barnetillegg {
     søkerOmBarnetillegg: boolean;
     ønskerÅSøkeBarnetilleggForAndreBarn: boolean;
     manueltRegistrerteBarnSøktBarnetilleggFor: Barn[];
-    registrerteBarn: OppholdUtenforEØS
+    registrerteBarn: OppholdUtenforEØS;
+    kladd: Barn
 }
 
 export interface OppholdUtenforEØS {

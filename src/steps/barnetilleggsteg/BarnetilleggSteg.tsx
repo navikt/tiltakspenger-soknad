@@ -9,6 +9,8 @@ import styles from '@/components/barnetillegg//Barnetillegg.module.css';
 import BarnetilleggRegistrertBarn from '@/components/barnetillegg/BarnetilleggRegistrertBarn';
 import {LeggTilBarnModal} from '@/components/barnetillegg/LeggTilBarnModal';
 import BarneInfo from "@/components/barnetillegg/BarneInfo";
+import {Barn} from "@/types/Barn";
+
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -17,14 +19,10 @@ interface BarnetilleggStegProps {
 }
 
 export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
-    const {watch, control, getValues} = useFormContext<Søknad>();
-    const {fields, remove} = useFieldArray<Søknad>({
-        name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor',
-        control
-    });
+    const {control, watch, getValues} = useFormContext<Søknad>();
+    const fieldArray = useFieldArray<Søknad>({name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor', control: control});
     const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
     const barnFraApi = personalia.barn;
-    const selvregistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor')
     const vedlegg = getValues('vedlegg')
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
 
@@ -83,17 +81,28 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
             )}
 
             <div className="marginTop">
-                {selvregistrerteBarn && selvregistrerteBarn.length > 0 && (
+                {fieldArray.fields && fieldArray.fields.length > 0 && (
                     <>
                         <Heading className="marginTopHeading" level="3" size="xsmall">
                             Barn lagt til av deg
                         </Heading>
                         <div className="marginTop">
-                            {selvregistrerteBarn.map((barn) => (
-                                <div className={styles.barnetillegg}>
-                                    <BarneInfo key={barn.uuid} barn={barn} utenforEØS={true} vedlegg={vedlegg.filter((vedlegg) => vedlegg.uuid === barn.uuid).map((vedlegg) => vedlegg.file.name)}/>
-                                </div>
-                            ))}
+                            {fieldArray.fields.map((field, index) => {
+                                console.log("vedlegg", vedlegg)
+                                console.log("barnid", field.uuid)
+                                return (
+                                    <div className={styles.barnetillegg} key={field.id}>
+                                        <BarneInfo
+                                            barn={field}
+                                            vedlegg={vedlegg.filter(
+                                                (vedlegg) =>
+                                                    vedlegg.uuid === field.uuid
+                                                ).map((vedlegg) => vedlegg.file.name)
+                                        }
+                                        />
+                                    </div>
+                                )
+                            })}
                         </div>
                     </>
                 )}
@@ -108,7 +117,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                 <br/>
                 Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
             </BodyLong>
-            <LeggTilBarnModal />
+            <LeggTilBarnModal fieldArray={fieldArray} />
         </Step>
     );
 }
