@@ -26,13 +26,6 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
         Modal.setAppElement('#__next');
     }, []);
 
-    useEffect(() => {
-        if (open) {
-            uuid.current = uuidv4()
-            setValue('svar.barnetillegg.kladd', {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuid.current})
-        }
-    }, [open]);
-
     function fornavnValidator(verdi: string) {
         return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi fornavn');
     }
@@ -54,6 +47,8 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
             <Button
                 onClick={e => {
                     e.preventDefault()
+                    uuid.current = uuidv4()
+                    setValue('svar.barnetillegg.kladd', {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuid.current})
                     setOpen(true)
                 }}
                 className={styles.knappLeggTilBarn}
@@ -177,7 +172,6 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
                             <ScanningGuide/>
                         </div>
                     </ReadMore>
-
                     <div className={styles.marginTop}>
                         <FileUploader name="vedlegg" uuid={uuid.current} knappTekst="Last opp fødselsattest eller adopsjonsbevis" control={control}/>
                     </div>
