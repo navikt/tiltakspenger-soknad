@@ -87,7 +87,7 @@ function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
                 oppholdUtenforEØS: oppholdUtenforEØSDict[uuid],
             })),
         manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
-            .filter(({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland)
+            .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
             .map((barn) => ({
                 ...barn,
                 fødselsdato: formatDate(barn.fødselsdato),
