@@ -8,6 +8,7 @@ interface DatovelgerProps {
     maxDate?: Date;
     label: string;
     datoMåVæreIFortid?: boolean;
+    value: string;
 }
 
 export default function Datovelger({
@@ -18,6 +19,7 @@ export default function Datovelger({
                                         maxDate,
                                         minDate,
                                         datoMåVæreIFortid,
+                                        value,
                                     }: DatovelgerProps) {
     const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
         onDateChange,
@@ -32,6 +34,7 @@ export default function Datovelger({
                 label={label}
                 error={errorMessage}
                 id={id}
+                value={value}
             />
         </UNSAFE_DatePicker>
     );

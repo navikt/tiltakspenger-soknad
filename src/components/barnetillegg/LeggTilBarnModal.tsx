@@ -1,6 +1,6 @@
 import {Add} from '@navikt/ds-icons';
 import {Alert, Button, Heading, Link, Modal, ReadMore} from '@navikt/ds-react';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useImperativeHandle, useRef, useState} from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import {v4 as uuidv4} from 'uuid';
 import styles from './Barnetillegg.module.css';
@@ -12,15 +12,28 @@ import Søknad from "@/types/Søknad";
 import {ScanningGuide} from "@/components/veiledning/ScanningGuide";
 import Fritekstspørsmål from "@/components/fritekstspørsmål/Fritekstspørsmål";
 import Datospørsmål from "@/components/datospørsmål/Datospørsmål";
+import {Barn} from "@/types/Barn";
 
 interface LeggTilBarnModalProps {
     fieldArray: UseFieldArrayReturn<Søknad>;
 }
 
-export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
-    const {trigger, getValues, control, setValue} = useFormContext<Søknad>();
+export interface LeggTilBarnModalImperativeHandle {
+    åpneEndretBarn: (barn: Barn) => void,
+}
+
+export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandle, LeggTilBarnModalProps>(function LeggTilBarnModal({fieldArray}: LeggTilBarnModalProps, ref  ) {
+    const {trigger, getValues, control, setValue, clearErrors} = useFormContext<Søknad>();
     const [open, setOpen] = useState(false);
     const uuid = useRef(uuidv4())
+
+    useImperativeHandle(ref, () => {
+        return {
+            åpneEndretBarn(barn: Barn) {
+                åpneEndring(barn)
+            }
+        };
+    }, []);
 
     useEffect(() => {
         Modal.setAppElement('#__next');
@@ -42,15 +55,34 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
         return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om barnet bor utenfor EØS');
     }
 
+    const åpneLeggTil = () => {
+        uuid.current = uuidv4()
+        setValue('svar.barnetillegg.kladd', {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuid.current, index: undefined})
+        setOpen(true)
+    }
+
+    const åpneEndring = (barn: Barn) => {
+        setValue('svar.barnetillegg.kladd', {
+            fornavn: barn.fornavn,
+            etternavn: barn.etternavn,
+            fødselsdato: barn.fødselsdato,
+            oppholdUtenforEØS: barn.oppholdUtenforEØS,
+            uuid: barn.uuid,
+            index: barn.index
+        })
+        uuid.current = barn.uuid
+        setOpen(true)
+    }
+
+    const lukkModal = () => {
+        clearErrors('svar.barnetillegg.kladd')
+        setOpen(false)
+    }
+
     return (
         <>
             <Button
-                onClick={e => {
-                    e.preventDefault()
-                    uuid.current = uuidv4()
-                    setValue('svar.barnetillegg.kladd', {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuid.current})
-                    setOpen(true)
-                }}
+                onClick={åpneLeggTil}
                 className={styles.knappLeggTilBarn}
                 variant="secondary"
                 type="button"
@@ -62,9 +94,7 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
             <Modal
                 open={open}
                 aria-label="Legg til barn"
-                onClose={() => {
-                    setOpen(false)
-                }}
+                onClose={lukkModal}
                 aria-labelledby="modal-heading"
                 className={styles.modalLeggTilBarn}
             >
@@ -124,10 +154,7 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
                                 </JaNeiSpørsmål>
                             </>
                     <Button
-                        onClick={(e) => {
-                            e.preventDefault()
-                            setOpen(false)
-                        }}
+                        onClick={lukkModal}
                         className={styles.knappAvbrytModal}
                         variant="secondary"
                     >
@@ -142,7 +169,11 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
                                   const barnLagtTil = {
                                     ...getValues('svar.barnetillegg.kladd'), uuid: uuid.current
                                 }
-                                fieldArray.append(barnLagtTil)
+                                if (barnLagtTil.index == undefined) {
+                                    fieldArray.append(barnLagtTil)
+                                } else {
+                                    fieldArray.update(barnLagtTil.index, barnLagtTil)
+                                }
                                 setOpen(false)
                             }
                         }}
@@ -179,4 +210,4 @@ export const LeggTilBarnModal = ({fieldArray}: LeggTilBarnModalProps ) => {
             </Modal>
         </>
     );
-};
+});

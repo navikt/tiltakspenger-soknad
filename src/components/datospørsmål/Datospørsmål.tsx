@@ -5,6 +5,7 @@ import Datovelger from '@/components/datovelger/Datovelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Datospørsmål.module.css';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
+import {formatDate} from "@/utils/formatDate";
 
 interface DatospørsmålProps {
     name: string;
@@ -34,7 +35,7 @@ export default function Datospørsmål({
                 name={name}
                 control={control}
                 rules={{validate}}
-                render={({ field: { onChange } }) => (
+                render={({ field: { onChange, value } }) => (
                     <Datovelger
                         id={name}
                         label={children}
@@ -43,6 +44,7 @@ export default function Datospørsmål({
                         minDate={minDate}
                         maxDate={maxDate}
                         datoMåVæreIFortid={datoMåVæreIFortid}
+                        value={value ? formatDate(value) : ""}
                     />
                 )}
             />

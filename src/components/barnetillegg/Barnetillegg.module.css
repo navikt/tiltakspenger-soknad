@@ -28,6 +28,12 @@
     padding: 5px;
 }
 
+.knapperEgenregistertBarn {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+
 .modalTextField {
     width: 50%
 }

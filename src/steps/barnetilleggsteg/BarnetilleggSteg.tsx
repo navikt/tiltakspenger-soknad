@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef} from 'react';
 import {useFieldArray, useFormContext} from 'react-hook-form';
 import Step from '@/components/step/Step';
 import {Alert, BodyLong, Button, Heading, ReadMore} from '@navikt/ds-react';
@@ -7,10 +7,10 @@ import Søknad from '@/types/Søknad';
 
 import styles from '@/components/barnetillegg//Barnetillegg.module.css';
 import BarnetilleggRegistrertBarn from '@/components/barnetillegg/BarnetilleggRegistrertBarn';
-import {LeggTilBarnModal} from '@/components/barnetillegg/LeggTilBarnModal';
+import {LeggTilBarnModal, LeggTilBarnModalImperativeHandle} from '@/components/barnetillegg/LeggTilBarnModal';
 import BarneInfo from "@/components/barnetillegg/BarneInfo";
 import {Barn} from "@/types/Barn";
-
+import {PencilIcon, TrashIcon} from "@navikt/aksel-icons";
 
 interface BarnetilleggStegProps {
     onCompleted: () => void;
@@ -19,12 +19,13 @@ interface BarnetilleggStegProps {
 }
 
 export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
-    const {control, watch, getValues} = useFormContext<Søknad>();
-    const fieldArray = useFieldArray<Søknad>({name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor', control: control});
+    const {watch, getValues} = useFormContext<Søknad>();
+    const fieldArray = useFieldArray<Søknad>({name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor'});
     const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
     const barnFraApi = personalia.barn;
     const vedlegg = getValues('vedlegg')
     const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
+    const refEndring = useRef<LeggTilBarnModalImperativeHandle>(null);
 
     return (
         <Step
@@ -96,6 +97,27 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                                                     vedlegg.uuid === field.uuid
                                                 )}
                                         />
+                                        <div className={styles.knapperEgenregistertBarn}>
+                                            <Button
+                                                icon={<PencilIcon aria-hidden/>}
+                                                size="small"
+                                                variant="tertiary"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    refEndring.current?.åpneEndretBarn({...field as Barn, index: index})
+                                                }}
+                                            >
+                                                Endre informasjon
+                                            </Button>
+                                            <Button
+                                                icon={<TrashIcon aria-hidden/>}
+                                                size="small"
+                                                variant="tertiary"
+                                                onClick={() => fieldArray.remove(index)}
+                                            >
+                                                Slett barn
+                                            </Button>
+                                        </div>
                                     </div>
                                 )
                             )}
@@ -113,7 +135,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                 <br/>
                 Vær oppmerksom på at du ikke får barnetillegg for stebarn eller fosterbarn.
             </BodyLong>
-            <LeggTilBarnModal fieldArray={fieldArray} />
+            <LeggTilBarnModal fieldArray={fieldArray} ref={refEndring}/>
         </Step>
     );
 }
