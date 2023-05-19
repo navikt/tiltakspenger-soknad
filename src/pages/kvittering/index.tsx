@@ -40,10 +40,10 @@ export default function Kvittering({ personalia, innsendingsTidspunkt }: Kvitter
                         <span>Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. </span>
                         <p>Saken din er nå til behandling hos NAV.</p>
                         <p>
-                            <Link href="#">Her kan du ettersende dokumentasjon digitalt (åpnes i nytt vindu)</Link>
+                            <Link href="https://www.nav.no/person/ettersende/" target="_blank">Her kan du ettersende dokumentasjon digitalt (åpnes i nytt vindu)</Link>
                         </p>
                         <p>
-                            Du kan også <Link href="#">ettersende per post (åpnes i nytt vindu)</Link> eller levere
+                            Du kan også <Link href="https://www.nav.no/soknader/nb/person/arbeid/tiltakspenger/NAV%2076-13.45/ettersendelse/brev" target="_blank">ettersende per post (åpnes i nytt vindu)</Link> eller levere
                         </p>
                         <p>dokumntasjon på ditt lokale NAV-kontor.</p>
                     </span>
