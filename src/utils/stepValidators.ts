@@ -17,12 +17,10 @@ export function brukerHarFyltUtTiltakssteg({
 export function brukerHarFyltUtKvpSteg({
     kvalifiseringsprogram,
     introduksjonsprogram,
-    institusjonsopphold,
 }: Spørsmålsbesvarelser) {
     if (
         kvalifiseringsprogram.deltar === undefined ||
-        introduksjonsprogram.deltar === undefined ||
-        institusjonsopphold.borPåInstitusjon === undefined
+        introduksjonsprogram.deltar === undefined
     ) {
         return false;
     }
@@ -39,6 +37,19 @@ export function brukerHarFyltUtKvpSteg({
         }
     }
 
+    return true;
+}
+
+export function brukerMottarAndreUtbetalinger({mottarAndreUtbetalinger} : Spørsmålsbesvarelser) {
+    console.log("mottarAndreUtbetalinger:", mottarAndreUtbetalinger);
+    return mottarAndreUtbetalinger;
+}
+
+export function brukerHarFyltUtInstitusjonsoppholdSteg({ institusjonsopphold }: Spørsmålsbesvarelser) {
+    if (institusjonsopphold.borPåInstitusjon === undefined) {
+        return false;
+    }
+
     if (institusjonsopphold.borPåInstitusjon) {
         if (!institusjonsopphold.periode) {
             return false;
@@ -49,19 +60,19 @@ export function brukerHarFyltUtKvpSteg({
 
 export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlønn }: Spørsmålsbesvarelser) {
     if (
-        pensjonsordning.mottarEllerSøktPensjonsordning === undefined ||
-        etterlønn.mottarEllerSøktEtterlønn === undefined
+        pensjonsordning.jaNei === undefined ||
+        etterlønn.jaNei === undefined
     ) {
         return false;
     }
 
-    if (pensjonsordning.mottarEllerSøktPensjonsordning) {
+    if (pensjonsordning.jaNei) {
         if (!pensjonsordning.periode) {
             return false;
         }
     }
 
-    if (etterlønn.mottarEllerSøktEtterlønn) {
+    if (etterlønn.jaNei) {
         if (!etterlønn.periode) {
             return false;
         }
@@ -77,12 +88,20 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
     } else if (steg === Søknadssteg.KVP) {
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
+        console.log("brukerHarFyltUtKvpSteg(svar):", brukerHarFyltUtKvpSteg(svar));
         return brukerHarFyltUtTiltakssteg(svar) && brukerHarFyltUtKvpSteg(svar);
-    } else if (steg === Søknadssteg.BARNETILLEGG) {
+    } else if (steg === Søknadssteg.INSTITUSJONSOPPHOLD) {
         return (
             brukerHarFyltUtTiltakssteg(svar) &&
             brukerHarFyltUtKvpSteg(svar) &&
             brukerHarFyltUtAndreUtbetalingerSteg(svar)
+        );
+    } else if (steg === Søknadssteg.BARNETILLEGG) {
+        return (
+            brukerHarFyltUtTiltakssteg(svar) &&
+            brukerHarFyltUtKvpSteg(svar) &&
+            brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
+            brukerHarFyltUtInstitusjonsoppholdSteg(svar)
         );
     } else if (steg === Søknadssteg.OPPSUMMERING) {
         // todo: Sjekk at bruker har fylt ut steget om barnetillegg når det er klart

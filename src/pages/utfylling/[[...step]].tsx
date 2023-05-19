@@ -4,6 +4,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '@/components/oppsummeringssteg/Oppsummeringssteg';
 import KvpSteg from '@/components/innledningssteg/KvpSteg';
+import InstitusjonsoppholdSteg from '@/components/institusjonsopphold-steg/InstitusjonsoppholdSteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
@@ -15,7 +16,7 @@ import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
 import { Søknadssteg } from '@/types/Søknadssteg';
-import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
+import {brukerHarFyltUtNødvendigeOpplysninger, brukerMottarAndreUtbetalinger} from '@/utils/stepValidators';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -69,6 +70,8 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 return Søknadssteg.KVP;
             case Søknadssteg.ANDRE_UTBETALINGER:
                 return Søknadssteg.ANDRE_UTBETALINGER;
+            case Søknadssteg.INSTITUSJONSOPPHOLD:
+                return Søknadssteg.INSTITUSJONSOPPHOLD;
             case Søknadssteg.BARNETILLEGG:
                 return Søknadssteg.BARNETILLEGG;
             case Søknadssteg.OPPSUMMERING:
@@ -99,8 +102,16 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
 
     const navigerBrukerTilIntroside = (shallow: boolean = true) => navigateToPath('/', shallow);
     const navigerBrukerTilKvpSteg = (shallow: boolean = true) => navigateToPath('/utfylling/kvp', shallow);
-    const navigerBrukerTilAndreUtbetalingerSteg = (shallow: boolean = true) =>
-        navigateToPath('/utfylling/andreutbetalinger', shallow);
+    const navigerBrukerTilInstitusjonsOppholdSteg = (shallow: boolean = true) => navigateToPath('/utfylling/institusjonsopphold', shallow);
+
+    const navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold = (shallow: boolean =true) => {
+        if (svar.mottarAndreUtbetalinger) {
+            navigateToPath('/utfylling/andreutbetalinger', shallow);
+        } else {
+            navigateToPath('/utfylling/institusjonsopphold', shallow);
+        }
+    }
+
     const navigerBrukerTilBarnetilleggSteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/barnetillegg', shallow);
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
@@ -114,6 +125,11 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
     const brukerErPåKvpSteg = () => {
         const formStateErPåKvpsteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVP);
         return step && step[0] === Søknadssteg.KVP && formStateErPåKvpsteg;
+    };
+
+    const brukerErPåInstitusjonsoppholdSteg = () => {
+        const formStateErPåInstitusjonsoppholdsteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.INSTITUSJONSOPPHOLD);
+        return step && step[0] === Søknadssteg.INSTITUSJONSOPPHOLD && formStateErPåInstitusjonsoppholdsteg;
     };
 
     const brukerErPåAndreUtbetalingerSteg = () => {
@@ -146,13 +162,22 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             )}
             {brukerErPåKvpSteg() && (
                 <KvpSteg
-                    onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
+                    onCompleted={navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold}
                     onGoToPreviousStep={goBack}
                     valgtTiltak={valgtTiltak!}
                 />
             )}
             {brukerErPåAndreUtbetalingerSteg() && (
-                <AndreUtbetalingerSteg onCompleted={navigerBrukerTilBarnetilleggSteg} onGoToPreviousStep={goBack} />
+                <AndreUtbetalingerSteg
+                    onCompleted={navigerBrukerTilInstitusjonsOppholdSteg}
+                    onGoToPreviousStep={goBack} />
+            )}
+            {brukerErPåInstitusjonsoppholdSteg() && (
+                <InstitusjonsoppholdSteg
+                    onCompleted={navigerBrukerTilBarnetilleggSteg}
+                    onGoToPreviousStep={goBack}
+                    valgtTiltak={valgtTiltak!}
+                />
             )}
             {brukerErPåBarnetilleggSteg() && (
                 <BarnetilleggSteg

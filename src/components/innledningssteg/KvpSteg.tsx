@@ -26,6 +26,10 @@ function borPåInstitusjonValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du bor på institusjon');
 }
 
+function mottarAndreUtbetalinger(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du mottar andre utbetalinger');
+}
+
 function påkrevdKvpPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i kvalifiseringsprogrammet');
 }
@@ -46,11 +50,10 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
-    const watchBorPåInstitusjon = watch('svar.institusjonsopphold.borPåInstitusjon');
 
     return (
         <Step
-            title="Kvalifiseringsprogrammet, introduksjonsprogrammet og institusjonsopphold"
+            title="Andre utbetalinger"
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={2}
@@ -93,6 +96,7 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                             </>
                         ),
                     }}
+                    reverse
                 >
                     Deltar du i kvalifiseringsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
@@ -123,6 +127,7 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                             </>
                         ),
                     }}
+                    reverse
                 >
                     Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
@@ -135,23 +140,23 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
                     </Periodespørsmål>
                 )}
                 <JaNeiSpørsmål
-                    name="svar.institusjonsopphold.borPåInstitusjon"
-                    validate={borPåInstitusjonValidator}
-                    hjelpetekst={{
-                        tittel: 'Unntak for barnevernsinstitusjoner og overgangsbolig',
-                        tekst: 'Bor du på barnevernsinstitusjon eller i en overgangsbolig har du likevel rett til å få tiltakspenger. Da kan du krysse «nei» på spørsmålet.',
-                    }}
+                    name="svar.mottarAndreUtbetalinger"
+                    validate={mottarAndreUtbetalinger}
+                    undertekst={(
+                        <ul>
+                            <li>Sykepenger</li>
+                            <li>Gjenlevendepensjon</li>
+                            <li>Alderspensjon</li>
+                            <li>Supplerende stønad</li>
+                            <li>Pengestøtte fra andre trygde- eller pensjonsordninger</li>
+                            <li>Etterlønn</li>
+                            <li>Stønad via Jobbsjansen</li>
+                        </ul>
+                    )}
+                    reverse
                 >
-                    Bor du i en institusjon med gratis opphold, mat og drikke i perioden {tiltaksperiodeTekst}?
+                    Mottar du noen av disse utbetalingene i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
-                {watchBorPåInstitusjon && (
-                    <Periodespørsmål
-                        name="svar.institusjonsopphold.periode"
-                        validate={[gyldigPeriodeValidator, påkrevdInstitusjonsoppholdPeriodeValidator]}
-                    >
-                        I hvilken periode bor du på institusjon med gratis opphold, mat og drikke?
-                    </Periodespørsmål>
-                )}
             </>
         </Step>
     );

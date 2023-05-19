@@ -31,13 +31,13 @@ export interface Barnetillegg {
 }
 
 export interface Pensjonsordning {
-    mottarEllerSøktPensjonsordning: boolean;
+    jaNei: boolean;
     utbetaler: string;
     periode: Periode;
 }
 
 export interface Etterlønn {
-    mottarEllerSøktEtterlønn: boolean;
+    jaNei: boolean;
     utbetaler: string;
     periode: Periode;
 }
@@ -47,6 +47,7 @@ interface Spørsmålsbesvarelser {
     introduksjonsprogram: Introduksjonsprogram;
     institusjonsopphold: Institusjonsopphold;
     tiltak: FormTiltak;
+    mottarAndreUtbetalinger: boolean;
     barnetillegg: Barnetillegg;
     pensjonsordning: Pensjonsordning;
     etterlønn: Etterlønn;
