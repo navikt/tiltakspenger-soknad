@@ -1,6 +1,6 @@
 import React, { DragEventHandler } from 'react';
 import styles from './FileUploader.module.css';
-import { BodyShort, Detail, Panel } from '@navikt/ds-react';
+import {Alert, BodyShort, Detail, Panel} from '@navikt/ds-react';
 import { UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
@@ -13,8 +13,8 @@ interface FileUploaderProps {
     knappTekst: string;
     uuid: string;
 }
-
 export default function FileUploader({ name, control, knappTekst, uuid }: FileUploaderProps) {
+    const [error, setError] = React.useState( "");
     const [dragOver, setDragOver] = React.useState<boolean>(false);
     const fileUploadInputElement = React.useRef<HTMLInputElement>(null);
     const inputId = 'test';
@@ -22,6 +22,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
         name,
         control,
     });
+    const MAKS_TOTAL_FILSTØRRELSE = 20000000;
 
     const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
         setDragOver(false);
@@ -45,6 +46,12 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
     const cls = classNames(styles.fileInput, {
         [styles.dragOver]: dragOver,
     });
+
+    const validerStørrelse = (file: File): Boolean => {
+        const samletStørrelse = fields.reduce((acc, fil) => acc + fil.file.size, 0)
+        console.log(samletStørrelse)
+        return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE
+    }
 
     const fileSizeString = (size: number) => {
         const kb = size / 1024;
@@ -99,11 +106,14 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         value={''}
                         onChange={(e) => {
                             const file = e?.target?.files?.[0];
-                            if (file) {
+                            if (file && validerStørrelse(file)) {
+                                setError("")
                                 append({
                                     file,
                                     uuid
                                 });
+                            } else {
+                                setError(`Filen er for stor!`)
                             }
                         }}
                         className={styles.visuallyHidden}
@@ -129,6 +139,11 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                             {knappTekst}
                         </span>
                     </label>
+                    {error != "" &&
+                        <Alert size="small" variant="error" style={{marginTop: "1rem"}}>
+                            {error}
+                        </Alert>
+                    }
                 </>
             </div>
         </div>
