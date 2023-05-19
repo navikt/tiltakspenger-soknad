@@ -140,6 +140,7 @@ export default function App() {
                 className={styles.bekreftelsespanel}
                 label="Jeg vil svare så godt jeg kan på spørsmålene i søknaden"
                 value={brukerHarBekreftet}
+                checked={brukerHarBekreftet}
                 onChange={() => setBrukerHarBekreftet(!brukerHarBekreftet)}
                 error={
                     markerBekreftelsesboksSomRød
