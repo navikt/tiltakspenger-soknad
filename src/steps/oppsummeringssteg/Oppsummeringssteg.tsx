@@ -87,7 +87,7 @@ function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valg
 }
 
 function postSøknadMultipart(formData: FormData) {
-     return fetch('/api/soknad', {
+    return fetch('/api/soknad', {
         method: 'POST',
         body: formData,
     });
@@ -114,7 +114,13 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
         barnetillegg,
     } = svar;
 
+    const valgtTiltakManglerPeriode =
+        !valgtTiltak?.arenaRegistrertPeriode ||
+        !valgtTiltak?.arenaRegistrertPeriode.fra ||
+        !valgtTiltak?.arenaRegistrertPeriode.til;
+
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
+    const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
     const alleBarnSøktBarnetilleggFor =
         barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
@@ -131,10 +137,12 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                 return router.push('/feil');
             }
 
-            const soknadInnsendingsTidspunkt = await response.json().then((json : SøknadResponse) => json.innsendingTidspunkt);
+            const soknadInnsendingsTidspunkt = await response
+                .json()
+                .then((json: SøknadResponse) => json.innsendingTidspunkt);
             return router.push({
                 pathname: '/kvittering',
-                query: { innsendingsTidspunkt : soknadInnsendingsTidspunkt},
+                query: { innsendingsTidspunkt: soknadInnsendingsTidspunkt },
             });
         } catch {
             return router.push('/feil');
@@ -190,10 +198,16 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                     <Accordion.Content>
                         <Oppsummeringsfelt feltNavn="Tiltak" feltVerdi={valgtTiltak?.arrangør || ''} />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode!.fra)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Fra dato"
+                                feltVerdi={formatDate(opprinneligTiltaksperiode!.fra)}
+                            />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Til dato"
+                                feltVerdi={formatDate(opprinneligTiltaksperiode!.til)}
+                            />
                         </div>
 
                         <div style={{ marginTop: '2rem' }}>
@@ -259,7 +273,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                     <Accordion.Content>
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
                             <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
-                                <BarneInfo barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.registrerteBarn.oppholdUtenforEØS[barn.uuid]}}/>
+                                <BarneInfo barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid]}}/>
                                 {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
                             </div>
                         ))}
