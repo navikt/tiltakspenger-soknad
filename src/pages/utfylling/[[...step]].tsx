@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '@/components/oppsummeringssteg/Oppsummeringssteg';
-import KvpSteg from '@/components/innledningssteg/KvpSteg';
+import KvpSteg from '@/components/innledningssteg/ProgramDeltagelseSteg';
 import InstitusjonsoppholdSteg from '@/components/institusjonsopphold-steg/InstitusjonsoppholdSteg';
 import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
@@ -16,7 +16,8 @@ import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
 import { Søknadssteg } from '@/types/Søknadssteg';
-import {brukerHarFyltUtNødvendigeOpplysninger, brukerMottarAndreUtbetalinger} from '@/utils/stepValidators';
+import {brukerHarFyltUtNødvendigeOpplysninger} from '@/utils/stepValidators';
+import ProgramDeltagelseSteg from "@/components/innledningssteg/ProgramDeltagelseSteg";
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -67,8 +68,8 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         switch (route) {
             case Søknadssteg.TILTAK:
                 return Søknadssteg.TILTAK;
-            case Søknadssteg.KVP:
-                return Søknadssteg.KVP;
+            case Søknadssteg.PROGRAM_DELTAGELSE:
+                return Søknadssteg.PROGRAM_DELTAGELSE;
             case Søknadssteg.ANDRE_UTBETALINGER:
                 return Søknadssteg.ANDRE_UTBETALINGER;
             case Søknadssteg.INSTITUSJONSOPPHOLD:
@@ -102,7 +103,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
     }
 
     const navigerBrukerTilIntroside = (shallow: boolean = true) => navigateToPath('/', shallow);
-    const navigerBrukerTilKvpSteg = (shallow: boolean = true) => navigateToPath('/utfylling/kvp', shallow);
+    const navigerBrukerTilProgramDeltagelseSteg = (shallow: boolean = true) => navigateToPath('/utfylling/programdeltagelse', shallow);
     const navigerBrukerTilInstitusjonsOppholdSteg = (shallow: boolean = true) => navigateToPath('/utfylling/institusjonsopphold', shallow);
 
     const navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold = (shallow: boolean =true) => {
@@ -123,9 +124,9 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         return step && step[0] === Søknadssteg.TILTAK && formStateErPåTiltakssteg;
     };
 
-    const brukerErPåKvpSteg = () => {
-        const formStateErPåKvpsteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVP);
-        return step && step[0] === Søknadssteg.KVP && formStateErPåKvpsteg;
+    const brukerErPåProgramDeltagelseSteg = () => {
+        const formStateErPåProgramDeltagelsesteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.PROGRAM_DELTAGELSE);
+        return step && step[0] === Søknadssteg.PROGRAM_DELTAGELSE && formStateErPåProgramDeltagelsesteg;
     };
 
     const brukerErPåInstitusjonsoppholdSteg = () => {
@@ -165,14 +166,14 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 <Tiltakssteg
                     title="Tiltak"
                     stegNummerTekst={hentStegNummerTekst(1)}
-                    onCompleted={navigerBrukerTilKvpSteg}
+                    onCompleted={navigerBrukerTilProgramDeltagelseSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
                     tiltak={tiltak}
                     valgtTiltak={valgtTiltak}
                 />
             )}
-            {brukerErPåKvpSteg() && (
-                <KvpSteg
+            {brukerErPåProgramDeltagelseSteg() && (
+                <ProgramDeltagelseSteg
                     title="Andre utbetalinger og programdeltagelse"
                     stegNummerTekst={hentStegNummerTekst(2)}
                     onCompleted={navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold}

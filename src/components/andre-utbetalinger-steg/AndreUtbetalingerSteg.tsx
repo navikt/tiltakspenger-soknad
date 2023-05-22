@@ -4,7 +4,7 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
 import styles from './andreutbetalinger.module.css'
-import { påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
+import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 
 interface AndreUtbetalingerStegProps {
     title: string;
@@ -37,8 +37,12 @@ function etterlønnValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar etterlønn');
 }
 
-function etterlønnutbetalerValidator(verdi: string) {
-    return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi hvem som utbetaler etterlønn');
+function supplerendeStønadOver67Validator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar supplerende stønad for personer over 67 år');
+}
+
+function supplerendeStønadFlyktningerValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar supplerende stønad for uføre flyktninger');
 }
 
 export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
@@ -48,11 +52,13 @@ export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onComple
     const watchGjenlevendepensjon = watch('svar.gjenlevendepensjon.mottar');
     const watchAlderspensjon = watch('svar.alderspensjon.mottar');
     const watchJobbsjansen = watch('svar.jobbsjansen.mottar');
+    const watchSupplerendestønadOver67 = watch('svar.supplerendestønadover67.mottar');
+    const watchSupplerendestønadFlyktninger = watch('svar.supplerendestønadflyktninger.mottar');
 
     return (
         <Step
             title={title}
-            stepNumberText={stegNummerTekst}
+            stepNumber={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={
@@ -131,6 +137,46 @@ export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onComple
                 </JaNeiSpørsmål>
                 {watchAlderspensjon && (
                     <Periodespørsmål name="svar.alderspensjon.periode" ikkeVisTilDato>Når mortar du alderspensjon?</Periodespørsmål>
+                )}
+            </div>
+            <div className={styles.blokk}>
+                <JaNeiSpørsmål
+                    name="svar.supplerendestønadover67.mottar"
+                    validate={supplerendeStønadOver67Validator}
+                    hjelpetekst={{ tittel: 'Hva er supplerende stønad for personer over 67 år med kort botid i Norge?',
+                        tekst: (
+                            <>
+                                <span>Du kan motta supplerende stønad hvis du er over 67 år, og ikke har bodd lenge nok i Norge til å ha rett på alderspensjon.</span>
+                                <p>Les mer om supplerende stønad for personer over 67 år med kort botid i Norge (LENKE)</p>
+                            </>
+                        ) }}
+                >
+                    Mottar du supplerende stønad for personer over 67 år med kort botid i Norge?
+                </JaNeiSpørsmål>
+                {watchSupplerendestønadOver67 && (
+                    <>
+                        <Periodespørsmål name="svar.supplerendestønadover67.periode">Når mottar du det?</Periodespørsmål>
+                    </>
+                )}
+            </div>
+            <div className={styles.blokk}>
+                <JaNeiSpørsmål
+                    name="svar.supplerendestønadflyktninger.mottar"
+                    validate={supplerendeStønadFlyktningerValidator}
+                    hjelpetekst={{ tittel: 'Hva er supplerende stønad for uføre flyktninger?',
+                        tekst: (
+                            <>
+                                <span>Du kan motta supplerende stønad hvis du er både ufør og har flyktningstatus. Du må ha oppholdstillatelse og være bosatt i Norge.</span>
+                                <p>Les mer om supplerende stønad for uføre flyktninger (LENKE)</p>
+                            </>
+                        ) }}
+                >
+                    Mottar du supplerende stønad for uføre flyktninger?
+                </JaNeiSpørsmål>
+                {watchSupplerendestønadFlyktninger && (
+                    <>
+                        <Periodespørsmål name="svar.supplerendestønadflyktninger.periode">Når mottar du det?</Periodespørsmål>
+                    </>
                 )}
             </div>
             <div className={styles.blokk}>

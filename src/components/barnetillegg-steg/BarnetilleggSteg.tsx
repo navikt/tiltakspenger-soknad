@@ -47,7 +47,7 @@ export default function BarnetilleggSteg({ title, stegNummerTekst, onCompleted, 
     return (
         <Step
             title={title}
-            stepNumberText={stegNummerTekst}
+            stepNumber={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={
@@ -70,7 +70,7 @@ export default function BarnetilleggSteg({ title, stegNummerTekst, onCompleted, 
                 </>
             }
         >
-            <JaNeiSpørsmål name="svar.barnetillegg.søkerOmBarnetillegg" validate={søkerBarnetilleggValidator} reverse>
+            <JaNeiSpørsmål name="svar.barnetillegg.søkerOmBarnetillegg" validate={søkerBarnetilleggValidator}>
                 Ønsker du å søke om barnetillegg for ett eller flere barn som du forsørger?
             </JaNeiSpørsmål>
             {watchSøkerOmBarnetillegg && barnFraApi && barnFraApi.length > 0 && (

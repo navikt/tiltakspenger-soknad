@@ -126,7 +126,7 @@ export default function Tiltakssteg({ title, stegNummerTekst, onCompleted, onGoT
     return (
         <Step
             title={title}
-            stepNumberText={stegNummerTekst}
+            stepNumber={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={veiledningstekst()}
@@ -179,7 +179,6 @@ const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingPro
         <>
             <JaNeiSpørsmål
                 name="svar.tiltak.søkerHeleTiltaksperioden"
-                reverse
                 validate={påkrevdSøkerHeleTiltaksperiodenValidator}
             >
                 Vi har registrert at du deltar på dette tiltaket i perioden{' '}

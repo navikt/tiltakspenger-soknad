@@ -33,7 +33,7 @@ export default function InstitusjonsoppholdSteg({ title, stegNummerTekst, onComp
     return (
         <Step
             title={title}
-            stepNumberText={stegNummerTekst}
+            stepNumber={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={

@@ -14,7 +14,7 @@ export function brukerHarFyltUtTiltakssteg({
     }
 }
 
-export function brukerHarFyltUtKvpSteg({
+export function brukerHarFyltUtProgramDeltagelseSteg({
     kvalifiseringsprogram,
     introduksjonsprogram,
     mottarAndreUtbetalinger
@@ -40,10 +40,6 @@ export function brukerHarFyltUtKvpSteg({
     }
 
     return true;
-}
-
-export function brukerMottarAndreUtbetalinger({mottarAndreUtbetalinger} : Spørsmålsbesvarelser) {
-    return mottarAndreUtbetalinger;
 }
 
 export function brukerHarFyltUtInstitusjonsoppholdSteg({ institusjonsopphold }: Spørsmålsbesvarelser) {
@@ -88,35 +84,35 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
     if (steg === Søknadssteg.TILTAK) {
         // todo: Sjekk at bruker har huket av på bekreftelsesboks på innledningssteget når det er klart
         return true;
-    } else if (steg === Søknadssteg.KVP) {
+    } else if (steg === Søknadssteg.PROGRAM_DELTAGELSE) {
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
-        return brukerHarFyltUtTiltakssteg(svar) && brukerHarFyltUtKvpSteg(svar);
+        return brukerHarFyltUtTiltakssteg(svar) && brukerHarFyltUtProgramDeltagelseSteg(svar);
     } else if (steg === Søknadssteg.INSTITUSJONSOPPHOLD) {
         if (skalVisesAndreUtbetalingerSteg) {
             return (
                 brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
                 brukerHarFyltUtAndreUtbetalingerSteg(svar)
             );
         } else {
             return (
                 brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtKvpSteg(svar)
+                brukerHarFyltUtProgramDeltagelseSteg(svar)
             );
         }
     } else if (steg === Søknadssteg.BARNETILLEGG) {
         if (skalVisesAndreUtbetalingerSteg) {
             return (
                 brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
                 brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
                 brukerHarFyltUtInstitusjonsoppholdSteg(svar)
             );
         } else {
             return (
                 brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
                 brukerHarFyltUtInstitusjonsoppholdSteg(svar)
             );
         }
@@ -125,14 +121,14 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
         if (skalVisesAndreUtbetalingerSteg) {
             return (
                 brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
                 brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
                 brukerHarFyltUtInstitusjonsoppholdSteg(svar)
             );
         } else {
             return (
                 brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
                 brukerHarFyltUtInstitusjonsoppholdSteg(svar)
             );
         }

@@ -8,7 +8,7 @@ import { FormPeriode } from '@/types/FormPeriode';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { Tiltak } from '@/types/Tiltak';
 
-interface KvpStegProps {
+interface ProgramDeltagelseStegProps {
     title: string;
     stegNummerTekst: string;
     onCompleted: () => void;
@@ -36,7 +36,7 @@ function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
-export default function KvpSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
+export default function ProgramDeltagelseSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, valgtTiltak }: ProgramDeltagelseStegProps) {
     const { watch } = useFormContext();
 
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
@@ -48,7 +48,7 @@ export default function KvpSteg({ title, stegNummerTekst, onCompleted, onGoToPre
     return (
         <Step
             title={title}
-            stepNumberText={stegNummerTekst}
+            stepNumber={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={
@@ -66,6 +66,36 @@ export default function KvpSteg({ title, stegNummerTekst, onCompleted, onGoToPre
             }
         >
             <>
+                <JaNeiSpørsmål
+                    name="svar.introduksjonsprogram.deltar"
+                    validate={deltarIIntroprogrammetValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er introduksjonsprogrammet?',
+                        tekst: (
+                            <>
+                                <p>Hva er introduksjonsprogrammet?</p>
+                                <p>
+                                    Introduksjonsprogrammet avtales med kommunen du bor i. Det er en ordning for
+                                    nyankomne flyktninger. Hvis du er med i Introduksjonsprogrammet har du fått et brev
+                                    fra kommunen du bor i om dette. Du kan også få utbetalt introduksjonsstønad. Ta
+                                    kontakt med kommunen din hvis du er usikker på om du er med i
+                                    Introduksjonsprogrammet.
+                                </p>
+                                <p>Du kan lese mer om introduksjonsprogrammet på (LENKE til IMDI)</p>
+                            </>
+                        ),
+                    }}
+                >
+                    Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
+                </JaNeiSpørsmål>
+                {watchDeltarIIntroprogrammet && (
+                    <Periodespørsmål
+                        name="svar.introduksjonsprogram.periode"
+                        validate={[gyldigPeriodeValidator, påkrevdIntroprogramPeriodeValidator]}
+                    >
+                        Når deltar du i introduksjonsprogrammet?
+                    </Periodespørsmål>
+                )}
                 <JaNeiSpørsmål
                     name="svar.kvalifiseringsprogram.deltar"
                     validate={deltarIKvpValidator}
@@ -90,7 +120,6 @@ export default function KvpSteg({ title, stegNummerTekst, onCompleted, onGoToPre
                             </>
                         ),
                     }}
-                    reverse
                 >
                     Deltar du i kvalifiseringsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
@@ -100,37 +129,6 @@ export default function KvpSteg({ title, stegNummerTekst, onCompleted, onGoToPre
                         validate={[gyldigPeriodeValidator, påkrevdKvpPeriodeValidator]}
                     >
                         Når deltar du i kvalifiseringsprogrammet?
-                    </Periodespørsmål>
-                )}
-                <JaNeiSpørsmål
-                    name="svar.introduksjonsprogram.deltar"
-                    validate={deltarIIntroprogrammetValidator}
-                    hjelpetekst={{
-                        tittel: 'Hva er introduksjonsprogrammet?',
-                        tekst: (
-                            <>
-                                <p>Hva er introduksjonsprogrammet?</p>
-                                <p>
-                                    Introduksjonsprogrammet avtales med kommunen du bor i. Det er en ordning for
-                                    nyankomne flyktninger. Hvis du er med i Introduksjonsprogrammet har du fått et brev
-                                    fra kommunen du bor i om dette. Du kan også få utbetalt introduksjonsstønad. Ta
-                                    kontakt med kommunen din hvis du er usikker på om du er med i
-                                    Introduksjonsprogrammet.
-                                </p>
-                                <p>Du kan lese mer om introduksjonsprogrammet på (LENKE til IMDI)</p>
-                            </>
-                        ),
-                    }}
-                    reverse
-                >
-                    Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
-                </JaNeiSpørsmål>
-                {watchDeltarIIntroprogrammet && (
-                    <Periodespørsmål
-                        name="svar.introduksjonsprogram.periode"
-                        validate={[gyldigPeriodeValidator, påkrevdIntroprogramPeriodeValidator]}
-                    >
-                        Når deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}
                 <JaNeiSpørsmål
@@ -147,7 +145,6 @@ export default function KvpSteg({ title, stegNummerTekst, onCompleted, onGoToPre
                             <li>Stønad via Jobbsjansen</li>
                         </ul>
                     )}
-                    reverse
                 >
                     Mottar du noen av disse utbetalingene i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>

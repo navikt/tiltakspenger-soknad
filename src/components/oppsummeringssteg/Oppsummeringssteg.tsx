@@ -158,7 +158,7 @@ export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPrevio
     return (
         <Step
             title={title}
-            stepNumberText={stegNummerTekst}
+            stepNumber={stegNummerTekst}
             onGoToPreviousStep={onGoToPreviousStep}
             onCompleted={sendInnSøknad}
             submitSectionRenderer={() => (

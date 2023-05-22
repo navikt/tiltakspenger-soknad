@@ -8,11 +8,10 @@ interface JaNeiSpørsmålProps {
     name: string;
     validate?: (value: any) => string | undefined;
     hjelpetekst?: Hjelpetekst;
-    reverse?: boolean;
     undertekst?: string | JSX.Element;
 }
 
-export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst, reverse, undertekst }: JaNeiSpørsmålProps) {
+export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst, undertekst }: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     const errorObject = errorMessage ? { error: <>{errorMessage}</> } : {};
@@ -33,9 +32,8 @@ export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst,
                     {...errorObject}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
-                    {!reverse && <Radio value="nei">Nei</Radio>}
                     <Radio value="ja">Ja</Radio>
-                    {reverse && <Radio value="nei">Nei</Radio>}
+                    <Radio value="nei">Nei</Radio>
                 </RadioGroup>
             )}
         />

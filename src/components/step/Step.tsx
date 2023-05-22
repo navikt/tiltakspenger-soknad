@@ -9,7 +9,7 @@ interface StepProps {
     onCompleted?: () => void;
     onGoToPreviousStep: () => void;
     children: React.ReactNode;
-    stepNumberText: string;
+    stepNumber: string;
     submitSectionRenderer?: undefined | (() => React.ReactNode);
     guide?: string | React.ReactNode;
     hideStepIndicator?: boolean;
@@ -21,7 +21,7 @@ export default function Step({
     children,
     onCompleted,
     onGoToPreviousStep,
-    stepNumberText,
+    stepNumber,
     submitSectionRenderer,
     guide,
     hideStepIndicator,
@@ -64,7 +64,7 @@ export default function Step({
                     })}
                 </ErrorSummary>
             )}
-            {!hideStepIndicator && <span className={styles.step__stepindicator}>{stepNumberText}</span>}
+            {!hideStepIndicator && <span className={styles.step__stepindicator}> {stepNumber} </span>}
             {guide && <GuidePanel poster>{guide}</GuidePanel>}
             <form onSubmit={onCompleted ? handleSubmit(onCompleted) : () => {}}>
                 <>
