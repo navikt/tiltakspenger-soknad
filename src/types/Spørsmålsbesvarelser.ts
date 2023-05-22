@@ -31,14 +31,19 @@ export interface Barnetillegg {
 }
 
 export interface Pensjonsordning {
-    jaNei: boolean;
+    mottar: boolean;
     utbetaler: string;
     periode: Periode;
 }
 
 export interface Etterlønn {
-    jaNei: boolean;
+    mottar: boolean;
     utbetaler: string;
+    periode: Periode;
+}
+
+export interface sykepenger{
+    mottar: boolean;
     periode: Periode;
 }
 

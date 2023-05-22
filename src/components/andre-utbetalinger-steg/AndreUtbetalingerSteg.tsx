@@ -42,12 +42,12 @@ function etterlønnutbetalerValidator(verdi: string) {
 
 export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
     const { watch } = useFormContext();
-    const watchPensjonsordning = watch('svar.pensjonsordning.jaNei');
-    const watchEtterlønn = watch('svar.etterlønn.jaNei');
-    const watchSykepenger = watch('svar.sykepenger.jaNei');
-    const watchGjenlevendepensjon = watch('svar.gjenlevendepensjon.jaNei');
-    const watchAlderspensjon = watch('svar.alderspensjon.jaNei');
-    const watchJobbsjansen = watch('svar.jobbsjansen.jaNei');
+    const watchPensjonsordning = watch('svar.pensjonsordning.mottar');
+    const watchEtterlønn = watch('svar.etterlønn.mottar');
+    const watchSykepenger = watch('svar.sykepenger.mottar');
+    const watchGjenlevendepensjon = watch('svar.gjenlevendepensjon.mottar');
+    const watchAlderspensjon = watch('svar.alderspensjon.mottar');
+    const watchJobbsjansen = watch('svar.jobbsjansen.mottar');
 
     return (
         <Step
@@ -72,7 +72,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
         >
             <div className={styles.blokk}>
             <JaNeiSpørsmål
-                name="svar.sykepenger.jaNei"
+                name="svar.sykepenger.mottar"
                 validate={sykepengerValidator}
                 hjelpetekst={{
                             tittel: 'Hva er sykepenger? ',
@@ -93,7 +93,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
-                    name="svar.gjenlevendepensjon.jaNei"
+                    name="svar.gjenlevendepensjon.mottar"
                     validate={gjenlevendepensjonValidator}
                     hjelpetekst={{
                         tittel: 'Hva er gjenlevendepensjon? ',
@@ -115,7 +115,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
-                    name="svar.alderspensjon.jaNei"
+                    name="svar.alderspensjon.mottar"
                     validate={alderspensjonValidator}
                     hjelpetekst={{
                         tittel: 'Når begynner din alderspensjon? ',
@@ -135,7 +135,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
-                    name="svar.pensjonsordning.jaNei"
+                    name="svar.pensjonsordning.mottar"
                     validate={pensjonsordningValidator}
                     hjelpetekst={{ tittel: 'Hva er pengestøtte fra andre trygde- eller pensjonsordninger?',
                         tekst: (
@@ -159,7 +159,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             </div>
             <div className={styles.blokk}>
             <JaNeiSpørsmål
-                name="svar.etterlønn.jaNei"
+                name="svar.etterlønn.mottar"
                 validate={etterlønnValidator}
                 hjelpetekst={{
                                 tittel: 'Hva er etterlønn?',
@@ -182,7 +182,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
-                    name="svar.jobbsjansen.jaNei"
+                    name="svar.jobbsjansen.mottar"
                     validate={jobbsjansenValidator}
                     hjelpetekst={{
                         tittel: 'Hva er stønad via jobbsjansen?',

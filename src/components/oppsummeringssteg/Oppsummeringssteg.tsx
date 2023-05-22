@@ -254,14 +254,14 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                         <Oppsummeringsfelt
                             feltNavn="Pensjonsordninger"
                             feltVerdi={oppsummeringPensjonsordninger(
-                                pensjonsordning.jaNei,
+                                pensjonsordning.mottar,
                                 pensjonsordning
                             )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Etterlønn"
-                                feltVerdi={oppsummeringEtterlønn(etterlønn.jaNei, etterlønn)}
+                                feltVerdi={oppsummeringEtterlønn(etterlønn.mottar, etterlønn)}
                             />
                         </div>
                     </Accordion.Content>

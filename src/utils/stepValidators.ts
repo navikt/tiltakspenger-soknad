@@ -41,7 +41,6 @@ export function brukerHarFyltUtKvpSteg({
 }
 
 export function brukerMottarAndreUtbetalinger({mottarAndreUtbetalinger} : Spørsmålsbesvarelser) {
-    console.log("mottarAndreUtbetalinger:", mottarAndreUtbetalinger);
     return mottarAndreUtbetalinger;
 }
 
@@ -60,19 +59,19 @@ export function brukerHarFyltUtInstitusjonsoppholdSteg({ institusjonsopphold }: 
 
 export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlønn }: Spørsmålsbesvarelser) {
     if (
-        pensjonsordning.jaNei === undefined ||
-        etterlønn.jaNei === undefined
+        pensjonsordning.mottar === undefined ||
+        etterlønn.mottar === undefined
     ) {
         return false;
     }
 
-    if (pensjonsordning.jaNei) {
+    if (pensjonsordning.mottar) {
         if (!pensjonsordning.periode) {
             return false;
         }
     }
 
-    if (etterlønn.jaNei) {
+    if (etterlønn.mottar) {
         if (!etterlønn.periode) {
             return false;
         }
@@ -88,7 +87,6 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
     } else if (steg === Søknadssteg.KVP) {
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
-        console.log("brukerHarFyltUtKvpSteg(svar):", brukerHarFyltUtKvpSteg(svar));
         return brukerHarFyltUtTiltakssteg(svar) && brukerHarFyltUtKvpSteg(svar);
     } else if (steg === Søknadssteg.INSTITUSJONSOPPHOLD) {
         return (

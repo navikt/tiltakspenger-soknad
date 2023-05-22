@@ -42,17 +42,17 @@ function introduksjonsprogram({ deltar, periode }: Introduksjonsprogram) {
 }
 
 function pensjon(pensjonsornding: Pensjonsordning) {
-    const { jaNei, periode, utbetaler } = pensjonsornding;
-    if (jaNei) {
-        return { utbetaler, jaNei, periode: formatPeriod(periode) };
+    const { mottar, periode, utbetaler } = pensjonsornding;
+    if (mottar) {
+        return { utbetaler, mottar, periode: formatPeriod(periode) };
     }
     return pensjonsornding;
 }
 
 function etterlønn(etterlønn: Etterlønn) {
-    const { periode, jaNei, utbetaler } = etterlønn;
-    if (jaNei) {
-        return { jaNei, utbetaler, periode: formatPeriod(periode) };
+    const { periode, mottar, utbetaler } = etterlønn;
+    if (mottar) {
+        return { mottar, utbetaler, periode: formatPeriod(periode) };
     }
     return etterlønn;
 }
