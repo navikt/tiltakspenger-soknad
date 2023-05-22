@@ -1,6 +1,6 @@
 import React, { DragEventHandler } from 'react';
 import styles from './FileUploader.module.css';
-import { Alert, BodyShort, Detail, Panel } from '@navikt/ds-react';
+import {Alert, BodyShort, Detail, Panel} from '@navikt/ds-react';
 import { UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
@@ -13,13 +13,8 @@ interface FileUploaderProps {
     knappTekst: string;
     uuid: string;
 }
-export default function FileUploader({
-    name,
-    control,
-    knappTekst,
-    uuid,
-}: FileUploaderProps) {
-    const [error, setError] = React.useState('');
+export default function FileUploader({ name, control, knappTekst, uuid }: FileUploaderProps) {
+    const [error, setError] = React.useState( "");
     const [dragOver, setDragOver] = React.useState<boolean>(false);
     const fileUploadInputElement = React.useRef<HTMLInputElement>(null);
     const inputId = 'test';
@@ -53,78 +48,49 @@ export default function FileUploader({
     });
 
     const validerStørrelse = (file: File): Boolean => {
-        const samletStørrelse = fields.reduce(
-            (acc, fil) => acc + fil.file.size,
-            0
-        );
-        return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE;
-    };
+        const samletStørrelse = fields.reduce((acc, fil) => acc + fil.file.size, 0)
+        console.log(samletStørrelse)
+        return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE
+    }
 
     const fileSizeString = (size: number) => {
         const kb = size / 1024;
-        return kb > 1000
-            ? `${(kb / 1024).toFixed(1)} mB`
-            : `${Math.floor(kb)} kB`;
+        return kb > 1000 ? `${(kb / 1024).toFixed(1)} mB` : `${Math.floor(kb)} kB`;
     };
 
     return (
         <div className={cls}>
-            {fields
-                ?.filter((attachment) => attachment.uuid === uuid)
-                .map((attachment, index) => {
-                    return (
-                        <Panel className={styles.fileCard} key={attachment.id}>
-                            <div className={styles.fileCardLeftContent}>
-                                <div className={styles.fileSuccess}>
-                                    <FileSuccess
-                                        color={'var(--a-icon-success)'}
-                                    />
-                                </div>
-                                <div className={styles.fileInputText}>
-                                    <span
-                                        onClick={() => {
-                                            var data = new Blob(
-                                                [attachment.file],
-                                                { type: `application/pdf` }
-                                            );
-                                            var csvURL =
-                                                window.URL.createObjectURL(
-                                                    data
-                                                );
-                                            var tempLink =
-                                                document.createElement('a');
-                                            tempLink.href = csvURL;
-                                            tempLink.setAttribute(
-                                                'download',
-                                                attachment.file.name
-                                            );
-                                            tempLink.click();
-                                        }}
-                                    >
-                                        {attachment.file.name}
-                                    </span>
-                                    <Detail>
-                                        {fileSizeString(attachment.file.size)}
-                                    </Detail>
-                                </div>
+            {fields?.filter((attachment) =>
+                attachment.uuid ===  uuid
+            ).map((attachment, index) => {
+                return (
+                    <Panel className={styles.fileCard} key={attachment.id}>
+                        <div className={styles.fileCardLeftContent}>
+                            <div className={styles.fileSuccess}>
+                                <FileSuccess color={'var(--a-icon-success)'} />
                             </div>
-                            <button
-                                type={'button'}
-                                onClick={() => remove(index)}
-                                tabIndex={0}
-                                onKeyPress={(event) => {
-                                    if (event.key === 'Enter') {
-                                        remove(index);
-                                    }
-                                }}
-                                className={styles.deleteAttachment}
-                            >
-                                <Delete title={'Slett'} />
-                                <BodyShort>{'Slett'}</BodyShort>
-                            </button>
-                        </Panel>
-                    );
-                })}
+                            <div className={styles.fileInputText}>
+                                <span>{attachment.file.name}</span>
+                                <Detail>{fileSizeString(attachment.file.size)}</Detail>
+                            </div>
+                        </div>
+                        <button
+                            type={'button'}
+                            onClick={() => remove(index)}
+                            tabIndex={0}
+                            onKeyPress={(event) => {
+                                if (event.key === 'Enter') {
+                                    remove(index);
+                                }
+                            }}
+                            className={styles.deleteAttachment}
+                        >
+                            <Delete title={'Slett'} />
+                            <BodyShort>{'Slett'}</BodyShort>
+                        </button>
+                    </Panel>
+                );
+            })}
 
             <div
                 className={styles.dropZone}
@@ -141,13 +107,13 @@ export default function FileUploader({
                         onChange={(e) => {
                             const file = e?.target?.files?.[0];
                             if (file && validerStørrelse(file)) {
-                                setError('');
+                                setError("")
                                 append({
                                     file,
-                                    uuid,
+                                    uuid
                                 });
                             } else {
-                                setError(`Filen er for stor`);
+                                setError(`Filen er for stor!`)
                             }
                         }}
                         className={styles.visuallyHidden}
@@ -156,7 +122,7 @@ export default function FileUploader({
                         accept="image/jpg,image/png,.pdf"
                     />
                     <BodyShort>{'Dra og slipp'}</BodyShort>
-                    <BodyShort className={styles.bodyShort}>{'eller'}</BodyShort>
+                    <BodyShort style={{padding: "1rem"}}>{'eller'}</BodyShort>
                     <label htmlFor={inputId}>
                         <span
                             className={`${styles?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
@@ -173,15 +139,11 @@ export default function FileUploader({
                             {knappTekst}
                         </span>
                     </label>
-                    {error != '' && (
-                        <Alert
-                            size="small"
-                            variant="error"
-                            className={styles.alert}
-                        >
+                    {error != "" &&
+                        <Alert size="small" variant="error" style={{marginTop: "1rem"}}>
                             {error}
                         </Alert>
-                    )}
+                    }
                 </>
             </div>
         </div>

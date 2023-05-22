@@ -15,8 +15,7 @@ const appDirectives = {
 module.exports = {
     output: 'standalone',
     async headers() {
-        const environment =
-            process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+        const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
         const csp = await buildCspHeader(appDirectives, { env: environment });
         const securityHeaders = [
             {

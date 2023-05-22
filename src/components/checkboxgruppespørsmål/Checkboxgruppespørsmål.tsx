@@ -40,16 +40,9 @@ export default function Checkboxgruppespørsmål({
                     onChange={onChange}
                     error={errorMessage}
                 >
-                    {hjelpetekst && (
-                        <ReadMore header={hjelpetekst.tittel}>
-                            {hjelpetekst.tekst}
-                        </ReadMore>
-                    )}
+                    {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
                     {alternativer.map((alternativ) => (
-                        <Checkbox
-                            value={alternativ.value}
-                            key={alternativ.value}
-                        >
+                        <Checkbox value={alternativ.value} key={alternativ.value}>
                             {alternativ.tekst}
                         </Checkbox>
                     ))}

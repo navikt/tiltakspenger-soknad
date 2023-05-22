@@ -18,10 +18,7 @@ interface PeriodespørsmålProps {
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
     const validateObject: { [key: string]: ValidatorFunction } = {};
-    validate.forEach(
-        (validatorFunction, index) =>
-            (validateObject[`${index}`] = validatorFunction)
-    );
+    validate.forEach((validatorFunction, index) => (validateObject[`${index}`] = validatorFunction));
     return validateObject;
 }
 
@@ -42,20 +39,12 @@ export default function Periodespørsmål({
 }: PeriodespørsmålProps) {
     const { control, watch, formState } = useFormContext();
     const verdi = watch(name);
-    const defaultValue = verdi
-        ? { from: dayjs(verdi.fra).toDate(), to: dayjs(verdi.til).toDate() }
-        : null;
+    const defaultValue = verdi ? { from: dayjs(verdi.fra).toDate(), to: dayjs(verdi.til).toDate() } : null;
     const errorMessage = get(formState.errors, name)?.message;
     return (
         <fieldset className={styles.periodespørsmål}>
-            <legend className={styles.periodespørsmål__legend}>
-                {children}
-            </legend>
-            {hjelpetekst && (
-                <ReadMore header={hjelpetekst.tittel}>
-                    {hjelpetekst.tekst}
-                </ReadMore>
-            )}
+            <legend className={styles.periodespørsmål__legend}>{children}</legend>
+            {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
                 name={name}
                 control={control}

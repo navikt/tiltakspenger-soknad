@@ -40,11 +40,7 @@ export default function Flervalgsspørsmål({
                     onChange={onChange}
                     error={errorMessage}
                 >
-                    {hjelpetekst && (
-                        <ReadMore header={hjelpetekst.tittel}>
-                            {hjelpetekst.tekst}
-                        </ReadMore>
-                    )}
+                    {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
                     {alternativer.map((alternativ) => (
                         <Radio value={alternativ.value} key={alternativ.value}>
                             {alternativ.tekst}

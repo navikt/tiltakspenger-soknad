@@ -10,10 +10,7 @@ function getUrl(req: NextApiRequest): string {
     return `${backendUrl}${path}`;
 }
 
-async function makeApiRequest(
-    request: NextApiRequest,
-    oboToken: string
-): Promise<Response> {
+async function makeApiRequest(request: NextApiRequest, oboToken: string): Promise<Response> {
     const url = getUrl(request);
     if (request.method!.toUpperCase() === 'GET') {
         return makeGetRequest(url, oboToken);
@@ -24,10 +21,7 @@ async function makeApiRequest(
     return Promise.reject(`Unsupported method ${request.method}`);
 }
 
-export default async function middleware(
-    request: NextApiRequest,
-    response: NextApiResponse
-): Promise<void> {
+export default async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
     let oboToken = null;
     try {
         logger.info('Henter token');
@@ -55,16 +49,10 @@ export default async function middleware(
             } else {
                 logger.info('Respons var ikke OK');
                 const error = await res.text();
-                response
-                    .status(res.status)
-                    .json({ error: !error ? res.statusText : error });
+                response.status(res.status).json({ error: !error ? res.statusText : error });
             }
         } catch (error) {
-            logger.error(
-                `Fikk ikke kontakt med APIet, returnerer 502. Message: ${
-                    (error as Error).message
-                }`
-            );
+            logger.error(`Fikk ikke kontakt med APIet, returnerer 502. Message: ${(error as Error).message}`);
             response.status(502).json({ message: 'Bad Gateway' });
         }
     }

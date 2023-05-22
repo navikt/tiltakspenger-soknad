@@ -13,10 +13,7 @@ const loggerOptions: LoggerOptions = {
         },
         log: (object: any) => {
             if (object.err) {
-                const err =
-                    object.err instanceof Error
-                        ? pino.stdSerializers.err(object.err)
-                        : object.err;
+                const err = object.err instanceof Error ? pino.stdSerializers.err(object.err) : object.err;
                 object.stack_trace = err.stack;
                 object.type = err.type;
                 object.message = err.message;

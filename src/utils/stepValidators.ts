@@ -2,17 +2,9 @@ import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { Søknadssteg } from '@/types/Søknadssteg';
 
 export function brukerHarFyltUtTiltakssteg({
-    tiltak: {
-        aktivitetId,
-        periode,
-        søkerHeleTiltaksperioden,
-        arenaRegistrertPeriode,
-    },
+    tiltak: { aktivitetId, periode, søkerHeleTiltaksperioden, arenaRegistrertPeriode },
 }: Spørsmålsbesvarelser) {
-    const tiltaketHarPeriode =
-        arenaRegistrertPeriode &&
-        arenaRegistrertPeriode.fra &&
-        arenaRegistrertPeriode.til;
+    const tiltaketHarPeriode = arenaRegistrertPeriode && arenaRegistrertPeriode.fra && arenaRegistrertPeriode.til;
     if (tiltaketHarPeriode && søkerHeleTiltaksperioden === undefined) {
         return false;
     } else if (søkerHeleTiltaksperioden) {
@@ -55,10 +47,7 @@ export function brukerHarFyltUtKvpSteg({
     return true;
 }
 
-export function brukerHarFyltUtAndreUtbetalingerSteg({
-    pensjonsordning,
-    etterlønn,
-}: Spørsmålsbesvarelser) {
+export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlønn }: Spørsmålsbesvarelser) {
     if (
         pensjonsordning.mottarEllerSøktPensjonsordning === undefined ||
         etterlønn.mottarEllerSøktEtterlønn === undefined
@@ -81,10 +70,7 @@ export function brukerHarFyltUtAndreUtbetalingerSteg({
     return true;
 }
 
-export function brukerHarFyltUtNødvendigeOpplysninger(
-    svar: Spørsmålsbesvarelser,
-    steg: Søknadssteg
-) {
+export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg) {
     if (steg === Søknadssteg.TILTAK) {
         // todo: Sjekk at bruker har huket av på bekreftelsesboks på innledningssteget når det er klart
         return true;

@@ -6,17 +6,17 @@
     padding: 0.5rem 1rem 1rem 2rem;
 }
 
-.knappLeggTilBarn {
+.knappLeggTilBarn{
     width: 100%;
     margin-top: 1rem;
 }
 
-.knappAvbrytModal {
+.knappAvbrytModal{
     width: 100%;
     margin-top: 1rem;
 }
 
-.knappLagreModal {
+.knappLagreModal{
     width: 100%;
     margin-top: 1rem;
     margin-bottom: 1rem;
@@ -35,5 +35,5 @@
 }
 
 .modalTextField {
-    width: 50%;
+    width: 50%
 }

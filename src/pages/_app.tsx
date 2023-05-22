@@ -11,20 +11,7 @@ const defaultPersonalia = {
     mellomnavn: 'Bar',
     etternavn: 'Baz',
     fødselsnummer: '123',
-    barn: [
-        {
-            fornavn: 'Test',
-            etternavn: 'Testesen',
-            fødselsdato: '2025-01-01',
-            uuid: uuidv4(),
-        },
-        {
-            fornavn: 'Fest',
-            etternavn: 'Festesen',
-            fødselsdato: '2020-12-31',
-            uuid: uuidv4(),
-        },
-    ],
+    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },{ fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() }],
 };
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
@@ -37,8 +24,7 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
 }
 
 function App({ Component, pageProps }: AppProps) {
-    const [personaliaData, setPersonaliaData] =
-        useState<Personalia>(defaultPersonalia);
+    const [personaliaData, setPersonaliaData] = useState<Personalia>(defaultPersonalia);
 
     return (
         <Component
