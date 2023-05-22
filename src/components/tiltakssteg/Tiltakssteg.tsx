@@ -16,6 +16,8 @@ import {
 import { FormPeriode } from '@/types/FormPeriode';
 
 interface TiltaksstegProps {
+    title: string;
+    stegNummerTekst: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     tiltak: Tiltak[];
@@ -26,7 +28,7 @@ function valgtTiltakValidator(verdi: string) {
     return påkrevdSvarValidator(verdi, 'Du må oppgi hvilket tiltak du søker tiltakspenger for');
 }
 
-export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
+export default function Tiltakssteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
     const { watch, resetField } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
@@ -123,10 +125,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
 
     return (
         <Step
-            title="Tiltak"
+            title={title}
+            stepNumberText={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={1}
             guide={veiledningstekst()}
             submitSectionRenderer={submitSectionRenderer}
             hideStepIndicator={!brukerHarRegistrerteTiltak}

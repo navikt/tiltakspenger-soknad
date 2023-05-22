@@ -17,10 +17,12 @@ export function brukerHarFyltUtTiltakssteg({
 export function brukerHarFyltUtKvpSteg({
     kvalifiseringsprogram,
     introduksjonsprogram,
+    mottarAndreUtbetalinger
 }: Spørsmålsbesvarelser) {
     if (
         kvalifiseringsprogram.deltar === undefined ||
-        introduksjonsprogram.deltar === undefined
+        introduksjonsprogram.deltar === undefined ||
+        mottarAndreUtbetalinger === undefined
     ) {
         return false;
     }
@@ -81,6 +83,8 @@ export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlø
 }
 
 export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg) {
+    const skalVisesAndreUtbetalingerSteg = svar.mottarAndreUtbetalinger;
+
     if (steg === Søknadssteg.TILTAK) {
         // todo: Sjekk at bruker har huket av på bekreftelsesboks på innledningssteget når det er klart
         return true;
@@ -89,24 +93,48 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
         return brukerHarFyltUtTiltakssteg(svar) && brukerHarFyltUtKvpSteg(svar);
     } else if (steg === Søknadssteg.INSTITUSJONSOPPHOLD) {
-        return (
-            brukerHarFyltUtTiltakssteg(svar) &&
-            brukerHarFyltUtKvpSteg(svar) &&
-            brukerHarFyltUtAndreUtbetalingerSteg(svar)
-        );
+        if (skalVisesAndreUtbetalingerSteg) {
+            return (
+                brukerHarFyltUtTiltakssteg(svar) &&
+                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtAndreUtbetalingerSteg(svar)
+            );
+        } else {
+            return (
+                brukerHarFyltUtTiltakssteg(svar) &&
+                brukerHarFyltUtKvpSteg(svar)
+            );
+        }
     } else if (steg === Søknadssteg.BARNETILLEGG) {
-        return (
-            brukerHarFyltUtTiltakssteg(svar) &&
-            brukerHarFyltUtKvpSteg(svar) &&
-            brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
-            brukerHarFyltUtInstitusjonsoppholdSteg(svar)
-        );
+        if (skalVisesAndreUtbetalingerSteg) {
+            return (
+                brukerHarFyltUtTiltakssteg(svar) &&
+                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
+                brukerHarFyltUtInstitusjonsoppholdSteg(svar)
+            );
+        } else {
+            return (
+                brukerHarFyltUtTiltakssteg(svar) &&
+                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtInstitusjonsoppholdSteg(svar)
+            );
+        }
     } else if (steg === Søknadssteg.OPPSUMMERING) {
         // todo: Sjekk at bruker har fylt ut steget om barnetillegg når det er klart
-        return (
-            brukerHarFyltUtTiltakssteg(svar) &&
-            brukerHarFyltUtKvpSteg(svar) &&
-            brukerHarFyltUtAndreUtbetalingerSteg(svar)
-        );
+        if (skalVisesAndreUtbetalingerSteg) {
+            return (
+                brukerHarFyltUtTiltakssteg(svar) &&
+                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
+                brukerHarFyltUtInstitusjonsoppholdSteg(svar)
+            );
+        } else {
+            return (
+                brukerHarFyltUtTiltakssteg(svar) &&
+                brukerHarFyltUtKvpSteg(svar) &&
+                brukerHarFyltUtInstitusjonsoppholdSteg(svar)
+            );
+        }
     }
 }

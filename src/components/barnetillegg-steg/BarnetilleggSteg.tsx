@@ -12,6 +12,8 @@ import Søknad from '@/types/Søknad';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 
 interface BarnetilleggStegProps {
+    title: string;
+    stegNummerTekst: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     personalia: Personalia;
@@ -27,7 +29,7 @@ interface Barn {
     fødselsdato: string;
 }
 
-export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
+export default function BarnetilleggSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, personalia }: BarnetilleggStegProps) {
     const { watch, control } = useFormContext<Søknad>();
     const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
     const watchØnskerÅSøkeBarnetilleggForAndreBarn = watch('svar.barnetillegg.ønskerÅSøkeBarnetilleggForAndreBarn');
@@ -44,10 +46,10 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep, pers
 
     return (
         <Step
-            title="Barnetillegg"
+            title={title}
+            stepNumberText={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={4}
             guide={
                 <>
                     <p>Når du har rett til tiltakspenger, kan du også ha rett på barnetillegg.</p>

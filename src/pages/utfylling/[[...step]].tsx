@@ -46,6 +46,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 institusjonsopphold: {},
                 introduksjonsprogram: {},
                 kvalifiseringsprogram: {},
+                mottarAndreUtbetalinger: false,
                 pensjonsordning: {},
                 harBekreftetAlleOpplysninger: false,
             },
@@ -150,10 +151,20 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         return step && step[0] === Søknadssteg.OPPSUMMERING && formStateErPåOppsummeringssteg;
     };
 
+    const hentStegNummerTekst = (stegNummer: number) => {
+        let totalSteg = 5;
+        if(svar.mottarAndreUtbetalinger) {
+            return `Steg ${stegNummer+1} av ${totalSteg+1}`;
+        }
+        return `Steg ${stegNummer} av ${totalSteg}`;
+    }
+
     return (
         <FormProvider {...formMethods}>
             {brukerErPåTiltakssteg() && (
                 <Tiltakssteg
+                    title="Tiltak"
+                    stegNummerTekst={hentStegNummerTekst(1)}
                     onCompleted={navigerBrukerTilKvpSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
                     tiltak={tiltak}
@@ -162,6 +173,8 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             )}
             {brukerErPåKvpSteg() && (
                 <KvpSteg
+                    title="Andre utbetalinger og programdeltagelse"
+                    stegNummerTekst={hentStegNummerTekst(2)}
                     onCompleted={navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold}
                     onGoToPreviousStep={goBack}
                     valgtTiltak={valgtTiltak!}
@@ -169,11 +182,15 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             )}
             {brukerErPåAndreUtbetalingerSteg() && (
                 <AndreUtbetalingerSteg
+                    title="Andre utbetalinger"
+                    stegNummerTekst={hentStegNummerTekst(2)}
                     onCompleted={navigerBrukerTilInstitusjonsOppholdSteg}
                     onGoToPreviousStep={goBack} />
             )}
             {brukerErPåInstitusjonsoppholdSteg() && (
                 <InstitusjonsoppholdSteg
+                    title="Institusjonsopphold"
+                    stegNummerTekst={hentStegNummerTekst(3)}
                     onCompleted={navigerBrukerTilBarnetilleggSteg}
                     onGoToPreviousStep={goBack}
                     valgtTiltak={valgtTiltak!}
@@ -181,13 +198,20 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             )}
             {brukerErPåBarnetilleggSteg() && (
                 <BarnetilleggSteg
+                    title="Barnetillegg"
+                    stegNummerTekst={hentStegNummerTekst(4)}
                     onCompleted={navigerBrukerTilOppsummeringssteg}
                     onGoToPreviousStep={goBack}
                     personalia={personalia}
                 />
             )}
             {brukerErPåOppsummeringssteg() && (
-                <Oppsummeringssteg onGoToPreviousStep={goBack} personalia={personalia} valgtTiltak={valgtTiltak!} />
+                <Oppsummeringssteg
+                    title="Oppsummering"
+                    stegNummerTekst={hentStegNummerTekst(5)}
+                    onGoToPreviousStep={goBack}
+                    personalia={personalia}
+                    valgtTiltak={valgtTiltak!} />
             )}
         </FormProvider>
     );

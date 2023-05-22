@@ -2,12 +2,13 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
-import Fritekstspørsmål from '@/components/fritekstspørsmål/Fritekstspørsmål';
 import Step from '@/components/step/Step';
 import styles from './andreutbetalinger.module.css'
 import { påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 
 interface AndreUtbetalingerStegProps {
+    title: string;
+    stegNummerTekst: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
 }
@@ -40,10 +41,9 @@ function etterlønnutbetalerValidator(verdi: string) {
     return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi hvem som utbetaler etterlønn');
 }
 
-export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
+export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
     const { watch } = useFormContext();
     const watchPensjonsordning = watch('svar.pensjonsordning.mottar');
-    const watchEtterlønn = watch('svar.etterlønn.mottar');
     const watchSykepenger = watch('svar.sykepenger.mottar');
     const watchGjenlevendepensjon = watch('svar.gjenlevendepensjon.mottar');
     const watchAlderspensjon = watch('svar.alderspensjon.mottar');
@@ -51,10 +51,10 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
 
     return (
         <Step
-            title="Andre utbetalinger"
+            title={title}
+            stepNumberText={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={3}
             guide={
                 <>
                     <p>
@@ -71,25 +71,25 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
             }
         >
             <div className={styles.blokk}>
-            <JaNeiSpørsmål
-                name="svar.sykepenger.mottar"
-                validate={sykepengerValidator}
-                hjelpetekst={{
-                            tittel: 'Hva er sykepenger? ',
-                            tekst: (
-                                <>
-                                    <p>Du kan få sykepenger hvis du ikke kan jobbe på grunn av sykdom eller skade.
-                                       Du kan også få sykepenger hvis du blir syk mens du mottar dagpenger.
-                                    </p>
-                                    <p>Les mer om sykepenger på (LENKE)</p>
-                                </>)
-                            }}
-            >
-                Mottar du sykepenger?
-            </JaNeiSpørsmål>
-            {watchSykepenger && (
-                <Periodespørsmål name="svar.sykepenger.periode">Når mottar du sykepenger?</Periodespørsmål>
-            )}
+                <JaNeiSpørsmål
+                    name="svar.sykepenger.mottar"
+                    validate={sykepengerValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er sykepenger? ',
+                        tekst: (
+                            <>
+                                <p>Du kan få sykepenger hvis du ikke kan jobbe på grunn av sykdom eller skade.
+                                    Du kan også få sykepenger hvis du blir syk mens du mottar dagpenger.
+                                </p>
+                                <p>Les mer om sykepenger på (LENKE)</p>
+                            </>)
+                    }}
+                >
+                    Mottar du sykepenger?
+                </JaNeiSpørsmål>
+                {watchSykepenger && (
+                    <Periodespørsmål name="svar.sykepenger.periode">Når mottar du sykepenger?</Periodespørsmål>
+                )}
             </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
@@ -130,7 +130,7 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
                     Mottar du alderspensjon?
                 </JaNeiSpørsmål>
                 {watchAlderspensjon && (
-                    <Periodespørsmål name="svar.alderspensjon.periode">Når mortar du alderspensjon?</Periodespørsmål>
+                    <Periodespørsmål name="svar.alderspensjon.periode" ikkeVisTilDato>Når mortar du alderspensjon?</Periodespørsmål>
                 )}
             </div>
             <div className={styles.blokk}>
@@ -158,27 +158,16 @@ export default function AndreUtbetalingerSteg({ onCompleted, onGoToPreviousStep 
                 )}
             </div>
             <div className={styles.blokk}>
-            <JaNeiSpørsmål
-                name="svar.etterlønn.mottar"
-                validate={etterlønnValidator}
-                hjelpetekst={{
-                                tittel: 'Hva er etterlønn?',
-                                tekst: 'Med etterlønn menes penger du mottar i forbindelse med at du slutter i arbeid og ikke jobber.'
-                            }}
-            >
-                Mottar du etterlønn?
-            </JaNeiSpørsmål>
-            {watchEtterlønn && (
-                <>
-                    <Fritekstspørsmål
-                        name="svar.etterlønn.utbetaler"
-                        textFieldProps={{ htmlSize: 45 }}
-                        validate={etterlønnutbetalerValidator}
-                    >
-                        Hvem utbetaler etterlønn?
-                    </Fritekstspørsmål>
-                </>
-            )}
+                <JaNeiSpørsmål
+                    name="svar.etterlønn.mottar"
+                    validate={etterlønnValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er etterlønn?',
+                        tekst: 'Med etterlønn menes penger du mottar i forbindelse med at du slutter i arbeid og ikke jobber.'
+                    }}
+                >
+                    Mottar du etterlønn?
+                </JaNeiSpørsmål>
             </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål

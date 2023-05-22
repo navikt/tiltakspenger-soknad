@@ -8,6 +8,7 @@ interface PeriodevelgerProps {
     id?: string;
     minDate?: Date;
     maxDate?: Date;
+    ikkeVisTilDato?: boolean;
 }
 
 export default function Periodevelger({
@@ -17,6 +18,7 @@ export default function Periodevelger({
     id,
     minDate,
     maxDate,
+    ikkeVisTilDato,
 }: PeriodevelgerProps) {
     function getRangepickerProps() {
         if (defaultValue)
@@ -45,7 +47,7 @@ export default function Periodevelger({
                 error={errorMessage}
                 id={`${id}.fra`}
             />
-            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} id={`${id}.til`} />
+            {!ikkeVisTilDato && <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} id={`${id}.til`} />}
         </UNSAFE_DatePicker>
     );
 }

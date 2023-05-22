@@ -20,6 +20,8 @@ import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import SøknadResponse from "@/types/SøknadResponse";
 
 interface OppsummeringsstegProps {
+    title: string;
+    stegNummerTekst: string;
     onGoToPreviousStep: () => void;
     personalia: Personalia;
     valgtTiltak: Tiltak;
@@ -104,7 +106,7 @@ function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
 }
 
-export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valgtTiltak }: OppsummeringsstegProps) {
+export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPreviousStep, personalia, valgtTiltak }: OppsummeringsstegProps) {
     const router = useRouter();
     const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
 
@@ -155,9 +157,9 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
 
     return (
         <Step
-            title="Oppsummering"
+            title={title}
+            stepNumberText={stegNummerTekst}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={5}
             onCompleted={sendInnSøknad}
             submitSectionRenderer={() => (
                 <div className={stepStyles.step__buttonsection}>

@@ -14,6 +14,7 @@ interface PeriodespørsmålProps {
     minDate?: Date;
     maxDate?: Date;
     hjelpetekst?: Hjelpetekst;
+    ikkeVisTilDato?: boolean;
 }
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
@@ -36,6 +37,7 @@ export default function Periodespørsmål({
     minDate,
     maxDate,
     hjelpetekst,
+    ikkeVisTilDato,
 }: PeriodespørsmålProps) {
     const { control, watch, formState } = useFormContext();
     const verdi = watch(name);
@@ -62,6 +64,7 @@ export default function Periodespørsmål({
                         errorMessage={errorMessage}
                         minDate={minDate}
                         maxDate={maxDate}
+                        ikkeVisTilDato={ikkeVisTilDato}
                     />
                 )}
             />

@@ -9,6 +9,8 @@ import { formatPeriode } from '@/utils/formatPeriode';
 import { Tiltak } from '@/types/Tiltak';
 
 interface KvpStegProps {
+    title: string;
+    stegNummerTekst: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     valgtTiltak: Tiltak;
@@ -20,10 +22,6 @@ function deltarIKvpValidator(verdi: boolean) {
 
 function deltarIIntroprogrammetValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i introduksjonsprogrammet');
-}
-
-function borPåInstitusjonValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du bor på institusjon');
 }
 
 function mottarAndreUtbetalinger(verdi: boolean) {
@@ -38,11 +36,7 @@ function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
-function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du bor på institusjon');
-}
-
-export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
+export default function KvpSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
     const { watch } = useFormContext();
 
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
@@ -53,10 +47,10 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }
 
     return (
         <Step
-            title="Andre utbetalinger"
+            title={title}
+            stepNumberText={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={2}
             guide={
                 <React.Fragment>
                     <p>

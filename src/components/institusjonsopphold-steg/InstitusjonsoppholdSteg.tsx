@@ -9,6 +9,8 @@ import {formatPeriode} from "@/utils/formatPeriode";
 import {Tiltak} from "@/types/Tiltak";
 
 interface InstitusjonsoppholdProps {
+    title: string;
+    stegNummerTekst: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     valgtTiltak: Tiltak;
@@ -22,7 +24,7 @@ function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du bor på institusjon');
 }
 
-export default function InstitusjonsoppholdSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: InstitusjonsoppholdProps) {
+export default function InstitusjonsoppholdSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, valgtTiltak }: InstitusjonsoppholdProps) {
     const { watch } = useFormContext();
     const watchBorPåInstitusjon = watch('svar.institusjonsopphold.borPåInstitusjon');
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
@@ -30,10 +32,10 @@ export default function InstitusjonsoppholdSteg({ onCompleted, onGoToPreviousSte
 
     return (
         <Step
-            title="Institusjonsopphold"
+            title={title}
+            stepNumberText={stegNummerTekst}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={4}
             guide={
                 <React.Fragment>
                     <p>
