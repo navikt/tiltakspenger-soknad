@@ -17,7 +17,7 @@ import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekrefte
 import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
-import SøknadResponse from "@/types/SøknadResponse";
+import SøknadResponse from '@/types/SøknadResponse';
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
@@ -94,7 +94,7 @@ function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valg
 }
 
 function postSøknadMultipart(formData: FormData) {
-     return fetch('/api/soknad', {
+    return fetch('/api/soknad', {
         method: 'POST',
         body: formData,
     });
@@ -121,7 +121,13 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
         barnetillegg,
     } = svar;
 
+    const valgtTiltakManglerPeriode =
+        !valgtTiltak?.arenaRegistrertPeriode ||
+        !valgtTiltak?.arenaRegistrertPeriode.fra ||
+        !valgtTiltak?.arenaRegistrertPeriode.til;
+
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
+    const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
     const registrerteBarnSøktBarnetilleggFor = personalia.barn.filter(
         ({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0
@@ -143,10 +149,12 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                 return router.push('/feil');
             }
 
-            const soknadInnsendingsTidspunkt = await response.json().then((json : SøknadResponse) => json.innsendingTidspunkt);
+            const soknadInnsendingsTidspunkt = await response
+                .json()
+                .then((json: SøknadResponse) => json.innsendingTidspunkt);
             return router.push({
                 pathname: '/kvittering',
-                query: { innsendingsTidspunkt : soknadInnsendingsTidspunkt},
+                query: { innsendingsTidspunkt: soknadInnsendingsTidspunkt },
             });
         } catch {
             return router.push('/feil');
@@ -202,10 +210,16 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                     <Accordion.Content>
                         <Oppsummeringsfelt feltNavn="Tiltak" feltVerdi={valgtTiltak?.arrangør || ''} />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode!.fra)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Fra dato"
+                                feltVerdi={formatDate(opprinneligTiltaksperiode!.fra)}
+                            />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Til dato"
+                                feltVerdi={formatDate(opprinneligTiltaksperiode!.til)}
+                            />
                         </div>
 
                         <div style={{ marginTop: '2rem' }}>
