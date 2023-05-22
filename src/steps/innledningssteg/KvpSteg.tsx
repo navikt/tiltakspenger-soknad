@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/validators';
+import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
 import { FormPeriode } from '@/types/FormPeriode';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { Tiltak } from '@/types/Tiltak';
@@ -41,8 +41,8 @@ function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
 export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
     const { watch } = useFormContext();
 
-    const tiltaksperiode = watch('svar.tiltak.periode');
-    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode || valgtTiltak?.deltakelsePeriode);
+    const brukerregistrertPeriode = watch('svar.tiltak.periode');
+    const tiltaksperiodeTekst = formatPeriode(brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode);
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');

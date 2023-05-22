@@ -7,9 +7,9 @@ export function påkrevdJaNeiSpørsmålValidator(verdi: boolean, feilmelding: st
     }
 }
 
-export function validerNavn(verdi: string) {
-    if (!verdi.match(/[A-Z a-zæøåÆØÅ]/g)){
-        return "Kan kun inneholde bokstaver"
+export function påkrevdBekreftelsesspørsmål(verdi: boolean, feilmelding: string) {
+    if (verdi !== true) {
+        return feilmelding;
     }
 }
 
@@ -36,6 +36,12 @@ export function påkrevdDatoValidator(dato: Date, feilmelding: string) {
 
 export function påkrevdFritekstfeltValidator(verdi: string, feilmelding: string) {
     if (!verdi || verdi.length === 0) {
+        return feilmelding;
+    }
+}
+
+export function påkrevdSvarValidator(verdi: string, feilmelding: string) {
+    if (!verdi) {
         return feilmelding;
     }
 }

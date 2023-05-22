@@ -5,7 +5,7 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import {v4 as uuidv4} from 'uuid';
 import styles from './Barnetillegg.module.css';
 import {ExternalLinkIcon} from '@navikt/aksel-icons';
-import {påkrevdDatoValidator, påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator} from '@/utils/validators';
+import {påkrevdDatoValidator, påkrevdFritekstfeltValidator, påkrevdJaNeiSpørsmålValidator} from '@/utils/formValidators';
 import FileUploader from "@/components/file-uploader/FIleUploader";
 import {UseFieldArrayReturn, useFormContext} from "react-hook-form";
 import Søknad from "@/types/Søknad";

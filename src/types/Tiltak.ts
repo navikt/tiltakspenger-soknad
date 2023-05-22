@@ -3,7 +3,8 @@ import { Periode } from '@/types/Periode';
 export interface Tiltak {
     aktivitetId: string;
     type: string;
-    deltakelsePeriode: Periode;
+    typeNavn: string;
+    arenaRegistrertPeriode?: Periode;
     arrangør: string;
     status: string;
 }

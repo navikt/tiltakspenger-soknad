@@ -20,6 +20,7 @@ export interface FormTiltak {
     aktivitetId: string;
     periode?: Periode;
     søkerHeleTiltaksperioden: boolean;
+    arenaRegistrertPeriode?: Periode;
 }
 
 export interface Barnetillegg {
@@ -54,6 +55,7 @@ interface Spørsmålsbesvarelser {
     barnetillegg: Barnetillegg;
     pensjonsordning: Pensjonsordning;
     etterlønn: Etterlønn;
+    harBekreftetAlleOpplysninger: boolean;
 }
 
 export default Spørsmålsbesvarelser;

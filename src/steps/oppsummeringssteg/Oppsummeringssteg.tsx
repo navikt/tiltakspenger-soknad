@@ -2,7 +2,6 @@ import React from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Accordion, Button, ConfirmationPanel } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
-import styles from '@/components/step/Step.module.css';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
 import { Personalia } from '@/types/Personalia';
 import { Periode } from '@/types/Periode';
@@ -14,6 +13,11 @@ import { Barn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
 import toSøknadJson from '@/utils/toSøknadJson';
 import { useRouter } from 'next/router';
+import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
+import styles from './Oppsummeringssteg.module.css';
+import stepStyles from './../../components/step/Step.module.css';
+import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
+import SøknadResponse from "@/types/SøknadResponse";
 import BarneInfo from "@/components/barnetillegg/BarneInfo";
 
 interface OppsummeringsstegProps {
@@ -72,8 +76,8 @@ function oppsummeringBarn(barn: Barn ) {
     }
 }
 
-function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia): FormData {
-    const søknadJson = toSøknadJson(søknad.svar, personalia.barn);
+function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
+    const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
     const formData = new FormData();
     formData.append('søknad', søknadJson as string);
     søknad.vedlegg.forEach((vedlegg, index) => {
@@ -83,10 +87,14 @@ function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia): For
 }
 
 function postSøknadMultipart(formData: FormData) {
-    return fetch('/api/soknad', {
+     return fetch('/api/soknad', {
         method: 'POST',
         body: formData,
     });
+}
+
+function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
+    return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
 }
 
 export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valgtTiltak }: OppsummeringsstegProps) {
@@ -106,7 +114,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
         barnetillegg,
     } = svar;
 
-    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.deltakelsePeriode : tiltak.periode;
+    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
 
     const alleBarnSøktBarnetilleggFor =
         barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
@@ -115,14 +123,19 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
     ;
 
     async function sendInnSøknad() {
-        const formData = lagFormDataForInnsending(søknad, personalia);
+        const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak);
         try {
             setSøknadsinnsendingInProgress(true);
             const response = await postSøknadMultipart(formData);
             if (response.status !== 201) {
                 return router.push('/feil');
             }
-            return router.push('/kvittering');
+
+            const soknadInnsendingsTidspunkt = await response.json().then((json : SøknadResponse) => json.innsendingTidspunkt);
+            return router.push({
+                pathname: '/kvittering',
+                query: { innsendingsTidspunkt : soknadInnsendingsTidspunkt},
+            });
         } catch {
             return router.push('/feil');
         }
@@ -133,8 +146,9 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
             title="Oppsummering"
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={5}
+            onCompleted={sendInnSøknad}
             submitSectionRenderer={() => (
-                <div className={styles.step__buttonsection}>
+                <div className={stepStyles.step__buttonsection}>
                     <Button
                         type="button"
                         onClick={onGoToPreviousStep}
@@ -146,8 +160,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                         Forrige steg
                     </Button>
                     <Button
-                        type="button"
-                        onClick={sendInnSøknad}
+                        type="submit"
                         size="small"
                         style={{ marginLeft: '1rem' }}
                         disabled={søknadsinnsendingInProgress}
@@ -181,6 +194,13 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                         </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
+                        </div>
+
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Jeg søker om tiltakspenger i perioden:"
+                                feltVerdi={formatPeriode(tiltaksperiode!)}
+                            />
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>
@@ -246,12 +266,14 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                     </Accordion.Content>
                 </Accordion.Item>
             </Accordion>
-            <ConfirmationPanel
+            <Bekreftelsesspørsmål
                 label="Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte"
-                style={{ marginTop: '2rem' }}
+                className={styles.bekreftelsesboks}
+                name="svar.harBekreftetAlleOpplysninger"
+                validate={harBekreftetAlleOpplysningerValidator}
             >
                 <b>Vi stoler på deg</b>
-            </ConfirmationPanel>
+            </Bekreftelsesspørsmål>
         </Step>
     );
 }

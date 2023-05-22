@@ -5,12 +5,16 @@ metadata:
   namespace: tpts
   labels:
     team: tpts
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: "20m"
 spec:
   image: {{ image }}
   port: 3000
   env:
       - name: TILTAKSPENGER_SOKNAD_API_URL
         value: {{ TILTAKSPENGER_SOKNAD_API_URL }}
+      - name: NEXT_PUBLIC_TELEMETRY_URL
+        value: {{ NEXT_PUBLIC_TELEMETRY_URL }}
   ingresses:
     - {{ ingress }}
   replicas:

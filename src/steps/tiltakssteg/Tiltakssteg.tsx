@@ -6,7 +6,14 @@ import { formatPeriode } from '@/utils/formatPeriode';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { useFormContext } from 'react-hook-form';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
-import { Button, Link } from '@navikt/ds-react';
+import { Alert, Button, Link } from '@navikt/ds-react';
+import {
+    gyldigPeriodeValidator,
+    påkrevdJaNeiSpørsmålValidator,
+    påkrevdPeriodeValidator,
+    påkrevdSvarValidator,
+} from '@/utils/formValidators';
+import { FormPeriode } from '@/types/FormPeriode';
 
 interface TiltaksstegProps {
     onCompleted: () => void;
@@ -15,12 +22,19 @@ interface TiltaksstegProps {
     valgtTiltak: Tiltak | null;
 }
 
+function valgtTiltakValidator(verdi: string) {
+    return påkrevdSvarValidator(verdi, 'Du må oppgi hvilket tiltak du søker tiltakspenger for');
+}
+
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
     const { watch, resetField } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
-    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
     const brukerHarValgtEtTiltak = !!valgtTiltak;
+    const valgtTiltakManglerPeriode =
+        !valgtTiltak?.arenaRegistrertPeriode ||
+        !valgtTiltak?.arenaRegistrertPeriode.fra ||
+        !valgtTiltak?.arenaRegistrertPeriode.til;
 
     const resetFormValues = () => {
         resetField('svar.tiltak.søkerHeleTiltaksperioden');
@@ -120,33 +134,83 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         >
             {brukerHarRegistrerteTiltak && (
                 <Flervalgsspørsmål
-                    alternativer={tiltak.map(({ arrangør, deltakelsePeriode, aktivitetId }) => {
+                    alternativer={tiltak.map(({ arrangør, arenaRegistrertPeriode, aktivitetId, typeNavn }) => {
+                        let tiltakTekst = `${typeNavn} - ${arrangør}`;
+                        if (arenaRegistrertPeriode && arenaRegistrertPeriode.fra && arenaRegistrertPeriode.til) {
+                            tiltakTekst += `. Periode: ${formatPeriode(arenaRegistrertPeriode)}`;
+                        }
                         return {
-                            tekst: `${arrangør}. Periode: ${formatPeriode(deltakelsePeriode)}`,
+                            tekst: tiltakTekst,
                             value: aktivitetId,
                         };
                     })}
                     name="svar.tiltak.aktivitetId"
+                    validate={valgtTiltakValidator}
                 >
                     Hvilket tiltak ønsker du å søke tiltakspenger for?
                 </Flervalgsspørsmål>
             )}
-            {brukerHarValgtEtTiltak && (
-                <JaNeiSpørsmål name="svar.tiltak.søkerHeleTiltaksperioden" reverse>
-                    Vi har registrert at du deltar på dette tiltaket i perioden{' '}
-                    {formatPeriode(valgtTiltak.deltakelsePeriode)}. Ønsker du å søke tiltakspenger i hele denne
-                    perioden?
-                </JaNeiSpørsmål>
+            {brukerHarValgtEtTiltak && !valgtTiltakManglerPeriode && (
+                <TiltakMedPeriodeUtfylling valgtTiltak={valgtTiltak} />
             )}
-            {brukerHarValgtEtTiltak && søkerHeleTiltaksperioden === false && (
+            {brukerHarValgtEtTiltak && valgtTiltakManglerPeriode && <TiltakUtenPeriodeUtfylling />}
+        </Step>
+    );
+}
+
+interface TiltakMedPeriodeUtfyllingProps {
+    valgtTiltak: Tiltak;
+}
+
+function påkrevdSøkerHeleTiltaksperiodenValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker tiltakspenger for hele tiltaksperioden');
+}
+
+function påkrevdTiltaksperiodeSpørsmål(verdi: FormPeriode) {
+    return påkrevdPeriodeValidator(verdi, 'Du må oppgi hvilken periode du søker tiltakspenger for');
+}
+
+const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingProps) => {
+    const { watch } = useFormContext();
+    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
+    return (
+        <>
+            <JaNeiSpørsmål
+                name="svar.tiltak.søkerHeleTiltaksperioden"
+                reverse
+                validate={påkrevdSøkerHeleTiltaksperiodenValidator}
+            >
+                Vi har registrert at du deltar på dette tiltaket i perioden{' '}
+                {formatPeriode(valgtTiltak.arenaRegistrertPeriode!)}. Ønsker du å søke tiltakspenger i hele denne
+                perioden?
+            </JaNeiSpørsmål>
+            {søkerHeleTiltaksperioden === false && (
                 <Periodespørsmål
                     name="svar.tiltak.periode"
-                    minDate={new Date(valgtTiltak.deltakelsePeriode.fra)}
-                    maxDate={new Date(valgtTiltak.deltakelsePeriode.til)}
+                    minDate={new Date(valgtTiltak.arenaRegistrertPeriode!.fra)}
+                    maxDate={new Date(valgtTiltak.arenaRegistrertPeriode!.til)}
+                    validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
                 >
                     Hvilken periode søker du tiltakspenger for?
                 </Periodespørsmål>
             )}
-        </Step>
+        </>
     );
-}
+};
+
+const TiltakUtenPeriodeUtfylling = () => {
+    return (
+        <>
+            <Alert variant="info" style={{ marginTop: '2rem' }}>
+                Vi har ikke registrert i hvilken periode du deltar på dette tiltaket. Du kan legge inn perioden du
+                ønsker å søke tiltakspenger for under.
+            </Alert>
+            <Periodespørsmål
+                name="svar.tiltak.periode"
+                validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
+            >
+                Hvilken periode søker du tiltakspenger for?
+            </Periodespørsmål>
+        </>
+    );
+};

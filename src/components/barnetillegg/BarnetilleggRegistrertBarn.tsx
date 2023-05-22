@@ -1,7 +1,7 @@
 import { Barn } from '@/types/Barn';
 import React from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/validators';
+import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 import { Link } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import styles from './Barnetillegg.module.css';
