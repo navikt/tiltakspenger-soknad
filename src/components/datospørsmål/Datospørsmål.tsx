@@ -5,7 +5,7 @@ import Datovelger from '@/components/datovelger/Datovelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Datospørsmål.module.css';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
-import {formatDate} from "@/utils/formatDate";
+import { formatDate } from '@/utils/formatDate';
 
 interface DatospørsmålProps {
     name: string;
@@ -30,11 +30,15 @@ export default function Datospørsmål({
     const errorMessage = get(formState.errors, name)?.message;
     return (
         <fieldset className={styles.datospørsmål}>
-            {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
+            {hjelpetekst && (
+                <ReadMore header={hjelpetekst.tittel}>
+                    {hjelpetekst.tekst}
+                </ReadMore>
+            )}
             <Controller
                 name={name}
                 control={control}
-                rules={{validate}}
+                rules={{ validate }}
                 render={({ field: { onChange, value } }) => (
                     <Datovelger
                         id={name}
@@ -44,7 +48,7 @@ export default function Datospørsmål({
                         minDate={minDate}
                         maxDate={maxDate}
                         datoMåVæreIFortid={datoMåVæreIFortid}
-                        value={value ? formatDate(value) : ""}
+                        value={value ? formatDate(value) : ''}
                     />
                 )}
             />

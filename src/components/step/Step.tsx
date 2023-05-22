@@ -43,7 +43,8 @@ export default function Step({
     const shouldRenderCustomSubmitSection = !!submitSectionRenderer;
 
     const allErrors = findAllErrors(errors || [], []);
-    const shouldShowErrorSummary = submitCount > 0 && allErrors && allErrors.length > 0;
+    const shouldShowErrorSummary =
+        submitCount > 0 && allErrors && allErrors.length > 0;
 
     function goToPreviousStepHandler() {
         clearErrors();
@@ -54,17 +55,27 @@ export default function Step({
         <>
             {!hideTitle && <h2 className={styles.step__title}>{title}</h2>}
             {shouldShowErrorSummary && (
-                <ErrorSummary className={styles.step__errorsummary} ref={errorRef}>
+                <ErrorSummary
+                    className={styles.step__errorsummary}
+                    ref={errorRef}
+                >
                     {allErrors.map(({ message, ref, type, types, root }) => {
                         return (
-                            <ErrorSummary.Item key={ref!.name} href={`#${ref!.name}`}>
+                            <ErrorSummary.Item
+                                key={ref!.name}
+                                href={`#${ref!.name}`}
+                            >
                                 {message}
                             </ErrorSummary.Item>
                         );
                     })}
                 </ErrorSummary>
             )}
-            {!hideStepIndicator && <span className={styles.step__stepindicator}>Steg {stepNumber} av 5</span>}
+            {!hideStepIndicator && (
+                <span className={styles.step__stepindicator}>
+                    Steg {stepNumber} av 5
+                </span>
+            )}
             {guide && <GuidePanel poster>{guide}</GuidePanel>}
             <form onSubmit={onCompleted ? handleSubmit(onCompleted) : () => {}}>
                 <>
@@ -73,7 +84,12 @@ export default function Step({
                         (submitSectionRenderer as any)()
                     ) : (
                         <div className={styles.step__buttonsection}>
-                            <Button type="button" size="small" variant="secondary" onClick={goToPreviousStepHandler}>
+                            <Button
+                                type="button"
+                                size="small"
+                                variant="secondary"
+                                onClick={goToPreviousStepHandler}
+                            >
                                 Forrige steg
                             </Button>
                             <Button type="submit" size="small">

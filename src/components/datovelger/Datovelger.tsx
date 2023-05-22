@@ -12,15 +12,15 @@ interface DatovelgerProps {
 }
 
 export default function Datovelger({
-                                        onDateChange,
-                                        errorMessage,
-                                        id,
-                                        label,
-                                        maxDate,
-                                        minDate,
-                                        datoMåVæreIFortid,
-                                        value,
-                                    }: DatovelgerProps) {
+    onDateChange,
+    errorMessage,
+    id,
+    label,
+    maxDate,
+    minDate,
+    datoMåVæreIFortid,
+    value,
+}: DatovelgerProps) {
     const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
         onDateChange,
         fromDate: minDate,
@@ -39,4 +39,3 @@ export default function Datovelger({
         </UNSAFE_DatePicker>
     );
 }
-

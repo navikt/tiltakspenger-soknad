@@ -11,7 +11,13 @@ interface JaNeiSpørsmålProps {
     reverse?: boolean;
 }
 
-export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst, reverse }: JaNeiSpørsmålProps) {
+export default function JaNeiSpørsmål({
+    children,
+    name,
+    validate,
+    hjelpetekst,
+    reverse,
+}: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     const errorObject = errorMessage ? { error: <>{errorMessage}</> } : {};
@@ -30,7 +36,11 @@ export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst,
                     onChange={(value) => onChange(value === 'ja')}
                     {...errorObject}
                 >
-                    {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
+                    {hjelpetekst && (
+                        <ReadMore header={hjelpetekst.tittel}>
+                            {hjelpetekst.tekst}
+                        </ReadMore>
+                    )}
                     {!reverse && <Radio value="nei">Nei</Radio>}
                     <Radio value="ja">Ja</Radio>
                     {reverse && <Radio value="nei">Nei</Radio>}

@@ -42,9 +42,14 @@ function introduksjonsprogram({ deltar, periode }: Introduksjonsprogram) {
 }
 
 function pensjon(pensjonsornding: Pensjonsordning) {
-    const { mottarEllerSøktPensjonsordning, periode, utbetaler } = pensjonsornding;
+    const { mottarEllerSøktPensjonsordning, periode, utbetaler } =
+        pensjonsornding;
     if (mottarEllerSøktPensjonsordning) {
-        return { utbetaler, mottarEllerSøktPensjonsordning, periode: formatPeriod(periode) };
+        return {
+            utbetaler,
+            mottarEllerSøktPensjonsordning,
+            periode: formatPeriod(periode),
+        };
     }
     return pensjonsornding;
 }
@@ -52,7 +57,11 @@ function pensjon(pensjonsornding: Pensjonsordning) {
 function etterlønn(etterlønn: Etterlønn) {
     const { periode, mottarEllerSøktEtterlønn, utbetaler } = etterlønn;
     if (mottarEllerSøktEtterlønn) {
-        return { mottarEllerSøktEtterlønn, utbetaler, periode: formatPeriod(periode) };
+        return {
+            mottarEllerSøktEtterlønn,
+            utbetaler,
+            periode: formatPeriod(periode),
+        };
     }
     return etterlønn;
 }
@@ -65,11 +74,17 @@ function institusjon(institusjonsopphold: Institusjonsopphold) {
     return institusjonsopphold;
 }
 
-function brukerregistrertTiltaksperiodeSkalMedVedInnsending({ søkerHeleTiltaksperioden }: FormTiltak, tiltak: Tiltak) {
+function brukerregistrertTiltaksperiodeSkalMedVedInnsending(
+    { søkerHeleTiltaksperioden }: FormTiltak,
+    tiltak: Tiltak
+) {
     if (søkerHeleTiltaksperioden === false) {
         return true;
     }
-    if (!tiltak.arenaRegistrertPeriode?.fra || !tiltak.arenaRegistrertPeriode?.til) {
+    if (
+        !tiltak.arenaRegistrertPeriode?.fra ||
+        !tiltak.arenaRegistrertPeriode?.til
+    ) {
         return true;
     }
     return false;
@@ -82,30 +97,38 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
         type: tiltak.type,
         typeNavn: tiltak.typeNavn,
         arenaRegistrertPeriode: tiltak.arenaRegistrertPeriode,
-        periode: brukerregistrertTiltaksperiodeSkalMedVedInnsending(formTiltak, tiltak)
+        periode: brukerregistrertTiltaksperiodeSkalMedVedInnsending(
+            formTiltak,
+            tiltak
+        )
             ? formatPeriod(formTiltak.periode!)
             : tiltak.arenaRegistrertPeriode,
     };
 }
 
 function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
-    const oppholdUtenforEØSDict = barnetillegg.registrerteBarn.oppholdUtenforEØS
+    const oppholdUtenforEØSDict = barnetillegg.eøsOppholdForBarnFraAPI;
     return {
         ...barnetillegg,
-        registrerteBarn: barnFraAPI
-            .map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
+        registrerteBarn: barnFraAPI.map(
+            ({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
                 fornavn,
                 fødselsdato,
                 mellomnavn,
                 etternavn,
                 oppholdUtenforEØS: oppholdUtenforEØSDict[uuid],
-            })),
-        manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
-            .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
-            .map((barn) => ({
-                ...barn,
-                fødselsdato: formatDate(barn.fødselsdato),
-            })),
+            })
+        ),
+        manueltRegistrerteBarnSøktBarnetilleggFor:
+            barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+                .filter(
+                    ({ fornavn, etternavn, fødselsdato }) =>
+                        fornavn && etternavn && fødselsdato
+                )
+                .map((barn) => ({
+                    ...barn,
+                    fødselsdato: formatDate(barn.fødselsdato),
+                })),
     };
 }
 
@@ -116,12 +139,21 @@ export default function toSøknadJson(
 ): String {
     return JSON.stringify({
         ...spørsmålsbesvarelser,
-        kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),
-        introduksjonsprogram: introduksjonsprogram(spørsmålsbesvarelser.introduksjonsprogram),
-        barnetillegg: barnetillegg(spørsmålsbesvarelser.barnetillegg, barnFraApi),
+        kvalifiseringsprogram: kvalifiseringsprogram(
+            spørsmålsbesvarelser.kvalifiseringsprogram
+        ),
+        introduksjonsprogram: introduksjonsprogram(
+            spørsmålsbesvarelser.introduksjonsprogram
+        ),
+        barnetillegg: barnetillegg(
+            spørsmålsbesvarelser.barnetillegg,
+            barnFraApi
+        ),
         pensjonsordning: pensjon(spørsmålsbesvarelser.pensjonsordning),
         etterlønn: etterlønn(spørsmålsbesvarelser.etterlønn),
-        institusjonsopphold: institusjon(spørsmålsbesvarelser.institusjonsopphold),
+        institusjonsopphold: institusjon(
+            spørsmålsbesvarelser.institusjonsopphold
+        ),
         tiltak: tiltak(spørsmålsbesvarelser.tiltak, valgtTiltak),
     });
 }

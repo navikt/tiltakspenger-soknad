@@ -1,113 +1,113 @@
-version: "3.7"
+version: '3.7'
 
 services:
-  backend:
-    build:
-      context: ../../tiltakspenger-soknad-api
-      dockerfile: Dockerfile
-    environment:
-      AZURE_APP_WELL_KNOWN_URL: "http://host.docker.internal:6969/azure/.well-known/openid-configuration"
-      AZURE_APP_CLIENT_SECRET: mocked_secret
-      AZURE_APP_CLIENT_ID: mocked_client_id
-      TOKEN_X_WELL_KNOWN_URL: "http://host.docker.internal:6969/tokendings/.well-known/openid-configuration"
-      TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspenger-soknad-api
-      PDL_AUDIENCE: mock_audience
-      PDL_SCOPE: mock_scope
-      PDF_ENDPOINT_URL: "http://localhost:8081"
-      JOARK_ENDPOINT_URL: "http://localhost"
-      JOARK_AUDIENCE: "mock_audience"
-      JOARK_SCOPE: "mock_scope"
-      TILTAKSPENGER_ARENA_URL: "http://localhost:8080"
-      TILTAKSPENGER_ARENA_AUDIENCE: "mock-audience"
-    env_file:
-      - .env
-    depends_on:
-      - auth
-    ports:
-      - 8080:8080
+    backend:
+        build:
+            context: ../../tiltakspenger-soknad-api
+            dockerfile: Dockerfile
+        environment:
+            AZURE_APP_WELL_KNOWN_URL: 'http://host.docker.internal:6969/azure/.well-known/openid-configuration'
+            AZURE_APP_CLIENT_SECRET: mocked_secret
+            AZURE_APP_CLIENT_ID: mocked_client_id
+            TOKEN_X_WELL_KNOWN_URL: 'http://host.docker.internal:6969/tokendings/.well-known/openid-configuration'
+            TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspenger-soknad-api
+            PDL_AUDIENCE: mock_audience
+            PDL_SCOPE: mock_scope
+            PDF_ENDPOINT_URL: 'http://localhost:8081'
+            JOARK_ENDPOINT_URL: 'http://localhost'
+            JOARK_AUDIENCE: 'mock_audience'
+            JOARK_SCOPE: 'mock_scope'
+            TILTAKSPENGER_ARENA_URL: 'http://localhost:8080'
+            TILTAKSPENGER_ARENA_AUDIENCE: 'mock-audience'
+        env_file:
+            - .env
+        depends_on:
+            - auth
+        ports:
+            - 8080:8080
 
-  redis:
-    image: redis:7-alpine
-    restart: always
-    ports:
-      - 6379:6379
+    redis:
+        image: redis:7-alpine
+        restart: always
+        ports:
+            - 6379:6379
 
-  auth:
-    image: "ghcr.io/navikt/mock-oauth2-server:0.5.1"
-    container_name: auth
-    ports:
-      - "6969:6969"
-    environment:
-      SERVER_PORT: 6969
-      JSON_CONFIG: >
-        {
-            "interactiveLogin": true,
-            "httpServer": "NettyWrapper",
-            "tokenCallbacks": [
+    auth:
+        image: 'ghcr.io/navikt/mock-oauth2-server:0.5.1'
+        container_name: auth
+        ports:
+            - '6969:6969'
+        environment:
+            SERVER_PORT: 6969
+            JSON_CONFIG: >
                 {
-                    "issuerId": "idporten",
-                    "tokenExpiry": 3600,
-                    "requestMappings": [
+                    "interactiveLogin": true,
+                    "httpServer": "NettyWrapper",
+                    "tokenCallbacks": [
                         {
-                            "requestParam": "grant_type",
-                            "match": "*",
-                            "claims": {
-                                "sub": "12345678901",
-                                "pid": "12345678901"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "issuerId": "tokendings",
-                    "tokenExpiry": 3600,
-                    "requestMappings": [
+                            "issuerId": "idporten",
+                            "tokenExpiry": 3600,
+                            "requestMappings": [
+                                {
+                                    "requestParam": "grant_type",
+                                    "match": "*",
+                                    "claims": {
+                                        "sub": "12345678901",
+                                        "pid": "12345678901"
+                                    }
+                                }
+                            ]
+                        },
                         {
-                            "requestParam": "grant_type",
-                            "match": "*",
-                            "claims": {
-                                "sub": "12345678901",
-                                "pid": "12345678901",
-                                "aud": ["localhost:tpts:tiltakspenger-soknad-api"],
-                                "acr": "Level4"
-                            }
-                        }
-                    ]
-                },
-                {
-                    "issuerId": "azure",
-                    "tokenExpiry": 3600,
-                    "requestMappings": [
+                            "issuerId": "tokendings",
+                            "tokenExpiry": 3600,
+                            "requestMappings": [
+                                {
+                                    "requestParam": "grant_type",
+                                    "match": "*",
+                                    "claims": {
+                                        "sub": "12345678901",
+                                        "pid": "12345678901",
+                                        "aud": ["localhost:tpts:tiltakspenger-soknad-api"],
+                                        "acr": "Level4"
+                                    }
+                                }
+                            ]
+                        },
                         {
-                            "requestParam": "grant_type",
-                            "match": "*",
-                            "claims": {
-                                "sub": "12345678901",
-                                "pid": "12345678901",
-                                "aud": ["localhost:tpts:tiltakspenger-soknad-api"],
-                                "acr": "Level4"
-                            }
+                            "issuerId": "azure",
+                            "tokenExpiry": 3600,
+                            "requestMappings": [
+                                {
+                                    "requestParam": "grant_type",
+                                    "match": "*",
+                                    "claims": {
+                                        "sub": "12345678901",
+                                        "pid": "12345678901",
+                                        "aud": ["localhost:tpts:tiltakspenger-soknad-api"],
+                                        "acr": "Level4"
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }
-            ]
-        }
 
-  wonderwall:
-    image: "ghcr.io/nais/wonderwall:latest"
-    container_name: wonderwall
-    environment:
-      WONDERWALL_OPENID_CLIENT_ID: "localhost:tpts:tiltakspenger-soknad"
-      WONDERWALL_OPENID_WELL_KNOWN_URL: "http://host.docker.internal:6969/idporten/.well-known/openid-configuration"
-      WONDERWALL_INGRESS: "http://localhost:2222"
-      WONDERWALL_BIND_ADDRESS: "0.0.0.0:2222"
-      WONDERWALL_UPSTREAM_HOST: "host.docker.internal:3000"
-      WONDERWALL_AUTO_LOGIN: "true"
-      WONDERWALL_LOG_FORMAT: "text"
-    env_file:
-      - .env
-    depends_on:
-      - auth
-    ports:
-      - 2222:2222
-    restart: on-failure
+    wonderwall:
+        image: 'ghcr.io/nais/wonderwall:latest'
+        container_name: wonderwall
+        environment:
+            WONDERWALL_OPENID_CLIENT_ID: 'localhost:tpts:tiltakspenger-soknad'
+            WONDERWALL_OPENID_WELL_KNOWN_URL: 'http://host.docker.internal:6969/idporten/.well-known/openid-configuration'
+            WONDERWALL_INGRESS: 'http://localhost:2222'
+            WONDERWALL_BIND_ADDRESS: '0.0.0.0:2222'
+            WONDERWALL_UPSTREAM_HOST: 'host.docker.internal:3000'
+            WONDERWALL_AUTO_LOGIN: 'true'
+            WONDERWALL_LOG_FORMAT: 'text'
+        env_file:
+            - .env
+        depends_on:
+            - auth
+        ports:
+            - 2222:2222
+        restart: on-failure

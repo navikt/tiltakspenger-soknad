@@ -13,7 +13,7 @@ npm run dev
 
 ### Kjøre opp docker-compose lokalt
 
-Autentisering og TokenX er mocket ut med docker-compose i `./docker-compose` på rot av repoet. 
+Autentisering og TokenX er mocket ut med docker-compose i `./docker-compose` på rot av repoet.
 Dette oppsettet antar at man har [tiltakspenger-soknad-api](https://github.com/navikt/tiltakspenger-soknad-api)
 liggende på `../` relativt til tiltakspenger-soknad.
 
@@ -35,12 +35,12 @@ miljøvariabel for [Wonderwall](https://github.com/nais/wonderwall) som er mocke
     PDL_ENDPOINT_URL=<en eller annen baseurl>
     ```
 3. Sørg for at tiltakspenger-soknad-api ligger på `../` relativt til tiltakspenger-soknad repoet.
-4. Spinn opp containere med 
+4. Spinn opp containere med
     ```
     cd ./docker-compose
     docker-compose up -d --build
     ```
-5. Kjør opp frontend på vanlig måte med `npm run dev` på rot av repoet 
+5. Kjør opp frontend på vanlig måte med `npm run dev` på rot av repoet
 6. :rocket: Gå på localhost:2222 (dette gjør at man treffer Wonderwall)
 
 ---

@@ -3,9 +3,7 @@ export interface Barn {
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
-    bostedsland?: string;
     uuid: string;
     oppholdUtenforEØS?: boolean;
     index?: number;
-
 }

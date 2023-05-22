@@ -1,7 +1,10 @@
 import logger from '@/utils/serverLogger';
 import { NextApiRequest } from 'next';
 
-export async function makeGetRequest(url: string, token: string): Promise<Response> {
+export async function makeGetRequest(
+    url: string,
+    token: string
+): Promise<Response> {
     logger.info(`Making request to ${url}`);
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 5000);
@@ -30,13 +33,19 @@ async function readRequestAsStream(request: NextApiRequest): Promise<Buffer> {
                 return resolve(buffer);
             })
             .on('error', (error) => {
-                logger.error(`Error occured reading buffer ${JSON.stringify(error)}`);
+                logger.error(
+                    `Error occured reading buffer ${JSON.stringify(error)}`
+                );
                 return reject(error);
             });
     });
 }
 
-export async function makePostRequest(url: string, token: string, request: NextApiRequest): Promise<Response> {
+export async function makePostRequest(
+    url: string,
+    token: string,
+    request: NextApiRequest
+): Promise<Response> {
     logger.info(`Making request to ${url}`);
     const requestBuffer = await readRequestAsStream(request);
     return await fetch(url, {

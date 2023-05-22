@@ -10,7 +10,12 @@ interface FritekstspørsmålProps {
     validate?: ValidatorFunction;
 }
 
-export default function Fritekstspørsmål({ name, children, textFieldProps, validate }: FritekstspørsmålProps) {
+export default function Fritekstspørsmål({
+    name,
+    children,
+    textFieldProps,
+    validate,
+}: FritekstspørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (

@@ -27,12 +27,8 @@ export interface Barnetillegg {
     søkerOmBarnetillegg: boolean;
     ønskerÅSøkeBarnetilleggForAndreBarn: boolean;
     manueltRegistrerteBarnSøktBarnetilleggFor: Barn[];
-    registrerteBarn: OppholdUtenforEØS;
-    kladd: Barn
-}
-
-export interface OppholdUtenforEØS {
-    oppholdUtenforEØS: Record<string, boolean>
+    eøsOppholdForBarnFraAPI: Record<string, boolean>;
+    kladd: Barn;
 }
 
 export interface Pensjonsordning {

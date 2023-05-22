@@ -34,7 +34,10 @@ function createClientAssertion(key: any) {
         exp: now + 10,
     };
 
-    return jwt.sign(assertionClaims, key.toPEM(true), { header: assertionHeaders, algorithm: 'RS256' });
+    return jwt.sign(assertionClaims, key.toPEM(true), {
+        header: assertionHeaders,
+        algorithm: 'RS256',
+    });
 }
 
 async function exchangeToken(subjectToken: string) {
@@ -44,8 +47,14 @@ async function exchangeToken(subjectToken: string) {
     const cluster = process.env.NAIS_CLUSTER_NAME;
 
     const params = new URLSearchParams();
-    params.append('grant_type', 'urn:ietf:params:oauth:grant-type:token-exchange');
-    params.append('client_assertion_type', 'urn:ietf:params:oauth:client-assertion-type:jwt-bearer');
+    params.append(
+        'grant_type',
+        'urn:ietf:params:oauth:grant-type:token-exchange'
+    );
+    params.append(
+        'client_assertion_type',
+        'urn:ietf:params:oauth:client-assertion-type:jwt-bearer'
+    );
     params.append('token_endpoint_auth_method', 'private_key_jwt');
     params.append('client_assertion', clientAssertion);
     params.append('subject_token_type', 'urn:ietf:params:oauth:token-type:jwt');

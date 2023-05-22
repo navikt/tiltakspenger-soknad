@@ -17,8 +17,8 @@ import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekrefte
 import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../../components/step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
-import SøknadResponse from "@/types/SøknadResponse";
-import BarneInfo from "@/components/barnetillegg/BarneInfo";
+import SøknadResponse from '@/types/SøknadResponse';
+import BarneInfo from '@/components/barnetillegg/BarneInfo';
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
@@ -26,57 +26,86 @@ interface OppsummeringsstegProps {
     valgtTiltak: Tiltak;
 }
 
-function oppsummeringDeltarIKvp(deltarIKvp: boolean, periodeMedKvp: Periode | undefined) {
+function oppsummeringDeltarIKvp(
+    deltarIKvp: boolean,
+    periodeMedKvp: Periode | undefined
+) {
     if (deltarIKvp) {
-        return `Ja, jeg deltar i kvalifiseringsprogrammet i perioden ${formatPeriode(periodeMedKvp!)}`;
+        return `Ja, jeg deltar i kvalifiseringsprogrammet i perioden ${formatPeriode(
+            periodeMedKvp!
+        )}`;
     } else {
         return 'Nei, jeg deltar ikke i kvalifiseringsprogrammet i perioden jeg deltar på tiltaket';
     }
 }
 
-function oppsummeringDeltarIIntroprogram(deltarIIntroprogrammet: boolean, periodeMedIntro?: Periode) {
+function oppsummeringDeltarIIntroprogram(
+    deltarIIntroprogrammet: boolean,
+    periodeMedIntro?: Periode
+) {
     if (deltarIIntroprogrammet) {
-        return `Ja, jeg deltar i introduksjonsprogrammet i perioden ${formatPeriode(periodeMedIntro!)}`;
+        return `Ja, jeg deltar i introduksjonsprogrammet i perioden ${formatPeriode(
+            periodeMedIntro!
+        )}`;
     } else {
         return 'Nei, jeg deltar ikke i introduksjonsprogrammet i perioden jeg deltar på tiltaket';
     }
 }
 
-function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusjon?: Periode) {
+function oppsummeringInstitusjon(
+    borPåInstitusjon: boolean,
+    periodePåInstitusjon?: Periode
+) {
     if (borPåInstitusjon) {
-        return `Ja, jeg bor på institusjon med fri kost og losji i perioden ${formatPeriode(periodePåInstitusjon!)}`;
+        return `Ja, jeg bor på institusjon med fri kost og losji i perioden ${formatPeriode(
+            periodePåInstitusjon!
+        )}`;
     } else {
         return 'Nei, jeg bor ikke på institusjon med fri kost og losji i perioden jeg går på tiltak';
     }
 }
 
-function oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning: boolean, pensjon: AnnenUtbetaling) {
+function oppsummeringPensjonsordninger(
+    mottarEllerSøktPensjonsordning: boolean,
+    pensjon: AnnenUtbetaling
+) {
     if (mottarEllerSøktPensjonsordning) {
-        return `Ja, jeg mottar etterlønn fra ${pensjon.utbetaler} i perioden ${formatPeriode(pensjon.periode)}`;
+        return `Ja, jeg mottar etterlønn fra ${
+            pensjon.utbetaler
+        } i perioden ${formatPeriode(pensjon.periode)}`;
     } else {
         return 'Nei, jeg har verken søkt om eller mottar utbetalinger fra en pensjonsordning';
     }
 }
 
-function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn: AnnenUtbetaling) {
+function oppsummeringEtterlønn(
+    mottarEllerSøktEtterlønn: boolean,
+    etterlønn: AnnenUtbetaling
+) {
     if (mottarEllerSøktEtterlønn) {
-        return `Ja, jeg mottar etterlønn fra ${etterlønn.utbetaler} i perioden ${formatPeriode(etterlønn.periode)}`;
+        return `Ja, jeg mottar etterlønn fra ${
+            etterlønn.utbetaler
+        } i perioden ${formatPeriode(etterlønn.periode)}`;
     } else {
         return 'Nei, jeg har verken søkt eller mottar etterlønn fra en arbeidsgiver';
     }
 }
 
-function oppsummeringBarn(barn: Barn ) {
+function oppsummeringBarn(barn: Barn) {
     if (barn.fornavn && barn.etternavn) {
-        return `${barn.fornavn} ${barn.mellomnavn ? `${barn.mellomnavn} ` : ''}${barn.etternavn}, født ${formatDate(
-            barn.fødselsdato
-        )}, barn.`;
+        return `${barn.fornavn} ${
+            barn.mellomnavn ? `${barn.mellomnavn} ` : ''
+        }${barn.etternavn}, født ${formatDate(barn.fødselsdato)}, barn.`;
     } else {
         return `Barn født ${formatDate(barn.fødselsdato)}`;
     }
 }
 
-function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
+function lagFormDataForInnsending(
+    søknad: Søknad,
+    personalia: Personalia,
+    valgtTiltak: Tiltak
+): FormData {
     const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
     const formData = new FormData();
     formData.append('søknad', søknadJson as string);
@@ -87,19 +116,27 @@ function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valg
 }
 
 function postSøknadMultipart(formData: FormData) {
-     return fetch('/api/soknad', {
+    return fetch('/api/soknad', {
         method: 'POST',
         body: formData,
     });
 }
 
 function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
-    return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
+    return påkrevdBekreftelsesspørsmål(
+        verdi,
+        'Du må bekrefte at alle opplysninger du har oppgitt er korrekte'
+    );
 }
 
-export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valgtTiltak }: OppsummeringsstegProps) {
+export default function Oppsummeringssteg({
+    onGoToPreviousStep,
+    personalia,
+    valgtTiltak,
+}: OppsummeringsstegProps) {
     const router = useRouter();
-    const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
+    const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] =
+        React.useState(false);
 
     const { getValues } = useFormContext();
     const søknad: Søknad = getValues() as Søknad;
@@ -114,16 +151,23 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
         barnetillegg,
     } = svar;
 
-    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
+    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden
+        ? valgtTiltak.arenaRegistrertPeriode
+        : tiltak.periode;
 
     const alleBarnSøktBarnetilleggFor =
-        barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
-            ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
-        ).concat(personalia.barn)
-    ;
-
+        barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+            .filter(
+                ({ fornavn, etternavn, fødselsdato }) =>
+                    fornavn && etternavn && fødselsdato
+            )
+            .concat(personalia.barn);
     async function sendInnSøknad() {
-        const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak);
+        const formData = lagFormDataForInnsending(
+            søknad,
+            personalia,
+            valgtTiltak
+        );
         try {
             setSøknadsinnsendingInProgress(true);
             const response = await postSøknadMultipart(formData);
@@ -131,10 +175,12 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                 return router.push('/feil');
             }
 
-            const soknadInnsendingsTidspunkt = await response.json().then((json : SøknadResponse) => json.innsendingTidspunkt);
+            const soknadInnsendingsTidspunkt = await response
+                .json()
+                .then((json: SøknadResponse) => json.innsendingTidspunkt);
             return router.push({
                 pathname: '/kvittering',
-                query: { innsendingsTidspunkt : soknadInnsendingsTidspunkt},
+                query: { innsendingsTidspunkt: soknadInnsendingsTidspunkt },
             });
         } catch {
             return router.push('/feil');
@@ -181,19 +227,31 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                             feltVerdi={`${personalia.fornavn} ${personalia.etternavn}`}
                         />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fødselsnummer" feltVerdi={`${personalia.fødselsnummer}`} />
+                            <Oppsummeringsfelt
+                                feltNavn="Fødselsnummer"
+                                feltVerdi={`${personalia.fødselsnummer}`}
+                            />
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Tiltak</Accordion.Header>
                     <Accordion.Content>
-                        <Oppsummeringsfelt feltNavn="Tiltak" feltVerdi={valgtTiltak?.arrangør || ''} />
+                        <Oppsummeringsfelt
+                            feltNavn="Tiltak"
+                            feltVerdi={valgtTiltak?.arrangør || ''}
+                        />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode!.fra)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Fra dato"
+                                feltVerdi={formatDate(tiltaksperiode!.fra)}
+                            />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Til dato"
+                                feltVerdi={formatDate(tiltaksperiode!.til)}
+                            />
                         </div>
 
                         <div style={{ marginTop: '2rem' }}>
@@ -206,7 +264,8 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>
-                        Kvalifiseringsprogram, introduksjonsprogram og institusjonsopphold
+                        Kvalifiseringsprogram, introduksjonsprogram og
+                        institusjonsopphold
                     </Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
@@ -249,7 +308,10 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Etterlønn"
-                                feltVerdi={oppsummeringEtterlønn(etterlønn.mottarEllerSøktEtterlønn, etterlønn)}
+                                feltVerdi={oppsummeringEtterlønn(
+                                    etterlønn.mottarEllerSøktEtterlønn,
+                                    etterlønn
+                                )}
                             />
                         </div>
                     </Accordion.Content>
@@ -258,9 +320,26 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
-                            <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
-                                <BarneInfo barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.registrerteBarn.oppholdUtenforEØS[barn.uuid]}}/>
-                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
+                            <div
+                                style={{
+                                    marginTop: index == 0 ? '0rem' : '2rem',
+                                }}
+                            >
+                                <BarneInfo
+                                    barn={{
+                                        ...barn,
+                                        oppholdUtenforEØS:
+                                            barn.oppholdUtenforEØS ??
+                                            barnetillegg
+                                                .eøsOppholdForBarnFraAPI[
+                                                barn.uuid
+                                            ],
+                                    }}
+                                />
+                                {index !=
+                                    alleBarnSøktBarnetilleggFor.length - 1 && (
+                                    <hr />
+                                )}
                             </div>
                         ))}
                     </Accordion.Content>

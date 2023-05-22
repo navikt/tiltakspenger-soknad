@@ -29,12 +29,13 @@ export default function Periodevelger({
         else return {};
     }
 
-    const { datepickerProps, toInputProps, fromInputProps } = UNSAFE_useRangeDatepicker({
-        onRangeChange,
-        ...getRangepickerProps(),
-        fromDate: minDate,
-        toDate: maxDate,
-    });
+    const { datepickerProps, toInputProps, fromInputProps } =
+        UNSAFE_useRangeDatepicker({
+            onRangeChange,
+            ...getRangepickerProps(),
+            fromDate: minDate,
+            toDate: maxDate,
+        });
 
     return (
         <UNSAFE_DatePicker {...datepickerProps} id={id}>
@@ -45,7 +46,13 @@ export default function Periodevelger({
                 error={errorMessage}
                 id={`${id}.fra`}
             />
-            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} id={`${id}.til`} />
+            <UNSAFE_DatePicker.Input
+                {...toInputProps}
+                size="small"
+                label="Til"
+                error={errorMessage}
+                id={`${id}.til`}
+            />
         </UNSAFE_DatePicker>
     );
 }

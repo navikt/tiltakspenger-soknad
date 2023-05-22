@@ -23,7 +23,11 @@ interface UtfyllingProps {
     setPersonaliaData: (personalia: Personalia) => void;
 }
 
-export default function Utfylling({ tiltak, personalia, setPersonaliaData }: UtfyllingProps) {
+export default function Utfylling({
+    tiltak,
+    personalia,
+    setPersonaliaData,
+}: UtfyllingProps) {
     const router = useRouter();
 
     React.useEffect(() => {
@@ -36,7 +40,7 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             svar: {
                 tiltak: {},
                 barnetillegg: {
-                    registrerteBarn: {},
+                    eøsOppholdForBarnFraAPI: {},
                     manueltRegistrerteBarnSøktBarnetilleggFor: [],
                 },
                 etterlønn: {},
@@ -53,13 +57,17 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
     const valgtAktivitetId = formMethods.watch('svar.tiltak.aktivitetId');
     React.useEffect(() => {
-        const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
+        const matchendeTiltak = tiltak.find(
+            ({ aktivitetId }) => aktivitetId === valgtAktivitetId
+        );
         if (matchendeTiltak) {
             setValgtTiltak(matchendeTiltak);
         }
     }, [valgtAktivitetId]);
 
-    function utledSøknadsstegFraRoute(route: string | undefined): Søknadssteg | null {
+    function utledSøknadsstegFraRoute(
+        route: string | undefined
+    ): Søknadssteg | null {
         switch (route) {
             case Søknadssteg.TILTAK:
                 return Søknadssteg.TILTAK;
@@ -95,8 +103,10 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         return router.back();
     }
 
-    const navigerBrukerTilIntroside = (shallow: boolean = true) => navigateToPath('/', shallow);
-    const navigerBrukerTilKvpSteg = (shallow: boolean = true) => navigateToPath('/utfylling/kvp', shallow);
+    const navigerBrukerTilIntroside = (shallow: boolean = true) =>
+        navigateToPath('/', shallow);
+    const navigerBrukerTilKvpSteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/kvp', shallow);
     const navigerBrukerTilAndreUtbetalingerSteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/andreutbetalinger', shallow);
     const navigerBrukerTilBarnetilleggSteg = (shallow: boolean = true) =>
@@ -105,31 +115,60 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         navigateToPath('/utfylling/oppsummering', shallow);
 
     const brukerErPåTiltakssteg = () => {
-        const formStateErPåTiltakssteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.TILTAK);
-        return step && step[0] === Søknadssteg.TILTAK && formStateErPåTiltakssteg;
+        const formStateErPåTiltakssteg = brukerHarFyltUtNødvendigeOpplysninger(
+            svar,
+            Søknadssteg.TILTAK
+        );
+        return (
+            step && step[0] === Søknadssteg.TILTAK && formStateErPåTiltakssteg
+        );
     };
 
     const brukerErPåKvpSteg = () => {
-        const formStateErPåKvpsteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVP);
+        const formStateErPåKvpsteg = brukerHarFyltUtNødvendigeOpplysninger(
+            svar,
+            Søknadssteg.KVP
+        );
         return step && step[0] === Søknadssteg.KVP && formStateErPåKvpsteg;
     };
 
     const brukerErPåAndreUtbetalingerSteg = () => {
-        const formStateErPåAndreUtbetalingerSteg = brukerHarFyltUtNødvendigeOpplysninger(
-            svar,
-            Søknadssteg.ANDRE_UTBETALINGER
+        const formStateErPåAndreUtbetalingerSteg =
+            brukerHarFyltUtNødvendigeOpplysninger(
+                svar,
+                Søknadssteg.ANDRE_UTBETALINGER
+            );
+        return (
+            step &&
+            step[0] === Søknadssteg.ANDRE_UTBETALINGER &&
+            formStateErPåAndreUtbetalingerSteg
         );
-        return step && step[0] === Søknadssteg.ANDRE_UTBETALINGER && formStateErPåAndreUtbetalingerSteg;
     };
 
     const brukerErPåBarnetilleggSteg = () => {
-        const formStateErPåBarnetilleggSteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.BARNETILLEGG);
-        return step && step[0] === Søknadssteg.BARNETILLEGG && formStateErPåBarnetilleggSteg;
+        const formStateErPåBarnetilleggSteg =
+            brukerHarFyltUtNødvendigeOpplysninger(
+                svar,
+                Søknadssteg.BARNETILLEGG
+            );
+        return (
+            step &&
+            step[0] === Søknadssteg.BARNETILLEGG &&
+            formStateErPåBarnetilleggSteg
+        );
     };
 
     const brukerErPåOppsummeringssteg = () => {
-        const formStateErPåOppsummeringssteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.OPPSUMMERING);
-        return step && step[0] === Søknadssteg.OPPSUMMERING && formStateErPåOppsummeringssteg;
+        const formStateErPåOppsummeringssteg =
+            brukerHarFyltUtNødvendigeOpplysninger(
+                svar,
+                Søknadssteg.OPPSUMMERING
+            );
+        return (
+            step &&
+            step[0] === Søknadssteg.OPPSUMMERING &&
+            formStateErPåOppsummeringssteg
+        );
     };
 
     return (
@@ -150,7 +189,10 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 />
             )}
             {brukerErPåAndreUtbetalingerSteg() && (
-                <AndreUtbetalingerSteg onCompleted={navigerBrukerTilBarnetilleggSteg} onGoToPreviousStep={goBack} />
+                <AndreUtbetalingerSteg
+                    onCompleted={navigerBrukerTilBarnetilleggSteg}
+                    onGoToPreviousStep={goBack}
+                />
             )}
             {brukerErPåBarnetilleggSteg() && (
                 <BarnetilleggSteg
@@ -160,7 +202,11 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 />
             )}
             {brukerErPåOppsummeringssteg() && (
-                <Oppsummeringssteg onGoToPreviousStep={goBack} personalia={personalia} valgtTiltak={valgtTiltak!} />
+                <Oppsummeringssteg
+                    onGoToPreviousStep={goBack}
+                    personalia={personalia}
+                    valgtTiltak={valgtTiltak!}
+                />
             )}
         </FormProvider>
     );
@@ -198,11 +244,18 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     ];
 
     try {
-        const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
+        const tiltakResponse = await makeGetRequest(
+            `${backendUrl}/tiltak`,
+            token
+        );
         const tiltakJson = await tiltakResponse.json();
-        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
+        const personaliaResponse = await makeGetRequest(
+            `${backendUrl}/personalia`,
+            token
+        );
         const personaliaJson = await personaliaResponse.json();
-        const svarMedMocketTiltak = !tiltakJson.tiltak || tiltakJson.tiltak.length === 0;
+        const svarMedMocketTiltak =
+            !tiltakJson.tiltak || tiltakJson.tiltak.length === 0;
         return {
             props: {
                 tiltak: svarMedMocketTiltak ? mocketTiltak : tiltakJson.tiltak,
@@ -225,7 +278,20 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     mellomnavn: 'Bar',
                     etternavn: 'Baz',
                     fødselsnummer: '123',
-                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },{ fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() }],
+                    barn: [
+                        {
+                            fornavn: 'Test',
+                            etternavn: 'Testesen',
+                            fødselsdato: '2025-01-01',
+                            uuid: uuidv4(),
+                        },
+                        {
+                            fornavn: 'Fest',
+                            etternavn: 'Festesen',
+                            fødselsdato: '2020-12-31',
+                            uuid: uuidv4(),
+                        },
+                    ],
                 },
             },
         };
