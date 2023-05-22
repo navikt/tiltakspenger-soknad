@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Accordion, Button } from '@navikt/ds-react';
+import { Accordion, Button, ConfirmationPanel } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
 import { Personalia } from '@/types/Personalia';
@@ -9,15 +9,16 @@ import { formatPeriode } from '@/utils/formatPeriode';
 import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
-import { BarnFraAPI, SelvregistrertBarn } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
 import toSøknadJson from '@/utils/toSøknadJson';
 import { useRouter } from 'next/router';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
 import styles from './Oppsummeringssteg.module.css';
-import stepStyles from './../step/Step.module.css';
+import stepStyles from './../../components/step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import SøknadResponse from "@/types/SøknadResponse";
+import BarneInfo from "@/components/barnetillegg/BarneInfo";
 
 interface OppsummeringsstegProps {
     title: string;
@@ -67,19 +68,11 @@ function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn:
     }
 }
 
-function oppsummeringBarnetillegg(harSøktBarnetillegg: boolean) {
-    if (harSøktBarnetillegg) {
-        return `Ja, jeg søker om barnetillegg for følgende barn`;
-    } else {
-        return 'Nei, jeg søker ikke om barnetillegg';
-    }
-}
-
-function oppsummeringBarn(barn: BarnFraAPI | SelvregistrertBarn) {
+function oppsummeringBarn(barn: Barn ) {
     if (barn.fornavn && barn.etternavn) {
         return `${barn.fornavn} ${barn.mellomnavn ? `${barn.mellomnavn} ` : ''}${barn.etternavn}, født ${formatDate(
             barn.fødselsdato
-        )}`;
+        )}, barn.`;
     } else {
         return `Barn født ${formatDate(barn.fødselsdato)}`;
     }
@@ -96,7 +89,7 @@ function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valg
 }
 
 function postSøknadMultipart(formData: FormData) {
-     return fetch('/api/soknad', {
+    return fetch('/api/soknad', {
         method: 'POST',
         body: formData,
     });
@@ -123,18 +116,19 @@ export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPrevio
         barnetillegg,
     } = svar;
 
+    const valgtTiltakManglerPeriode =
+        !valgtTiltak?.arenaRegistrertPeriode ||
+        !valgtTiltak?.arenaRegistrertPeriode.fra ||
+        !valgtTiltak?.arenaRegistrertPeriode.til;
+
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
+    const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
-    const registrerteBarnSøktBarnetilleggFor = personalia.barn.filter(
-        ({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0
-    );
-
-    const alleBarnSøktBarnetilleggFor = [
-        ...barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
+    const alleBarnSøktBarnetilleggFor =
+        barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
             ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
-        ),
-        ...registrerteBarnSøktBarnetilleggFor,
-    ];
+        ).concat(personalia.barn)
+    ;
 
     async function sendInnSøknad() {
         const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak);
@@ -145,10 +139,12 @@ export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPrevio
                 return router.push('/feil');
             }
 
-            const soknadInnsendingsTidspunkt = await response.json().then((json : SøknadResponse) => json.innsendingTidspunkt);
+            const soknadInnsendingsTidspunkt = await response
+                .json()
+                .then((json: SøknadResponse) => json.innsendingTidspunkt);
             return router.push({
                 pathname: '/kvittering',
-                query: { innsendingsTidspunkt : soknadInnsendingsTidspunkt},
+                query: { innsendingsTidspunkt: soknadInnsendingsTidspunkt },
             });
         } catch {
             return router.push('/feil');
@@ -204,10 +200,16 @@ export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPrevio
                     <Accordion.Content>
                         <Oppsummeringsfelt feltNavn="Tiltak" feltVerdi={valgtTiltak?.arrangør || ''} />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fra dato" feltVerdi={formatDate(tiltaksperiode!.fra)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Fra dato"
+                                feltVerdi={formatDate(opprinneligTiltaksperiode!.fra)}
+                            />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Til dato" feltVerdi={formatDate(tiltaksperiode!.til)} />
+                            <Oppsummeringsfelt
+                                feltNavn="Til dato"
+                                feltVerdi={formatDate(opprinneligTiltaksperiode!.til)}
+                            />
                         </div>
 
                         <div style={{ marginTop: '2rem' }}>
@@ -271,13 +273,10 @@ export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPrevio
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
-                        <Oppsummeringsfelt
-                            feltNavn="Barnetillegg"
-                            feltVerdi={oppsummeringBarnetillegg(barnetillegg.søkerOmBarnetillegg)}
-                        />
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
-                            <div style={{ marginTop: '2rem' }}>
-                                <Oppsummeringsfelt feltNavn={`Barn ${index + 1}`} feltVerdi={oppsummeringBarn(barn)} />
+                            <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
+                                <BarneInfo barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid]}}/>
+                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
                             </div>
                         ))}
                     </Accordion.Content>

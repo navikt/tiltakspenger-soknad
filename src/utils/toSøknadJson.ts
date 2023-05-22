@@ -8,8 +8,8 @@ import Spørsmålsbesvarelser, {
     Pensjonsordning,
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
-import { BarnFraAPI } from '@/types/Barn';
 import { Tiltak } from '@/types/Tiltak';
+import { Barn } from '@/types/Barn';
 
 interface Periode {
     fra: string;
@@ -88,22 +88,20 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
     };
 }
 
-function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[]) {
+function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
+    const oppholdUtenforEØSDict = barnetillegg.eøsOppholdForBarnFraAPI
     return {
         ...barnetillegg,
-        registrerteBarnSøktBarnetilleggFor: registrerteBarn
-            .filter(({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0)
-            // sørger for å fjerne uuid i post
-            .map(({ fornavn, fødselsdato, mellomnavn, etternavn }) => ({
+        registrerteBarn: barnFraAPI
+            .map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
                 fornavn,
                 fødselsdato,
                 mellomnavn,
                 etternavn,
+                oppholdUtenforEØS: oppholdUtenforEØSDict[uuid],
             })),
         manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
-            .filter(
-                ({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland
-            )
+            .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
             .map((barn) => ({
                 ...barn,
                 fødselsdato: formatDate(barn.fødselsdato),
@@ -113,7 +111,7 @@ function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[])
 
 export default function toSøknadJson(
     spørsmålsbesvarelser: Spørsmålsbesvarelser,
-    barnFraApi: BarnFraAPI[],
+    barnFraApi: Barn[],
     valgtTiltak: Tiltak
 ): String {
     return JSON.stringify({

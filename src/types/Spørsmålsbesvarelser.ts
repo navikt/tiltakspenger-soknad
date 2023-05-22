@@ -1,5 +1,5 @@
 import { Periode } from '@/types/Periode';
-import { SelvregistrertBarn } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 
 export interface Introduksjonsprogram {
     deltar: boolean;
@@ -26,8 +26,9 @@ export interface FormTiltak {
 export interface Barnetillegg {
     søkerOmBarnetillegg: boolean;
     ønskerÅSøkeBarnetilleggForAndreBarn: boolean;
-    manueltRegistrerteBarnSøktBarnetilleggFor: SelvregistrertBarn[];
-    registrerteBarnSøktBarnetilleggFor: string[];
+    manueltRegistrerteBarnSøktBarnetilleggFor: Barn[];
+    eøsOppholdForBarnFraAPI: Record<string, boolean>;
+    kladd: Barn
 }
 
 export interface Pensjonsordning {
