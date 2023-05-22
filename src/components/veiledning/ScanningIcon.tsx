@@ -102,7 +102,7 @@ const ShadowScanning = ({ title, height }: ScanProps) => {
     return (
         <svg role="presentation" aria-hidden focusable="false" viewBox="0 0 83 121" height={height}>
             {title && <title>{title}</title>}
-            <desc>Bildet har har skygge oppå legeerklæring</desc>
+            <desc>Bildet har skygge</desc>
             <defs>
                 <filter x="-10%" y="-5.2%" width="120%" height="114.6%" filterUnits="objectBoundingBox" id="shadow_4__a">
                     <feOffset dy={2} in="SourceAlpha" result="shadowOffsetOuter1" />

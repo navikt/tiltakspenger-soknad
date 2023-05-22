@@ -59,7 +59,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
             {barnFraApi && barnFraApi.length > 0 ?
                 <>
                     <ReadMore className="marginTop" header={"Hvilke barn viser vi?"}>
-                        Vi viser dine barn under 16år som er registrert i folkeregisteret.
+                        Vi viser dine barn under 16 år som er registrert i folkeregisteret.
                     </ReadMore>
                     <div className="marginTop">
                         {barnFraApi.map((barn) => (
@@ -91,7 +91,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                             {fieldArray.fields.map((field, index) => (
                                     <div className={styles.barnetillegg} key={field.id}>
                                         <BarneInfo
-                                            barn={field}
+                                            barn={field as Barn}
                                             vedlegg={vedlegg.filter(
                                                 (vedlegg) =>
                                                     vedlegg.uuid === field.uuid
@@ -104,7 +104,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                                                 variant="tertiary"
                                                 onClick={(e) => {
                                                     e.preventDefault()
-                                                    refEndring.current?.åpneEndretBarn({...field as Barn, index: index})
+                                                    refEndring.current?.åpneModal({...field as Barn, index: index})
                                                 }}
                                             >
                                                 Endre informasjon

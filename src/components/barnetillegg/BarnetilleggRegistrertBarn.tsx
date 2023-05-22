@@ -7,7 +7,7 @@ import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import styles from './Barnetillegg.module.css';
 import { formatDate } from '@/utils/formatDate';
 
-interface props {
+interface BarnetilleggRegistrertBarnProps {
     barn: Barn;
 }
 
@@ -15,7 +15,7 @@ function barnUtenforEØSValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker barnetillegg');
 }
 
-export default function BarnetilleggRegistrertBarn({ barn }: props) {
+export default function BarnetilleggRegistrertBarn({ barn }: BarnetilleggRegistrertBarnProps) {
     const { fødselsdato, fornavn, etternavn, mellomnavn, uuid } = barn;
     return (
         <div className={styles.barnetillegg}>
@@ -25,7 +25,7 @@ export default function BarnetilleggRegistrertBarn({ barn }: props) {
             <p><strong>Fødselsdato:</strong> {formatDate(fødselsdato)}</p>
             <JaNeiSpørsmål
                 reverse
-                name={`svar.barnetillegg.registrerteBarn.oppholdUtenforEØS.${uuid}`}
+                name={`svar.barnetillegg.eøsOppholdForBarnFraAPI.${uuid}`}
                 validate={barnUtenforEØSValidator}
                 hjelpetekst={{
                     tittel: 'Hvorfor spør vi om dette?',

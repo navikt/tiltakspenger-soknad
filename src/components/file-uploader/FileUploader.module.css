@@ -74,3 +74,11 @@
     width: 0;
     height: 0;
 }
+
+.alert {
+    margin-top: 1rem;
+}
+
+.bodyShort {
+    padding: 1rem;
+}

@@ -19,7 +19,7 @@ interface LeggTilBarnModalProps {
 }
 
 export interface LeggTilBarnModalImperativeHandle {
-    åpneEndretBarn: (barn: Barn) => void,
+    åpneModal: (barn: Barn) => void,
 }
 
 export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandle, LeggTilBarnModalProps>(function LeggTilBarnModal({fieldArray}: LeggTilBarnModalProps, ref  ) {
@@ -29,8 +29,8 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
 
     useImperativeHandle(ref, () => {
         return {
-            åpneEndretBarn(barn: Barn) {
-                åpneEndring(barn)
+            åpneModal(barn: Barn) {
+                åpneModal(barn)
             }
         };
     }, []);
@@ -55,24 +55,27 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om barnet bor utenfor EØS');
     }
 
-    const åpneLeggTil = () => {
-        uuid.current = uuidv4()
-        setValue('svar.barnetillegg.kladd', {fornavn: "", etternavn: "", fødselsdato: "", uuid: uuid.current, index: undefined})
-        setOpen(true)
-    }
+    const tomtBarn = {
+        fornavn: '',
+        etternavn: '',
+        fødselsdato: '',
+        uuid: '',
+        index: undefined,
+    };
 
-    const åpneEndring = (barn: Barn) => {
+    const åpneModal = (barn: Barn) => {
+        const åpneMedUuid = barn.uuid === '' ? uuidv4() : barn.uuid;
         setValue('svar.barnetillegg.kladd', {
             fornavn: barn.fornavn,
             etternavn: barn.etternavn,
             fødselsdato: barn.fødselsdato,
             oppholdUtenforEØS: barn.oppholdUtenforEØS,
-            uuid: barn.uuid,
-            index: barn.index
-        })
-        uuid.current = barn.uuid
-        setOpen(true)
-    }
+            uuid: åpneMedUuid,
+            index: barn.index,
+        });
+        uuid.current = åpneMedUuid;
+        setOpen(true);
+    };
 
     const lukkModal = () => {
         clearErrors('svar.barnetillegg.kladd')
@@ -82,7 +85,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
     return (
         <>
             <Button
-                onClick={åpneLeggTil}
+                onClick={() => åpneModal(tomtBarn)}
                 className={styles.knappLeggTilBarn}
                 variant="secondary"
                 type="button"
@@ -102,8 +105,6 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     <Heading spacing level="1" size="large" id="modal-heading">
                         Andre barn
                     </Heading>
-
-                            <>
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.fornavn`}
                                     textFieldProps={{ htmlSize: 45 }}
@@ -152,7 +153,6 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                 >
                                     Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
                                 </JaNeiSpørsmål>
-                            </>
                     <Button
                         onClick={lukkModal}
                         className={styles.knappAvbrytModal}

@@ -89,7 +89,7 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
 }
 
 function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
-    const oppholdUtenforEØSDict = barnetillegg.registrerteBarn.oppholdUtenforEØS
+    const oppholdUtenforEØSDict = barnetillegg.eøsOppholdForBarnFraAPI
     return {
         ...barnetillegg,
         registrerteBarn: barnFraAPI

@@ -49,7 +49,6 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
 
     const validerStørrelse = (file: File): Boolean => {
         const samletStørrelse = fields.reduce((acc, fil) => acc + fil.file.size, 0)
-        console.log(samletStørrelse)
         return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE
     }
 
@@ -113,7 +112,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                                     uuid
                                 });
                             } else {
-                                setError(`Filen er for stor!`)
+                                setError(`Filen er for stor`)
                             }
                         }}
                         className={styles.visuallyHidden}
@@ -122,7 +121,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         accept="image/jpg,image/png,.pdf"
                     />
                     <BodyShort>{'Dra og slipp'}</BodyShort>
-                    <BodyShort style={{padding: "1rem"}}>{'eller'}</BodyShort>
+                    <BodyShort className={styles.bodyShort}>{'eller'}</BodyShort>
                     <label htmlFor={inputId}>
                         <span
                             className={`${styles?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
@@ -140,7 +139,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         </span>
                     </label>
                     {error != "" &&
-                        <Alert size="small" variant="error" style={{marginTop: "1rem"}}>
+                        <Alert size="small" variant="error" className={styles.alert}>
                             {error}
                         </Alert>
                     }

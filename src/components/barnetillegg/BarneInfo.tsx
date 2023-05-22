@@ -1,13 +1,13 @@
-/*import styles from "@/components/barnetillegg-steg/BarnetilleggRegistrertBarn.module.css";*/
 import React from "react";
 import {formatDate} from "@/utils/formatDate";
 import {Vedlegg} from "@/types/Søknad";
+import {Barn} from "@/types/Barn";
 
-interface props {
-    barn: any //TODO: undersøke hvorfor TS klager på typen om denne settes til Barn
+interface BarneInfoProps {
+    barn: Barn
     vedlegg?: Vedlegg[]
 }
-export default function BarneInfo({barn, vedlegg}: props) {
+export default function BarneInfo({barn, vedlegg}: BarneInfoProps) {
     const {fødselsdato, fornavn, etternavn, mellomnavn, oppholdUtenforEØS} = barn;
     return (
         <div>
