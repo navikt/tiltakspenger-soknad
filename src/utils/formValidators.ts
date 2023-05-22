@@ -28,6 +28,12 @@ export function påkrevdPeriodeValidator(periode: FormPeriode, feilmelding: stri
     }
 }
 
+export function påkrevdDatoValidator(dato: Date, feilmelding: string) {
+    if (!dato) {
+        return feilmelding;
+    }
+}
+
 export function påkrevdFritekstfeltValidator(verdi: string, feilmelding: string) {
     if (!verdi || verdi.length === 0) {
         return feilmelding;

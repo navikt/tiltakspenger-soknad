@@ -1,0 +1,39 @@
+.barnetillegg {
+    background-color: var(--a-gray-50);
+    width: 100%;
+    border: 0;
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem 1rem 2rem;
+}
+
+.knappLeggTilBarn{
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.knappAvbrytModal{
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.knappLagreModal{
+    width: 100%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.modalLeggTilBarn {
+    background-color: var(--a-gray-50);
+    width: 70%;
+    padding: 5px;
+}
+
+.knapperEgenregistertBarn {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 1rem;
+}
+
+.modalTextField {
+    width: 50%
+}

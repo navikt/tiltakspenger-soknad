@@ -1,6 +1,6 @@
 import React, { DragEventHandler } from 'react';
 import styles from './FileUploader.module.css';
-import { BodyShort, Detail, Panel } from '@navikt/ds-react';
+import {Alert, BodyShort, Detail, Panel} from '@navikt/ds-react';
 import { UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
@@ -10,10 +10,11 @@ import Søknad from '@/types/Søknad';
 interface FileUploaderProps {
     name: 'vedlegg'; // TODO: Kan dele opp i flere vedleggskategorier, feks "vedleggBarn" | "vedkeggKVP"
     control: Control<Søknad>;
-    kategori: string;
+    knappTekst: string;
+    uuid: string;
 }
-
-export default function FileUploader({ name, control, kategori }: FileUploaderProps) {
+export default function FileUploader({ name, control, knappTekst, uuid }: FileUploaderProps) {
+    const [error, setError] = React.useState( "");
     const [dragOver, setDragOver] = React.useState<boolean>(false);
     const fileUploadInputElement = React.useRef<HTMLInputElement>(null);
     const inputId = 'test';
@@ -21,6 +22,7 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
         name,
         control,
     });
+    const MAKS_TOTAL_FILSTØRRELSE = 20000000;
 
     const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
         setDragOver(false);
@@ -45,6 +47,11 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
         [styles.dragOver]: dragOver,
     });
 
+    const validerStørrelse = (file: File): Boolean => {
+        const samletStørrelse = fields.reduce((acc, fil) => acc + fil.file.size, 0)
+        return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE
+    }
+
     const fileSizeString = (size: number) => {
         const kb = size / 1024;
         return kb > 1000 ? `${(kb / 1024).toFixed(1)} mB` : `${Math.floor(kb)} kB`;
@@ -52,7 +59,9 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
 
     return (
         <div className={cls}>
-            {fields?.map((attachment, index) => {
+            {fields?.filter((attachment) =>
+                attachment.uuid ===  uuid
+            ).map((attachment, index) => {
                 return (
                     <Panel className={styles.fileCard} key={attachment.id}>
                         <div className={styles.fileCardLeftContent}>
@@ -96,10 +105,14 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                         value={''}
                         onChange={(e) => {
                             const file = e?.target?.files?.[0];
-                            if (file) {
+                            if (file && validerStørrelse(file)) {
+                                setError("")
                                 append({
                                     file,
+                                    uuid
                                 });
+                            } else {
+                                setError(`Filen er for stor`)
                             }
                         }}
                         className={styles.visuallyHidden}
@@ -108,7 +121,7 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                         accept="image/jpg,image/png,.pdf"
                     />
                     <BodyShort>{'Dra og slipp'}</BodyShort>
-                    <BodyShort>{'eller'}</BodyShort>
+                    <BodyShort className={styles.bodyShort}>{'eller'}</BodyShort>
                     <label htmlFor={inputId}>
                         <span
                             className={`${styles?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
@@ -122,9 +135,14 @@ export default function FileUploader({ name, control, kategori }: FileUploaderPr
                             }}
                         >
                             <UploadIcon />
-                            Velg dine filer for {kategori}
+                            {knappTekst}
                         </span>
                     </label>
+                    {error != "" &&
+                        <Alert size="small" variant="error" className={styles.alert}>
+                            {error}
+                        </Alert>
+                    }
                 </>
             </div>
         </div>

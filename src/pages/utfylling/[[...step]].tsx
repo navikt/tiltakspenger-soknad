@@ -2,11 +2,11 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import Oppsummeringssteg from '@/components/oppsummeringssteg/Oppsummeringssteg';
-import KvpSteg from '@/components/innledningssteg/KvpSteg';
-import Tiltakssteg from '@/components/tiltakssteg/Tiltakssteg';
-import AndreUtbetalingerSteg from '@/components/andre-utbetalinger-steg/AndreUtbetalingerSteg';
-import BarnetilleggSteg from '@/components/barnetillegg-steg/BarnetilleggSteg';
+import Oppsummeringssteg from '../../steps/oppsummeringssteg/Oppsummeringssteg';
+import KvpSteg from '../../steps/innledningssteg/KvpSteg';
+import Tiltakssteg from '../../steps/tiltakssteg/Tiltakssteg';
+import AndreUtbetalingerSteg from '../../steps/andre-utbetalingersteg/AndreUtbetalingerSteg';
+import BarnetilleggSteg from '../../steps/barnetilleggsteg/BarnetilleggSteg';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
@@ -36,10 +36,8 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
             svar: {
                 tiltak: {},
                 barnetillegg: {
-                    registrerteBarnSøktBarnetilleggFor: [],
-                    manueltRegistrerteBarnSøktBarnetilleggFor: [
-                        { fornavn: '', etternavn: '', fødselsdato: '', bostedsland: '' },
-                    ],
+                    eøsOppholdForBarnFraAPI: {},
+                    manueltRegistrerteBarnSøktBarnetilleggFor: [],
                 },
                 etterlønn: {},
                 institusjonsopphold: {},
@@ -227,7 +225,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     mellomnavn: 'Bar',
                     etternavn: 'Baz',
                     fødselsnummer: '123',
-                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() }],
+                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },{ fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() }],
                 },
             },
         };
