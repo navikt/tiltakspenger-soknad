@@ -1,8 +1,8 @@
 import React, { MouseEvent } from 'react';
-import { Button, ConfirmationPanel, GuidePanel, Link } from '@navikt/ds-react';
+import {Accordion, Button, ConfirmationPanel, GuidePanel, Link} from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import styles from './index.module.css';
-import Accordion from '@/components/accordion/Accordion';
+import {ExternalLinkIcon} from "@navikt/aksel-icons";
 
 export default function App() {
     const router = useRouter();
@@ -92,48 +92,61 @@ export default function App() {
             <GuidePanel poster>
                 <p>Hei! Jeg er her for å veilede deg gjennom søknaden.</p>
                 <p>Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.</p>
-                <p>
-                    OBS: Hvis du tar pause på mer enn X minutter, slettes skjemaet på grunn av sikkerhetsinnstillinger.
-                </p>
+                <Link href="" target="_blank">Du kan kontakte oss om du ikke forstår spørsmålene <ExternalLinkIcon title="Åpne link i ny fane" /></Link>
             </GuidePanel>
             <div className={styles.accordions}>
-                <Accordion header="Tiltakspenger og annen inntekt">
-                    <span>Du kan ikke få tiltakspenger hvis du</span>
-                    <ul>
-                        <li>får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter</li>
-                        <li>får lønn samtidig som du deltar i tiltaket</li>
-                    </ul>
-                    <span>Det har ikke betydning hvor mye du får i annen pengestøtte eller lønn.</span>
-                </Accordion>
-                <Accordion header="Hvis du får tiltakspenger, gjelder dette">
-                    <ul>
-                        <li>Du må møte som avtalt i tiltaket</li>
-                        <li>Du må sende inn meldekortet ditt hver 14. dag</li>
-                        <li>Du må gi beskjed hvis situasjonen din endrer seg</li>
-                        <li>Du må betale tilbake hvis du får tiltakspenger du ikke har rett på</li>
-                    </ul>
-                </Accordion>
-                <Accordion header="Vi henter og bruker informasjon om deg">
-                    <p>I tillegg til den informasjonen du oppgir i søknaden, henter vi:</p>
-                    <ul>
-                        <li>Personinformasjon om deg fra Folkeregisteret.</li>
-                        <li>Personinformasjon om barna dine hvis du søker om barnetillegg</li>
-                        <li>Inntektsinformasjon fra Skatteetaten</li>
-                        <li>Opplysninger om hvilket arbeidsmarkedstiltak du deltar på</li>
-                        <li>Opplysninger om du får andre utbetalinger fra NAV</li>
-                        <li>Hvis du har barn, sjekker vi om barnets andre forelder har barnetillegg</li>
-                    </ul>
-                    <p>Dette gjør vi for å vurdere om du har rett til tiltakspenger.</p>
-                    <p>
-                        Vi deler opplysninger om hva du får utbetalt i tiltakspenger med Skatteetaten og Statistisk
-                        sentralbyrå. Vi kan bruke opplysninger om deg til å forbedre våre tjenester.
-                    </p>
-                    <Link
-                        href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten"
-                        target="_blank"
-                    >
-                        Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane).
-                    </Link>
+                <Accordion>
+                    <Accordion.Item>
+                        <Accordion.Header>Tiltakspenger og annen inntekt</Accordion.Header>
+                        <Accordion.Content>
+                            <span>Du kan ikke få tiltakspenger hvis:</span>
+                            <ul>
+                                <li>du får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter </li>
+                                <li>du har en jobb som hindrer deg i å delta på tiltaket</li>
+                                <li>jobben du får lønn for er en del av tiltaket</li>
+                            </ul>
+                            <span>Det har ikke betydning hvor mye du får i annen pengestøtte eller lønn.</span>
+                        </Accordion.Content>
+                    </Accordion.Item>
+                    <Accordion.Item>
+                        <Accordion.Header>Hvis du får tiltakspenger, gjelder dette</Accordion.Header>
+                        <Accordion.Content>
+                            <span>Hvir du får tiltakspenger må du:</span>
+                            <ul>
+                                <li>Møte som avtalt i tiltaket</li>
+                                <li>Sende inn meldekortet ditt hver 14. dag</li>
+                                <li>Gi beskjed hvis situasjonen din endrer seg</li>
+                                <li>Betale tilbake hvis du får tiltakspenger du ikke har rett på</li>
+                            </ul>
+
+
+                        </Accordion.Content>
+                    </Accordion.Item>
+                    <Accordion.Item>
+                        <Accordion.Header>Vi henter og bruker informasjon om deg</Accordion.Header>
+                        <Accordion.Content>
+                            <p>I tillegg til den informasjonen du oppgir i søknaden, henter vi:</p>
+                            <ul>
+                                <li>Personinformasjon om deg fra Folkeregisteret.</li>
+                                <li>Personinformasjon om barna dine hvis du søker om barnetillegg</li>
+                                <li>Inntektsinformasjon fra Skatteetaten</li>
+                                <li>Opplysninger om hvilket arbeidsmarkedstiltak du deltar på</li>
+                                <li>Opplysninger om du får andre utbetalinger fra NAV</li>
+                                <li>Hvis du har barn, sjekker vi om barnets andre forelder har barnetillegg</li>
+                            </ul>
+                            <p>Dette gjør vi for å vurdere om du har rett til tiltakspenger.</p>
+                            <p>
+                                Vi deler opplysninger om hva du får utbetalt i tiltakspenger med Skatteetaten og Statistisk
+                                sentralbyrå. Vi kan bruke opplysninger om deg til å forbedre våre tjenester.
+                            </p>
+                            <Link
+                                href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten"
+                                target="_blank"
+                            >
+                                Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane).
+                            </Link>
+                        </Accordion.Content>
+                    </Accordion.Item>
                 </Accordion>
             </div>
             <ConfirmationPanel
