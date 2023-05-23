@@ -107,7 +107,7 @@ function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
     const søkerOmBarnetillegg = registrerteBarn.length > 0 || manueltRegistrerteBarnSøktBarnetilleggFor.length > 0;
     return {
         ...barnetillegg,
-        registrerteBarn: registrerteBarn,
+        registrerteBarnSøktBarnetilleggFor: registrerteBarn,
         manueltRegistrerteBarnSøktBarnetilleggFor: manueltRegistrerteBarnSøktBarnetilleggFor,
         søkerOmBarnetillegg: søkerOmBarnetillegg
     };
