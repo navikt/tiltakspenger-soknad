@@ -52,6 +52,7 @@ interface Spørsmålsbesvarelser {
     pensjonsordning: Pensjonsordning;
     etterlønn: Etterlønn;
     harBekreftetAlleOpplysninger: boolean;
+    harBekreftetÅSvareSåGodtManKan: boolean;
 }
 
 export default Spørsmålsbesvarelser;

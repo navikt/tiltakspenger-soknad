@@ -5,13 +5,18 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { Personalia } from '@/types/Personalia';
 import { initializeFaro } from '@grafana/faro-web-sdk';
+import { FormProvider, useForm } from 'react-hook-form';
+import Søknad from '@/types/Søknad';
 
 const defaultPersonalia = {
     fornavn: 'Foo',
     mellomnavn: 'Bar',
     etternavn: 'Baz',
     fødselsnummer: '123',
-    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },{ fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() }],
+    barn: [
+        { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
+        { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
+    ],
 };
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
@@ -25,13 +30,30 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
 
 function App({ Component, pageProps }: AppProps) {
     const [personaliaData, setPersonaliaData] = useState<Personalia>(defaultPersonalia);
+    const formMethods = useForm<Søknad>({
+        defaultValues: {
+            svar: {
+                tiltak: {},
+                barnetillegg: {
+                    eøsOppholdForBarnFraAPI: {},
+                    manueltRegistrerteBarnSøktBarnetilleggFor: [],
+                },
+                etterlønn: {},
+                institusjonsopphold: {},
+                introduksjonsprogram: {},
+                kvalifiseringsprogram: {},
+                pensjonsordning: {},
+                harBekreftetAlleOpplysninger: false,
+                harBekreftetÅSvareSåGodtManKan: false,
+            },
+            vedlegg: [],
+        },
+    });
 
     return (
-        <Component
-            {...pageProps}
-            setPersonaliaData={setPersonaliaData}
-            personalia={personaliaData}
-        />
+        <FormProvider {...formMethods}>
+            <Component {...pageProps} setPersonaliaData={setPersonaliaData} personalia={personaliaData} />
+        </FormProvider>
     );
 }
 

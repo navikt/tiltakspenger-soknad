@@ -72,8 +72,7 @@ export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlø
 
 export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg) {
     if (steg === Søknadssteg.TILTAK) {
-        // todo: Sjekk at bruker har huket av på bekreftelsesboks på innledningssteget når det er klart
-        return true;
+        return svar.harBekreftetÅSvareSåGodtManKan;
     } else if (steg === Søknadssteg.KVP) {
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
