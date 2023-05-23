@@ -105,6 +105,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
     const søknad: Søknad = getValues() as Søknad;
     const svar = søknad.svar;
     const {
+        harBekreftetÅSvareSåGodtManKan,
         kvalifiseringsprogram,
         introduksjonsprogram,
         pensjonsordning,
@@ -181,10 +182,12 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Innledning</Accordion.Header>
                     <Accordion.Content>
-                        <Oppsummeringsfelt
-                            feltNavn="Bekreftelse"
-                            feltVerdi="Jeg vil svare så godt jeg kan på spørsmålene i søknaden"
-                        />
+                        {harBekreftetÅSvareSåGodtManKan && (
+                            <Oppsummeringsfelt
+                                feltNavn="Bekreftelse"
+                                feltVerdi="Jeg vil svare så godt jeg kan på spørsmålene i søknaden"
+                            />
+                        )}
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
