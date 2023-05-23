@@ -107,14 +107,13 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     </Heading>
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.fornavn`}
-                                    textFieldProps={{ htmlSize: 45 }}
                                     validate={fornavnValidator}
+
                                 >
                                     Fornavn og mellomnavn
                                 </Fritekstspørsmål>
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.etternavn`}
-                                    textFieldProps={{ htmlSize: 45 }}
                                     validate={etternavnValidator}
                                 >
                                     Etternavn

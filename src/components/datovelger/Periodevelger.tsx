@@ -40,12 +40,12 @@ export default function Periodevelger({
         <UNSAFE_DatePicker {...datepickerProps} id={id}>
             <UNSAFE_DatePicker.Input
                 {...fromInputProps}
-                size="small"
-                label="Fra"
+                size="medium"
+                label="Fra dato"
                 error={errorMessage}
                 id={`${id}.fra`}
             />
-            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} id={`${id}.til`} />
+            <UNSAFE_DatePicker.Input {...toInputProps} size="medium" label="Til dato" error={errorMessage} id={`${id}.til`} />
         </UNSAFE_DatePicker>
     );
 }
