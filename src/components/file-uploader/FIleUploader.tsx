@@ -1,10 +1,10 @@
 import React, { DragEventHandler } from 'react';
 import styles from './FileUploader.module.css';
-import {Alert, BodyShort, Detail, Panel} from '@navikt/ds-react';
+import {Alert, BodyShort, Detail, Link, Panel} from '@navikt/ds-react';
 import { UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
-import { Delete, FileSuccess } from '@navikt/ds-icons';
+import {Delete, Download, FileSuccess} from '@navikt/ds-icons';
 import Søknad from '@/types/Søknad';
 
 interface FileUploaderProps {
@@ -62,6 +62,9 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
             {fields?.filter((attachment) =>
                 attachment.uuid ===  uuid
             ).map((attachment, index) => {
+                const url = window.URL.createObjectURL(
+                    new Blob([attachment.file]),
+                );
                 return (
                     <Panel className={styles.fileCard} key={attachment.id}>
                         <div className={styles.fileCardLeftContent}>
@@ -69,7 +72,10 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                                 <FileSuccess color={'var(--a-icon-success)'} />
                             </div>
                             <div className={styles.fileInputText}>
-                                <span>{attachment.file.name}</span>
+                                <Link href={url} download={attachment.file.name}>
+                                    {attachment.file.name}
+                                    <Download title="Last ned vedlegg" />
+                                </Link>
                                 <Detail>{fileSizeString(attachment.file.size)}</Detail>
                             </div>
                         </div>
