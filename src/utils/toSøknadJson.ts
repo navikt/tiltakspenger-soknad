@@ -8,8 +8,8 @@ import Spørsmålsbesvarelser, {
     Pensjonsordning,
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
-import { BarnFraAPI } from '@/types/Barn';
 import { Tiltak } from '@/types/Tiltak';
+import { Barn } from '@/types/Barn';
 
 interface Periode {
     fra: string;
@@ -88,32 +88,36 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
     };
 }
 
-function barnetillegg(barnetillegg: Barnetillegg, registrerteBarn: BarnFraAPI[]) {
-    return {
-        ...barnetillegg,
-        registrerteBarnSøktBarnetilleggFor: registrerteBarn
-            .filter(({ uuid }) => barnetillegg.registrerteBarnSøktBarnetilleggFor.indexOf(uuid) >= 0)
-            // sørger for å fjerne uuid i post
-            .map(({ fornavn, fødselsdato, mellomnavn, etternavn }) => ({
+function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
+    const oppholdUtenforEØSDict = barnetillegg.eøsOppholdForBarnFraAPI;
+    const registrerteBarn = barnFraAPI
+            .map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
                 fornavn,
                 fødselsdato,
                 mellomnavn,
                 etternavn,
-            })),
-        manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
-            .filter(
-                ({ fornavn, etternavn, fødselsdato, bostedsland }) => fornavn && etternavn && fødselsdato && bostedsland
-            )
+                oppholdUtenforEØS: oppholdUtenforEØSDict[uuid],
+            }));
+    const manueltRegistrerteBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+            .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
             .map((barn) => ({
                 ...barn,
                 fødselsdato: formatDate(barn.fødselsdato),
-            })),
+            }));
+    const ønskerÅSøkeBarnetilleggForAndreBarn = manueltRegistrerteBarnSøktBarnetilleggFor.length > 0;
+    const søkerOmBarnetillegg = registrerteBarn.length > 0 || ønskerÅSøkeBarnetilleggForAndreBarn;
+    return {
+        ...barnetillegg,
+        registrerteBarnSøktBarnetilleggFor: registrerteBarn,
+        manueltRegistrerteBarnSøktBarnetilleggFor: manueltRegistrerteBarnSøktBarnetilleggFor,
+        søkerOmBarnetillegg: søkerOmBarnetillegg,
+        ønskerÅSøkeBarnetilleggForAndreBarn: ønskerÅSøkeBarnetilleggForAndreBarn
     };
 }
 
 export default function toSøknadJson(
     spørsmålsbesvarelser: Spørsmålsbesvarelser,
-    barnFraApi: BarnFraAPI[],
+    barnFraApi: Barn[],
     valgtTiltak: Tiltak
 ): String {
     return JSON.stringify({
