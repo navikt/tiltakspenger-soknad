@@ -19,12 +19,11 @@ interface BarnetilleggStegProps {
 }
 
 export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
-    const {watch, getValues} = useFormContext<Søknad>();
+    const {getValues} = useFormContext<Søknad>();
     const fieldArray = useFieldArray<Søknad>({name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor'});
-    const watchSøkerOmBarnetillegg = watch('svar.barnetillegg.søkerOmBarnetillegg');
     const barnFraApi = personalia.barn;
     const vedlegg = getValues('vedlegg')
-    const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0) && watchSøkerOmBarnetillegg;
+    const harIngenBarnÅViseFraApi = (!barnFraApi || barnFraApi.length === 0);
     const refEndring = useRef<LeggTilBarnModalImperativeHandle>(null);
 
     return (
