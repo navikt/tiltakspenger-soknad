@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Accordion, Button, ConfirmationPanel } from '@navikt/ds-react';
+import { Accordion, Button } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
 import { Personalia } from '@/types/Personalia';
@@ -17,8 +17,8 @@ import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekrefte
 import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../../components/step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
-import SøknadResponse from "@/types/SøknadResponse";
-import BarneInfo from "@/components/barnetillegg/BarneInfo";
+import SøknadResponse from '@/types/SøknadResponse';
+import BarneInfo from '@/components/barnetillegg/BarneInfo';
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
@@ -66,7 +66,7 @@ function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn:
     }
 }
 
-function oppsummeringBarn(barn: Barn ) {
+function oppsummeringBarn(barn: Barn) {
     if (barn.fornavn && barn.etternavn) {
         return `${barn.fornavn} ${barn.mellomnavn ? `${barn.mellomnavn} ` : ''}${barn.etternavn}, født ${formatDate(
             barn.fødselsdato
@@ -122,12 +122,9 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
     const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
-    const alleBarnSøktBarnetilleggFor =
-        barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
-            ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
-        ).concat(personalia.barn)
-    ;
-
+    const alleBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+        .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
+        .concat(personalia.barn);
     async function sendInnSøknad() {
         const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak);
         try {
@@ -181,6 +178,15 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
             guide="Her kan du se over at alt er riktig, og ved behov endre opplysninger, før du sender inn søknaden din."
         >
             <Accordion style={{ marginTop: '2rem' }}>
+                <Accordion.Item defaultOpen>
+                    <Accordion.Header>Innledning</Accordion.Header>
+                    <Accordion.Content>
+                        <Oppsummeringsfelt
+                            feltNavn="Bekreftelse"
+                            feltVerdi="Jeg vil svare så godt jeg kan på spørsmålene i søknaden"
+                        />
+                    </Accordion.Content>
+                </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Om deg</Accordion.Header>
                     <Accordion.Content>
@@ -272,9 +278,15 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => (
-                            <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
-                                <BarneInfo barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid]}}/>
-                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
+                            <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }}>
+                                <BarneInfo
+                                    barn={{
+                                        ...barn,
+                                        oppholdUtenforEØS:
+                                            barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
+                                    }}
+                                />
+                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
                             </div>
                         ))}
                     </Accordion.Content>
