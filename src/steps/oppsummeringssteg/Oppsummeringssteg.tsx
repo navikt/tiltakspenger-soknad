@@ -180,17 +180,6 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
         >
             <Accordion style={{ marginTop: '2rem' }}>
                 <Accordion.Item defaultOpen>
-                    <Accordion.Header>Innledning</Accordion.Header>
-                    <Accordion.Content>
-                        {harBekreftetÅSvareSåGodtManKan && (
-                            <Oppsummeringsfelt
-                                feltNavn="Bekreftelse"
-                                feltVerdi="Jeg vil svare så godt jeg kan på spørsmålene i søknaden"
-                            />
-                        )}
-                    </Accordion.Content>
-                </Accordion.Item>
-                <Accordion.Item defaultOpen>
                     <Accordion.Header>Om deg</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
@@ -296,7 +285,7 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
                 </Accordion.Item>
             </Accordion>
             <Bekreftelsesspørsmål
-                label="Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte"
+                label="Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte."
                 className={styles.bekreftelsesboks}
                 name="svar.harBekreftetAlleOpplysninger"
                 validate={harBekreftetAlleOpplysningerValidator}
