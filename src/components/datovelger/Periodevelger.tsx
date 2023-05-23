@@ -43,11 +43,19 @@ export default function Periodevelger({
             <UNSAFE_DatePicker.Input
                 {...fromInputProps}
                 size="small"
-                label="Fra"
+                label="Fra dato"
                 error={errorMessage}
                 id={`${id}.fra`}
             />
-            {!ikkeVisTilDato && <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} id={`${id}.til`} />}
+            {!ikkeVisTilDato &&
+                <UNSAFE_DatePicker.Input
+                    {...toInputProps}
+                    size="small"
+                    label="Til dato"
+                    error={errorMessage}
+                    id={`${id}.til`}
+                />
+            }
         </UNSAFE_DatePicker>
     );
 }

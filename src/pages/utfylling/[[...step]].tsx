@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '../../steps/oppsummeringssteg/Oppsummeringssteg';
-import InstitusjonsoppholdSteg from '../../steps/institusjonsopphold-steg/InstitusjonsoppholdSteg';
+import InstitusjonsoppholdSteg from '@/steps/institusjonsoppholdsteg/InstitusjonsoppholdSteg';
 import ProgramDeltagelseSteg from '@/steps/programdeltagelsesteg/ProgramDeltagelseSteg';
 import Tiltakssteg from '../../steps/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '../../steps/andre-utbetalingersteg/AndreUtbetalingerSteg';
@@ -17,6 +17,12 @@ import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
 import { Søknadssteg } from '@/types/Søknadssteg';
 import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
+import {
+    Alderspensjon, Etterlønn,
+    Gjenlevendepensjon, Jobbsjansen, Pensjonsordning,
+    Supplerendestønadflyktninger,
+    Supplerendestønadover67
+} from "@/types/Spørsmålsbesvarelser";
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -40,12 +46,18 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                     eøsOppholdForBarnFraAPI: {},
                     manueltRegistrerteBarnSøktBarnetilleggFor: [],
                 },
-                etterlønn: {},
                 institusjonsopphold: {},
                 introduksjonsprogram: {},
                 kvalifiseringsprogram: {},
                 mottarAndreUtbetalinger: false,
+                sykepenger:{},
+                gjenlevendepensjon: {},
+                alderspensjon: {},
+                supplerendestønadover67: {},
+                supplerendestønadflyktninger: {},
                 pensjonsordning: {},
+                etterlønn: {},
+                jobbsjansen: {},
                 harBekreftetAlleOpplysninger: false,
             },
             vedlegg: [],

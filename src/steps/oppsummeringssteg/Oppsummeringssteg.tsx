@@ -52,17 +52,17 @@ function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusj
     }
 }
 
-function oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning: boolean, pensjon: AnnenUtbetaling) {
+function oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning: boolean) {
     if (mottarEllerSøktPensjonsordning) {
-        return `Ja, jeg mottar etterlønn fra ${pensjon.utbetaler} i perioden ${formatPeriode(pensjon.periode)}`;
+        return `Ja, jeg mottar utbetalinger fra en pensjonsordning`;
     } else {
         return 'Nei, jeg har verken søkt om eller mottar utbetalinger fra en pensjonsordning';
     }
 }
 
-function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn: AnnenUtbetaling) {
+function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean) {
     if (mottarEllerSøktEtterlønn) {
-        return `Ja, jeg mottar etterlønn fra ${etterlønn.utbetaler} i perioden ${formatPeriode(etterlønn.periode)}`;
+        return `Ja, jeg mottar etterlønn fra en arbeidsgiver`;
     } else {
         return 'Nei, jeg har verken søkt eller mottar etterlønn fra en arbeidsgiver';
     }
@@ -111,6 +111,13 @@ export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPrevio
         introduksjonsprogram,
         pensjonsordning,
         etterlønn,
+        mottarAndreUtbetalinger,
+        sykepenger,
+        gjenlevendepensjon,
+        alderspensjon,
+        supplerendestønadover67,
+        supplerendestønadflyktninger,
+        jobbsjansen,
         institusjonsopphold,
         tiltak,
         barnetillegg,
@@ -257,15 +264,12 @@ export default function Oppsummeringssteg({ title, stegNummerTekst, onGoToPrevio
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Pensjonsordninger"
-                            feltVerdi={oppsummeringPensjonsordninger(
-                                pensjonsordning.mottar,
-                                pensjonsordning
-                            )}
+                            feltVerdi={oppsummeringPensjonsordninger(pensjonsordning.mottar)}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Etterlønn"
-                                feltVerdi={oppsummeringEtterlønn(etterlønn.mottar, etterlønn)}
+                                feltVerdi={oppsummeringEtterlønn(etterlønn.mottar)}
                             />
                         </div>
                     </Accordion.Content>

@@ -47,7 +47,6 @@ function supplerendeStønadFlyktningerValidator(verdi: boolean) {
 
 export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
     const { watch } = useFormContext();
-    const watchPensjonsordning = watch('svar.pensjonsordning.mottar');
     const watchSykepenger = watch('svar.sykepenger.mottar');
     const watchGjenlevendepensjon = watch('svar.gjenlevendepensjon.mottar');
     const watchAlderspensjon = watch('svar.alderspensjon.mottar');
@@ -136,7 +135,7 @@ export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onComple
                     Mottar du alderspensjon?
                 </JaNeiSpørsmål>
                 {watchAlderspensjon && (
-                    <Periodespørsmål name="svar.alderspensjon.periode" ikkeVisTilDato>Når mortar du alderspensjon?</Periodespørsmål>
+                    <Periodespørsmål name="svar.alderspensjon.fraDato" ikkeVisTilDato>Når mottar du alderspensjon?</Periodespørsmål>
                 )}
             </div>
             <div className={styles.blokk}>
@@ -197,11 +196,6 @@ export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onComple
                 >
                     Mottar du pengestøtte fra andre trygde- eller pensjonsordninger?
                 </JaNeiSpørsmål>
-                {watchPensjonsordning && (
-                    <>
-                        <Periodespørsmål name="svar.pensjonsordning.periode">Når mottar du det?</Periodespørsmål>
-                    </>
-                )}
             </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål

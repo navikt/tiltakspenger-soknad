@@ -1,22 +1,25 @@
 import Spørsmålsbesvarelser, {
+    Alderspensjon,
     Barnetillegg,
     Etterlønn,
-    FormTiltak,
+    FormTiltak, Gjenlevendepensjon,
     Institusjonsopphold,
-    Introduksjonsprogram,
+    Introduksjonsprogram, Jobbsjansen,
     Kvalifiseringsprogram,
-    Pensjonsordning,
+    Pensjonsordning, Supplerendestønadover67, Sykepenger,
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
 import { Tiltak } from '@/types/Tiltak';
 import { Barn } from '@/types/Barn';
+import {Nullable} from "@/utils/eller-null";
 
 interface Periode {
     fra: string;
     til: string;
 }
 
-function formatDate(dateString: string) {
+function formatDate(dateString: Nullable<string>) {
+    if (!dateString) return '';
     return dayjs(dateString).format('YYYY-MM-DD');
 }
 
@@ -41,20 +44,47 @@ function introduksjonsprogram({ deltar, periode }: Introduksjonsprogram) {
     return { deltar };
 }
 
-function pensjon(pensjonsornding: Pensjonsordning) {
-    const { mottar, periode, utbetaler } = pensjonsornding;
+function sykepenger({ mottar, periode }: Sykepenger) {
     if (mottar) {
-        return { utbetaler, mottar, periode: formatPeriod(periode) };
+        return { mottar, periode: formatPeriod(periode as Periode)}
     }
-    return pensjonsornding;
+    return { mottar };
 }
 
-function etterlønn(etterlønn: Etterlønn) {
-    const { periode, mottar, utbetaler } = etterlønn;
+function gjenlevendepensjon({ mottar, periode }: Gjenlevendepensjon) {
     if (mottar) {
-        return { mottar, utbetaler, periode: formatPeriod(periode) };
+        return { mottar, periode: formatPeriod(periode as Periode)}
     }
-    return etterlønn;
+    return { mottar };
+}
+
+function alderspensjon(alderspensjon: Alderspensjon) {
+    const { mottar, fraDato} = alderspensjon;
+    if (mottar) {
+        return { mottar, fraDato: formatDate(fraDato)}
+    }
+    return alderspensjon;
+}
+
+function supplerendestønadover67({ mottar, periode }: Supplerendestønadover67) {
+    if (mottar) {
+        return { mottar, periode: formatPeriod(periode as Periode)}
+    }
+    return { mottar };
+}
+
+function jobbsjansen({ mottar, periode }: Jobbsjansen) {
+    if (mottar) {
+        return { mottar, periode: formatPeriod(periode as Periode)}
+    }
+    return { mottar };
+}
+
+function supplerendestønadflyktninger({ mottar, periode }: Supplerendestønadover67) {
+    if (mottar) {
+        return { mottar, periode: formatPeriod(periode as Periode)}
+    }
+    return { mottar };
 }
 
 function institusjon(institusjonsopphold: Institusjonsopphold) {
@@ -119,8 +149,14 @@ export default function toSøknadJson(
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),
         introduksjonsprogram: introduksjonsprogram(spørsmålsbesvarelser.introduksjonsprogram),
         barnetillegg: barnetillegg(spørsmålsbesvarelser.barnetillegg, barnFraApi),
-        pensjonsordning: pensjon(spørsmålsbesvarelser.pensjonsordning),
-        etterlønn: etterlønn(spørsmålsbesvarelser.etterlønn),
+        pensjonsordning: spørsmålsbesvarelser.pensjonsordning,
+        etterlønn: spørsmålsbesvarelser.etterlønn,
+        sykepenger: sykepenger(spørsmålsbesvarelser.sykepenger),
+        gjenlevendepensjon: gjenlevendepensjon(spørsmålsbesvarelser.gjenlevendepensjon),
+        alderspensjon: alderspensjon(spørsmålsbesvarelser.alderspensjon),
+        supplerendestønadover67: supplerendestønadover67(spørsmålsbesvarelser.supplerendestønadover67),
+        supplerendestønadflyktninger: supplerendestønadflyktninger(spørsmålsbesvarelser.supplerendestønadflyktninger),
+        jobbsjansen: jobbsjansen(spørsmålsbesvarelser.jobbsjansen),
         institusjonsopphold: institusjon(spørsmålsbesvarelser.institusjonsopphold),
         tiltak: tiltak(spørsmålsbesvarelser.tiltak, valgtTiltak),
     });
