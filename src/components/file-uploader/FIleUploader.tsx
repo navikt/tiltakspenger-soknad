@@ -1,4 +1,4 @@
-import React, { DragEventHandler } from 'react';
+import React, {DragEventHandler, useEffect, useRef} from 'react';
 import styles from './FileUploader.module.css';
 import {Alert, BodyShort, Detail, Link, Panel} from '@navikt/ds-react';
 import { UploadIcon } from '@navikt/aksel-icons';
@@ -17,6 +17,12 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
     const [error, setError] = React.useState( "");
     const [dragOver, setDragOver] = React.useState<boolean>(false);
     const fileUploadInputElement = React.useRef<HTMLInputElement>(null);
+    const objectUrls = useRef<Array<string>>([]);
+    useEffect(()=>{
+        return () => {
+            objectUrls.current.map((url) => window.URL.revokeObjectURL(url));
+        }
+    }, []);
     const inputId = 'test';
     const { append, remove, fields } = useFieldArray({
         name,
@@ -65,6 +71,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                 const url = window.URL.createObjectURL(
                     new Blob([attachment.file]),
                 );
+                objectUrls.current.push(url);
                 return (
                     <Panel className={styles.fileCard} key={attachment.id}>
                         <div className={styles.fileCardLeftContent}>
