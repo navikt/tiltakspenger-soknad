@@ -1,6 +1,6 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '../../steps/oppsummeringssteg/Oppsummeringssteg';
 import KvpSteg from '../../steps/innledningssteg/KvpSteg';
@@ -29,27 +29,10 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
 
     const { step } = router.query;
-    const formMethods = useForm<Søknad>({
-        defaultValues: {
-            svar: {
-                tiltak: {},
-                barnetillegg: {
-                    eøsOppholdForBarnFraAPI: {},
-                    manueltRegistrerteBarnSøktBarnetilleggFor: [],
-                },
-                etterlønn: {},
-                institusjonsopphold: {},
-                introduksjonsprogram: {},
-                kvalifiseringsprogram: {},
-                pensjonsordning: {},
-                harBekreftetAlleOpplysninger: false,
-            },
-            vedlegg: [],
-        },
-    });
+    const { getValues, watch } = useFormContext<Søknad>();
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
-    const valgtAktivitetId = formMethods.watch('svar.tiltak.aktivitetId');
+    const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     React.useEffect(() => {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
@@ -76,7 +59,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         }
     }
 
-    const svar = formMethods.getValues().svar;
+    const svar = getValues().svar;
     const aktivtSøknadssteg = utledSøknadsstegFraRoute(step && step[0]);
     React.useEffect(() => {
         if (aktivtSøknadssteg == null) {
@@ -163,7 +146,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const [innsendingstidspunkt, setInnsendingstidspunkt] = React.useState<string>();
 
     async function sendInnSøknad() {
-        const søknad = formMethods.getValues();
+        const søknad = getValues();
         const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak!);
         try {
             setSøknadsinnsendingInProgress(true);
@@ -183,7 +166,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     }
 
     return (
-        <FormProvider {...formMethods}>
+        <>
             {brukerErPåTiltakssteg() && (
                 <Tiltakssteg
                     onCompleted={navigerBrukerTilKvpSteg}
@@ -221,7 +204,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
             {brukerErPåKvitteringssiden() && (
                 <Kvitteringsside personalia={personalia} innsendingstidspunkt={innsendingstidspunkt!} />
             )}
-        </FormProvider>
+        </>
     );
 }
 
