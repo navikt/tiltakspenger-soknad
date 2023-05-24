@@ -144,7 +144,9 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
         const formData = new FormData();
         formData.append('søknad', søknadJson as string);
-        søknad.vedlegg.forEach((vedlegg, index) => {
+        søknad.vedlegg.filter((v) =>
+            søknad.svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.find((elem) => elem.uuid === v.uuid) != undefined
+        ).forEach((vedlegg, index) => {
             formData.append(`vedlegg-${index}`, vedlegg.file);
         });
         return formData;
