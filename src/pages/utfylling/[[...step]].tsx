@@ -16,19 +16,17 @@ import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
 import { Søknadssteg } from '@/types/Søknadssteg';
 import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
+import Kvitteringsside from '@/components/kvitteringsside/Kvitteringsside';
+import SøknadResponse from '@/types/SøknadResponse';
+import toSøknadJson from '@/utils/toSøknadJson';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
     personalia: Personalia;
-    setPersonaliaData: (personalia: Personalia) => void;
 }
 
-export default function Utfylling({ tiltak, personalia, setPersonaliaData }: UtfyllingProps) {
+export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
-
-    React.useEffect(() => {
-        setPersonaliaData(personalia);
-    }, [personalia]);
 
     const { step } = router.query;
     const { getValues, watch } = useFormContext<Søknad>();
@@ -54,6 +52,8 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 return Søknadssteg.BARNETILLEGG;
             case Søknadssteg.OPPSUMMERING:
                 return Søknadssteg.OPPSUMMERING;
+            case Søknadssteg.KVITTERING:
+                return Søknadssteg.KVITTERING;
             default:
                 return null;
         }
@@ -86,6 +86,9 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         navigateToPath('/utfylling/barnetillegg', shallow);
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/oppsummering', shallow);
+    const navigerBrukerTilKvitteringssiden = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/kvittering', shallow);
+    const navigerBrukerTilGenerellFeilside = () => navigateToPath('/feil', false);
 
     const brukerErPåTiltakssteg = () => {
         const formStateErPåTiltakssteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.TILTAK);
@@ -115,6 +118,51 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
         return step && step[0] === Søknadssteg.OPPSUMMERING && formStateErPåOppsummeringssteg;
     };
 
+    const brukerErPåKvitteringssiden = () => {
+        const formStateErPåKvitteringssiden = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVITTERING);
+        return step && step[0] === Søknadssteg.KVITTERING && formStateErPåKvitteringssiden;
+    };
+
+    function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
+        const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
+        const formData = new FormData();
+        formData.append('søknad', søknadJson as string);
+        søknad.vedlegg.forEach((vedlegg, index) => {
+            formData.append(`vedlegg-${index}`, vedlegg.file);
+        });
+        return formData;
+    }
+
+    function postSøknadMultipart(formData: FormData) {
+        return fetch('/api/soknad', {
+            method: 'POST',
+            body: formData,
+        });
+    }
+
+    const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
+    const [innsendingstidspunkt, setInnsendingstidspunkt] = React.useState<string>();
+
+    async function sendInnSøknad() {
+        const søknad = getValues();
+        const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak!);
+        try {
+            setSøknadsinnsendingInProgress(true);
+            const response = await postSøknadMultipart(formData);
+            if (response.status !== 201) {
+                return navigerBrukerTilGenerellFeilside();
+            }
+
+            const innsendingstidspunktFraApi = await response
+                .json()
+                .then((json: SøknadResponse) => json.innsendingTidspunkt);
+            setInnsendingstidspunkt(innsendingstidspunktFraApi);
+            return navigerBrukerTilKvitteringssiden();
+        } catch {
+            return navigerBrukerTilGenerellFeilside();
+        }
+    }
+
     return (
         <>
             {brukerErPåTiltakssteg() && (
@@ -143,7 +191,16 @@ export default function Utfylling({ tiltak, personalia, setPersonaliaData }: Utf
                 />
             )}
             {brukerErPåOppsummeringssteg() && (
-                <Oppsummeringssteg onGoToPreviousStep={goBack} personalia={personalia} valgtTiltak={valgtTiltak!} />
+                <Oppsummeringssteg
+                    onGoToPreviousStep={goBack}
+                    personalia={personalia}
+                    valgtTiltak={valgtTiltak!}
+                    søknadsinnsendingInProgress={søknadsinnsendingInProgress}
+                    onCompleted={sendInnSøknad}
+                />
+            )}
+            {brukerErPåKvitteringssiden() && (
+                <Kvitteringsside personalia={personalia} innsendingstidspunkt={innsendingstidspunkt!} />
             )}
         </>
     );
@@ -208,7 +265,10 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     mellomnavn: 'Bar',
                     etternavn: 'Baz',
                     fødselsnummer: '123',
-                    barn: [{ fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },{ fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() }],
+                    barn: [
+                        { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
+                        { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
+                    ],
                 },
             },
         };

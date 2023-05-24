@@ -70,6 +70,10 @@ export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlø
     return true;
 }
 
+export function brukerHarFyltUtOppsummeringssteg({ harBekreftetAlleOpplysninger }: Spørsmålsbesvarelser) {
+    return harBekreftetAlleOpplysninger;
+}
+
 export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg) {
     if (steg === Søknadssteg.TILTAK) {
         return svar.harBekreftetÅSvareSåGodtManKan;
@@ -89,6 +93,13 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
             brukerHarFyltUtTiltakssteg(svar) &&
             brukerHarFyltUtKvpSteg(svar) &&
             brukerHarFyltUtAndreUtbetalingerSteg(svar)
+        );
+    } else if (steg === Søknadssteg.KVITTERING) {
+        return (
+            brukerHarFyltUtTiltakssteg(svar) &&
+            brukerHarFyltUtKvpSteg(svar) &&
+            brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
+            brukerHarFyltUtOppsummeringssteg(svar)
         );
     }
 }
