@@ -17,12 +17,6 @@ import { Personalia } from '@/types/Personalia';
 import Søknad from '@/types/Søknad';
 import { Søknadssteg } from '@/types/Søknadssteg';
 import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
-import {
-    Alderspensjon, Etterlønn,
-    Gjenlevendepensjon, Jobbsjansen, Pensjonsordning,
-    Supplerendestønadflyktninger,
-    Supplerendestønadover67
-} from "@/types/Spørsmålsbesvarelser";
 
 interface UtfyllingProps {
     tiltak: Tiltak[];

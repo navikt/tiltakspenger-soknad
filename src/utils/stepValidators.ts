@@ -63,18 +63,6 @@ export function brukerHarFyltUtAndreUtbetalingerSteg({ pensjonsordning, etterlø
         return false;
     }
 
-    if (pensjonsordning.mottar) {
-        if (!pensjonsordning.periode) {
-            return false;
-        }
-    }
-
-    if (etterlønn.mottar) {
-        if (!etterlønn.periode) {
-            return false;
-        }
-    }
-
     return true;
 }
 

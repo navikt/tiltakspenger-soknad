@@ -8,7 +8,6 @@ import { Periode } from '@/types/Periode';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
-import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
 import { Barn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
 import toSøknadJson from '@/utils/toSøknadJson';

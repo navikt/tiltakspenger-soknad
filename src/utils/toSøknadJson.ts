@@ -1,12 +1,14 @@
 import Spørsmålsbesvarelser, {
     Alderspensjon,
     Barnetillegg,
-    Etterlønn,
-    FormTiltak, Gjenlevendepensjon,
+    FormTiltak,
+    Gjenlevendepensjon,
     Institusjonsopphold,
-    Introduksjonsprogram, Jobbsjansen,
+    Introduksjonsprogram,
+    Jobbsjansen,
     Kvalifiseringsprogram,
-    Pensjonsordning, Supplerendestønadover67, Sykepenger,
+    Supplerendestønadover67,
+    Sykepenger,
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
 import { Tiltak } from '@/types/Tiltak';
@@ -155,8 +157,8 @@ export default function toSøknadJson(
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),
         introduksjonsprogram: introduksjonsprogram(spørsmålsbesvarelser.introduksjonsprogram),
         barnetillegg: barnetillegg(spørsmålsbesvarelser.barnetillegg, barnFraApi),
-        pensjonsordning: spørsmålsbesvarelser.pensjonsordning,
-        etterlønn: spørsmålsbesvarelser.etterlønn,
+        pensjonsordning: {mottar: spørsmålsbesvarelser.pensjonsordning},
+        etterlønn: {mottar: spørsmålsbesvarelser.etterlønn},
         sykepenger: sykepenger(spørsmålsbesvarelser.sykepenger),
         gjenlevendepensjon: gjenlevendepensjon(spørsmålsbesvarelser.gjenlevendepensjon),
         alderspensjon: alderspensjon(spørsmålsbesvarelser.alderspensjon),

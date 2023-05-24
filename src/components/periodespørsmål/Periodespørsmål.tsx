@@ -30,7 +30,7 @@ function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
     return validate;
 }
 
-export default function  Periodespørsmål({
+export default function Periodespørsmål({
     name,
     children,
     validate,
