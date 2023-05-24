@@ -4,4 +4,5 @@ export enum Søknadssteg {
     ANDRE_UTBETALINGER = 'andreutbetalinger',
     BARNETILLEGG = 'barnetillegg',
     OPPSUMMERING = 'oppsummering',
+    KVITTERING = 'kvittering',
 }

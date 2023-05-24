@@ -4,24 +4,28 @@ import styles from './kvittering.module.css';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import Show from '@/components/show/show';
 import { Personalia } from '@/types/Personalia';
-import { dateStrWithHourMinute, dateStrWithMonthName } from "@/utils/formatDate";
-import { GetServerSidePropsContext } from "next/types";
+import { dateStrWithHourMinute, dateStrWithMonthName } from '@/utils/formatDate';
 
-interface KvitteringProps {
+interface KvitteringssideProps {
     personalia: Personalia;
-    innsendingsTidspunkt: string;
+    innsendingstidspunkt: string;
 }
 
-export default function Kvittering({ personalia, innsendingsTidspunkt }: KvitteringProps)
-{
+export default function Kvitteringsside({ personalia, innsendingstidspunkt }: KvitteringssideProps) {
     const [visManglendeDokVarsel, setvisManglendeDokVarsel] = useState(false);
-    const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(innsendingsTidspunkt)}, klokken ${dateStrWithHourMinute(innsendingsTidspunkt)}`
-
+    const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
+        innsendingstidspunkt
+    )}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
     return (
         <div>
-            <p> <CheckmarkCircleFillIcon title="sendt-søknad-bekreftelse-icon" className={styles.checkmark}/> </p>
+            <p>
+                {' '}
+                <CheckmarkCircleFillIcon title="sendt-søknad-bekreftelse-icon" className={styles.checkmark} />{' '}
+            </p>
 
-            <h4 className={styles.centerText}>Takk for søknaden, {personalia.fornavn} {personalia.etternavn}!</h4>
+            <h4 className={styles.centerText}>
+                Takk for søknaden, {personalia.fornavn} {personalia.etternavn}!
+            </h4>
 
             <h6 className={styles.centerText}>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
 
@@ -40,10 +44,19 @@ export default function Kvittering({ personalia, innsendingsTidspunkt }: Kvitter
                         <span>Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. </span>
                         <p>Saken din er nå til behandling hos NAV.</p>
                         <p>
-                            <Link href="https://www.nav.no/person/ettersende/" target="_blank">Her kan du ettersende dokumentasjon digitalt (åpnes i nytt vindu)</Link>
+                            <Link href="https://www.nav.no/person/ettersende/" target="_blank">
+                                Her kan du ettersende dokumentasjon digitalt (åpnes i nytt vindu)
+                            </Link>
                         </p>
                         <p>
-                            Du kan også <Link href="https://www.nav.no/soknader/nb/person/arbeid/tiltakspenger/NAV%2076-13.45/ettersendelse/brev" target="_blank">ettersende per post (åpnes i nytt vindu)</Link> eller levere
+                            Du kan også{' '}
+                            <Link
+                                href="https://www.nav.no/soknader/nb/person/arbeid/tiltakspenger/NAV%2076-13.45/ettersendelse/brev"
+                                target="_blank"
+                            >
+                                ettersende per post (åpnes i nytt vindu)
+                            </Link>{' '}
+                            eller levere
                         </p>
                         <p>dokumntasjon på ditt lokale NAV-kontor.</p>
                     </span>
@@ -61,14 +74,4 @@ export default function Kvittering({ personalia, innsendingsTidspunkt }: Kvitter
             </Link>
         </div>
     );
-}
-
-export async function getServerSideProps(ctx: GetServerSidePropsContext) {
-    const innsendingsTidspunkt = ctx.query['innsendingsTidspunkt'];
-
-    return {
-        props: {
-            innsendingsTidspunkt: innsendingsTidspunkt,
-        },
-    };
 }
