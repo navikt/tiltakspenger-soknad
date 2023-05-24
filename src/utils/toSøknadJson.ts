@@ -89,23 +89,29 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
 }
 
 function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
-    const oppholdUtenforEØSDict = barnetillegg.eøsOppholdForBarnFraAPI
-    return {
-        ...barnetillegg,
-        registrerteBarn: barnFraAPI
+    const oppholdUtenforEØSDict = barnetillegg.eøsOppholdForBarnFraAPI;
+    const registrerteBarn = barnFraAPI
             .map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
                 fornavn,
                 fødselsdato,
                 mellomnavn,
                 etternavn,
                 oppholdUtenforEØS: oppholdUtenforEØSDict[uuid],
-            })),
-        manueltRegistrerteBarnSøktBarnetilleggFor: barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+            }));
+    const manueltRegistrerteBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
             .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
             .map((barn) => ({
                 ...barn,
                 fødselsdato: formatDate(barn.fødselsdato),
-            })),
+            }));
+    const ønskerÅSøkeBarnetilleggForAndreBarn = manueltRegistrerteBarnSøktBarnetilleggFor.length > 0;
+    const søkerOmBarnetillegg = registrerteBarn.length > 0 || ønskerÅSøkeBarnetilleggForAndreBarn;
+    return {
+        ...barnetillegg,
+        registrerteBarnSøktBarnetilleggFor: registrerteBarn,
+        manueltRegistrerteBarnSøktBarnetilleggFor: manueltRegistrerteBarnSøktBarnetilleggFor,
+        søkerOmBarnetillegg: søkerOmBarnetillegg,
+        ønskerÅSøkeBarnetilleggForAndreBarn: ønskerÅSøkeBarnetilleggForAndreBarn
     };
 }
 

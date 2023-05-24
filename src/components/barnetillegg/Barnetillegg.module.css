@@ -25,6 +25,7 @@
 .modalLeggTilBarn {
     background-color: var(--a-gray-50);
     width: 70%;
+    max-width: 600px;
     padding: 5px;
 }
 

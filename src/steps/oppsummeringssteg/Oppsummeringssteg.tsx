@@ -1,6 +1,6 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Accordion, Button, ConfirmationPanel } from '@navikt/ds-react';
+import { Accordion, Button } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
 import { Personalia } from '@/types/Personalia';
@@ -9,21 +9,19 @@ import { formatPeriode } from '@/utils/formatPeriode';
 import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import { AnnenUtbetaling } from '@/types/AnnenUtbetaling';
-import { Barn } from '@/types/Barn';
 import Søknad from '@/types/Søknad';
-import toSøknadJson from '@/utils/toSøknadJson';
-import { useRouter } from 'next/router';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
 import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../../components/step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
-import SøknadResponse from "@/types/SøknadResponse";
-import BarneInfo from "@/components/barnetillegg/BarneInfo";
+import BarneInfo from '@/components/barnetillegg/BarneInfo';
 
 interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
     personalia: Personalia;
     valgtTiltak: Tiltak;
+    onCompleted: () => void;
+    søknadsinnsendingInProgress: boolean;
 }
 
 function oppsummeringDeltarIKvp(deltarIKvp: boolean, periodeMedKvp: Periode | undefined) {
@@ -66,41 +64,17 @@ function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean, etterlønn:
     }
 }
 
-function oppsummeringBarn(barn: Barn ) {
-    if (barn.fornavn && barn.etternavn) {
-        return `${barn.fornavn} ${barn.mellomnavn ? `${barn.mellomnavn} ` : ''}${barn.etternavn}, født ${formatDate(
-            barn.fødselsdato
-        )}, barn.`;
-    } else {
-        return `Barn født ${formatDate(barn.fødselsdato)}`;
-    }
-}
-
-function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
-    const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
-    const formData = new FormData();
-    formData.append('søknad', søknadJson as string);
-    søknad.vedlegg.forEach((vedlegg, index) => {
-        formData.append(`vedlegg-${index}`, vedlegg.file);
-    });
-    return formData;
-}
-
-function postSøknadMultipart(formData: FormData) {
-    return fetch('/api/soknad', {
-        method: 'POST',
-        body: formData,
-    });
-}
-
 function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
 }
 
-export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valgtTiltak }: OppsummeringsstegProps) {
-    const router = useRouter();
-    const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
-
+export default function Oppsummeringssteg({
+    onGoToPreviousStep,
+    personalia,
+    valgtTiltak,
+    onCompleted,
+    søknadsinnsendingInProgress,
+}: OppsummeringsstegProps) {
     const { getValues } = useFormContext();
     const søknad: Søknad = getValues() as Søknad;
     const svar = søknad.svar;
@@ -123,39 +97,15 @@ export default function Oppsummeringssteg({ onGoToPreviousStep, personalia, valg
     const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
     const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
-    const alleBarnSøktBarnetilleggFor =
-        barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.filter(
-            ({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato
-        ).concat(personalia.barn)
-    ;
-
-    async function sendInnSøknad() {
-        const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak);
-        try {
-            setSøknadsinnsendingInProgress(true);
-            const response = await postSøknadMultipart(formData);
-            if (response.status !== 201) {
-                return router.push('/feil');
-            }
-
-            const soknadInnsendingsTidspunkt = await response
-                .json()
-                .then((json: SøknadResponse) => json.innsendingTidspunkt);
-            return router.push({
-                pathname: '/kvittering',
-                query: { innsendingsTidspunkt: soknadInnsendingsTidspunkt },
-            });
-        } catch {
-            return router.push('/feil');
-        }
-    }
-
+    const alleBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+        .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
+        .concat(personalia.barn);
     return (
         <Step
             title="Oppsummering"
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={5}
-            onCompleted={sendInnSøknad}
+            onCompleted={onCompleted}
             submitSectionRenderer={() => (
                 <div className={stepStyles.step__buttonsection}>
                     <Button
