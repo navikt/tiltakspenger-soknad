@@ -10,7 +10,7 @@ import {Tiltak} from "@/types/Tiltak";
 
 interface InstitusjonsoppholdProps {
     title: string;
-    stepNumber: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     valgtTiltak: Tiltak;

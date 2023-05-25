@@ -83,14 +83,10 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
 
     const navigerBrukerTilIntroside = (shallow: boolean = true) => navigateToPath('/', shallow);
     const navigerBrukerTilProgramDeltagelseSteg = (shallow: boolean = true) => navigateToPath('/utfylling/programdeltagelse', shallow);
-    const navigerBrukerTilInstitusjonsOppholdSteg = (shallow: boolean = true) => navigateToPath('/utfylling/institusjonsopphold', shallow);
-    const navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold = (shallow: boolean = true) => {
-        if (svar.mottarAndreUtbetalinger) {
-            navigateToPath('/utfylling/andreutbetalinger', shallow);
-        } else {
-            navigateToPath('/utfylling/institusjonsopphold', shallow);
-        }
-    }
+    const navigerBrukerTilAndreUtbetalingerSteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/andreutbetalinger', shallow);
+    const navigerBrukerTilInstitusjonsOppholdSteg = (shallow: boolean = true) =>
+        navigateToPath('/utfylling/institusjonsopphold', shallow);
     const navigerBrukerTilBarnetilleggSteg = (shallow: boolean = true) =>
         navigateToPath('/utfylling/barnetillegg', shallow);
     const navigerBrukerTilOppsummeringssteg = (shallow: boolean = true) =>
@@ -181,20 +177,12 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         }
     }
 
-    const hentStegNummer = (stegNummer: number) => {
-        let totalSteg = 5;
-        if (svar.mottarAndreUtbetalinger) {
-            return `Steg ${stegNummer + 1} av ${totalSteg + 1}`;
-        }
-        return `Steg ${stegNummer} av ${totalSteg}`;
-    }
-
      return (
          <>
              {brukerErPåTiltakssteg() && (
                  <Tiltakssteg
                      title="Tiltak"
-                     stepNumber={hentStegNummer(1)}
+                     stepNumber={1}
                      onCompleted={navigerBrukerTilProgramDeltagelseSteg}
                      onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
                      tiltak={tiltak}
@@ -203,9 +191,9 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
              )}
              {brukerErPåProgramDeltagelseSteg() && (
                  <ProgramDeltagelseSteg
-                     title="Andre utbetalinger og programdeltagelse"
-                     stepNumber={hentStegNummer(2)}
-                     onCompleted={navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold}
+                     title="Programdeltagelse"
+                     stepNumber={2}
+                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                      onGoToPreviousStep={goBack}
                      valgtTiltak={valgtTiltak!}
                  />
@@ -213,14 +201,16 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
              {brukerErPåAndreUtbetalingerSteg() && (
                  <AndreUtbetalingerSteg
                      title="Andre utbetalinger"
-                     stepNumber={hentStegNummer(2)}
+                     stepNumber={3}
                      onCompleted={navigerBrukerTilInstitusjonsOppholdSteg}
-                     onGoToPreviousStep={goBack}/>
+                     onGoToPreviousStep={goBack}
+                     valgtTiltak={valgtTiltak!}
+                 />
              )}
              {brukerErPåInstitusjonsoppholdSteg() && (
                  <InstitusjonsoppholdSteg
                      title="Institusjonsopphold"
-                     stepNumber={hentStegNummer(3)}
+                     stepNumber={4}
                      onCompleted={navigerBrukerTilBarnetilleggSteg}
                      onGoToPreviousStep={goBack}
                      valgtTiltak={valgtTiltak!}
@@ -229,7 +219,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
              {brukerErPåBarnetilleggSteg() && (
                  <BarnetilleggSteg
                      title="Barnetillegg"
-                     stepNumber={hentStegNummer(4)}
+                     stepNumber={5}
                      onCompleted={navigerBrukerTilOppsummeringssteg}
                      onGoToPreviousStep={goBack}
                      personalia={personalia}
@@ -238,7 +228,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
              {brukerErPåOppsummeringssteg() && (
                  <Oppsummeringssteg
                      title="Oppsummering"
-                     stepNumber={hentStegNummer(5)}
+                     stepNumber={6}
                      onGoToPreviousStep={goBack}
                      personalia={personalia}
                      valgtTiltak={valgtTiltak!}

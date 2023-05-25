@@ -13,9 +13,8 @@ interface KvitteringssideProps {
 
 export default function Kvitteringsside({ personalia, innsendingstidspunkt }: KvitteringssideProps) {
     const [visManglendeDokVarsel, setvisManglendeDokVarsel] = useState(false);
-    const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
-        innsendingstidspunkt
-    )}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
+    const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(innsendingstidspunkt)}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
+
     return (
         <div>
             <p>

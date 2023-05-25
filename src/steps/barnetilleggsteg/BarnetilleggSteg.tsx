@@ -14,7 +14,7 @@ import {PencilIcon, TrashIcon} from "@navikt/aksel-icons";
 
 interface BarnetilleggStegProps {
     title: string;
-    stepNumber: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     personalia: Personalia;

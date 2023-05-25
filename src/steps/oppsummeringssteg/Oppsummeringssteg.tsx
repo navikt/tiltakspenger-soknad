@@ -17,7 +17,7 @@ import BarneInfo from '@/components/barnetillegg/BarneInfo';
 
 interface OppsummeringsstegProps {
     title: string;
-    stepNumber: string;
+    stepNumber: number;
     onGoToPreviousStep: () => void;
     personalia: Personalia;
     valgtTiltak: Tiltak;
@@ -182,7 +182,7 @@ export default function Oppsummeringssteg({
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>
-                        Program deltagelse og Andre utbetalinger
+                        Programdeltagelse
                     </Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
@@ -201,6 +201,11 @@ export default function Oppsummeringssteg({
                                 )}
                             />
                         </div>
+                    </Accordion.Content>
+                </Accordion.Item>
+                <Accordion.Item defaultOpen>
+                    <Accordion.Header>Andre utbetalinger</Accordion.Header>
+                    <Accordion.Content>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Opphold på institusjon"
@@ -210,11 +215,6 @@ export default function Oppsummeringssteg({
                                 )}
                             />
                         </div>
-                    </Accordion.Content>
-                </Accordion.Item>
-                <Accordion.Item defaultOpen>
-                    <Accordion.Header>Andre utbetalinger</Accordion.Header>
-                    <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Pensjonsordninger"
                             feltVerdi={oppsummeringPensjonsordninger(pensjonsordning.mottar)}

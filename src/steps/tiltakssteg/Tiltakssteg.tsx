@@ -17,7 +17,7 @@ import { FormPeriode } from '@/types/FormPeriode';
 
 interface TiltaksstegProps {
     title: string;
-    stepNumber: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     tiltak: Tiltak[];

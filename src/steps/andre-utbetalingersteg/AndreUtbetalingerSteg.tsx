@@ -5,12 +5,16 @@ import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål'
 import Step from '@/components/step/Step';
 import styles from './andreutbetalinger.module.css'
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
+import {formatPeriode} from "@/utils/formatPeriode";
+import {Tiltak} from "@/types/Tiltak";
+import Show from "@/components/show/show";
 
 interface AndreUtbetalingerStegProps {
     title: string;
-    stepNumber: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
+    valgtTiltak: Tiltak | null;
 }
 
 function sykepengerValidator(verdi: boolean) {
@@ -45,14 +49,21 @@ function supplerendeStønadFlyktningerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar supplerende stønad for uføre flyktninger');
 }
 
-export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
+function mottarAndreUtbetalinger(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du mottar andre utbetalinger');
+}
+
+export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, onGoToPreviousStep, valgtTiltak }: AndreUtbetalingerStegProps) {
     const { watch } = useFormContext();
+    const watchMottarAndreUtbetalinger = watch('svar.mottarAndreUtbetalinger');
     const watchSykepenger = watch('svar.sykepenger.mottar');
     const watchGjenlevendepensjon = watch('svar.gjenlevendepensjon.mottar');
     const watchAlderspensjon = watch('svar.alderspensjon.mottar');
     const watchJobbsjansen = watch('svar.jobbsjansen.mottar');
     const watchSupplerendestønadOver67 = watch('svar.supplerendestønadover67.mottar');
     const watchSupplerendestønadFlyktninger = watch('svar.supplerendestønadflyktninger.mottar');
+    const brukerregistrertPeriode = watch('svar.tiltak.periode');
+    const tiltaksperiodeTekst = formatPeriode(brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode);
 
     return (
         <Step
@@ -75,6 +86,26 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                 </>
             }
         >
+            <div className={styles.blokk}>
+            <JaNeiSpørsmål
+                name="svar.mottarAndreUtbetalinger"
+                validate={mottarAndreUtbetalinger}
+                description={(
+                    <ul>
+                        <li>Sykepenger</li>
+                        <li>Gjenlevendepensjon</li>
+                        <li>Alderspensjon</li>
+                        <li>Supplerende stønad</li>
+                        <li>Pengestøtte fra andre trygde- eller pensjonsordninger</li>
+                        <li>Etterlønn</li>
+                        <li>Stønad via Jobbsjansen</li>
+                    </ul>
+                )}
+            >
+                Mottar du noen av disse utbetalingene i perioden {tiltaksperiodeTekst}?
+            </JaNeiSpørsmål>
+            </div>
+            <Show if={watchMottarAndreUtbetalinger}>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
                     name="svar.sykepenger.mottar"
@@ -232,6 +263,7 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                 </JaNeiSpørsmål>
                 {watchJobbsjansen && (<Periodespørsmål name="svar.jobbsjansen.periode">Når mottar du det?</Periodespørsmål>)}
             </div>
+            </Show>
         </Step>
     );
 }

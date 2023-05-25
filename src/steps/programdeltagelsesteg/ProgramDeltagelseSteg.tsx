@@ -10,7 +10,7 @@ import { Tiltak } from '@/types/Tiltak';
 
 interface ProgramDeltagelseStegProps {
     title: string;
-    stepNumber: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     valgtTiltak: Tiltak;
@@ -22,10 +22,6 @@ function deltarIKvpValidator(verdi: boolean) {
 
 function deltarIIntroprogrammetValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i introduksjonsprogrammet');
-}
-
-function mottarAndreUtbetalinger(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du mottar andre utbetalinger');
 }
 
 function påkrevdKvpPeriodeValidator(periode: FormPeriode) {
@@ -131,23 +127,6 @@ export default function ProgramDeltagelseSteg({ title, stepNumber, onCompleted, 
                         Når deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
                 )}
-                <JaNeiSpørsmål
-                    name="svar.mottarAndreUtbetalinger"
-                    validate={mottarAndreUtbetalinger}
-                    description={(
-                        <ul>
-                            <li>Sykepenger</li>
-                            <li>Gjenlevendepensjon</li>
-                            <li>Alderspensjon</li>
-                            <li>Supplerende stønad</li>
-                            <li>Pengestøtte fra andre trygde- eller pensjonsordninger</li>
-                            <li>Etterlønn</li>
-                            <li>Stønad via Jobbsjansen</li>
-                        </ul>
-                    )}
-                >
-                    Mottar du noen av disse utbetalingene i perioden {tiltaksperiodeTekst}?
-                </JaNeiSpørsmål>
             </>
         </Step>
     );
