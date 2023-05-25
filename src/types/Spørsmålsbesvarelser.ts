@@ -39,34 +39,34 @@ export interface Etterlønn {
     mottar: boolean;
 }
 
-export interface Sykepenger{
-    mottar?: boolean;
-    periode?: Periode;
+export interface Sykepenger {
+    mottar: boolean;
+    periode: Periode;
 }
 
-export interface Gjenlevendepensjon{
+export interface Gjenlevendepensjon {
     mottar: boolean;
-    periode?: Periode;
+    periode: Periode;
 }
 
-export interface Alderspensjon{
+export interface Alderspensjon {
     mottar: boolean;
-    fraDato?: string;
+    fraDato: string;
 }
 
-export interface Supplerendestønadover67{
+export interface Supplerendestønadover67 {
     mottar: boolean;
-    periode?: Periode;
+    periode: Periode;
 }
 
-export interface Supplerendestønadflyktninger{
+export interface Supplerendestønadflyktninger {
     mottar: boolean;
-    periode?: Periode;
+    periode: Periode;
 }
 
-export interface Jobbsjansen{
+export interface Jobbsjansen {
     mottar: boolean;
-    periode?: Periode;
+    periode: Periode;
 }
 
 interface Spørsmålsbesvarelser {

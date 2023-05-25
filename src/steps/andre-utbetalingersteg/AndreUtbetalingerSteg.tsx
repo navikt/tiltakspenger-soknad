@@ -4,10 +4,11 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
 import styles from './andreutbetalinger.module.css'
-import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
+import {gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator} from '@/utils/formValidators';
 import {formatPeriode} from "@/utils/formatPeriode";
 import {Tiltak} from "@/types/Tiltak";
 import Show from "@/components/show/show";
+import {FormPeriode} from "@/types/FormPeriode";
 
 interface AndreUtbetalingerStegProps {
     title: string;
@@ -47,6 +48,30 @@ function supplerendeStønadOver67Validator(verdi: boolean) {
 
 function supplerendeStønadFlyktningerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar supplerende stønad for uføre flyktninger');
+}
+
+function påkrevdSykepengerPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar sykepenger');
+}
+
+function påkrevdGjenlevendepensjonPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar gjenlevendepensjon');
+}
+
+function påkrevdJobbsjansenPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar jobbsjansen');
+}
+
+function påkrevdAlderpensjonPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi når startet  alderspensjonen din');
+}
+
+function påkrevdSupplerendeStønadOver67PeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar supplerende stønad for personer over 67 år');
+}
+
+function påkrevdSupplerendeStønadFlyktningerPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar supplerende stønad for uføre flyktninger');
 }
 
 function mottarAndreUtbetalinger(verdi: boolean) {
@@ -124,7 +149,12 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                     Mottar du sykepenger?
                 </JaNeiSpørsmål>
                 {watchSykepenger && (
-                    <Periodespørsmål name="svar.sykepenger.periode">Når mottar du sykepenger?</Periodespørsmål>
+                    <Periodespørsmål
+                        name="svar.sykepenger.periode"
+                        validate={[gyldigPeriodeValidator, påkrevdSykepengerPeriodeValidator]}
+                    >
+                        Når mottar du sykepenger?
+                    </Periodespørsmål>
                 )}
             </div>
             <div className={styles.blokk}>
@@ -146,7 +176,12 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                     Mottar du gjenlevendepensjon?
                 </JaNeiSpørsmål>
                 {watchGjenlevendepensjon && (
-                    <Periodespørsmål name="svar.gjenlevende.periode">Når mottar du gjenlevendepensjon?</Periodespørsmål>
+                    <Periodespørsmål
+                        name="svar.gjenlevendepensjon.periode"
+                        validate={[gyldigPeriodeValidator, påkrevdGjenlevendepensjonPeriodeValidator]}
+                    >
+                            Når mottar du gjenlevendepensjon?
+                    </Periodespørsmål>
                 )}
             </div>
             <div className={styles.blokk}>
@@ -166,7 +201,13 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                     Mottar du alderspensjon?
                 </JaNeiSpørsmål>
                 {watchAlderspensjon && (
-                    <Periodespørsmål name="svar.alderspensjon.fraDato" ikkeVisTilDato>Når mottar du alderspensjon?</Periodespørsmål>
+                    <Periodespørsmål
+                        name="svar.alderspensjon.fraDato"
+                        validate={[gyldigPeriodeValidator, påkrevdAlderpensjonPeriodeValidator]}
+                        ikkeVisTilDato
+                    >
+                        Når mottar du alderspensjon?
+                    </Periodespørsmål>
                 )}
             </div>
             <div className={styles.blokk}>
@@ -184,9 +225,12 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                     Mottar du supplerende stønad for personer over 67 år med kort botid i Norge?
                 </JaNeiSpørsmål>
                 {watchSupplerendestønadOver67 && (
-                    <>
-                        <Periodespørsmål name="svar.supplerendestønadover67.periode">Når mottar du det?</Periodespørsmål>
-                    </>
+                        <Periodespørsmål
+                            name="svar.supplerendestønadover67.periode"
+                            validate={[gyldigPeriodeValidator, påkrevdSupplerendeStønadOver67PeriodeValidator]}
+                        >
+                            Når mottar du det?
+                        </Periodespørsmål>
                 )}
             </div>
             <div className={styles.blokk}>
@@ -204,9 +248,12 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                     Mottar du supplerende stønad for uføre flyktninger?
                 </JaNeiSpørsmål>
                 {watchSupplerendestønadFlyktninger && (
-                    <>
-                        <Periodespørsmål name="svar.supplerendestønadflyktninger.periode">Når mottar du det?</Periodespørsmål>
-                    </>
+                        <Periodespørsmål
+                            name="svar.supplerendestønadflyktninger.periode"
+                            validate={[gyldigPeriodeValidator, påkrevdSupplerendeStønadFlyktningerPeriodeValidator]}
+                        >
+                            Når mottar du det?
+                        </Periodespørsmål>
                 )}
             </div>
             <div className={styles.blokk}>
@@ -261,7 +308,13 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                 >
                     Mottar du stønad via jobbsjansen?
                 </JaNeiSpørsmål>
-                {watchJobbsjansen && (<Periodespørsmål name="svar.jobbsjansen.periode">Når mottar du det?</Periodespørsmål>)}
+                {watchJobbsjansen && (
+                    <Periodespørsmål
+                        name="svar.jobbsjansen.periode"
+                        validate={[gyldigPeriodeValidator, påkrevdJobbsjansenPeriodeValidator]}
+                    >Når mottar du det?
+                    </Periodespørsmål>
+                )}
             </div>
             </Show>
         </Step>

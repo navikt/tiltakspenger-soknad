@@ -48,7 +48,7 @@ function introduksjonsprogram({ deltar, periode }: Introduksjonsprogram) {
 
 function sykepenger({mottar, periode}: Sykepenger) {
     if (mottar) {
-        return { motttar: mottar, periode: formatPeriod( periode as Periode)}
+        return { mottar: mottar, periode: formatPeriod( periode as Periode)}
     }
     return { mottar: mottar };
 }

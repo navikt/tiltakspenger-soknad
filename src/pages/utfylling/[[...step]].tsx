@@ -135,7 +135,6 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
 
     function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
         const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
-        console.log("søknadJson: ",søknadJson);
         const formData = new FormData();
         formData.append('søknad', søknadJson as string);
         søknad.vedlegg.filter((v) =>
@@ -158,7 +157,6 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
 
     async function sendInnSøknad() {
         const søknad = getValues();
-        console.log("søknad: ", søknad);
         const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak!);
         try {
             setSøknadsinnsendingInProgress(true);

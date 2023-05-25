@@ -104,6 +104,14 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
             return false;
         }
     }
+
+    if (!((sykepenger && sykepenger.mottar) || (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
+        (alderspensjon && alderspensjon.mottar) || pensjonsordning && pensjonsordning.mottar ||
+        (jobbsjansen && jobbsjansen.mottar) || (supplerendestønadover67 && supplerendestønadover67.mottar) ||
+        (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar))) {
+        return false;
+    }
+
     return true;
 }
 
@@ -119,7 +127,7 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
         return brukerHarFyltUtTiltakssteg(svar) &&
-            brukerHarFyltUtProgramDeltagelseSteg(svar);
+               brukerHarFyltUtProgramDeltagelseSteg(svar);
     } else if (steg === Søknadssteg.INSTITUSJONSOPPHOLD) {
             return (
                 brukerHarFyltUtTiltakssteg(svar) &&
