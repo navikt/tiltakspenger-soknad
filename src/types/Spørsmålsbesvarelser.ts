@@ -40,7 +40,7 @@ export interface Etterlønn {
 }
 
 export interface Sykepenger{
-    mottar: boolean;
+    mottar?: boolean;
     periode?: Periode;
 }
 
@@ -85,6 +85,7 @@ interface Spørsmålsbesvarelser {
     jobbsjansen: Jobbsjansen;
     barnetillegg: Barnetillegg;
     harBekreftetAlleOpplysninger: boolean;
+    harBekreftetÅSvareSåGodtManKan: boolean;
 }
 
 export default Spørsmålsbesvarelser;

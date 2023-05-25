@@ -46,11 +46,11 @@ function introduksjonsprogram({ deltar, periode }: Introduksjonsprogram) {
     return { deltar };
 }
 
-function sykepenger({ mottar, periode }: Sykepenger) {
+function sykepenger({mottar, periode}: Sykepenger) {
     if (mottar) {
-        return { mottar, periode: formatPeriod(periode as Periode)}
+        return { motttar: mottar, periode: formatPeriod( periode as Periode)}
     }
-    return { mottar };
+    return { mottar: mottar };
 }
 
 function gjenlevendepensjon({ mottar, periode }: Gjenlevendepensjon) {
@@ -157,8 +157,6 @@ export default function toSøknadJson(
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),
         introduksjonsprogram: introduksjonsprogram(spørsmålsbesvarelser.introduksjonsprogram),
         barnetillegg: barnetillegg(spørsmålsbesvarelser.barnetillegg, barnFraApi),
-        pensjonsordning: {mottar: spørsmålsbesvarelser.pensjonsordning},
-        etterlønn: {mottar: spørsmålsbesvarelser.etterlønn},
         sykepenger: sykepenger(spørsmålsbesvarelser.sykepenger),
         gjenlevendepensjon: gjenlevendepensjon(spørsmålsbesvarelser.gjenlevendepensjon),
         alderspensjon: alderspensjon(spørsmålsbesvarelser.alderspensjon),

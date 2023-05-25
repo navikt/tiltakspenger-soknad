@@ -1,6 +1,6 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { FormProvider, useForm } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '../../steps/oppsummeringssteg/Oppsummeringssteg';
 import InstitusjonsoppholdSteg from '@/steps/institusjonsoppholdsteg/InstitusjonsoppholdSteg';
@@ -30,34 +30,10 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
 
     const { step } = router.query;
-    const formMethods = useForm<Søknad>({
-        defaultValues: {
-            svar: {
-                tiltak: {},
-                barnetillegg: {
-                    eøsOppholdForBarnFraAPI: {},
-                    manueltRegistrerteBarnSøktBarnetilleggFor: [],
-                },
-                institusjonsopphold: {},
-                introduksjonsprogram: {},
-                kvalifiseringsprogram: {},
-                mottarAndreUtbetalinger: false,
-                sykepenger: {},
-                gjenlevendepensjon: {},
-                alderspensjon: {},
-                supplerendestønadover67: {},
-                supplerendestønadflyktninger: {},
-                pensjonsordning: {},
-                etterlønn: {},
-                jobbsjansen: {},
-                harBekreftetAlleOpplysninger: false,
-            },
-            vedlegg: [],
-        },
-    });
+    const { getValues, watch } = useFormContext<Søknad>();
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
-    const valgtAktivitetId = formMethods.watch('svar.tiltak.aktivitetId');
+    const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     React.useEffect(() => {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
@@ -86,7 +62,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         }
     }
 
-    const svar = formMethods.getValues().svar;
+    const svar = getValues().svar;
     const aktivtSøknadssteg = utledSøknadsstegFraRoute(step && step[0]);
     React.useEffect(() => {
         if (aktivtSøknadssteg == null) {
@@ -156,14 +132,6 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         return step && step[0] === Søknadssteg.OPPSUMMERING && formStateErPåOppsummeringssteg;
     };
 
-    const hentStegNummerTekst = (stegNummer: number) => {
-        let totalSteg = 5;
-        if (svar.mottarAndreUtbetalinger) {
-            return `Steg ${stegNummer + 1} av ${totalSteg + 1}`;
-        }
-        return `Steg ${stegNummer} av ${totalSteg}`;
-    }
-
     const brukerErPåKvitteringssiden = () => {
         const formStateErPåKvitteringssiden = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVITTERING);
         return step && step[0] === Søknadssteg.KVITTERING && formStateErPåKvitteringssiden;
@@ -171,6 +139,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
 
     function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
         const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
+        console.log("søknadJson: ",søknadJson);
         const formData = new FormData();
         formData.append('søknad', søknadJson as string);
         søknad.vedlegg.filter((v) =>
@@ -192,7 +161,8 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const [innsendingstidspunkt, setInnsendingstidspunkt] = React.useState<string>();
 
     async function sendInnSøknad() {
-        const søknad = formMethods.getValues();
+        const søknad = getValues();
+        console.log("søknad: ", søknad);
         const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak!);
         try {
             setSøknadsinnsendingInProgress(true);
@@ -211,72 +181,80 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         }
     }
 
-        return (
-            <FormProvider {...formMethods}>
-                {brukerErPåTiltakssteg() && (
-                    <Tiltakssteg
-                        title="Tiltak"
-                        stegNummerTekst={hentStegNummerTekst(1)}
-                        onCompleted={navigerBrukerTilProgramDeltagelseSteg}
-                        onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
-                        tiltak={tiltak}
-                        valgtTiltak={valgtTiltak}
-                    />
-                )}
-                {brukerErPåProgramDeltagelseSteg() && (
-                    <ProgramDeltagelseSteg
-                        title="Andre utbetalinger og programdeltagelse"
-                        stegNummerTekst={hentStegNummerTekst(2)}
-                        onCompleted={navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold}
-                        onGoToPreviousStep={goBack}
-                        valgtTiltak={valgtTiltak!}
-                    />
-                )}
-                {brukerErPåAndreUtbetalingerSteg() && (
-                    <AndreUtbetalingerSteg
-                        title="Andre utbetalinger"
-                        stegNummerTekst={hentStegNummerTekst(2)}
-                        onCompleted={navigerBrukerTilInstitusjonsOppholdSteg}
-                        onGoToPreviousStep={goBack}/>
-                )}
-                {brukerErPåInstitusjonsoppholdSteg() && (
-                    <InstitusjonsoppholdSteg
-                        title="Institusjonsopphold"
-                        stegNummerTekst={hentStegNummerTekst(3)}
-                        onCompleted={navigerBrukerTilBarnetilleggSteg}
-                        onGoToPreviousStep={goBack}
-                        valgtTiltak={valgtTiltak!}
-                    />
-                )}
-                {brukerErPåBarnetilleggSteg() && (
-                    <BarnetilleggSteg
-                        title="Barnetillegg"
-                        stegNummerTekst={hentStegNummerTekst(4)}
-                        onCompleted={navigerBrukerTilOppsummeringssteg}
-                        onGoToPreviousStep={goBack}
-                        personalia={personalia}
-                    />
-                )}
-                {brukerErPåOppsummeringssteg() && (
-                    <Oppsummeringssteg
-                        title="Oppsummering"
-                        stegNummerTekst={hentStegNummerTekst(5)}
-                        onGoToPreviousStep={goBack}
-                        personalia={personalia}
-                        valgtTiltak={valgtTiltak!}
-                        søknadsinnsendingInProgress={søknadsinnsendingInProgress}
-                        onCompleted={sendInnSøknad}
-                    />
-                )}
-                {brukerErPåKvitteringssiden() && (
-                    <Kvitteringsside
-                        personalia={personalia}
-                        innsendingstidspunkt={innsendingstidspunkt!}
-                    />
-                )}
-            </FormProvider>
-        );
+    const hentStegNummer = (stegNummer: number) => {
+        let totalSteg = 5;
+        if (svar.mottarAndreUtbetalinger) {
+            return `Steg ${stegNummer + 1} av ${totalSteg + 1}`;
+        }
+        return `Steg ${stegNummer} av ${totalSteg}`;
     }
+
+     return (
+         <>
+             {brukerErPåTiltakssteg() && (
+                 <Tiltakssteg
+                     title="Tiltak"
+                     stepNumber={hentStegNummer(1)}
+                     onCompleted={navigerBrukerTilProgramDeltagelseSteg}
+                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
+                     tiltak={tiltak}
+                     valgtTiltak={valgtTiltak}
+                 />
+             )}
+             {brukerErPåProgramDeltagelseSteg() && (
+                 <ProgramDeltagelseSteg
+                     title="Andre utbetalinger og programdeltagelse"
+                     stepNumber={hentStegNummer(2)}
+                     onCompleted={navigerBrukerTilAndreUtbetalingerEllerInstitusjonsopphold}
+                     onGoToPreviousStep={goBack}
+                     valgtTiltak={valgtTiltak!}
+                 />
+             )}
+             {brukerErPåAndreUtbetalingerSteg() && (
+                 <AndreUtbetalingerSteg
+                     title="Andre utbetalinger"
+                     stepNumber={hentStegNummer(2)}
+                     onCompleted={navigerBrukerTilInstitusjonsOppholdSteg}
+                     onGoToPreviousStep={goBack}/>
+             )}
+             {brukerErPåInstitusjonsoppholdSteg() && (
+                 <InstitusjonsoppholdSteg
+                     title="Institusjonsopphold"
+                     stepNumber={hentStegNummer(3)}
+                     onCompleted={navigerBrukerTilBarnetilleggSteg}
+                     onGoToPreviousStep={goBack}
+                     valgtTiltak={valgtTiltak!}
+                 />
+             )}
+             {brukerErPåBarnetilleggSteg() && (
+                 <BarnetilleggSteg
+                     title="Barnetillegg"
+                     stepNumber={hentStegNummer(4)}
+                     onCompleted={navigerBrukerTilOppsummeringssteg}
+                     onGoToPreviousStep={goBack}
+                     personalia={personalia}
+                 />
+             )}
+             {brukerErPåOppsummeringssteg() && (
+                 <Oppsummeringssteg
+                     title="Oppsummering"
+                     stepNumber={hentStegNummer(5)}
+                     onGoToPreviousStep={goBack}
+                     personalia={personalia}
+                     valgtTiltak={valgtTiltak!}
+                     søknadsinnsendingInProgress={søknadsinnsendingInProgress}
+                     onCompleted={sendInnSøknad}
+                 />
+             )}
+             {brukerErPåKvitteringssiden() && (
+                 <Kvitteringsside
+                     personalia={personalia}
+                     innsendingstidspunkt={innsendingstidspunkt!}
+                 />
+             )}
+         </>
+     );
+}
 
     export async function getServerSideProps({req}: GetServerSidePropsContext) {
         let token = null;

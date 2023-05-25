@@ -1,7 +1,9 @@
 import type { AppProps } from 'next/app';
 import '@navikt/ds-css';
-import '../styles/global.css';
 import { initializeFaro } from '@grafana/faro-web-sdk';
+import { FormProvider, useForm } from 'react-hook-form';
+import Søknad from '@/types/Søknad';
+import '../styles/global.css';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
     initializeFaro({
@@ -13,7 +15,31 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
 }
 
 function App({ Component, pageProps }: AppProps) {
-    return <Component {...pageProps} />;
+    const formMethods = useForm<Søknad>({
+        defaultValues: {
+            svar: {
+                tiltak: {},
+                barnetillegg: {
+                    eøsOppholdForBarnFraAPI: {},
+                    manueltRegistrerteBarnSøktBarnetilleggFor: [],
+                },
+                etterlønn: {},
+                institusjonsopphold: {},
+                introduksjonsprogram: {},
+                kvalifiseringsprogram: {},
+                pensjonsordning: {},
+                harBekreftetAlleOpplysninger: false,
+                harBekreftetÅSvareSåGodtManKan: false,
+            },
+            vedlegg: [],
+        },
+    });
+
+    return (
+        <FormProvider {...formMethods}>
+            <Component {...pageProps} />
+        </FormProvider>
+    );
 }
 
 export default App;

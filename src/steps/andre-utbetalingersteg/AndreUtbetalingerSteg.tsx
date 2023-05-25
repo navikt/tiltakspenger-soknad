@@ -8,7 +8,7 @@ import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 
 interface AndreUtbetalingerStegProps {
     title: string;
-    stegNummerTekst: string;
+    stepNumber: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
 }
@@ -45,7 +45,7 @@ function supplerendeStønadFlyktningerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar supplerende stønad for uføre flyktninger');
 }
 
-export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
+export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, onGoToPreviousStep }: AndreUtbetalingerStegProps) {
     const { watch } = useFormContext();
     const watchSykepenger = watch('svar.sykepenger.mottar');
     const watchGjenlevendepensjon = watch('svar.gjenlevendepensjon.mottar');
@@ -57,7 +57,7 @@ export default function AndreUtbetalingerSteg({ title, stegNummerTekst, onComple
     return (
         <Step
             title={title}
-            stepNumber={stegNummerTekst}
+            stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={

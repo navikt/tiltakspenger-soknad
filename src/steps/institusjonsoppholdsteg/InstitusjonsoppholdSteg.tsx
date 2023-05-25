@@ -10,7 +10,7 @@ import {Tiltak} from "@/types/Tiltak";
 
 interface InstitusjonsoppholdProps {
     title: string;
-    stegNummerTekst: string;
+    stepNumber: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     valgtTiltak: Tiltak;
@@ -24,7 +24,7 @@ function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du bor på institusjon');
 }
 
-export default function InstitusjonsoppholdSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, valgtTiltak }: InstitusjonsoppholdProps) {
+export default function InstitusjonsoppholdSteg({ title, stepNumber, onCompleted, onGoToPreviousStep, valgtTiltak }: InstitusjonsoppholdProps) {
     const { watch } = useFormContext();
     const watchBorPåInstitusjon = watch('svar.institusjonsopphold.borPåInstitusjon');
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
@@ -33,7 +33,7 @@ export default function InstitusjonsoppholdSteg({ title, stegNummerTekst, onComp
     return (
         <Step
             title={title}
-            stepNumber={stegNummerTekst}
+            stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={

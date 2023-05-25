@@ -14,13 +14,13 @@ import {PencilIcon, TrashIcon} from "@navikt/aksel-icons";
 
 interface BarnetilleggStegProps {
     title: string;
-    stegNummerTekst: string;
+    stepNumber: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     personalia: Personalia;
 }
 
-export default function BarnetilleggSteg({title, stegNummerTekst, onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
+export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoToPreviousStep, personalia}: BarnetilleggStegProps) {
     const {getValues} = useFormContext<Søknad>();
     const fieldArray = useFieldArray<Søknad>({name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor'});
     const barnFraApi = personalia.barn;
@@ -31,7 +31,7 @@ export default function BarnetilleggSteg({title, stegNummerTekst, onCompleted, o
     return (
         <Step
             title={title}
-            stepNumber={stegNummerTekst}
+            stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={

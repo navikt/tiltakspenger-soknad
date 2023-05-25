@@ -10,7 +10,7 @@ import { Tiltak } from '@/types/Tiltak';
 
 interface ProgramDeltagelseStegProps {
     title: string;
-    stegNummerTekst: string;
+    stepNumber: string;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
     valgtTiltak: Tiltak;
@@ -36,7 +36,7 @@ function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
-export default function ProgramDeltagelseSteg({ title, stegNummerTekst, onCompleted, onGoToPreviousStep, valgtTiltak }: ProgramDeltagelseStegProps) {
+export default function ProgramDeltagelseSteg({ title, stepNumber, onCompleted, onGoToPreviousStep, valgtTiltak }: ProgramDeltagelseStegProps) {
     const { watch } = useFormContext();
 
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
@@ -48,7 +48,7 @@ export default function ProgramDeltagelseSteg({ title, stegNummerTekst, onComple
     return (
         <Step
             title={title}
-            stepNumber={stegNummerTekst}
+            stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             guide={
@@ -134,7 +134,7 @@ export default function ProgramDeltagelseSteg({ title, stegNummerTekst, onComple
                 <JaNeiSpørsmål
                     name="svar.mottarAndreUtbetalinger"
                     validate={mottarAndreUtbetalinger}
-                    undertekst={(
+                    description={(
                         <ul>
                             <li>Sykepenger</li>
                             <li>Gjenlevendepensjon</li>

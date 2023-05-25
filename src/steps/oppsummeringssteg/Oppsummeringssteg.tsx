@@ -17,7 +17,7 @@ import BarneInfo from '@/components/barnetillegg/BarneInfo';
 
 interface OppsummeringsstegProps {
     title: string;
-    stegNummerTekst: string;
+    stepNumber: string;
     onGoToPreviousStep: () => void;
     personalia: Personalia;
     valgtTiltak: Tiltak;
@@ -71,7 +71,7 @@ function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
 
 export default function Oppsummeringssteg({
     title,
-    stegNummerTekst,
+    stepNumber,
     onGoToPreviousStep,
     personalia,
     valgtTiltak,
@@ -82,6 +82,7 @@ export default function Oppsummeringssteg({
     const søknad: Søknad = getValues() as Søknad;
     const svar = søknad.svar;
     const {
+        harBekreftetÅSvareSåGodtManKan,
         kvalifiseringsprogram,
         introduksjonsprogram,
         pensjonsordning,
@@ -109,10 +110,11 @@ export default function Oppsummeringssteg({
     const alleBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
         .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
         .concat(personalia.barn);
+
     return (
         <Step
             title={title}
-            stepNumber={stegNummerTekst}
+            stepNumber={stepNumber}
             onGoToPreviousStep={onGoToPreviousStep}
             onCompleted={onCompleted}
             submitSectionRenderer={() => (
@@ -180,7 +182,7 @@ export default function Oppsummeringssteg({
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>
-                        Kvalifiseringsprogram, introduksjonsprogram og institusjonsopphold
+                        Program deltagelse og Andre utbetalinger
                     </Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
@@ -244,7 +246,7 @@ export default function Oppsummeringssteg({
                 </Accordion.Item>
             </Accordion>
             <Bekreftelsesspørsmål
-                label="Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte"
+                label="Jeg har lest all informasjonen jeg har fått i søknaden og bekrefter at opplysningene jeg har gitt er korrekte."
                 className={styles.bekreftelsesboks}
                 name="svar.harBekreftetAlleOpplysninger"
                 validate={harBekreftetAlleOpplysningerValidator}
