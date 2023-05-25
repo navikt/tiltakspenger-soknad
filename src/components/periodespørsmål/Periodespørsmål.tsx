@@ -49,16 +49,17 @@ export default function Periodespørsmål({
                 name={name}
                 control={control}
                 rules={{ validate: setupValidation(validate) }}
-                render={({ field: { onChange } }) => (
+                defaultValue={defaultValue}
+                render={({ field: { onChange, value } }) => (
                     <Periodevelger
                         id={name}
-                        defaultValue={defaultValue}
                         onRangeChange={(periode) => {
                             if (periode) {
                                 const { from: fra, to: til } = periode;
                                 onChange({ fra, til });
                             }
                         }}
+                        defaultValue={value}
                         errorMessage={errorMessage}
                         minDate={minDate}
                         maxDate={maxDate}

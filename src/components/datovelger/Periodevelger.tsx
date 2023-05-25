@@ -1,9 +1,14 @@
 import { UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from '@navikt/ds-react';
 import { DateRange } from 'react-day-picker';
 
+interface PeriodevelgerPeriode {
+    fra?: Date;
+    til?: Date;
+}
+
 interface PeriodevelgerProps {
     onRangeChange: (periode: DateRange | undefined) => void;
-    defaultValue?: DateRange | null;
+    defaultValue?: PeriodevelgerPeriode;
     errorMessage?: string;
     id?: string;
     minDate?: Date;
@@ -22,8 +27,8 @@ export default function Periodevelger({
         if (defaultValue)
             return {
                 defaultSelected: {
-                    from: defaultValue.from,
-                    to: defaultValue.to,
+                    from: defaultValue.fra,
+                    to: defaultValue.til,
                 },
             };
         else return {};

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
 import { Tiltak } from '@/types/Tiltak';
@@ -14,6 +14,8 @@ import {
     påkrevdSvarValidator,
 } from '@/utils/formValidators';
 import { FormPeriode } from '@/types/FormPeriode';
+import { formatDate } from '@/utils/formatDate';
+import dayjs from 'dayjs';
 
 interface TiltaksstegProps {
     onCompleted: () => void;
@@ -27,13 +29,18 @@ function valgtTiltakValidator(verdi: string) {
 }
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
-    const { watch, resetField } = useFormContext();
+    const { watch, resetField, setValue } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
+    const periode = watch('svar.tiltak.periode');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
     const brukerHarValgtEtTiltak = !!valgtTiltak;
-    const valgtTiltakManglerPeriode =
-        !valgtTiltak?.arenaRegistrertPeriode ||
-        !valgtTiltak?.arenaRegistrertPeriode.fra ||
+    const valgtTiltakManglerHelePerioden =
+        !valgtTiltak?.arenaRegistrertPeriode &&
+        !valgtTiltak?.arenaRegistrertPeriode?.fra &&
+        !valgtTiltak?.arenaRegistrertPeriode?.til;
+    const valgtTiltakManglerKunTilDato =
+        valgtTiltak?.arenaRegistrertPeriode &&
+        valgtTiltak?.arenaRegistrertPeriode.fra &&
         !valgtTiltak?.arenaRegistrertPeriode.til;
 
     const resetFormValues = () => {
@@ -106,6 +113,26 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         return veiledningstekstForBrukerMedTiltak();
     };
 
+    const lagDefaultPeriode = () => {
+        let defaultVerdi = null;
+        const brukerHarFyltUtPeriodeAllerede = periode?.fra && periode?.til;
+        if (brukerHarFyltUtPeriodeAllerede) {
+            defaultVerdi = {
+                fra: dayjs(periode.fra).toDate(),
+                til: dayjs(periode.til).toDate(),
+            };
+        } else if (valgtTiltakManglerKunTilDato) {
+            defaultVerdi = { fra: dayjs(valgtTiltak?.arenaRegistrertPeriode?.fra).toDate() };
+        }
+        return defaultVerdi;
+    };
+
+    React.useEffect(() => {
+        if (valgtTiltakManglerKunTilDato) {
+            setValue('svar.tiltak.periode', lagDefaultPeriode());
+        }
+    }, [valgtTiltak]);
+
     React.useEffect(() => {
         const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
         if (valgtTiltakHarEndretSeg) {
@@ -121,6 +148,24 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
           )
         : undefined;
 
+    const lagTiltaksalternativTekst = ({ typeNavn, arrangør, arenaRegistrertPeriode }: Tiltak) => {
+        const tiltakstypeOgArrangør = `${typeNavn} - ${arrangør}`;
+        if (arenaRegistrertPeriode?.fra && !arenaRegistrertPeriode?.til) {
+            return `${tiltakstypeOgArrangør}. Startdato: ${formatDate(arenaRegistrertPeriode!.fra)}`;
+        }
+        if (arenaRegistrertPeriode?.fra && arenaRegistrertPeriode?.til) {
+            return `${tiltakstypeOgArrangør}. Periode: ${formatPeriode(arenaRegistrertPeriode!)}`;
+        }
+        return tiltakstypeOgArrangør;
+    };
+
+    const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
+        return {
+            tekst: lagTiltaksalternativTekst(tiltak),
+            value: tiltak.aktivitetId,
+        };
+    };
+
     return (
         <Step
             title="Tiltak"
@@ -134,26 +179,22 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         >
             {brukerHarRegistrerteTiltak && (
                 <Flervalgsspørsmål
-                    alternativer={tiltak.map(({ arrangør, arenaRegistrertPeriode, aktivitetId, typeNavn }) => {
-                        let tiltakTekst = `${typeNavn} - ${arrangør}`;
-                        if (arenaRegistrertPeriode && arenaRegistrertPeriode.fra && arenaRegistrertPeriode.til) {
-                            tiltakTekst += `. Periode: ${formatPeriode(arenaRegistrertPeriode)}`;
-                        }
-                        return {
-                            tekst: tiltakTekst,
-                            value: aktivitetId,
-                        };
-                    })}
+                    alternativer={tiltak.map(lagSvaralternativForTiltak)}
                     name="svar.tiltak.aktivitetId"
                     validate={valgtTiltakValidator}
                 >
                     Hvilket tiltak ønsker du å søke tiltakspenger for?
                 </Flervalgsspørsmål>
             )}
-            {brukerHarValgtEtTiltak && !valgtTiltakManglerPeriode && (
+            {brukerHarValgtEtTiltak && !valgtTiltakManglerHelePerioden && !valgtTiltakManglerKunTilDato && (
                 <TiltakMedPeriodeUtfylling valgtTiltak={valgtTiltak} />
             )}
-            {brukerHarValgtEtTiltak && valgtTiltakManglerPeriode && <TiltakUtenPeriodeUtfylling />}
+            {brukerHarValgtEtTiltak && valgtTiltakManglerHelePerioden && (
+                <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={false} />
+            )}
+            {brukerHarValgtEtTiltak && valgtTiltakManglerKunTilDato && (
+                <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={true} />
+            )}
         </Step>
     );
 }
@@ -198,19 +239,29 @@ const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingPro
     );
 };
 
-const TiltakUtenPeriodeUtfylling = () => {
+interface TiltakMedUfullstendigPeriodeUtfyllingProps {
+    valgtTiltakManglerKunTilDato: boolean;
+}
+
+const TiltakMedUfullstendigPeriodeUtfylling = ({
+    valgtTiltakManglerKunTilDato,
+}: TiltakMedUfullstendigPeriodeUtfyllingProps) => {
+    const PeriodespørsmålLazy = React.lazy(() => import('./../../components/periodespørsmål/Periodespørsmål'));
     return (
         <>
             <Alert variant="info" style={{ marginTop: '2rem' }}>
-                Vi har ikke registrert i hvilken periode du deltar på dette tiltaket. Du kan legge inn perioden du
-                ønsker å søke tiltakspenger for under.
+                {valgtTiltakManglerKunTilDato
+                    ? 'Vi har ikke registrert en sluttdato på dette tiltaket. Du kan legge inn sluttdato på tiltaket under.'
+                    : 'Vi har ikke registrert i hvilken periode du deltar på dette tiltaket. Du kan legge inn perioden du ønsker å søke tiltakspenger for under.'}
             </Alert>
-            <Periodespørsmål
-                name="svar.tiltak.periode"
-                validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-            >
-                Hvilken periode søker du tiltakspenger for?
-            </Periodespørsmål>
+            <Suspense fallback={<></>}>
+                <PeriodespørsmålLazy
+                    name="svar.tiltak.periode"
+                    validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
+                >
+                    Hvilken periode søker du tiltakspenger for?
+                </PeriodespørsmålLazy>
+            </Suspense>
         </>
     );
 };
