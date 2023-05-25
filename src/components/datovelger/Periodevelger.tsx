@@ -2,8 +2,8 @@ import { UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from '@navikt/ds-react';
 import { DateRange } from 'react-day-picker';
 
 interface PeriodevelgerPeriode {
-    fra: Date;
-    til: Date;
+    fra?: Date;
+    til?: Date;
 }
 
 interface PeriodevelgerProps {
