@@ -88,6 +88,7 @@ export default function Oppsummeringssteg({
         tiltak,
         barnetillegg,
     } = svar;
+    const vedlegg = søknad.vedlegg;
 
     const valgtTiltakManglerPeriode =
         !valgtTiltak?.arenaRegistrertPeriode ||
@@ -223,18 +224,13 @@ export default function Oppsummeringssteg({
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
-                        {alleBarnSøktBarnetilleggFor.map((barn, index) => (
-                            <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }}>
-                                <BarneInfo
-                                    barn={{
-                                        ...barn,
-                                        oppholdUtenforEØS:
-                                            barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
-                                    }}
-                                />
-                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
-                            </div>
-                        ))}
+                        {alleBarnSøktBarnetilleggFor.map((barn, index) => {
+                            const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid)
+                            return <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
+                                <BarneInfo vedlegg={barnetsVedlegg} barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid]}}/>
+                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
+                            </div>;
+                        })}
                     </Accordion.Content>
                 </Accordion.Item>
             </Accordion>
