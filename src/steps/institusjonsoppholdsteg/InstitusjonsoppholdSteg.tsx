@@ -39,10 +39,6 @@ export default function InstitusjonsoppholdSteg({ title, stepNumber, onCompleted
             guide={
                 <React.Fragment>
                     <p>
-                        Hvis du deltar i kvalifiseringsprogrammet eller introduksjonsprogrammet har du <b>ikke</b> rett
-                        på tiltakspenger. Du må derfor svare på spørsmål om dette.
-                    </p>
-                    <p>
                         Bor du på en institusjon med gratis opphold, mat og drikke når du deltar i et
                         arbeidsmarkedstiltak, har du som regel ikke rett til tiltakspenger. En institusjon kan for
                         eksempel være et sykehus eller et fengsel.

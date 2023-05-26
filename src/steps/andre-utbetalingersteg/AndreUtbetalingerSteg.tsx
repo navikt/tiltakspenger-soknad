@@ -110,14 +110,21 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                 <>
                     <p>
                         Vi trenger å vite om du har annen pengestøtte som helt eller delvis skal dekke dine daglige
-                        utgifter. Derfor spør vi deg om dette.
+                        utgifter. Dette kan være utbetalinger fra:
                     </p>
+                    <ul>
+                        <li>Offentlige trygde-og pensjonsordninger</li>
+                        <li>Private trygde- og pensjonsordninger</li>
+                        <li>Utenlandske trygde-og pensjonsordninger</li>
+                    </ul>
                     <p>
-                        Du må fortelle oss om pengestøtte fra offentlige eller private trygde- og pensjonsordninger.
-                        Dette gjelder også hvis du får støtten fra et annet land.
+                        Vi kan hente informajon om nesten alle ytelser fra NAV. Det vi ikke kan hente automatisk, må du svare på spørsmål om under.
                     </p>
-                    <p>Det har ikke betydning hvor mye du mottar i annen pengestøtte.</p>
-                    <p>Du trenger ikke å fortelle oss om barnepensjon, barnetrygd eller sosialstønad fra kommunen.</p>
+                    <p>Du har ikke rett på tiltakspenger:</p>
+                    <ul>
+                        <li>hvis du mottar annen pengestøtte</li>
+                        <li>hvis du deltar i introduksjonsprogrammet eller i kvalifiseringsprogrammet</li>
+                    </ul>
                 </>
             }
         >
