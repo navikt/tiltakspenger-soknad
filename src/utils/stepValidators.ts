@@ -121,8 +121,7 @@ export function brukerHarFyltUtOppsummeringssteg({ harBekreftetAlleOpplysninger 
 
 export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg) {
     if (steg === Søknadssteg.TILTAK) {
-        // todo: Sjekk at bruker har huket av på bekreftelsesboks på innledningssteget når det er klart
-        return true;
+        return svar.harBekreftetÅSvareSåGodtManKan;
     } else if (steg === Søknadssteg.PROGRAM_DELTAGELSE) {
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {

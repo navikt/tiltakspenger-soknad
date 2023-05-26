@@ -34,6 +34,7 @@ function App({ Component, pageProps }: AppProps) {
                 pensjonsordning: {},
                 etterlønn: {},
                 jobbsjansen: {},
+                mottarAndreUtbetalinger: false,
                 harBekreftetAlleOpplysninger: false,
                 harBekreftetÅSvareSåGodtManKan: false,
             },

@@ -14,7 +14,6 @@ import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../../components/step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import BarneInfo from '@/components/barnetillegg/BarneInfo';
-import Show from "@/components/show/show";
 
 interface OppsummeringsstegProps {
     title: string;
@@ -58,22 +57,6 @@ function visSvarTilAndreUtbetalinger(mottarAndreUtbetalinger: boolean){
     }
 }
 
-function oppsummeringPensjonsordninger(mottarEllerSøktPensjonsordning: boolean) {
-    if (mottarEllerSøktPensjonsordning) {
-        return `Ja, jeg mottar utbetalinger fra en pensjonsordning`;
-    } else {
-        return 'Nei, jeg har verken søkt om eller mottar utbetalinger fra en pensjonsordning';
-    }
-}
-
-function oppsummeringEtterlønn(mottarEllerSøktEtterlønn: boolean) {
-    if (mottarEllerSøktEtterlønn) {
-        return `Ja, jeg mottar etterlønn fra en arbeidsgiver`;
-    } else {
-        return 'Nei, jeg har verken søkt eller mottar etterlønn fra en arbeidsgiver';
-    }
-}
-
 function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
 }
@@ -107,6 +90,9 @@ export default function Oppsummeringssteg({
         tiltak,
         barnetillegg,
     } = svar;
+
+    const vedlegg = søknad.vedlegg;
+
     const valgtTiltakManglerPeriode =
         !valgtTiltak?.arenaRegistrertPeriode ||
         !valgtTiltak?.arenaRegistrertPeriode.fra ||
@@ -313,18 +299,13 @@ export default function Oppsummeringssteg({
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
-                        {alleBarnSøktBarnetilleggFor.map((barn, index) => (
-                            <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }}>
-                                <BarneInfo
-                                    barn={{
-                                        ...barn,
-                                        oppholdUtenforEØS:
-                                            barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
-                                    }}
-                                />
-                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
-                            </div>
-                        ))}
+                        {alleBarnSøktBarnetilleggFor.map((barn, index) => {
+                            const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid)
+                            return <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
+                                <BarneInfo vedlegg={barnetsVedlegg} barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid]}}/>
+                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
+                            </div>;
+                        })}
                     </Accordion.Content>
                 </Accordion.Item>
             </Accordion>
