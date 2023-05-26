@@ -52,13 +52,13 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                 </>
             }
         >
-            <Heading className="marginTopHeading" level="3" size="small">Barn vi har funnet registrert på
+            <Heading className="marginTopHeading" level="3" size="small">Barn som er registrert på
                 deg
             </Heading>
             {barnFraApi && barnFraApi.length > 0 ?
                 <>
                     <ReadMore className="marginTop" header={"Hvilke barn viser vi?"}>
-                        Vi viser dine barn under 16 år som er registrert i folkeregisteret.
+                        Vi viser dine barn under 16 år som er registrert i Folkeregisteret.
                     </ReadMore>
                     <div className="marginTop">
                         {barnFraApi.map((barn) => (

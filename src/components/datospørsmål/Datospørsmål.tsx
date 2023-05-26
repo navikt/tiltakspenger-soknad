@@ -35,16 +35,15 @@ export default function Datospørsmål({
                 name={name}
                 control={control}
                 rules={{validate}}
-                render={({ field: { onChange, value } }) => (
+                render={({ field }) => (
                     <Datovelger
                         id={name}
                         label={children}
-                        onDateChange={onChange}
                         errorMessage={errorMessage}
                         minDate={minDate}
                         maxDate={maxDate}
                         datoMåVæreIFortid={datoMåVæreIFortid}
-                        value={value ? formatDate(value) : ""}
+                        fieldProps={field}
                     />
                 )}
             />

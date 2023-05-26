@@ -1,40 +1,43 @@
 import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
+import {ControllerRenderProps} from "react-hook-form";
+import {formatDate} from "@/utils/formatDate";
+import {fi} from "date-fns/locale";
 
 interface DatovelgerProps {
-    onDateChange: (date: Date | undefined) => void;
     errorMessage?: string;
     id?: string;
     minDate?: Date;
     maxDate?: Date;
     label: string;
     datoMåVæreIFortid?: boolean;
-    value: string;
+    fieldProps:  ControllerRenderProps;
 }
 
 export default function Datovelger({
-                                        onDateChange,
                                         errorMessage,
                                         id,
                                         label,
                                         maxDate,
                                         minDate,
                                         datoMåVæreIFortid,
-                                        value,
+                                        fieldProps,
                                     }: DatovelgerProps) {
     const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
-        onDateChange,
+        onDateChange: fieldProps.onChange,
         fromDate: minDate,
         toDate: datoMåVæreIFortid ? new Date() : maxDate,
     });
 
+    const dateFromForm = fieldProps.value ? formatDate((fieldProps.value)) : "";
+
     return (
         <UNSAFE_DatePicker {...datepickerProps} id={id}>
             <UNSAFE_DatePicker.Input
-                {...inputProps}
                 label={label}
                 error={errorMessage}
                 id={id}
-                value={value}
+                {...inputProps}
+                value={inputProps.value != "" ? inputProps.value : dateFromForm}
             />
         </UNSAFE_DatePicker>
     );

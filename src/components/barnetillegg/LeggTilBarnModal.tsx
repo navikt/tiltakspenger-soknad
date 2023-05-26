@@ -13,6 +13,7 @@ import {ScanningGuide} from "@/components/veiledning/ScanningGuide";
 import Fritekstspørsmål from "@/components/fritekstspørsmål/Fritekstspørsmål";
 import Datospørsmål from "@/components/datospørsmål/Datospørsmål";
 import {Barn} from "@/types/Barn";
+import {formatDate} from "@/utils/formatDate";
 
 interface LeggTilBarnModalProps {
     fieldArray: UseFieldArrayReturn<Søknad>;
@@ -142,7 +143,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                                     href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
                                                     target="_blank"
                                                 >
-                                                    Du kan lese mer om hvile land som er med i EØS her.
+                                                    Du kan lese mer om hvilke land som er med i EØS her.
                                                     <ExternalLinkIcon title="a11y-title"/>
                                                 </Link>
                                                 </span>
