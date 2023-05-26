@@ -4,11 +4,17 @@ import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
 import styles from './andreutbetalinger.module.css'
-import {gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator} from '@/utils/formValidators';
+import {
+    gyldigPeriodeValidator,
+    påkrevdDatoValidator,
+    påkrevdJaNeiSpørsmålValidator,
+    påkrevdPeriodeValidator
+} from '@/utils/formValidators';
 import {formatPeriode} from "@/utils/formatPeriode";
 import {Tiltak} from "@/types/Tiltak";
 import Show from "@/components/show/show";
 import {FormPeriode} from "@/types/FormPeriode";
+import Datospørsmål from "@/components/datospørsmål/Datospørsmål";
 
 interface AndreUtbetalingerStegProps {
     title: string;
@@ -72,6 +78,10 @@ function påkrevdSupplerendeStønadOver67PeriodeValidator(periode: FormPeriode) 
 
 function påkrevdSupplerendeStønadFlyktningerPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar supplerende stønad for uføre flyktninger');
+}
+
+function påkrevdAlderspensjonDatofeltValidator(verdi: Date) {
+    return påkrevdDatoValidator(verdi, 'Du må oppgi fra dato til alderspensjonen');
 }
 
 function mottarAndreUtbetalinger(verdi: boolean) {
@@ -201,13 +211,13 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                     Mottar du alderspensjon?
                 </JaNeiSpørsmål>
                 {watchAlderspensjon && (
-                    <Periodespørsmål
-                        name="svar.alderspensjon.fraDato"
-                        validate={[gyldigPeriodeValidator, påkrevdAlderpensjonPeriodeValidator]}
-                        ikkeVisTilDato
+                    <Datospørsmål
+                        name='svar.alderspensjon.fraDato'
+                        datoMåVæreIFortid={true}
+                        validate={påkrevdAlderspensjonDatofeltValidator}
                     >
-                        Når mottar du alderspensjon?
-                    </Periodespørsmål>
+                        Fra dato
+                    </Datospørsmål>
                 )}
             </div>
             <div className={styles.blokk}>

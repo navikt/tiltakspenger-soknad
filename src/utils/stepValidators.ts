@@ -105,13 +105,6 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
         }
     }
 
-    if (!((sykepenger && sykepenger.mottar) || (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
-        (alderspensjon && alderspensjon.mottar) || pensjonsordning && pensjonsordning.mottar ||
-        (jobbsjansen && jobbsjansen.mottar) || (supplerendestønadover67 && supplerendestønadover67.mottar) ||
-        (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar))) {
-        return false;
-    }
-
     return true;
 }
 

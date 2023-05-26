@@ -157,6 +157,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
 
     async function sendInnSøknad() {
         const søknad = getValues();
+        console.log("søknad: ", søknad);
         const formData = lagFormDataForInnsending(søknad, personalia, valgtTiltak!);
         try {
             setSøknadsinnsendingInProgress(true);
