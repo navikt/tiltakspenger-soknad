@@ -37,7 +37,7 @@ export default function Periodespørsmål({
     maxDate,
     hjelpetekst,
 }: PeriodespørsmålProps) {
-    const { control, watch, formState } = useFormContext();
+    const { control, watch, formState, getValues } = useFormContext();
     const verdi = watch(name);
     const defaultValue = verdi ? { from: dayjs(verdi.fra).toDate(), to: dayjs(verdi.til).toDate() } : null;
     const errorMessage = get(formState.errors, name)?.message;
@@ -56,7 +56,12 @@ export default function Periodespørsmål({
                         onRangeChange={(periode) => {
                             if (periode) {
                                 const { from: fra, to: til } = periode;
-                                onChange({ fra, til });
+                                onChange(
+                                    {
+                                        fra: fra ?? getValues(`${name}.fra`),
+                                        til: til ?? getValues(`${name}.til`),
+                                    }
+                                );
                             }
                         }}
                         defaultValue={value}

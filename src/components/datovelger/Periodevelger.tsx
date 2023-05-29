@@ -1,5 +1,6 @@
-import { UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from '@navikt/ds-react';
+import {ErrorMessage, UNSAFE_DatePicker, UNSAFE_useDatepicker} from '@navikt/ds-react';
 import { DateRange } from 'react-day-picker';
+import React from "react";
 
 interface PeriodevelgerPeriode {
     fra?: Date;
@@ -23,34 +24,42 @@ export default function Periodevelger({
     minDate,
     maxDate,
 }: PeriodevelgerProps) {
-    function getRangepickerProps() {
-        if (defaultValue)
-            return {
-                defaultSelected: {
-                    from: defaultValue.fra,
-                    to: defaultValue.til,
-                },
-            };
-        else return {};
-    }
 
-    const { datepickerProps, toInputProps, fromInputProps } = UNSAFE_useRangeDatepicker({
-        onRangeChange,
-        ...getRangepickerProps(),
-        fromDate: minDate,
-        toDate: maxDate,
+    const fromDatePicker = UNSAFE_useDatepicker({
+        onDateChange: (d) => onRangeChange({from: d, to: undefined}),
+        defaultSelected: defaultValue?.fra,
+        fromDate: minDate
+    });
+
+    const toDatePicker = UNSAFE_useDatepicker({
+        onDateChange: (d) => onRangeChange({from: undefined, to: d}),
+        defaultSelected: defaultValue?.til,
+        toDate: maxDate
     });
 
     return (
-        <UNSAFE_DatePicker {...datepickerProps} id={id}>
-            <UNSAFE_DatePicker.Input
-                {...fromInputProps}
-                size="small"
-                label="Fra"
-                error={errorMessage}
-                id={`${id}.fra`}
-            />
-            <UNSAFE_DatePicker.Input {...toInputProps} size="small" label="Til" error={errorMessage} id={`${id}.til`} />
-        </UNSAFE_DatePicker>
+        <>
+            <div style={{display: "flex", gap: "1rem", paddingBottom: "0.5rem"}}>
+                <UNSAFE_DatePicker {...fromDatePicker.datepickerProps}>
+                    <UNSAFE_DatePicker.Input
+                        {...fromDatePicker.inputProps}
+                        size="small"
+                        label="Fra"
+                        id={`${id}.fra`}
+                        error={!!errorMessage}
+                    />
+                </UNSAFE_DatePicker>
+                <UNSAFE_DatePicker {...toDatePicker.datepickerProps}>
+                    <UNSAFE_DatePicker.Input
+                        {...toDatePicker.inputProps}
+                        size="small"
+                        label="Til"
+                        id={`${id}.til`}
+                        error={!!errorMessage}
+                    />
+                </UNSAFE_DatePicker>
+            </div>
+            {errorMessage ? <ErrorMessage size={"small"}>{`• ${errorMessage}`}</ErrorMessage> : ""}
+        </>
     );
 }
