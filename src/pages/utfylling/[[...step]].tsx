@@ -29,7 +29,11 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
 
     const { step } = router.query;
-    const { getValues, watch } = useFormContext<Søknad>();
+    const { getValues, watch, reset } = useFormContext<Søknad>();
+
+    React.useEffect(() => {
+        reset(getValues(), { keepValues: true });
+    }, [step]);
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak | null>(null);
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
@@ -127,11 +131,16 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
         const formData = new FormData();
         formData.append('søknad', søknadJson as string);
-        søknad.vedlegg.filter((v) =>
-            søknad.svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.find((elem) => elem.uuid === v.uuid) != undefined
-        ).forEach((vedlegg, index) => {
-            formData.append(`vedlegg-${index}`, vedlegg.file);
-        });
+        søknad.vedlegg
+            .filter(
+                (v) =>
+                    søknad.svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.find(
+                        (elem) => elem.uuid === v.uuid
+                    ) != undefined
+            )
+            .forEach((vedlegg, index) => {
+                formData.append(`vedlegg-${index}`, vedlegg.file);
+            });
         return formData;
     }
 

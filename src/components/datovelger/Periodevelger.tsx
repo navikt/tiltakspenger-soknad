@@ -1,5 +1,4 @@
 import { ErrorMessage, UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import { DateRange } from 'react-day-picker';
 import React from 'react';
 
 export interface PeriodevelgerPeriode {
