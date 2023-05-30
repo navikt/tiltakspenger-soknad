@@ -51,14 +51,17 @@ export default function Periodespørsmål({
                 render={({ field: { onChange } }) => (
                     <Periodevelger
                         id={name}
-                        onRangeChange={(periode) => {
-                            if (periode) {
-                                const { from: fra, to: til } = periode;
-                                onChange({
-                                    fra: fra ?? getValues(`${name}.fra`),
-                                    til: til ?? getValues(`${name}.til`),
-                                });
-                            }
+                        onFromChange={(date) => {
+                            onChange({
+                                fra: date || '',
+                                til: getValues(`${name}.til`),
+                            });
+                        }}
+                        onToChange={(date) => {
+                            onChange({
+                                fra: getValues(`${name}.fra`),
+                                til: date || '',
+                            });
                         }}
                         defaultValue={defaultValue}
                         errorMessage={errorMessage}

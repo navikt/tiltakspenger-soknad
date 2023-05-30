@@ -8,7 +8,8 @@ export interface PeriodevelgerPeriode {
 }
 
 interface PeriodevelgerProps {
-    onRangeChange: (periode: DateRange | undefined) => void;
+    onFromChange: (date: Date | undefined) => void;
+    onToChange: (date: Date | undefined) => void;
     defaultValue?: PeriodevelgerPeriode | null;
     errorMessage?: string;
     id?: string;
@@ -17,7 +18,8 @@ interface PeriodevelgerProps {
 }
 
 export default function Periodevelger({
-    onRangeChange,
+    onFromChange,
+    onToChange,
     defaultValue,
     errorMessage,
     id,
@@ -30,16 +32,16 @@ export default function Periodevelger({
     }, [defaultValue]);
 
     const fromDatePicker = UNSAFE_useDatepicker({
-        onDateChange: (d) => {
-            onRangeChange({ from: d, to: undefined });
+        onDateChange: (date) => {
+            onFromChange(date);
         },
         defaultSelected: defaultValue?.fra,
         fromDate: minDate,
     });
 
     const toDatePicker = UNSAFE_useDatepicker({
-        onDateChange: (d) => {
-            onRangeChange({ from: undefined, to: d });
+        onDateChange: (date) => {
+            onToChange(date);
         },
         defaultSelected: defaultValue?.til,
         toDate: maxDate,

@@ -30,7 +30,7 @@ function valgtTiltakValidator(verdi: string) {
 }
 
 export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
-    const { watch, resetField, setValue } = useFormContext();
+    const { watch, resetField } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
@@ -40,8 +40,8 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         !valgtTiltak?.arenaRegistrertPeriode?.fra &&
         !valgtTiltak?.arenaRegistrertPeriode?.til;
     const valgtTiltakManglerKunTilDato =
-        valgtTiltak?.arenaRegistrertPeriode &&
-        valgtTiltak?.arenaRegistrertPeriode.fra &&
+        !!valgtTiltak?.arenaRegistrertPeriode &&
+        !!valgtTiltak?.arenaRegistrertPeriode.fra &&
         !valgtTiltak?.arenaRegistrertPeriode.til;
 
     const resetFormValues = () => {
@@ -161,7 +161,9 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         };
     };
 
-    const defaultPeriode = React.useMemo(() => lagDefaultPeriode(), [valgtTiltak]);
+    const defaultPeriode = React.useMemo(() => {
+        return lagDefaultPeriode();
+    }, [valgtTiltak]);
 
     return (
         <Step
@@ -186,12 +188,9 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
             {brukerHarValgtEtTiltak && !valgtTiltakManglerHelePerioden && !valgtTiltakManglerKunTilDato && (
                 <TiltakMedPeriodeUtfylling valgtTiltak={valgtTiltak} />
             )}
-            {brukerHarValgtEtTiltak && valgtTiltakManglerHelePerioden && (
-                <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={false} />
-            )}
-            {brukerHarValgtEtTiltak && valgtTiltakManglerKunTilDato && (
+            {brukerHarValgtEtTiltak && (valgtTiltakManglerHelePerioden || valgtTiltakManglerKunTilDato) && (
                 <TiltakMedUfullstendigPeriodeUtfylling
-                    valgtTiltakManglerKunTilDato={true}
+                    valgtTiltakManglerKunTilDato={valgtTiltakManglerKunTilDato}
                     defaultPeriode={defaultPeriode || undefined}
                 />
             )}
