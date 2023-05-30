@@ -6,7 +6,7 @@ import { formatPeriode } from '@/utils/formatPeriode';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { useFormContext } from 'react-hook-form';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
-import { Alert, Button, Link } from '@navikt/ds-react';
+import { Alert, Button } from '@navikt/ds-react';
 import {
     gyldigPeriodeValidator,
     påkrevdJaNeiSpørsmålValidator,
@@ -17,6 +17,7 @@ import { FormPeriode } from '@/types/FormPeriode';
 import { formatDate } from '@/utils/formatDate';
 import dayjs from 'dayjs';
 import { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
+import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
 
 interface TiltaksstegProps {
     onCompleted: () => void;
@@ -63,71 +64,6 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         return defaultVerdi;
     };
 
-    const veiledningstekstForBrukerUtenTiltak = () => {
-        return (
-            <>
-                <p>For å ha rett til tiltakspenger må du delta i et arbeidsmarkedstiltak som er godkjent av NAV. </p>
-                <p>
-                    Det er ikke registrert at du er påmeldt, deltar på eller nylig har deltatt på et
-                    arbeidsmarkedstiltak som gir rett til tiltakspenger.
-                </p>
-                <span>Hvis du mener dette ikke er riktig kan du </span>
-                <ul>
-                    <li>
-                        Kontakte veilederen din gjennom{' '}
-                        <Link href="https://pto.dev.nav.no/arbeid/dialog" target="_blank">
-                            dialogen (åpnes i ny fane)
-                        </Link>
-                    </li>
-                    <li>Vente noen dager og prøve igjen</li>
-                    <li>
-                        <Link href="https://www.nav.no/fyllut/nav761345?sub=paper" target="_blank">
-                            Sende søknad på papir (åpnes i ny fane)
-                        </Link>
-                    </li>
-                </ul>
-            </>
-        );
-    };
-
-    const veiledningstekstForBrukerMedTiltak = () => {
-        return (
-            <>
-                <p>
-                    For å ha rett til tiltakspenger må du delta i et arbeidsmarkedstiltak som er godkjent av NAV. Listen
-                    under viser arbeidsmarkedstiltak som du enten er påmeldt, deltar på eller nylig har deltatt på. Vi
-                    viser bare dine arbeidsmarkedstiltak som gir rett til tiltakspenger.
-                </p>
-
-                <p>
-                    Hvis ikke listen under inneholder det arbeidsmarkedstiltaket som du vil søke tiltakspenger for, kan
-                    du
-                </p>
-                <ul>
-                    <li>
-                        Kontakte veilederen din gjennom{' '}
-                        <Link href="https://pto.dev.nav.no/arbeid/dialog" target="_blank">
-                            dialogen (åpnes i ny fane)
-                        </Link>
-                    </li>
-                    <li>Vente noen dager og prøve igjen</li>
-                    <li>
-                        <Link href="https://www.nav.no/fyllut/nav761345?sub=paper" target="_blank">
-                            Sende søknad på papir (åpnes i ny fane)
-                        </Link>
-                    </li>
-                </ul>
-            </>
-        );
-    };
-
-    const veiledningstekst = () => {
-        if (!brukerHarRegistrerteTiltak) {
-            return veiledningstekstForBrukerUtenTiltak();
-        }
-        return veiledningstekstForBrukerMedTiltak();
-    };
-
     React.useEffect(() => {
         const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
         if (valgtTiltakHarEndretSeg) {
@@ -171,7 +107,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
             stepNumber={1}
-            guide={veiledningstekst()}
+            guide={<Veiledningstekst brukerHarRegistrerteTiltak={brukerHarRegistrerteTiltak} />}
             submitSectionRenderer={submitSectionRenderer}
             hideStepIndicator={!brukerHarRegistrerteTiltak}
             hideTitle={!brukerHarRegistrerteTiltak}
