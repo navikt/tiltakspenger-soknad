@@ -16,6 +16,7 @@ import {
 import { FormPeriode } from '@/types/FormPeriode';
 import { formatDate } from '@/utils/formatDate';
 import dayjs from 'dayjs';
+import { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
 
 interface TiltaksstegProps {
     onCompleted: () => void;
@@ -46,6 +47,20 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
     const resetFormValues = () => {
         resetField('svar.tiltak.søkerHeleTiltaksperioden');
         resetField('svar.tiltak.periode');
+    };
+
+    const lagDefaultPeriode = () => {
+        let defaultVerdi = null;
+        const brukerHarFyltUtPeriodeAllerede = periode?.fra && periode?.til;
+        if (brukerHarFyltUtPeriodeAllerede) {
+            defaultVerdi = {
+                fra: dayjs(periode.fra).toDate(),
+                til: dayjs(periode.til).toDate(),
+            };
+        } else if (valgtTiltakManglerKunTilDato) {
+            defaultVerdi = { fra: dayjs(valgtTiltak?.arenaRegistrertPeriode?.fra).toDate() };
+        }
+        return defaultVerdi;
     };
 
     const veiledningstekstForBrukerUtenTiltak = () => {
@@ -113,26 +128,6 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         return veiledningstekstForBrukerMedTiltak();
     };
 
-    const lagDefaultPeriode = () => {
-        let defaultVerdi = null;
-        const brukerHarFyltUtPeriodeAllerede = periode?.fra && periode?.til;
-        if (brukerHarFyltUtPeriodeAllerede) {
-            defaultVerdi = {
-                fra: dayjs(periode.fra).toDate(),
-                til: dayjs(periode.til).toDate(),
-            };
-        } else if (valgtTiltakManglerKunTilDato) {
-            defaultVerdi = { fra: dayjs(valgtTiltak?.arenaRegistrertPeriode?.fra).toDate() };
-        }
-        return defaultVerdi;
-    };
-
-    React.useEffect(() => {
-        if (valgtTiltakManglerKunTilDato) {
-            setValue('svar.tiltak.periode', lagDefaultPeriode());
-        }
-    }, [valgtTiltak]);
-
     React.useEffect(() => {
         const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
         if (valgtTiltakHarEndretSeg) {
@@ -166,6 +161,8 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         };
     };
 
+    const defaultPeriode = React.useMemo(() => lagDefaultPeriode(), [valgtTiltak]);
+
     return (
         <Step
             title="Tiltak"
@@ -193,7 +190,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
                 <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={false} />
             )}
             {brukerHarValgtEtTiltak && valgtTiltakManglerKunTilDato && (
-                <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={true} />
+                <TiltakMedUfullstendigPeriodeUtfylling
+                    valgtTiltakManglerKunTilDato={true}
+                    defaultPeriode={defaultPeriode || undefined}
+                />
             )}
         </Step>
     );
@@ -241,12 +241,13 @@ const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingPro
 
 interface TiltakMedUfullstendigPeriodeUtfyllingProps {
     valgtTiltakManglerKunTilDato: boolean;
+    defaultPeriode?: PeriodevelgerPeriode;
 }
 
 const TiltakMedUfullstendigPeriodeUtfylling = ({
     valgtTiltakManglerKunTilDato,
+    defaultPeriode,
 }: TiltakMedUfullstendigPeriodeUtfyllingProps) => {
-    const PeriodespørsmålLazy = React.lazy(() => import('./../../components/periodespørsmål/Periodespørsmål'));
     return (
         <>
             <Alert variant="info" style={{ marginTop: '2rem' }}>
@@ -255,12 +256,13 @@ const TiltakMedUfullstendigPeriodeUtfylling = ({
                     : 'Vi har ikke registrert i hvilken periode du deltar på dette tiltaket. Du kan legge inn perioden du ønsker å søke tiltakspenger for under.'}
             </Alert>
             <Suspense fallback={<></>}>
-                <PeriodespørsmålLazy
+                <Periodespørsmål
                     name="svar.tiltak.periode"
                     validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
+                    defaultValue={defaultPeriode}
                 >
                     Hvilken periode søker du tiltakspenger for?
-                </PeriodespørsmålLazy>
+                </Periodespørsmål>
             </Suspense>
         </>
     );

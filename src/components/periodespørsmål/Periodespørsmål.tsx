@@ -1,8 +1,7 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import dayjs from 'dayjs';
 import { ReadMore } from '@navikt/ds-react';
-import Periodevelger from '@/components/datovelger/Periodevelger';
+import Periodevelger, { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Periodespørsmål.module.css';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
@@ -14,6 +13,7 @@ interface PeriodespørsmålProps {
     minDate?: Date;
     maxDate?: Date;
     hjelpetekst?: Hjelpetekst;
+    defaultValue?: PeriodevelgerPeriode;
 }
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
@@ -36,10 +36,9 @@ export default function Periodespørsmål({
     minDate,
     maxDate,
     hjelpetekst,
+    defaultValue,
 }: PeriodespørsmålProps) {
-    const { control, watch, formState, getValues } = useFormContext();
-    const verdi = watch(name);
-    const defaultValue = verdi ? { from: dayjs(verdi.fra).toDate(), to: dayjs(verdi.til).toDate() } : null;
+    const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
         <fieldset className={styles.periodespørsmål}>
@@ -49,22 +48,19 @@ export default function Periodespørsmål({
                 name={name}
                 control={control}
                 rules={{ validate: setupValidation(validate) }}
-                defaultValue={defaultValue}
-                render={({ field: { onChange, value } }) => (
+                render={({ field: { onChange } }) => (
                     <Periodevelger
                         id={name}
                         onRangeChange={(periode) => {
                             if (periode) {
                                 const { from: fra, to: til } = periode;
-                                onChange(
-                                    {
-                                        fra: fra ?? getValues(`${name}.fra`),
-                                        til: til ?? getValues(`${name}.til`),
-                                    }
-                                );
+                                onChange({
+                                    fra: fra ?? getValues(`${name}.fra`),
+                                    til: til ?? getValues(`${name}.til`),
+                                });
                             }
                         }}
-                        defaultValue={value}
+                        defaultValue={defaultValue}
                         errorMessage={errorMessage}
                         minDate={minDate}
                         maxDate={maxDate}

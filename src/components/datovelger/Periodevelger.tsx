@@ -1,15 +1,15 @@
-import {ErrorMessage, UNSAFE_DatePicker, UNSAFE_useDatepicker} from '@navikt/ds-react';
+import { ErrorMessage, UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
 import { DateRange } from 'react-day-picker';
-import React from "react";
+import React from 'react';
 
-interface PeriodevelgerPeriode {
+export interface PeriodevelgerPeriode {
     fra?: Date;
     til?: Date;
 }
 
 interface PeriodevelgerProps {
     onRangeChange: (periode: DateRange | undefined) => void;
-    defaultValue?: PeriodevelgerPeriode;
+    defaultValue?: PeriodevelgerPeriode | null;
     errorMessage?: string;
     id?: string;
     minDate?: Date;
@@ -24,22 +24,30 @@ export default function Periodevelger({
     minDate,
     maxDate,
 }: PeriodevelgerProps) {
+    React.useEffect(() => {
+        fromDatePicker.setSelected(defaultValue?.fra);
+        toDatePicker.setSelected(defaultValue?.til);
+    }, [defaultValue]);
 
     const fromDatePicker = UNSAFE_useDatepicker({
-        onDateChange: (d) => onRangeChange({from: d, to: undefined}),
+        onDateChange: (d) => {
+            onRangeChange({ from: d, to: undefined });
+        },
         defaultSelected: defaultValue?.fra,
-        fromDate: minDate
+        fromDate: minDate,
     });
 
     const toDatePicker = UNSAFE_useDatepicker({
-        onDateChange: (d) => onRangeChange({from: undefined, to: d}),
+        onDateChange: (d) => {
+            onRangeChange({ from: undefined, to: d });
+        },
         defaultSelected: defaultValue?.til,
-        toDate: maxDate
+        toDate: maxDate,
     });
 
     return (
         <>
-            <div style={{display: "flex", gap: "1rem", paddingBottom: "0.5rem"}}>
+            <div style={{ display: 'flex', gap: '1rem', paddingBottom: '0.5rem' }}>
                 <UNSAFE_DatePicker {...fromDatePicker.datepickerProps}>
                     <UNSAFE_DatePicker.Input
                         {...fromDatePicker.inputProps}
@@ -59,7 +67,7 @@ export default function Periodevelger({
                     />
                 </UNSAFE_DatePicker>
             </div>
-            {errorMessage ? <ErrorMessage size={"small"}>{`• ${errorMessage}`}</ErrorMessage> : ""}
+            {errorMessage ? <ErrorMessage size={'small'}>{`• ${errorMessage}`}</ErrorMessage> : ''}
         </>
     );
 }
