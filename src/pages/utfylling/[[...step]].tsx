@@ -190,7 +190,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
              )}
              {brukerErPåProgramDeltagelseSteg() && (
                  <ProgramDeltagelseSteg
-                     title="Programdeltagelse"
+                     title="Introduksjonsprogrammet og kvalifiseringsprogrammet"
                      stepNumber={2}
                      onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                      onGoToPreviousStep={goBack}

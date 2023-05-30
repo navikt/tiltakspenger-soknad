@@ -117,18 +117,9 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                         <li>Private trygde- og pensjonsordninger</li>
                         <li>Utenlandske trygde-og pensjonsordninger</li>
                     </ul>
-                    <p>
-                        Vi kan hente informajon om nesten alle ytelser fra NAV. Det vi ikke kan hente automatisk, må du svare på spørsmål om under.
-                    </p>
-                    <p>Du har ikke rett på tiltakspenger:</p>
-                    <ul>
-                        <li>hvis du mottar annen pengestøtte</li>
-                        <li>hvis du deltar i introduksjonsprogrammet eller i kvalifiseringsprogrammet</li>
-                    </ul>
                 </>
             }
         >
-            <div className={styles.blokk}>
             <JaNeiSpørsmål
                 name="svar.mottarAndreUtbetalinger"
                 validate={mottarAndreUtbetalinger}
@@ -137,7 +128,8 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
                         <li>Sykepenger</li>
                         <li>Gjenlevendepensjon</li>
                         <li>Alderspensjon</li>
-                        <li>Supplerende stønad</li>
+                        <li>Supplerende stønad for personer over 67 år</li>
+                        <li>Supplerende stønad for uføre flyktninger</li>
                         <li>Pengestøtte fra andre trygde- eller pensjonsordninger</li>
                         <li>Etterlønn</li>
                         <li>Stønad via Jobbsjansen</li>
@@ -146,7 +138,6 @@ export default function AndreUtbetalingerSteg({ title, stepNumber, onCompleted, 
             >
                 Mottar du noen av disse utbetalingene i perioden {tiltaksperiodeTekst}?
             </JaNeiSpørsmål>
-            </div>
             <Show if={watchMottarAndreUtbetalinger}>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
