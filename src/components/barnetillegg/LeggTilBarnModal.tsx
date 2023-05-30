@@ -153,35 +153,39 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                 >
                                     Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
                                 </JaNeiSpørsmål>
-                    <Button
-                        onClick={lukkModal}
-                        className={styles.knappAvbrytModal}
-                        variant="secondary"
-                    >
-                        Avbryt
-                    </Button>
                     <div/>
-                    <Button
-                        onClick={async (e) => {
-                            e.preventDefault()
-                            const harIngenValideringsfeil = await trigger('svar.barnetillegg.kladd')
-                            if (harIngenValideringsfeil) {
-                                  const barnLagtTil = {
-                                    ...getValues('svar.barnetillegg.kladd'), uuid: uuid.current
+
+                    <div className={styles.displayFlex}>
+                        <Button
+                            onClick={lukkModal}
+                            className={styles.knappAvbrytModal}
+                            variant="secondary"
+                        >
+                            Avbryt
+                        </Button>
+                        <Button
+                            onClick={async (e) => {
+                                e.preventDefault()
+                                const harIngenValideringsfeil = await trigger('svar.barnetillegg.kladd')
+                                if (harIngenValideringsfeil) {
+                                      const barnLagtTil = {
+                                        ...getValues('svar.barnetillegg.kladd'), uuid: uuid.current
+                                    }
+                                    if (barnLagtTil.index == undefined) {
+                                        fieldArray.append(barnLagtTil)
+                                    } else {
+                                        fieldArray.update(barnLagtTil.index, barnLagtTil)
+                                    }
+                                    setOpen(false)
                                 }
-                                if (barnLagtTil.index == undefined) {
-                                    fieldArray.append(barnLagtTil)
-                                } else {
-                                    fieldArray.update(barnLagtTil.index, barnLagtTil)
-                                }
-                                setOpen(false)
-                            }
-                        }}
-                        className={styles.knappLagreModal}
-                        variant="primary"
-                    >
-                        Lagre
-                    </Button>
+                            }}
+                            className={styles.knappLagreModal}
+                            variant="primary"
+                        >
+                            Lagre
+                        </Button>
+
+                    </div>
 
                     <Alert variant="info">
                         Du må legge ved:
@@ -199,7 +203,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                         kan du i stedet ta bilde av dokumentet med mobiltelefonen din.
                     </p>
                     <ReadMore header="Slik tar du et godt bilde av dokumentet">
-                        <div style={{display: 'flex', justifyContent: 'center', backgroundColor: 'white'}}>
+                        <div className={styles.scanningGuide}>
                             <ScanningGuide/>
                         </div>
                     </ReadMore>

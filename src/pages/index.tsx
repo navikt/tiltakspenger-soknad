@@ -167,7 +167,7 @@ export default function App() {
                 <Button
                     onClick={() => console.log('Hva skal vi gjøre når bruker avbryter søknaden?')}
                     type="button"
-                    size="small"
+                    size="medium"
                     variant="secondary"
                 >
                     Avbryt søknaden
@@ -178,7 +178,7 @@ export default function App() {
                         else setMarkerBekreftelsesboksSomRød(true);
                     }}
                     type="button"
-                    size="small"
+                    size="medium"
                 >
                     Start søknaden
                 </Button>

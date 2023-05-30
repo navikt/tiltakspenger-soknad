@@ -6,6 +6,10 @@
     padding: 0.5rem 1rem 1rem 2rem;
 }
 
+.displayFlex {
+    display: flex;
+}
+
 .knappLeggTilBarn{
     width: 100%;
     margin-top: 1rem;
@@ -14,12 +18,23 @@
 .knappAvbrytModal{
     width: 100%;
     margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-right: 0.5rem;
+}
+
+.scanningGuide {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    padding-left: 0.5rem;
+    margin-bottom: 2rem;
 }
 
 .knappLagreModal{
     width: 100%;
     margin-top: 1rem;
     margin-bottom: 1rem;
+    margin-left: 0.5rem;
 }
 
 .modalLeggTilBarn {
