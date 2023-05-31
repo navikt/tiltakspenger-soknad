@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
 import { Tiltak } from '@/types/Tiltak';
@@ -47,7 +47,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
 
     const resetFormValues = () => {
         resetField('svar.tiltak.søkerHeleTiltaksperioden');
-        resetField('svar.tiltak.periode');
+        resetField('svar.tiltak.periode', { defaultValue: null });
     };
 
     const lagDefaultPeriode = () => {
@@ -190,15 +190,13 @@ const TiltakMedUfullstendigPeriodeUtfylling = ({
                     ? 'Vi har ikke registrert en sluttdato på dette tiltaket. Du kan legge inn sluttdato på tiltaket under.'
                     : 'Vi har ikke registrert i hvilken periode du deltar på dette tiltaket. Du kan legge inn perioden du ønsker å søke tiltakspenger for under.'}
             </Alert>
-            <Suspense fallback={<></>}>
-                <Periodespørsmål
-                    name="svar.tiltak.periode"
-                    validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-                    defaultValue={defaultPeriode}
-                >
-                    Hvilken periode søker du tiltakspenger for?
-                </Periodespørsmål>
-            </Suspense>
+            <Periodespørsmål
+                name="svar.tiltak.periode"
+                validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
+                defaultValue={defaultPeriode}
+            >
+                Hvilken periode søker du tiltakspenger for?
+            </Periodespørsmål>
         </>
     );
 };
