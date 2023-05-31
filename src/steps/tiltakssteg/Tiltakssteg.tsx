@@ -1,23 +1,16 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
 import { Tiltak } from '@/types/Tiltak';
 import { formatPeriode } from '@/utils/formatPeriode';
-import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { useFormContext } from 'react-hook-form';
-import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
-import { Alert, Button } from '@navikt/ds-react';
-import {
-    gyldigPeriodeValidator,
-    påkrevdJaNeiSpørsmålValidator,
-    påkrevdPeriodeValidator,
-    påkrevdSvarValidator,
-} from '@/utils/formValidators';
-import { FormPeriode } from '@/types/FormPeriode';
+import { Button } from '@navikt/ds-react';
+import { påkrevdSvarValidator } from '@/utils/formValidators';
 import { formatDate } from '@/utils/formatDate';
-import dayjs from 'dayjs';
-import { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
+import TiltakMedUfullstendigPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedUfullstendigPeriodeUtfylling';
+import TiltakMedPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedPeriodeUtfylling';
 
 interface TiltaksstegProps {
     onCompleted: () => void;
@@ -64,6 +57,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         return defaultVerdi;
     };
 
+    const defaultPeriode = React.useMemo(() => {
+        return lagDefaultPeriode();
+    }, [valgtTiltak]);
+
     React.useEffect(() => {
         const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
         if (valgtTiltakHarEndretSeg) {
@@ -97,10 +94,6 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         };
     };
 
-    const defaultPeriode = React.useMemo(() => {
-        return lagDefaultPeriode();
-    }, [valgtTiltak]);
-
     return (
         <Step
             title="Tiltak"
@@ -133,70 +126,3 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
         </Step>
     );
 }
-
-interface TiltakMedPeriodeUtfyllingProps {
-    valgtTiltak: Tiltak;
-}
-
-function påkrevdSøkerHeleTiltaksperiodenValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker tiltakspenger for hele tiltaksperioden');
-}
-
-function påkrevdTiltaksperiodeSpørsmål(verdi: FormPeriode) {
-    return påkrevdPeriodeValidator(verdi, 'Du må oppgi hvilken periode du søker tiltakspenger for');
-}
-
-const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingProps) => {
-    const { watch } = useFormContext();
-    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
-    return (
-        <>
-            <JaNeiSpørsmål
-                name="svar.tiltak.søkerHeleTiltaksperioden"
-                reverse
-                validate={påkrevdSøkerHeleTiltaksperiodenValidator}
-            >
-                Vi har registrert at du deltar på dette tiltaket i perioden{' '}
-                {formatPeriode(valgtTiltak.arenaRegistrertPeriode!)}. Ønsker du å søke tiltakspenger i hele denne
-                perioden?
-            </JaNeiSpørsmål>
-            {søkerHeleTiltaksperioden === false && (
-                <Periodespørsmål
-                    name="svar.tiltak.periode"
-                    minDate={new Date(valgtTiltak.arenaRegistrertPeriode!.fra)}
-                    maxDate={new Date(valgtTiltak.arenaRegistrertPeriode!.til)}
-                    validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-                >
-                    Hvilken periode søker du tiltakspenger for?
-                </Periodespørsmål>
-            )}
-        </>
-    );
-};
-
-interface TiltakMedUfullstendigPeriodeUtfyllingProps {
-    valgtTiltakManglerKunTilDato: boolean;
-    defaultPeriode?: PeriodevelgerPeriode;
-}
-
-const TiltakMedUfullstendigPeriodeUtfylling = ({
-    valgtTiltakManglerKunTilDato,
-    defaultPeriode,
-}: TiltakMedUfullstendigPeriodeUtfyllingProps) => {
-    return (
-        <>
-            <Alert variant="info" style={{ marginTop: '2rem' }}>
-                {valgtTiltakManglerKunTilDato
-                    ? 'Vi har ikke registrert en sluttdato på dette tiltaket. Du kan legge inn sluttdato på tiltaket under.'
-                    : 'Vi har ikke registrert i hvilken periode du deltar på dette tiltaket. Du kan legge inn perioden du ønsker å søke tiltakspenger for under.'}
-            </Alert>
-            <Periodespørsmål
-                name="svar.tiltak.periode"
-                validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-                defaultValue={defaultPeriode}
-            >
-                Hvilken periode søker du tiltakspenger for?
-            </Periodespørsmål>
-        </>
-    );
-};
