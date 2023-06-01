@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import dayjs from 'dayjs';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
@@ -11,23 +11,23 @@ import { formatDate } from '@/utils/formatDate';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
 import TiltakMedUfullstendigPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedUfullstendigPeriodeUtfylling';
 import TiltakMedPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedPeriodeUtfylling';
+import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 
 interface TiltaksstegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
-    tiltak: Tiltak[];
-    valgtTiltak: Tiltak | null;
 }
 
 function valgtTiltakValidator(verdi: string) {
     return påkrevdSvarValidator(verdi, 'Du må oppgi hvilket tiltak du søker tiltakspenger for');
 }
 
-export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
+export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
     const { watch, resetField } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
-    const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
+    const { tiltak, valgtTiltak } = useContext(UtfyllingContext);
+    const brukerHarRegistrerteTiltak = !!tiltak && tiltak.length > 0;
     const brukerHarValgtEtTiltak = !!valgtTiltak;
     const valgtTiltakManglerHelePerioden =
         !valgtTiltak?.arenaRegistrertPeriode &&

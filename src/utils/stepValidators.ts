@@ -74,7 +74,7 @@ export function brukerHarFyltUtOppsummeringssteg({ harBekreftetAlleOpplysninger 
     return harBekreftetAlleOpplysninger;
 }
 
-export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg) {
+export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg | null) {
     if (steg === Søknadssteg.TILTAK) {
         return svar.harBekreftetÅSvareSåGodtManKan;
     } else if (steg === Søknadssteg.KVP) {
@@ -101,5 +101,7 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
             brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
             brukerHarFyltUtOppsummeringssteg(svar)
         );
+    } else {
+        return false;
     }
 }

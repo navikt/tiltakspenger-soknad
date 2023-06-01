@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
@@ -6,12 +6,11 @@ import Step from '@/components/step/Step';
 import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
 import { FormPeriode } from '@/types/FormPeriode';
 import { formatPeriode } from '@/utils/formatPeriode';
-import { Tiltak } from '@/types/Tiltak';
+import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 
 interface KvpStegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
-    valgtTiltak: Tiltak;
 }
 
 function deltarIKvpValidator(verdi: boolean) {
@@ -38,8 +37,9 @@ function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du bor på institusjon');
 }
 
-export default function KvpSteg({ onCompleted, onGoToPreviousStep, valgtTiltak }: KvpStegProps) {
+export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProps) {
     const { watch } = useFormContext();
+    const { valgtTiltak } = useContext(UtfyllingContext);
 
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
     const tiltaksperiodeTekst = formatPeriode(brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode);
