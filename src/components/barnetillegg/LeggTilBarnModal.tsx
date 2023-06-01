@@ -20,7 +20,7 @@ interface LeggTilBarnModalProps {
 
 export interface LeggTilBarnModalImperativeHandle {
     åpneModal: (barn: Barn) => void,
-    slettBarnløseVedlegg: () => void,
+    slettVedleggUtenTilknytningTilBarn: () => void,
 }
 
 export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandle, LeggTilBarnModalProps>(function LeggTilBarnModal({fieldArray}: LeggTilBarnModalProps, ref  ) {
@@ -33,8 +33,8 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
             åpneModal(barn: Barn) {
                 åpneModal(barn)
             },
-            slettBarnløseVedlegg() {
-                slettBarnløseVedlegg()
+            slettVedleggUtenTilknytningTilBarn() {
+                slettVedleggUtenTilknytningTilBarn()
             }
         };
     }, []);
@@ -81,7 +81,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         setOpen(true);
     };
 
-    const slettBarnløseVedlegg = () => {
+    const slettVedleggUtenTilknytningTilBarn = () => {
         const barnLagtTil = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
         const vedleggMedTilknytning = getValues('vedlegg').filter(
             vedlegg => barnLagtTil.find(
@@ -93,7 +93,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
 
     const lukkModal = () => {
         clearErrors('svar.barnetillegg.kladd')
-        slettBarnløseVedlegg()
+        slettVedleggUtenTilknytningTilBarn()
         setOpen(false)
     }
 

@@ -114,7 +114,7 @@ export default function BarnetilleggSteg({onCompleted, onGoToPreviousStep, perso
                                                 variant="tertiary"
                                                 onClick={() => {
                                                     fieldArray.remove(index)
-                                                    refEndring.current?.slettBarnløseVedlegg()
+                                                    refEndring.current?.slettVedleggUtenTilknytningTilBarn()
                                                 }}
                                             >
                                                 Slett barn
