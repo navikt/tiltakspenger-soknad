@@ -148,7 +148,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                    valgtTiltak={valgtTiltak!}
                />
            )}
-           {brukerErPåSteg(Søknadssteg.INSTITUSJONSOPPHOLD) && (
+           {brukerErPåSteg(Søknadssteg.ANDRE_UTBETALINGER) && (
                <AndreUtbetalingerSteg
                    title="Andre utbetalinger"
                    stepNumber={3}
@@ -157,7 +157,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                    valgtTiltak={valgtTiltak!}
                />
            )}
-           {brukerErPåSteg(Søknadssteg.ANDRE_UTBETALINGER) && (
+           {brukerErPåSteg(Søknadssteg.INSTITUSJONSOPPHOLD) && (
                <InstitusjonsoppholdSteg
                    title="Institusjonsopphold"
                    stepNumber={4}

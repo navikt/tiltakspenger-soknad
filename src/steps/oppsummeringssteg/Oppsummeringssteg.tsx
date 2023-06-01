@@ -49,6 +49,22 @@ function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusj
     }
 }
 
+function oppsummeringAlderspensjon(mottar: boolean, fraDato: string) {
+    if (mottar) {
+        return `Ja, jeg mottar alderspensjon fra ${formatDate(fraDato!)}`;
+    } else {
+        return 'Nei, jeg mottar ikke alderspensjon';
+    }
+}
+
+function hentSvarTilSpørsmålene(spørsmålTittel: String, mottar: boolean, periode?: Periode) {
+    if (mottar) {
+        return `Ja, jeg mottar ${spørsmålTittel} i perioden ${formatPeriode(periode!)}`;
+    } else {
+        return `Nei, jeg mottar ikke ${spørsmålTittel}`;
+    }
+}
+
 function visSvarTilAndreUtbetalinger(mottarAndreUtbetalinger: boolean){
     if (mottarAndreUtbetalinger) {
         return 'Ja, jeg mottar andre offentlige, private eller utenlandske trygde- eller pensjonsordninger.';
@@ -61,7 +77,7 @@ function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
 }
 
-export default function Oppsummeringssteg({
+export default function Oppsummeringssteg(this: any, {
                                               title,
                                               stepNumber,
                                               onGoToPreviousStep,
@@ -202,134 +218,63 @@ export default function Oppsummeringssteg({
                             feltNavn="Andreutbetalinger"
                             feltVerdi={visSvarTilAndreUtbetalinger(mottarAndreUtbetalinger)}
                         />
-                            {
-                                sykepenger.periode ? (
-                                    <div style={{ marginTop: '2rem' }}>
-                                        <Oppsummeringsfelt
-                                            feltNavn="Sykepenger"
-                                            feltVerdi={`Ja, jeg mottar sykepenger i perioden ${formatPeriode(sykepenger.periode!)}`}
-                                        />
-                                    </div>
-                                ) :
-                                    <div style={{ marginTop: '2rem' }}>
-                                        <Oppsummeringsfelt
-                                            feltNavn="Sykepenger"
-                                            feltVerdi={`Ja, jeg mottar ikke sykepenger`}
-                                        />
-                                    </div>
-                            }
-                        {
-                            gjenlevendepensjon.periode ? (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Gjenlevendepensjon"
-                                        feltVerdi={`Ja, jeg mottar gjenlevendepensjon i perioden ${formatPeriode(gjenlevendepensjon.periode!)}`}
-                                    />
-                                </div>
-                            ) :
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Gjenlevendepensjon"
-                                        feltVerdi="Ja, jeg mottar ikke gjenlevendepensjon"
-                                    />
-                                </div>
-                        }
-                        {
-                            alderspensjon.fraDato ? (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Alderspensjon"
-                                        feltVerdi={`Ja, jeg mottar alderspensjon fra ${formatDate(alderspensjon.fraDato!)}`}
-                                    />
-                                </div>
-                            ) :
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Alderspensjon"
-                                        feltVerdi="Ja, jeg mottar ikke alderspnesjon"
-                                    />
-                                </div>
-                        }
-                        {
-                            pensjonsordning && pensjonsordning.mottar ? (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Pensjonsordning"
-                                        feltVerdi="Jeg mottar pensjonsordning"
-                                    />
-                                </div>
-                            ) :
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Pensjonsordning"
-                                        feltVerdi="Jeg mottar ikke pensjonsordning"
-                                    />
-                                </div>
-                        }
-                        {
-                            etterlønn && etterlønn.mottar ? (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Etterlønn"
-                                        feltVerdi="Ja, jeg mottar etterlønn"
-                                    />
-                                </div>
-                            ) :
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Etterlønn"
-                                        feltVerdi="Ja, jeg mottar ikke etterlønn"
-                                    />
-                            </div>
-                        }
-                        {
-                            supplerendestønadover67 && supplerendestønadover67.mottar ? (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Supplerende stønad for personer over 67 år med kort botid i Norge"
-                                        feltVerdi={`Ja, jeg mottar supplerende stønad for personer over 67 år med kort botid i Norge i perioden ${formatPeriode(supplerendestønadover67.periode!)}`}
-                                    />
-                                </div>
-                            ) :
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Supplerende stønad for person over 67 år"
-                                        feltVerdi="Nei, jeg mottar ikke supplerende stønad for personer over 67 år med kort botid i Norge"
-                                    />
-                                </div>
-                        }
-                        {
-                            supplerendestønadflyktninger && supplerendestønadflyktninger.mottar ? (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Supplerende stønad for uføre flyktninger"
-                                        feltVerdi={`Ja, jeg mottar supplerende stønad for uføre flyktninger i perioden ${formatPeriode(supplerendestønadflyktninger.periode!)}`}
-                                    />
-                                </div>
-                            ) :
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Supplerende stønad for uføre flyktninger"
-                                        feltVerdi="Nei, jeg mottar ikke supplerende stønad for uføre flyktninger"
-                                    />
-                                </div>
-                        }
-                        {
-                            jobbsjansen && jobbsjansen.mottar ? (
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Stønad via jobbsjansen"
-                                        feltVerdi={`Ja, jeg mottar stønad via jobbsjansen i perioden ${formatPeriode(jobbsjansen.periode!)}` }
-                                    />
-                                </div>
-                            ) :
-                                <div style={{ marginTop: '2rem' }}>
-                                <Oppsummeringsfelt
-                                    feltNavn="Stønad via jobbsjansen"
-                                    feltVerdi="Nei, jeg mottar ikke stønad via jobbsjansen"
-                                />
-                            </div>
-                        }
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Sykepenger"
+                                feltVerdi={hentSvarTilSpørsmålene("sykepenger", sykepenger.mottar, sykepenger.periode)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Gjenlevendepensjon"
+                                feltVerdi={hentSvarTilSpørsmålene("gjenlevendepensjon", gjenlevendepensjon.mottar, gjenlevendepensjon.periode)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Alderspensjon"
+                                feltVerdi={oppsummeringAlderspensjon(alderspensjon.mottar, alderspensjon.fraDato!)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Pensjonsordning"
+                                feltVerdi={hentSvarTilSpørsmålene("pensjonsordning", pensjonsordning.mottar)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Etterlønn"
+                                feltVerdi={hentSvarTilSpørsmålene("etterlønn", etterlønn.mottar)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Supplerende stønad for personer over 67 år med kort botid i Norge"
+                                feltVerdi={hentSvarTilSpørsmålene(
+                                    "supplerende stønad for personer over 67 år med kort botid i Norge",
+                                    supplerendestønadover67.mottar,
+                                    supplerendestønadover67.periode
+                                )}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Supplerende stønad for uføre flyktninger"
+                                feltVerdi={hentSvarTilSpørsmålene(
+                                    "supplerende stønad for uføre flyktninger",
+                                    supplerendestønadflyktninger.mottar,
+                                    supplerendestønadflyktninger.periode
+                                )}
+                            />
+                        </div>
+
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Stønad via jobbsjansen"
+                                feltVerdi={hentSvarTilSpørsmålene("stønad via jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
+                            />
+                        </div>
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>

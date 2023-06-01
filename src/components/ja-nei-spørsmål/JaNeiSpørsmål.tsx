@@ -12,7 +12,7 @@ interface JaNeiSpørsmålProps {
     reverse?: boolean;
 }
 
-export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst, description,  reverse }: JaNeiSpørsmålProps) {
+export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst, description, reverse }: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     const errorObject = errorMessage ? { error: <>{errorMessage}</> } : {};

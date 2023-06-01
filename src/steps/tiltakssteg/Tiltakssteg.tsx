@@ -25,13 +25,9 @@ function valgtTiltakValidator(verdi: string) {
     return påkrevdSvarValidator(verdi, 'Du må oppgi hvilket tiltak du søker tiltakspenger for');
 }
 
-<<<<<<< HEAD
 export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
-    const { watch, resetField, setValue } = useFormContext();
-=======
-export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
-    const { watch, resetField } = useFormContext();
->>>>>>> ff30d14971d3ca07206ccf054dfdef9b75158943
+    const { watch, resetField} = useFormContext();
+
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
@@ -107,12 +103,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, v
             stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-<<<<<<< HEAD
-            guide={veiledningstekst()}
-=======
-            stepNumber={1}
             guide={<Veiledningstekst brukerHarRegistrerteTiltak={brukerHarRegistrerteTiltak} />}
->>>>>>> ff30d14971d3ca07206ccf054dfdef9b75158943
             submitSectionRenderer={submitSectionRenderer}
             hideStepIndicator={!brukerHarRegistrerteTiltak}
             hideTitle={!brukerHarRegistrerteTiltak}

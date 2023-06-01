@@ -81,28 +81,38 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
         }
     }
 
-    if (pensjonsordning && pensjonsordning.mottar) {
-        if (!gjenlevendepensjon.periode) {
+    if (jobbsjansen && jobbsjansen.mottar) {
+        if (!jobbsjansen.periode) {
             return false;
         }
     }
 
-    if (jobbsjansen && jobbsjansen.mottar) {
-        if (!gjenlevendepensjon.periode) {
-            return false;
-        }
+    if (pensjonsordning === undefined) {
+        return false;
+    }
+
+    if (etterlønn === undefined) {
+        return false;
     }
 
     if (supplerendestønadover67 && supplerendestønadover67.mottar) {
-        if (!gjenlevendepensjon.periode) {
+        if (!supplerendestønadover67.periode) {
             return false;
         }
     }
 
     if (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) {
-        if (!gjenlevendepensjon.periode) {
+        if (!supplerendestønadflyktninger.periode) {
             return false;
         }
+    }
+
+    if (mottarAndreUtbetalinger && !((sykepenger && sykepenger.mottar) || (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
+        (alderspensjon && alderspensjon.mottar) || (jobbsjansen && jobbsjansen.mottar) ||
+        (supplerendestønadover67 && supplerendestønadover67.mottar) || (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
+        (pensjonsordning && pensjonsordning.mottar) || (etterlønn && etterlønn.mottar)
+    )) {
+        return false;
     }
 
     return true;
@@ -121,26 +131,26 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
         return brukerHarFyltUtTiltakssteg(svar) &&
                brukerHarFyltUtProgramDeltagelseSteg(svar);
     } else if (steg === Søknadssteg.INSTITUSJONSOPPHOLD) {
-            return (
-                brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
-                brukerHarFyltUtAndreUtbetalingerSteg(svar)
-            );
+        return (
+            brukerHarFyltUtTiltakssteg(svar) &&
+            brukerHarFyltUtProgramDeltagelseSteg(svar) &&
+            brukerHarFyltUtAndreUtbetalingerSteg(svar)
+        );
     } else if (steg === Søknadssteg.BARNETILLEGG) {
-            return (
-                brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
-                brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
-                brukerHarFyltUtInstitusjonsoppholdSteg(svar)
-            );
+        return (
+            brukerHarFyltUtTiltakssteg(svar) &&
+            brukerHarFyltUtProgramDeltagelseSteg(svar) &&
+            brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
+            brukerHarFyltUtInstitusjonsoppholdSteg(svar)
+        );
     } else if (steg === Søknadssteg.OPPSUMMERING) {
         // todo: Sjekk at bruker har fylt ut steget om barnetillegg når det er klart
-            return (
-                brukerHarFyltUtTiltakssteg(svar) &&
-                brukerHarFyltUtProgramDeltagelseSteg(svar) &&
-                brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
-                brukerHarFyltUtInstitusjonsoppholdSteg(svar)
-            );
+        return (
+            brukerHarFyltUtTiltakssteg(svar) &&
+            brukerHarFyltUtProgramDeltagelseSteg(svar) &&
+            brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
+            brukerHarFyltUtInstitusjonsoppholdSteg(svar)
+        );
     } else if (steg === Søknadssteg.KVITTERING) {
         return (
             brukerHarFyltUtTiltakssteg(svar) &&
