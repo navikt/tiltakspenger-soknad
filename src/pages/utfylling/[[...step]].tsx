@@ -1,6 +1,7 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useFormContext } from 'react-hook-form';
+import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
 import Oppsummeringssteg from '../../steps/oppsummeringssteg/Oppsummeringssteg';
 import KvpSteg from '../../steps/innledningssteg/KvpSteg';
@@ -8,7 +9,6 @@ import Tiltakssteg from '../../steps/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '../../steps/andre-utbetalingersteg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '../../steps/barnetilleggsteg/BarnetilleggSteg';
 import { getOnBehalfOfToken } from '@/utils/authentication';
-import { GetServerSidePropsContext } from 'next';
 import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
 import { Tiltak } from '@/types/Tiltak';
@@ -18,7 +18,7 @@ import { Søknadssteg } from '@/types/Søknadssteg';
 import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
 import Kvitteringsside from '@/components/kvitteringsside/Kvitteringsside';
 import SøknadResponse from '@/types/SøknadResponse';
-import toSøknadJson from '@/utils/toSøknadJson';
+import { lagFormDataForInnsending, postSøknadMultipart } from '@/utils/innsending';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -98,30 +98,6 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         const formStateErGyldig = brukerHarFyltUtNødvendigeOpplysninger(svar, søknadssteg);
         return step && step[0] === søknadssteg && formStateErGyldig;
     };
-
-    function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
-        const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
-        const formData = new FormData();
-        formData.append('søknad', søknadJson as string);
-        søknad.vedlegg
-            .filter(
-                (v) =>
-                    søknad.svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.find(
-                        (elem) => elem.uuid === v.uuid
-                    ) != undefined
-            )
-            .forEach((vedlegg, index) => {
-                formData.append(`vedlegg-${index}`, vedlegg.file);
-            });
-        return formData;
-    }
-
-    function postSøknadMultipart(formData: FormData) {
-        return fetch('/api/soknad', {
-            method: 'POST',
-            body: formData,
-        });
-    }
 
     const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
     const [innsendingstidspunkt, setInnsendingstidspunkt] = React.useState<string>();
