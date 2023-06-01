@@ -20,6 +20,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
     const { watch, resetField } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
+    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
     const { tiltak, valgtTiltak } = useContext(UtfyllingContext);
     const brukerHarRegistrerteTiltak = !!tiltak && tiltak.length > 0;
     const brukerHarValgtEtTiltak = !!valgtTiltak;
@@ -53,7 +54,7 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
 
     const defaultTiltaksperiode = React.useMemo(() => {
         return lagDefaultTiltaksperiode();
-    }, [valgtTiltak]);
+    }, [valgtTiltak, søkerHeleTiltaksperioden]);
 
     React.useEffect(() => {
         const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
@@ -61,6 +62,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
             resetFormValues();
         }
     }, [valgtAktivitetId]);
+
+    React.useEffect(() => {
+        resetField('svar.tiltak.periode', { defaultValue: null });
+    }, [søkerHeleTiltaksperioden]);
 
     const submitSectionRenderer = !brukerHarRegistrerteTiltak
         ? () => (
@@ -91,7 +96,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
                 </Flervalgsspørsmål>
             )}
             {brukerHarValgtEtTiltak && !valgtTiltakManglerHelePerioden && !valgtTiltakManglerKunTilDato && (
-                <TiltakMedPeriodeUtfylling valgtTiltak={valgtTiltak} />
+                <TiltakMedPeriodeUtfylling
+                    valgtTiltak={valgtTiltak}
+                    defaultPeriode={defaultTiltaksperiode || undefined}
+                />
             )}
             {brukerHarValgtEtTiltak && (valgtTiltakManglerHelePerioden || valgtTiltakManglerKunTilDato) && (
                 <TiltakMedUfullstendigPeriodeUtfylling

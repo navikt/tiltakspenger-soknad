@@ -9,12 +9,14 @@ import {
     påkrevdSøkerHeleTiltaksperiodenValidator,
     påkrevdTiltaksperiodeSpørsmål,
 } from '@/steps/tiltakssteg/validation';
+import { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
 
 interface TiltakMedPeriodeUtfyllingProps {
     valgtTiltak: Tiltak;
+    defaultPeriode?: PeriodevelgerPeriode;
 }
 
-const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingProps) => {
+const TiltakMedPeriodeUtfylling = ({ valgtTiltak, defaultPeriode }: TiltakMedPeriodeUtfyllingProps) => {
     const { watch } = useFormContext();
     const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
     return (
@@ -34,6 +36,7 @@ const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingPro
                     minDate={new Date(valgtTiltak.arenaRegistrertPeriode!.fra)}
                     maxDate={new Date(valgtTiltak.arenaRegistrertPeriode!.til)}
                     validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
+                    defaultValue={defaultPeriode}
                 >
                     Hvilken periode søker du tiltakspenger for?
                 </Periodespørsmål>
