@@ -24,6 +24,7 @@ export default function BarnetilleggRegistrertBarn({ barn }: BarnetilleggRegistr
             </p>
             <p><strong>Fødselsdato:</strong> {formatDate(fødselsdato)}</p>
             <JaNeiSpørsmål
+                reverse
                 name={`svar.barnetillegg.eøsOppholdForBarnFraAPI.${uuid}`}
                 validate={barnUtenforEØSValidator}
                 hjelpetekst={{

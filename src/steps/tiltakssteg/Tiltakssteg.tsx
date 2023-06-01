@@ -1,21 +1,16 @@
-import React, { Suspense } from 'react';
+import React from 'react';
+import dayjs from 'dayjs';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
 import { Tiltak } from '@/types/Tiltak';
 import { formatPeriode } from '@/utils/formatPeriode';
-import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { useFormContext } from 'react-hook-form';
-import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
-import { Alert, Button, Link } from '@navikt/ds-react';
-import {
-    gyldigPeriodeValidator,
-    påkrevdJaNeiSpørsmålValidator,
-    påkrevdPeriodeValidator,
-    påkrevdSvarValidator,
-} from '@/utils/formValidators';
-import { FormPeriode } from '@/types/FormPeriode';
+import { Button } from '@navikt/ds-react';
+import { påkrevdSvarValidator } from '@/utils/formValidators';
 import { formatDate } from '@/utils/formatDate';
-import dayjs from 'dayjs';
+import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
+import TiltakMedUfullstendigPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedUfullstendigPeriodeUtfylling';
+import TiltakMedPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedPeriodeUtfylling';
 
 interface TiltaksstegProps {
     title: string;
@@ -30,8 +25,13 @@ function valgtTiltakValidator(verdi: string) {
     return påkrevdSvarValidator(verdi, 'Du må oppgi hvilket tiltak du søker tiltakspenger for');
 }
 
+<<<<<<< HEAD
 export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
     const { watch, resetField, setValue } = useFormContext();
+=======
+export default function Tiltakssteg({ onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
+    const { watch, resetField } = useFormContext();
+>>>>>>> ff30d14971d3ca07206ccf054dfdef9b75158943
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
     const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
@@ -41,78 +41,13 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         !valgtTiltak?.arenaRegistrertPeriode?.fra &&
         !valgtTiltak?.arenaRegistrertPeriode?.til;
     const valgtTiltakManglerKunTilDato =
-        valgtTiltak?.arenaRegistrertPeriode &&
-        valgtTiltak?.arenaRegistrertPeriode.fra &&
+        !!valgtTiltak?.arenaRegistrertPeriode &&
+        !!valgtTiltak?.arenaRegistrertPeriode.fra &&
         !valgtTiltak?.arenaRegistrertPeriode.til;
 
     const resetFormValues = () => {
         resetField('svar.tiltak.søkerHeleTiltaksperioden');
-        resetField('svar.tiltak.periode');
-    };
-
-    const veiledningstekstForBrukerUtenTiltak = () => {
-        return (
-            <>
-                <p>For å ha rett til tiltakspenger må du delta i et arbeidsmarkedstiltak som er godkjent av NAV. </p>
-                <p>
-                    Det er ikke registrert at du er påmeldt, deltar på eller nylig har deltatt på et
-                    arbeidsmarkedstiltak som gir rett til tiltakspenger.
-                </p>
-                <span>Hvis du mener dette ikke er riktig kan du </span>
-                <ul>
-                    <li>
-                        Kontakte veilederen din gjennom{' '}
-                        <Link href="https://pto.dev.nav.no/arbeid/dialog" target="_blank">
-                            dialogen (åpnes i ny fane)
-                        </Link>
-                    </li>
-                    <li>Vente noen dager og prøve igjen</li>
-                    <li>
-                        <Link href="https://www.nav.no/fyllut/nav761345?sub=paper" target="_blank">
-                            Sende søknad på papir (åpnes i ny fane)
-                        </Link>
-                    </li>
-                </ul>
-            </>
-        );
-    };
-
-    const veiledningstekstForBrukerMedTiltak = () => {
-        return (
-            <>
-                <p>
-                    For å ha rett til tiltakspenger må du delta i et arbeidsmarkedstiltak som er godkjent av NAV. Listen
-                    under viser arbeidsmarkedstiltak som du enten er påmeldt, deltar på eller nylig har deltatt på. Vi
-                    viser bare dine arbeidsmarkedstiltak som gir rett til tiltakspenger.
-                </p>
-
-                <p>
-                    Hvis ikke listen under inneholder det arbeidsmarkedstiltaket som du vil søke tiltakspenger for, kan
-                    du
-                </p>
-                <ul>
-                    <li>
-                        Kontakte veilederen din gjennom{' '}
-                        <Link href="https://pto.dev.nav.no/arbeid/dialog" target="_blank">
-                            dialogen (åpnes i ny fane)
-                        </Link>
-                    </li>
-                    <li>Vente noen dager og prøve igjen</li>
-                    <li>
-                        <Link href="https://www.nav.no/fyllut/nav761345?sub=paper" target="_blank">
-                            Sende søknad på papir (åpnes i ny fane)
-                        </Link>
-                    </li>
-                </ul>
-            </>
-        );
-    };
-
-    const veiledningstekst = () => {
-        if (!brukerHarRegistrerteTiltak) {
-            return veiledningstekstForBrukerUtenTiltak();
-        }
-        return veiledningstekstForBrukerMedTiltak();
+        resetField('svar.tiltak.periode', { defaultValue: null });
     };
 
     const lagDefaultPeriode = () => {
@@ -129,10 +64,8 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         return defaultVerdi;
     };
 
-    React.useEffect(() => {
-        if (valgtTiltakManglerKunTilDato) {
-            setValue('svar.tiltak.periode', lagDefaultPeriode());
-        }
+    const defaultPeriode = React.useMemo(() => {
+        return lagDefaultPeriode();
     }, [valgtTiltak]);
 
     React.useEffect(() => {
@@ -174,7 +107,12 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
             stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
+<<<<<<< HEAD
             guide={veiledningstekst()}
+=======
+            stepNumber={1}
+            guide={<Veiledningstekst brukerHarRegistrerteTiltak={brukerHarRegistrerteTiltak} />}
+>>>>>>> ff30d14971d3ca07206ccf054dfdef9b75158943
             submitSectionRenderer={submitSectionRenderer}
             hideStepIndicator={!brukerHarRegistrerteTiltak}
             hideTitle={!brukerHarRegistrerteTiltak}
@@ -191,79 +129,12 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
             {brukerHarValgtEtTiltak && !valgtTiltakManglerHelePerioden && !valgtTiltakManglerKunTilDato && (
                 <TiltakMedPeriodeUtfylling valgtTiltak={valgtTiltak} />
             )}
-            {brukerHarValgtEtTiltak && valgtTiltakManglerHelePerioden && (
-                <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={false} />
-            )}
-            {brukerHarValgtEtTiltak && valgtTiltakManglerKunTilDato && (
-                <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={true} />
+            {brukerHarValgtEtTiltak && (valgtTiltakManglerHelePerioden || valgtTiltakManglerKunTilDato) && (
+                <TiltakMedUfullstendigPeriodeUtfylling
+                    valgtTiltakManglerKunTilDato={valgtTiltakManglerKunTilDato}
+                    defaultPeriode={defaultPeriode || undefined}
+                />
             )}
         </Step>
     );
 }
-
-interface TiltakMedPeriodeUtfyllingProps {
-    valgtTiltak: Tiltak;
-}
-
-function påkrevdSøkerHeleTiltaksperiodenValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker tiltakspenger for hele tiltaksperioden');
-}
-
-function påkrevdTiltaksperiodeSpørsmål(verdi: FormPeriode) {
-    return påkrevdPeriodeValidator(verdi, 'Du må oppgi hvilken periode du søker tiltakspenger for');
-}
-
-const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingProps) => {
-    const { watch } = useFormContext();
-    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
-    return (
-        <>
-            <JaNeiSpørsmål
-                name="svar.tiltak.søkerHeleTiltaksperioden"
-                reverse
-                validate={påkrevdSøkerHeleTiltaksperiodenValidator}
-            >
-                Vi har registrert at du deltar på dette tiltaket i perioden{' '}
-                {formatPeriode(valgtTiltak.arenaRegistrertPeriode!)}. Ønsker du å søke tiltakspenger i hele denne
-                perioden?
-            </JaNeiSpørsmål>
-            {søkerHeleTiltaksperioden === false && (
-                <Periodespørsmål
-                    name="svar.tiltak.periode"
-                    minDate={new Date(valgtTiltak.arenaRegistrertPeriode!.fra)}
-                    maxDate={new Date(valgtTiltak.arenaRegistrertPeriode!.til)}
-                    validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-                >
-                    Hvilken periode søker du tiltakspenger for?
-                </Periodespørsmål>
-            )}
-        </>
-    );
-};
-
-interface TiltakMedUfullstendigPeriodeUtfyllingProps {
-    valgtTiltakManglerKunTilDato: boolean;
-}
-
-const TiltakMedUfullstendigPeriodeUtfylling = ({
-    valgtTiltakManglerKunTilDato,
-}: TiltakMedUfullstendigPeriodeUtfyllingProps) => {
-    const PeriodespørsmålLazy = React.lazy(() => import('./../../components/periodespørsmål/Periodespørsmål'));
-    return (
-        <>
-            <Alert variant="info" style={{ marginTop: '2rem' }}>
-                {valgtTiltakManglerKunTilDato
-                    ? 'Vi har ikke registrert en sluttdato på dette tiltaket. Du kan legge inn sluttdato på tiltaket under.'
-                    : 'Vi har ikke registrert i hvilken periode du deltar på dette tiltaket. Du kan legge inn perioden du ønsker å søke tiltakspenger for under.'}
-            </Alert>
-            <Suspense fallback={<></>}>
-                <PeriodespørsmålLazy
-                    name="svar.tiltak.periode"
-                    validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-                >
-                    Hvilken periode søker du tiltakspenger for?
-                </PeriodespørsmålLazy>
-            </Suspense>
-        </>
-    );
-};

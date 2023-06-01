@@ -40,6 +40,7 @@ function App({ Component, pageProps }: AppProps) {
             },
             vedlegg: [],
         },
+        mode: 'onSubmit',
     });
 
     return (

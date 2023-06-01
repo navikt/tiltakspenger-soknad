@@ -114,7 +114,10 @@ export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoTo
                                                 icon={<TrashIcon aria-hidden/>}
                                                 size="small"
                                                 variant="tertiary"
-                                                onClick={() => fieldArray.remove(index)}
+                                                onClick={() => {
+                                                    fieldArray.remove(index)
+                                                    refEndring.current?.slettVedleggUtenTilknytningTilBarn()
+                                                }}
                                             >
                                                 Slett barn
                                             </Button>
