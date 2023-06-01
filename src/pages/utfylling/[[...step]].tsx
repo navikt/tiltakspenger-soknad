@@ -94,37 +94,9 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         navigateToPath('/utfylling/kvittering', shallow);
     const navigerBrukerTilGenerellFeilside = () => navigateToPath('/feil', false);
 
-    const brukerErPåTiltakssteg = () => {
-        const formStateErPåTiltakssteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.TILTAK);
-        return step && step[0] === Søknadssteg.TILTAK && formStateErPåTiltakssteg;
-    };
-
-    const brukerErPåKvpSteg = () => {
-        const formStateErPåKvpsteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVP);
-        return step && step[0] === Søknadssteg.KVP && formStateErPåKvpsteg;
-    };
-
-    const brukerErPåAndreUtbetalingerSteg = () => {
-        const formStateErPåAndreUtbetalingerSteg = brukerHarFyltUtNødvendigeOpplysninger(
-            svar,
-            Søknadssteg.ANDRE_UTBETALINGER
-        );
-        return step && step[0] === Søknadssteg.ANDRE_UTBETALINGER && formStateErPåAndreUtbetalingerSteg;
-    };
-
-    const brukerErPåBarnetilleggSteg = () => {
-        const formStateErPåBarnetilleggSteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.BARNETILLEGG);
-        return step && step[0] === Søknadssteg.BARNETILLEGG && formStateErPåBarnetilleggSteg;
-    };
-
-    const brukerErPåOppsummeringssteg = () => {
-        const formStateErPåOppsummeringssteg = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.OPPSUMMERING);
-        return step && step[0] === Søknadssteg.OPPSUMMERING && formStateErPåOppsummeringssteg;
-    };
-
-    const brukerErPåKvitteringssiden = () => {
-        const formStateErPåKvitteringssiden = brukerHarFyltUtNødvendigeOpplysninger(svar, Søknadssteg.KVITTERING);
-        return step && step[0] === Søknadssteg.KVITTERING && formStateErPåKvitteringssiden;
+    const brukerErPåSteg = (søknadssteg: Søknadssteg) => {
+        const formStateErGyldig = brukerHarFyltUtNødvendigeOpplysninger(svar, søknadssteg);
+        return step && step[0] === søknadssteg && formStateErGyldig;
     };
 
     function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
@@ -176,7 +148,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
 
     return (
         <>
-            {brukerErPåTiltakssteg() && (
+            {brukerErPåSteg(Søknadssteg.TILTAK) && (
                 <Tiltakssteg
                     onCompleted={navigerBrukerTilKvpSteg}
                     onGoToPreviousStep={() => navigerBrukerTilIntroside(false)}
@@ -184,24 +156,24 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                     valgtTiltak={valgtTiltak}
                 />
             )}
-            {brukerErPåKvpSteg() && (
+            {brukerErPåSteg(Søknadssteg.KVP) && (
                 <KvpSteg
                     onCompleted={navigerBrukerTilAndreUtbetalingerSteg}
                     onGoToPreviousStep={goBack}
                     valgtTiltak={valgtTiltak!}
                 />
             )}
-            {brukerErPåAndreUtbetalingerSteg() && (
+            {brukerErPåSteg(Søknadssteg.ANDRE_UTBETALINGER) && (
                 <AndreUtbetalingerSteg onCompleted={navigerBrukerTilBarnetilleggSteg} onGoToPreviousStep={goBack} />
             )}
-            {brukerErPåBarnetilleggSteg() && (
+            {brukerErPåSteg(Søknadssteg.BARNETILLEGG) && (
                 <BarnetilleggSteg
                     onCompleted={navigerBrukerTilOppsummeringssteg}
                     onGoToPreviousStep={goBack}
                     personalia={personalia}
                 />
             )}
-            {brukerErPåOppsummeringssteg() && (
+            {brukerErPåSteg(Søknadssteg.OPPSUMMERING) && (
                 <Oppsummeringssteg
                     onGoToPreviousStep={goBack}
                     personalia={personalia}
@@ -210,7 +182,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
                     onCompleted={sendInnSøknad}
                 />
             )}
-            {brukerErPåKvitteringssiden() && (
+            {brukerErPåSteg(Søknadssteg.KVITTERING) && (
                 <Kvitteringsside personalia={personalia} innsendingstidspunkt={innsendingstidspunkt!} />
             )}
         </>
