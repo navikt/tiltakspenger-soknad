@@ -89,7 +89,6 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
         case Søknadssteg.KVITTERING:
             return <Kvitteringsside personalia={personalia!} innsendingstidspunkt={innsendingstidspunkt!} />;
         default:
-            navigateToError();
             return <></>;
     }
 };
