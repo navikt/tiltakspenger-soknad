@@ -122,6 +122,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             type: 'Annen utdanning',
             typeNavn: 'Annen utdanning',
             deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
+            arenaRegistrertPeriode: { fra: '2025-04-01', til: '2025-04-10' },
             arrangør: 'Testarrangør',
             status: 'Aktuell',
         },

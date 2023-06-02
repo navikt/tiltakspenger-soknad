@@ -3,51 +3,36 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
-import { FormPeriode } from '@/types/FormPeriode';
+import { gyldigPeriodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
+import { Periode } from '@/types/Periode';
+import {
+    borPåInstitusjonValidator,
+    deltarIIntroprogrammetValidator,
+    deltarIKvpValidator,
+    periodenErInnenforTiltaksperiodeValidator,
+    påkrevdInstitusjonsoppholdPeriodeValidator,
+    påkrevdIntroprogramPeriodeValidator,
+    påkrevdKvpPeriodeValidator,
+} from '@/steps/innledningssteg/validation';
 
 interface KvpStegProps {
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
 }
 
-function deltarIKvpValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i kvalifiseringsprogrammet');
-}
-
-function deltarIIntroprogrammetValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i introduksjonsprogrammet');
-}
-
-function borPåInstitusjonValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du bor på institusjon');
-}
-
-function påkrevdKvpPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i kvalifiseringsprogrammet');
-}
-
-function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
-}
-
-function påkrevdInstitusjonsoppholdPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du bor på institusjon');
-}
-
 export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProps) {
     const { watch } = useFormContext();
     const { valgtTiltak } = useContext(UtfyllingContext);
 
-    const brukerregistrertPeriode = watch('svar.tiltak.periode');
-    const tiltaksperiodeTekst = formatPeriode(brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode);
+    const brukerregistrertPeriode = watch('svar.tiltak.periode') as Periode;
+    const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
+    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
     const watchBorPåInstitusjon = watch('svar.institusjonsopphold.borPåInstitusjon');
-
     return (
         <Step
             title="Kvalifiseringsprogrammet, introduksjonsprogrammet og institusjonsopphold"
@@ -99,7 +84,13 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
                 {watchDeltarIKvp && (
                     <Periodespørsmål
                         name="svar.kvalifiseringsprogram.periode"
-                        validate={[gyldigPeriodeValidator, påkrevdKvpPeriodeValidator]}
+                        validate={[
+                            gyldigPeriodeValidator,
+                            påkrevdKvpPeriodeValidator,
+                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                        ]}
+                        minDate={new Date(tiltaksperiode?.fra)}
+                        maxDate={new Date(tiltaksperiode?.til)}
                     >
                         Når deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
@@ -129,7 +120,13 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
                 {watchDeltarIIntroprogrammet && (
                     <Periodespørsmål
                         name="svar.introduksjonsprogram.periode"
-                        validate={[gyldigPeriodeValidator, påkrevdIntroprogramPeriodeValidator]}
+                        validate={[
+                            gyldigPeriodeValidator,
+                            påkrevdIntroprogramPeriodeValidator,
+                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                        ]}
+                        minDate={new Date(tiltaksperiode?.fra)}
+                        maxDate={new Date(tiltaksperiode?.til)}
                     >
                         Når deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
@@ -147,7 +144,13 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
                 {watchBorPåInstitusjon && (
                     <Periodespørsmål
                         name="svar.institusjonsopphold.periode"
-                        validate={[gyldigPeriodeValidator, påkrevdInstitusjonsoppholdPeriodeValidator]}
+                        validate={[
+                            gyldigPeriodeValidator,
+                            påkrevdInstitusjonsoppholdPeriodeValidator,
+                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                        ]}
+                        minDate={new Date(tiltaksperiode?.fra)}
+                        maxDate={new Date(tiltaksperiode?.til)}
                     >
                         I hvilken periode bor du på institusjon med gratis opphold, mat og drikke?
                     </Periodespørsmål>

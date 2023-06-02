@@ -1,5 +1,6 @@
 import { FormPeriode } from '@/types/FormPeriode';
 import dayjs from 'dayjs';
+import { Periode } from '@/types/Periode';
 
 export function påkrevdJaNeiSpørsmålValidator(verdi: boolean, feilmelding: string) {
     if (verdi !== false && verdi !== true) {
@@ -42,6 +43,19 @@ export function påkrevdFritekstfeltValidator(verdi: string, feilmelding: string
 
 export function påkrevdSvarValidator(verdi: string, feilmelding: string) {
     if (!verdi) {
+        return feilmelding;
+    }
+}
+
+export function periodeInngårIAnnenPeriodeValidator(
+    periode: FormPeriode,
+    periodeÅValidereMot: Periode | FormPeriode,
+    feilmelding: string
+) {
+    const fraDato = dayjs(periode?.fra);
+    const tilDato = dayjs(periode?.til);
+
+    if (fraDato.isBefore(periodeÅValidereMot.fra) || tilDato.isAfter(periodeÅValidereMot.til)) {
         return feilmelding;
     }
 }

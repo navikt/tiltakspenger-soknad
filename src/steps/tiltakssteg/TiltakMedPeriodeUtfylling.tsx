@@ -6,6 +6,7 @@ import { formatPeriode } from '@/utils/formatPeriode';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import { gyldigPeriodeValidator } from '@/utils/formValidators';
 import {
+    innenforArenaRegistrertPeriodeValidator,
     påkrevdSøkerHeleTiltaksperiodenValidator,
     påkrevdTiltaksperiodeSpørsmål,
 } from '@/steps/tiltakssteg/validation';
@@ -35,7 +36,12 @@ const TiltakMedPeriodeUtfylling = ({ valgtTiltak, defaultPeriode }: TiltakMedPer
                     name="svar.tiltak.periode"
                     minDate={new Date(valgtTiltak.arenaRegistrertPeriode!.fra)}
                     maxDate={new Date(valgtTiltak.arenaRegistrertPeriode!.til)}
-                    validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
+                    validate={[
+                        gyldigPeriodeValidator,
+                        påkrevdTiltaksperiodeSpørsmål,
+                        (periode) =>
+                            innenforArenaRegistrertPeriodeValidator(periode, valgtTiltak.arenaRegistrertPeriode!),
+                    ]}
                     defaultValue={defaultPeriode}
                 >
                     Hvilken periode søker du tiltakspenger for?
