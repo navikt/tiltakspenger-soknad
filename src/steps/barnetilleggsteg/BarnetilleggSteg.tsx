@@ -87,38 +87,50 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
                             Barn lagt til av deg
                         </Heading>
                         <div className="marginTop">
-                            {fieldArray.fields.map((field, index) => (
-                                <div className={styles.barnetillegg} key={field.id}>
-                                    <BarneInfo
-                                        barn={field as Barn}
-                                        vedlegg={vedlegg.filter((vedlegg) => vedlegg.uuid === field.uuid)}
-                                    />
-                                    <div className={styles.knapperEgenregistertBarn}>
-                                        <Button
-                                            icon={<PencilIcon aria-hidden />}
-                                            size="small"
-                                            variant="tertiary"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                refEndring.current?.åpneModal({ ...(field as Barn), index: index });
-                                            }}
-                                        >
-                                            Endre informasjon
-                                        </Button>
-                                        <Button
-                                            icon={<TrashIcon aria-hidden />}
-                                            size="small"
-                                            variant="tertiary"
-                                            onClick={() => {
-                                                fieldArray.remove(index);
-                                                refEndring.current?.slettVedleggUtenTilknytningTilBarn();
-                                            }}
-                                        >
-                                            Slett barn
-                                        </Button>
+                            {fieldArray.fields.map((field, index) => {
+                                const manglerVedlegg = !vedlegg.find(vedlegg => vedlegg.uuid === field.uuid)
+                                return (
+                                    <div className={styles.barnetillegg} key={field.id}>
+                                        <BarneInfo
+                                            barn={field as Barn}
+                                            vedlegg={vedlegg.filter((vedlegg) => vedlegg.uuid === field.uuid)}
+                                        />
+                                        <div className={styles.knapperEgenregistertBarn}>
+                                            <Button
+                                                icon={<PencilIcon aria-hidden/>}
+                                                size="small"
+                                                variant="tertiary"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    refEndring.current?.åpneModal({...(field as Barn), index: index});
+                                                }}
+                                            >
+                                                Endre informasjon
+                                            </Button>
+                                            <Button
+                                                icon={<TrashIcon aria-hidden/>}
+                                                size="small"
+                                                variant="tertiary"
+                                                onClick={() => {
+                                                    fieldArray.remove(index);
+                                                    refEndring.current?.slettVedleggUtenTilknytningTilBarn();
+                                                }}
+                                            >
+                                                Slett barn
+                                            </Button>
+                                        </div>
+                                        {manglerVedlegg &&
+                                            <Alert
+                                                variant={"warning"}
+                                                size={"small"}
+                                                style={{marginTop: "1rem"}}
+                                            >
+                                                Dokumentasjon er ikke lastet opp.
+                                            </Alert>
+                                        }
                                     </div>
-                                </div>
-                            ))}
+                                )
+                            })}
                         </div>
                     </>
                 )}
