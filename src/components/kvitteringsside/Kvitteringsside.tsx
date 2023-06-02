@@ -16,20 +16,18 @@ interface KvitteringssideProps {
 export default function Kvitteringsside({ personalia, innsendingstidspunkt }: KvitteringssideProps) {
     const { getValues } = useFormContext<Søknad>();
     const manueltRegistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
-    console.log("Barn", manueltRegistrerteBarn);
     const vedlegg = getValues('vedlegg');
-    console.log("vedlegg", vedlegg)
     const manueltRegistrerteBarnUtenVedlegg = manueltRegistrerteBarn.filter(
         barn => {
             const ikkeFunnet = !vedlegg.find(
                 vedlegg => barn.uuid === vedlegg.uuid)
-            console.log("ikkeFunnet", ikkeFunnet)
             return ikkeFunnet
         }
     );
     const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
         innsendingstidspunkt
     )}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
+
     return (
         <div>
             <p>

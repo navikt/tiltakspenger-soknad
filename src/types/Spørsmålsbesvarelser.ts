@@ -32,14 +32,40 @@ export interface Barnetillegg {
 }
 
 export interface Pensjonsordning {
-    mottarEllerSøktPensjonsordning: boolean;
-    utbetaler: string;
-    periode: Periode;
+    mottar: boolean;
 }
 
 export interface Etterlønn {
-    mottarEllerSøktEtterlønn: boolean;
-    utbetaler: string;
+    mottar: boolean;
+}
+
+export interface Sykepenger {
+    mottar: boolean;
+    periode: Periode;
+}
+
+export interface Gjenlevendepensjon {
+    mottar: boolean;
+    periode: Periode;
+}
+
+export interface Alderspensjon {
+    mottar: boolean;
+    fraDato: string;
+}
+
+export interface Supplerendestønadover67 {
+    mottar: boolean;
+    periode: Periode;
+}
+
+export interface Supplerendestønadflyktninger {
+    mottar: boolean;
+    periode: Periode;
+}
+
+export interface Jobbsjansen {
+    mottar: boolean;
     periode: Periode;
 }
 
@@ -48,9 +74,16 @@ interface Spørsmålsbesvarelser {
     introduksjonsprogram: Introduksjonsprogram;
     institusjonsopphold: Institusjonsopphold;
     tiltak: FormTiltak;
-    barnetillegg: Barnetillegg;
+    mottarAndreUtbetalinger: boolean;
+    sykepenger: Sykepenger;
+    gjenlevendepensjon: Gjenlevendepensjon;
+    alderspensjon: Alderspensjon;
+    supplerendestønadover67: Supplerendestønadover67;
+    supplerendestønadflyktninger: Supplerendestønadflyktninger;
     pensjonsordning: Pensjonsordning;
     etterlønn: Etterlønn;
+    jobbsjansen: Jobbsjansen;
+    barnetillegg: Barnetillegg;
     harBekreftetAlleOpplysninger: boolean;
     harBekreftetÅSvareSåGodtManKan: boolean;
 }

@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { Søknadssteg } from '@/types/Søknadssteg';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import Tiltakssteg from '@/steps/tiltakssteg/Tiltakssteg';
-import KvpSteg from '@/steps/innledningssteg/KvpSteg';
 import AndreUtbetalingerSteg from '@/steps/andre-utbetalingersteg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/steps/barnetilleggsteg/BarnetilleggSteg';
 import Oppsummeringssteg from '@/steps/oppsummeringssteg/Oppsummeringssteg';
@@ -12,6 +11,8 @@ import { lagFormDataForInnsending, postSøknadMultipart } from '@/utils/innsendi
 import SøknadResponse from '@/types/SøknadResponse';
 import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
+import ProgramDeltagelseSteg from "@/steps/programdeltagelsesteg/ProgramDeltagelseSteg";
+import InstitusjonsoppholdSteg from "@/steps/institusjonsoppholdsteg/InstitusjonsoppholdSteg";
 
 interface AktivtSøknadsstegProps {
     steg: Søknadssteg | null;
@@ -59,21 +60,49 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
 
     switch (steg) {
         case Søknadssteg.TILTAK:
-            return <Tiltakssteg onCompleted={() => navigateTo(Søknadssteg.KVP)} onGoToPreviousStep={navigateToHome} />;
-        case Søknadssteg.KVP:
             return (
-                <KvpSteg onCompleted={() => navigateTo(Søknadssteg.ANDRE_UTBETALINGER)} onGoToPreviousStep={goBack} />
+                <Tiltakssteg
+                    title="Tiltak"
+                    stepNumber={1}
+                    onCompleted={() => navigateTo(Søknadssteg.PROGRAM_DELTAGELSE)}
+                    onGoToPreviousStep={navigateToHome}
+                />
+        );
+        case Søknadssteg.PROGRAM_DELTAGELSE:
+            return (
+                <ProgramDeltagelseSteg
+                    title="Introduksjonsprogrammet og kvalifiseringsprogrammet"
+                    stepNumber={2}
+                    onCompleted={() => navigateTo(Søknadssteg.ANDRE_UTBETALINGER)}
+                    onGoToPreviousStep={goBack}
+                    valgtTiltak={valgtTiltak!}
+                />
             );
         case Søknadssteg.ANDRE_UTBETALINGER:
             return (
                 <AndreUtbetalingerSteg
+                    title="Andre utbetalinger"
+                    stepNumber={3}
+                    onCompleted={() => navigateTo(Søknadssteg.INSTITUSJONSOPPHOLD)}
+                    onGoToPreviousStep={goBack}
+                    valgtTiltak={valgtTiltak!}
+                />
+            );
+        case Søknadssteg.INSTITUSJONSOPPHOLD:
+            return (
+                <InstitusjonsoppholdSteg
+                    title="Institusjonsopphold"
+                    stepNumber={4}
                     onCompleted={() => navigateTo(Søknadssteg.BARNETILLEGG)}
                     onGoToPreviousStep={goBack}
+                    valgtTiltak={valgtTiltak!}
                 />
             );
         case Søknadssteg.BARNETILLEGG:
             return (
                 <BarnetilleggSteg
+                    title="Barnetillegg"
+                    stepNumber={5}
                     onCompleted={() => navigateTo(Søknadssteg.OPPSUMMERING)}
                     onGoToPreviousStep={goBack}
                 />
@@ -81,6 +110,8 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
         case Søknadssteg.OPPSUMMERING:
             return (
                 <Oppsummeringssteg
+                    title="Oppsummering"
+                    stepNumber={6}
                     onGoToPreviousStep={goBack}
                     søknadsinnsendingInProgress={søknadsinnsendingInProgress}
                     onCompleted={sendInnSøknad}
