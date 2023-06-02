@@ -1,12 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { useFormContext } from 'react-hook-form';
 import { Accordion, Button } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
-import { Personalia } from '@/types/Personalia';
 import { Periode } from '@/types/Periode';
 import { formatPeriode } from '@/utils/formatPeriode';
-import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import Søknad from '@/types/Søknad';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
@@ -14,13 +12,12 @@ import styles from './Oppsummeringssteg.module.css';
 import stepStyles from './../../components/step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import BarneInfo from '@/components/barnetillegg/BarneInfo';
+import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 
 interface OppsummeringsstegProps {
     title: string;
     stepNumber: number;
     onGoToPreviousStep: () => void;
-    personalia: Personalia;
-    valgtTiltak: Tiltak;
     onCompleted: () => void;
     søknadsinnsendingInProgress: boolean;
 }
@@ -81,16 +78,14 @@ export default function Oppsummeringssteg(this: any, {
                                               title,
                                               stepNumber,
                                               onGoToPreviousStep,
-                                              personalia,
-                                              valgtTiltak,
                                               onCompleted,
                                               søknadsinnsendingInProgress,
                                           }: OppsummeringsstegProps) {
     const { getValues } = useFormContext();
+    const { personalia, valgtTiltak } = useContext(UtfyllingContext);
     const søknad: Søknad = getValues() as Søknad;
     const svar = søknad.svar;
     const {
-        harBekreftetÅSvareSåGodtManKan,
         kvalifiseringsprogram,
         introduksjonsprogram,
         pensjonsordning,
@@ -114,12 +109,12 @@ export default function Oppsummeringssteg(this: any, {
         !valgtTiltak?.arenaRegistrertPeriode.fra ||
         !valgtTiltak?.arenaRegistrertPeriode.til;
 
-    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak.arenaRegistrertPeriode : tiltak.periode;
+    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak!.arenaRegistrertPeriode : tiltak.periode;
     const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
     const alleBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
         .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
-        .concat(personalia.barn);
+        .concat(personalia!.barn);
 
     return (
         <Step
@@ -158,10 +153,12 @@ export default function Oppsummeringssteg(this: any, {
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Navn"
-                            feltVerdi={`${personalia.fornavn} ${personalia.etternavn}`}
+                            feltVerdi={`${personalia!.fornavn} ${
+                                personalia!.mellomnavn ? `${personalia!.mellomnavn} ` : ''
+                            }${personalia!.etternavn}`}
                         />
                         <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt feltNavn="Fødselsnummer" feltVerdi={`${personalia.fødselsnummer}`} />
+                            <Oppsummeringsfelt feltNavn="Fødselsnummer" feltVerdi={`${personalia!.fødselsnummer}`} />
                         </div>
                     </Accordion.Content>
                 </Accordion.Item>
@@ -268,7 +265,6 @@ export default function Oppsummeringssteg(this: any, {
                                 )}
                             />
                         </div>
-
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Stønad via jobbsjansen"
@@ -293,11 +289,21 @@ export default function Oppsummeringssteg(this: any, {
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
                         {alleBarnSøktBarnetilleggFor.map((barn, index) => {
-                            const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid)
-                            return <div style={{marginTop: index == 0 ? '0rem' : '2rem' }}>
-                                <BarneInfo vedlegg={barnetsVedlegg} barn={{...barn, oppholdUtenforEØS: barn.oppholdUtenforEØS ?? barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid]}}/>
-                                {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr/> }
-                            </div>;
+                            const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid);
+                            return (
+                                <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }}>
+                                    <BarneInfo
+                                        vedlegg={barnetsVedlegg}
+                                        barn={{
+                                            ...barn,
+                                            oppholdUtenforEØS:
+                                                barn.oppholdUtenforEØS ??
+                                                barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
+                                        }}
+                                    />
+                                    {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
+                                </div>
+                            );
                         })}
                     </Accordion.Content>
                 </Accordion.Item>

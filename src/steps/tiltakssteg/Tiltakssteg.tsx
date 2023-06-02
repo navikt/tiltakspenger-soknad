@@ -1,36 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import dayjs from 'dayjs';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
-import { Tiltak } from '@/types/Tiltak';
-import { formatPeriode } from '@/utils/formatPeriode';
 import { useFormContext } from 'react-hook-form';
 import { Button } from '@navikt/ds-react';
-import { påkrevdSvarValidator } from '@/utils/formValidators';
-import { formatDate } from '@/utils/formatDate';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
 import TiltakMedUfullstendigPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedUfullstendigPeriodeUtfylling';
 import TiltakMedPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedPeriodeUtfylling';
+import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
+import { valgtTiltakValidator } from '@/steps/tiltakssteg/validation';
+import { lagSvaralternativForTiltak } from '@/steps/tiltakssteg/utils';
 
 interface TiltaksstegProps {
     title: string;
     stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
-    tiltak: Tiltak[];
-    valgtTiltak: Tiltak | null;
 }
 
-function valgtTiltakValidator(verdi: string) {
-    return påkrevdSvarValidator(verdi, 'Du må oppgi hvilket tiltak du søker tiltakspenger for');
-}
-
-export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPreviousStep, tiltak, valgtTiltak }: TiltaksstegProps) {
-    const { watch, resetField} = useFormContext();
-
+export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
+    const { watch, resetField } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
-    const brukerHarRegistrerteTiltak = tiltak && tiltak.length > 0;
+    const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
+    const { tiltak, valgtTiltak } = useContext(UtfyllingContext);
+    const brukerHarRegistrerteTiltak = !!tiltak && tiltak.length > 0;
     const brukerHarValgtEtTiltak = !!valgtTiltak;
     const valgtTiltakManglerHelePerioden =
         !valgtTiltak?.arenaRegistrertPeriode &&
@@ -46,7 +40,7 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         resetField('svar.tiltak.periode', { defaultValue: null });
     };
 
-    const lagDefaultPeriode = () => {
+    const lagDefaultTiltaksperiode = () => {
         let defaultVerdi = null;
         const brukerHarFyltUtPeriodeAllerede = periode?.fra && periode?.til;
         if (brukerHarFyltUtPeriodeAllerede) {
@@ -60,9 +54,9 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         return defaultVerdi;
     };
 
-    const defaultPeriode = React.useMemo(() => {
-        return lagDefaultPeriode();
-    }, [valgtTiltak]);
+    const defaultTiltaksperiode = React.useMemo(() => {
+        return lagDefaultTiltaksperiode();
+    }, [valgtTiltak, søkerHeleTiltaksperioden]);
 
     React.useEffect(() => {
         const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
@@ -71,6 +65,10 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         }
     }, [valgtAktivitetId]);
 
+    React.useEffect(() => {
+        resetField('svar.tiltak.periode', { defaultValue: null });
+    }, [søkerHeleTiltaksperioden]);
+
     const submitSectionRenderer = !brukerHarRegistrerteTiltak
         ? () => (
               <Button style={{ margin: '1rem auto', display: 'block' }} type="button">
@@ -78,24 +76,6 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
               </Button>
           )
         : undefined;
-
-    const lagTiltaksalternativTekst = ({ typeNavn, arrangør, arenaRegistrertPeriode }: Tiltak) => {
-        const tiltakstypeOgArrangør = `${typeNavn} - ${arrangør}`;
-        if (arenaRegistrertPeriode?.fra && !arenaRegistrertPeriode?.til) {
-            return `${tiltakstypeOgArrangør}. Startdato: ${formatDate(arenaRegistrertPeriode!.fra)}`;
-        }
-        if (arenaRegistrertPeriode?.fra && arenaRegistrertPeriode?.til) {
-            return `${tiltakstypeOgArrangør}. Periode: ${formatPeriode(arenaRegistrertPeriode!)}`;
-        }
-        return tiltakstypeOgArrangør;
-    };
-
-    const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
-        return {
-            tekst: lagTiltaksalternativTekst(tiltak),
-            value: tiltak.aktivitetId,
-        };
-    };
 
     return (
         <Step
@@ -118,12 +98,15 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
                 </Flervalgsspørsmål>
             )}
             {brukerHarValgtEtTiltak && !valgtTiltakManglerHelePerioden && !valgtTiltakManglerKunTilDato && (
-                <TiltakMedPeriodeUtfylling valgtTiltak={valgtTiltak} />
+                <TiltakMedPeriodeUtfylling
+                    valgtTiltak={valgtTiltak}
+                    defaultPeriode={defaultTiltaksperiode || undefined}
+                />
             )}
             {brukerHarValgtEtTiltak && (valgtTiltakManglerHelePerioden || valgtTiltakManglerKunTilDato) && (
                 <TiltakMedUfullstendigPeriodeUtfylling
                     valgtTiltakManglerKunTilDato={valgtTiltakManglerKunTilDato}
-                    defaultPeriode={defaultPeriode || undefined}
+                    defaultPeriode={defaultTiltaksperiode || undefined}
                 />
             )}
         </Step>
