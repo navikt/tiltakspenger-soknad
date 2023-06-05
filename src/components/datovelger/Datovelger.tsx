@@ -25,6 +25,7 @@ export default function Datovelger({
     const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
         onDateChange,
         fromDate: minDate,
+        defaultMonth: minDate,
         toDate: datoMåVæreIFortid ? new Date() : maxDate,
         defaultSelected: defaultSelected,
         onValidate: (val) => {
