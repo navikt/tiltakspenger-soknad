@@ -3,10 +3,9 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import { gyldigPeriodeValidator } from '@/utils/formValidators';
+import { gyldigPeriodeValidator, periodenErInnenforTiltaksperiodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
-import { periodenErInnenforTiltaksperiodeValidator } from '@/steps/programdeltagelsesteg/validation';
 import {
     borPåInstitusjonValidator,
     påkrevdInstitusjonsoppholdPeriodeValidator,

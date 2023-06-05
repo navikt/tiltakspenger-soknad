@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import { FormPeriode } from '@/types/FormPeriode';
 import { Periode } from '@/types/Periode';
+import { formatPeriode } from '@/utils/formatPeriode';
 
 export function påkrevdJaNeiSpørsmålValidator(verdi: boolean, feilmelding: string) {
     if (verdi !== false && verdi !== true) {
@@ -58,4 +59,12 @@ export function periodeInngårIAnnenPeriodeValidator(
     if (fraDato.isBefore(periodeÅValidereMot.fra) || tilDato.isAfter(periodeÅValidereMot.til)) {
         return feilmelding;
     }
+}
+
+export function periodenErInnenforTiltaksperiodeValidator(periode: FormPeriode, tiltaksperiode: Periode | FormPeriode) {
+    return periodeInngårIAnnenPeriodeValidator(
+        periode,
+        tiltaksperiode!,
+        `Perioden kan ikke gå utenfor perioden på det registrerte tiltaket (${formatPeriode(tiltaksperiode!)})`
+    );
 }

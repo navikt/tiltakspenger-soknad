@@ -3,7 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import { gyldigPeriodeValidator } from '@/utils/formValidators';
+import { gyldigPeriodeValidator, periodenErInnenforTiltaksperiodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import Show from '@/components/show/show';
 import Datospørsmål from '@/components/datospørsmål/Datospørsmål';
@@ -13,7 +13,8 @@ import {
     alderspensjonValidator,
     etterlønnValidator,
     gjenlevendepensjonValidator,
-    jobbsjansenValidator, minstEnAnnenUtbetalingHvisJaValidator,
+    jobbsjansenValidator,
+    minstEnAnnenUtbetalingHvisJaValidator,
     mottarAndreUtbetalingerValidator,
     pensjonsordningValidator,
     påkrevdAlderspensjonDatofeltValidator,
@@ -40,7 +41,13 @@ export default function AndreUtbetalingerSteg({
     onCompleted,
     onGoToPreviousStep,
 }: AndreUtbetalingerStegProps) {
-    const { watch, getValues } = useFormContext();
+    const {
+        watch,
+        getValues,
+        formState: { submitCount },
+        trigger,
+        setValue,
+    } = useFormContext();
     const { valgtTiltak } = useContext(UtfyllingContext);
 
     const watchMottarAndreUtbetalinger = watch('svar.mottarAndreUtbetalinger');
@@ -50,11 +57,38 @@ export default function AndreUtbetalingerSteg({
     const watchJobbsjansen = watch('svar.jobbsjansen.mottar');
     const watchSupplerendestønadOver67 = watch('svar.supplerendestønadover67.mottar');
     const watchSupplerendestønadFlyktninger = watch('svar.supplerendestønadflyktninger.mottar');
+
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
     const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
     const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
 
     const spørsmålbesvarelser = getValues('svar');
+
+    React.useEffect(() => {
+        if (submitCount > 0) trigger('svar.mottarAndreUtbetalinger');
+    }, [
+        watchSykepenger,
+        watchGjenlevendepensjon,
+        watchAlderspensjon,
+        watchJobbsjansen,
+        watchSupplerendestønadOver67,
+        watchSupplerendestønadFlyktninger,
+    ]);
+
+    React.useEffect(() => {
+        const søknad = getValues();
+        setValue('svar', {
+            ...søknad.svar,
+            sykepenger: {},
+            gjenlevendepensjon: {},
+            alderspensjon: {},
+            supplerendestønadover67: {},
+            supplerendestønadflyktninger: {},
+            pensjonsordning: {},
+            etterlønn: {},
+            jobbsjansen: {},
+        });
+    }, [watchMottarAndreUtbetalinger]);
 
     return (
         <Step
@@ -78,7 +112,11 @@ export default function AndreUtbetalingerSteg({
         >
             <JaNeiSpørsmål
                 name="svar.mottarAndreUtbetalinger"
-                validate={[mottarAndreUtbetalingerValidator, (mottarAndreUtbetalinger) => minstEnAnnenUtbetalingHvisJaValidator(spørsmålbesvarelser, mottarAndreUtbetalinger)]}
+                validate={[
+                    mottarAndreUtbetalingerValidator,
+                    (mottarAndreUtbetalinger) =>
+                        minstEnAnnenUtbetalingHvisJaValidator(spørsmålbesvarelser, mottarAndreUtbetalinger),
+                ]}
                 description={
                     <ul>
                         <li>Sykepenger</li>
@@ -117,7 +155,13 @@ export default function AndreUtbetalingerSteg({
                     {watchSykepenger && (
                         <Periodespørsmål
                             name="svar.sykepenger.periode"
-                            validate={[gyldigPeriodeValidator, påkrevdSykepengerPeriodeValidator]}
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdSykepengerPeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
                         >
                             Når mottar du sykepenger?
                         </Periodespørsmål>
@@ -146,7 +190,13 @@ export default function AndreUtbetalingerSteg({
                     {watchGjenlevendepensjon && (
                         <Periodespørsmål
                             name="svar.gjenlevendepensjon.periode"
-                            validate={[gyldigPeriodeValidator, påkrevdGjenlevendepensjonPeriodeValidator]}
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdGjenlevendepensjonPeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
                         >
                             Når mottar du gjenlevendepensjon?
                         </Periodespørsmål>
@@ -173,6 +223,7 @@ export default function AndreUtbetalingerSteg({
                             name="svar.alderspensjon.fraDato"
                             datoMåVæreIFortid={true}
                             validate={påkrevdAlderspensjonDatofeltValidator}
+                            minDate={new Date(tiltaksperiode?.fra)}
                         >
                             Fra dato
                         </Datospørsmål>
@@ -203,7 +254,13 @@ export default function AndreUtbetalingerSteg({
                     {watchSupplerendestønadOver67 && (
                         <Periodespørsmål
                             name="svar.supplerendestønadover67.periode"
-                            validate={[gyldigPeriodeValidator, påkrevdSupplerendeStønadOver67PeriodeValidator]}
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdSupplerendeStønadOver67PeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
                         >
                             Når mottar du det?
                         </Periodespørsmål>
@@ -231,7 +288,13 @@ export default function AndreUtbetalingerSteg({
                     {watchSupplerendestønadFlyktninger && (
                         <Periodespørsmål
                             name="svar.supplerendestønadflyktninger.periode"
-                            validate={[gyldigPeriodeValidator, påkrevdSupplerendeStønadFlyktningerPeriodeValidator]}
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdSupplerendeStønadFlyktningerPeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
                         >
                             Når mottar du det?
                         </Periodespørsmål>
@@ -303,7 +366,13 @@ export default function AndreUtbetalingerSteg({
                     {watchJobbsjansen && (
                         <Periodespørsmål
                             name="svar.jobbsjansen.periode"
-                            validate={[gyldigPeriodeValidator, påkrevdJobbsjansenPeriodeValidator]}
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdJobbsjansenPeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
                         >
                             Når mottar du det?
                         </Periodespørsmål>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 import { Radio, RadioGroup, ReadMore } from '@navikt/ds-react';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
-import {ValidatorFunction} from "@/types/ValidatorFunction";
+import { ValidatorFunction } from '@/types/ValidatorFunction';
 
 interface JaNeiSpørsmålProps {
     children: string | React.ReactNode;
@@ -26,7 +26,14 @@ function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
     return validate;
 }
 
-export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst, description, reverse }: JaNeiSpørsmålProps) {
+export default function JaNeiSpørsmål({
+    children,
+    name,
+    validate,
+    hjelpetekst,
+    description,
+    reverse,
+}: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     const errorObject = errorMessage ? { error: <>{errorMessage}</> } : {};
@@ -43,7 +50,9 @@ export default function JaNeiSpørsmål({ children, name, validate, hjelpetekst,
                     value={value === true ? 'ja' : value === false ? 'nei' : ''}
                     name={name}
                     onBlur={onBlur}
-                    onChange={(value) => onChange(value === 'ja')}
+                    onChange={(value) => {
+                        onChange(value === 'ja');
+                    }}
                     {...errorObject}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
