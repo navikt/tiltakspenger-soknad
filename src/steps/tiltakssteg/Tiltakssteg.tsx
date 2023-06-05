@@ -19,7 +19,7 @@ interface TiltaksstegProps {
 }
 
 export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
-    const { watch, resetField } = useFormContext();
+    const { watch, resetField, getValues } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
     const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
@@ -58,17 +58,6 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         return lagDefaultTiltaksperiode();
     }, [valgtTiltak, søkerHeleTiltaksperioden]);
 
-    React.useEffect(() => {
-        const valgtTiltakHarEndretSeg = valgtAktivitetId !== valgtTiltak?.aktivitetId;
-        if (valgtTiltakHarEndretSeg) {
-            resetFormValues();
-        }
-    }, [valgtAktivitetId]);
-
-    React.useEffect(() => {
-        resetField('svar.tiltak.periode', { defaultValue: null });
-    }, [søkerHeleTiltaksperioden]);
-
     const submitSectionRenderer = !brukerHarRegistrerteTiltak
         ? () => (
               <Button style={{ margin: '1rem auto', display: 'block' }} type="button">
@@ -93,6 +82,7 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
                     alternativer={tiltak.map(lagSvaralternativForTiltak)}
                     name="svar.tiltak.aktivitetId"
                     validate={valgtTiltakValidator}
+                    afterOnChange={resetFormValues}
                 >
                     Hvilket tiltak ønsker du å søke tiltakspenger for?
                 </Flervalgsspørsmål>

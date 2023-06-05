@@ -15,6 +15,7 @@ interface FlervalgsspørsmålProps {
     children: string;
     validate?: ValidatorFunction;
     hjelpetekst?: Hjelpetekst;
+    afterOnChange: () => void;
 }
 export default function Flervalgsspørsmål({
     name,
@@ -22,6 +23,7 @@ export default function Flervalgsspørsmål({
     children,
     validate,
     hjelpetekst,
+    afterOnChange,
 }: FlervalgsspørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
@@ -37,7 +39,10 @@ export default function Flervalgsspørsmål({
                     value={value || ''}
                     name={name}
                     onBlur={onBlur}
-                    onChange={onChange}
+                onChange={(event) => {
+                    onChange(event)
+                    afterOnChange()
+                }}
                     error={errorMessage}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
