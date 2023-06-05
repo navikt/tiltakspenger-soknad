@@ -44,7 +44,7 @@ export default function Datospørsmål({
                         minDate={minDate}
                         maxDate={maxDate}
                         datoMåVæreIFortid={datoMåVæreIFortid}
-                        value={value ? formatDate(value) : ""}
+                        defaultSelected={value != '' ? value : null}
                     />
                 )}
             />
