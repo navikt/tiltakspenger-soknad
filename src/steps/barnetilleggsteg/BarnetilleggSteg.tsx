@@ -97,6 +97,16 @@ export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoTo
                                             barn={field as Barn}
                                             vedlegg={vedlegg.filter((vedlegg) => vedlegg.uuid === field.uuid)}
                                         />
+                                        {manglerVedlegg &&
+                                            <Alert
+                                                variant={"warning"}
+                                                size={"small"}
+                                                style={{margin: "1rem 0 1rem 0"}}
+                                            >
+                                                Du har ikke dokumentert at du er forelder til barnet. Trykk på "endre informasjon" hvis du vil legge til dokumentasjon.
+                                                <br/>Hvis du skal ettersende dokumentasjon anbefaler vi at du gjør dette så raskt som mulig.
+                                            </Alert>
+                                        }
                                         <div className={styles.knapperEgenregistertBarn}>
                                             <Button
                                                 icon={<PencilIcon aria-hidden/>}
@@ -121,15 +131,6 @@ export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoTo
                                                 Slett barn
                                             </Button>
                                         </div>
-                                        {manglerVedlegg &&
-                                            <Alert
-                                                variant={"warning"}
-                                                size={"small"}
-                                                style={{marginTop: "1rem"}}
-                                            >
-                                                Dokumentasjon er ikke lastet opp.
-                                            </Alert>
-                                        }
                                     </div>
                                 )
                             })}
