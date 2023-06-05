@@ -3,26 +3,42 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import { gyldigPeriodeValidator } from '@/utils/formValidators';
+import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { Periode } from '@/types/Periode';
-import {
-    borPåInstitusjonValidator,
-    deltarIIntroprogrammetValidator,
-    deltarIKvpValidator,
-    periodenErInnenforTiltaksperiodeValidator,
-    påkrevdInstitusjonsoppholdPeriodeValidator,
-    påkrevdIntroprogramPeriodeValidator,
-    påkrevdKvpPeriodeValidator,
-} from '@/steps/innledningssteg/validation';
+import { FormPeriode } from '@/types/FormPeriode';
+import { periodenErInnenforTiltaksperiodeValidator } from '@/steps/programdeltagelsesteg/validation';
 
-interface KvpStegProps {
+interface ProgramDeltagelseStegProps {
+    title: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
 }
 
-export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProps) {
+function deltarIKvpValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i kvalifiseringsprogrammet');
+}
+
+function deltarIIntroprogrammetValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i introduksjonsprogrammet');
+}
+
+function påkrevdKvpPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i kvalifiseringsprogrammet');
+}
+
+function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
+}
+
+export default function ProgramDeltagelseSteg({
+    title,
+    stepNumber,
+    onCompleted,
+    onGoToPreviousStep,
+}: ProgramDeltagelseStegProps) {
     const { watch } = useFormContext();
     const { valgtTiltak } = useContext(UtfyllingContext);
 
@@ -32,23 +48,17 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
-    const watchBorPåInstitusjon = watch('svar.institusjonsopphold.borPåInstitusjon');
     return (
         <Step
-            title="Kvalifiseringsprogrammet, introduksjonsprogrammet og institusjonsopphold"
+            title={title}
+            stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={2}
             guide={
                 <React.Fragment>
                     <p>
                         Hvis du deltar i kvalifiseringsprogrammet eller introduksjonsprogrammet har du <b>ikke</b> rett
                         på tiltakspenger. Du må derfor svare på spørsmål om dette.
-                    </p>
-                    <p>
-                        Bor du på en institusjon med gratis opphold, mat og drikke når du deltar i et
-                        arbeidsmarkedstiltak, har du som regel ikke rett til tiltakspenger. En institusjon kan for
-                        eksempel være et sykehus eller et fengsel.
                     </p>
                 </React.Fragment>
             }
@@ -129,30 +139,6 @@ export default function KvpSteg({ onCompleted, onGoToPreviousStep }: KvpStegProp
                         maxDate={new Date(tiltaksperiode?.til)}
                     >
                         Når deltar du i introduksjonsprogrammet?
-                    </Periodespørsmål>
-                )}
-                <JaNeiSpørsmål
-                    name="svar.institusjonsopphold.borPåInstitusjon"
-                    validate={borPåInstitusjonValidator}
-                    hjelpetekst={{
-                        tittel: 'Unntak for barnevernsinstitusjoner og overgangsbolig',
-                        tekst: 'Bor du på barnevernsinstitusjon eller i en overgangsbolig har du likevel rett til å få tiltakspenger. Da kan du krysse «nei» på spørsmålet.',
-                    }}
-                >
-                    Bor du i en institusjon med gratis opphold, mat og drikke i perioden {tiltaksperiodeTekst}?
-                </JaNeiSpørsmål>
-                {watchBorPåInstitusjon && (
-                    <Periodespørsmål
-                        name="svar.institusjonsopphold.periode"
-                        validate={[
-                            gyldigPeriodeValidator,
-                            påkrevdInstitusjonsoppholdPeriodeValidator,
-                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
-                        ]}
-                        minDate={new Date(tiltaksperiode?.fra)}
-                        maxDate={new Date(tiltaksperiode?.til)}
-                    >
-                        I hvilken periode bor du på institusjon med gratis opphold, mat og drikke?
                     </Periodespørsmål>
                 )}
             </>

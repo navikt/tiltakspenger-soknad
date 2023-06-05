@@ -12,11 +12,13 @@ import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import styles from '@/components/barnetillegg//Barnetillegg.module.css';
 
 interface BarnetilleggStegProps {
+    title: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
 }
 
-export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: BarnetilleggStegProps) {
+export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoToPreviousStep }: BarnetilleggStegProps) {
     const { getValues } = useFormContext<Søknad>();
     const { personalia } = useContext(UtfyllingContext);
     const fieldArray = useFieldArray<Søknad>({ name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor' });
@@ -27,10 +29,10 @@ export default function BarnetilleggSteg({ onCompleted, onGoToPreviousStep }: Ba
 
     return (
         <Step
-            title="Barnetillegg"
+            title={title}
+            stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={4}
             guide={
                 <>
                     Når du har rett til tiltakspenger, kan du også ha rett på barnetillegg.

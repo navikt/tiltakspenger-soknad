@@ -45,10 +45,12 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         switch (route) {
             case Søknadssteg.TILTAK:
                 return Søknadssteg.TILTAK;
-            case Søknadssteg.KVP:
-                return Søknadssteg.KVP;
+            case Søknadssteg.PROGRAM_DELTAGELSE:
+                return Søknadssteg.PROGRAM_DELTAGELSE;
             case Søknadssteg.ANDRE_UTBETALINGER:
                 return Søknadssteg.ANDRE_UTBETALINGER;
+            case Søknadssteg.INSTITUSJONSOPPHOLD:
+                return Søknadssteg.INSTITUSJONSOPPHOLD;
             case Søknadssteg.BARNETILLEGG:
                 return Søknadssteg.BARNETILLEGG;
             case Søknadssteg.OPPSUMMERING:

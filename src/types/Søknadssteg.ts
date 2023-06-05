@@ -1,7 +1,8 @@
 export enum Søknadssteg {
     TILTAK = 'tiltak',
-    KVP = 'kvp',
+    PROGRAM_DELTAGELSE = 'programdeltagelse',
     ANDRE_UTBETALINGER = 'andreutbetalinger',
+    INSTITUSJONSOPPHOLD = 'institusjonsopphold',
     BARNETILLEGG = 'barnetillegg',
     OPPSUMMERING = 'oppsummering',
     KVITTERING = 'kvittering',

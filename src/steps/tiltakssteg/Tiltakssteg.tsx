@@ -12,11 +12,13 @@ import { valgtTiltakValidator } from '@/steps/tiltakssteg/validation';
 import { lagSvaralternativForTiltak } from '@/steps/tiltakssteg/utils';
 
 interface TiltaksstegProps {
+    title: string;
+    stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
 }
 
-export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
+export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
     const { watch, resetField } = useFormContext();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
     const periode = watch('svar.tiltak.periode');
@@ -77,10 +79,10 @@ export default function Tiltakssteg({ onCompleted, onGoToPreviousStep }: Tiltaks
 
     return (
         <Step
-            title="Tiltak"
+            title={title}
+            stepNumber={stepNumber}
             onCompleted={onCompleted}
             onGoToPreviousStep={onGoToPreviousStep}
-            stepNumber={1}
             guide={<Veiledningstekst brukerHarRegistrerteTiltak={brukerHarRegistrerteTiltak} />}
             submitSectionRenderer={submitSectionRenderer}
             hideStepIndicator={!brukerHarRegistrerteTiltak}
