@@ -5,7 +5,6 @@ import Datovelger from '@/components/datovelger/Datovelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Datospørsmål.module.css';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
-import {formatDate} from "@/utils/formatDate";
 
 interface DatospørsmålProps {
     name: string;
@@ -14,7 +13,7 @@ interface DatospørsmålProps {
     minDate?: Date;
     maxDate?: Date;
     hjelpetekst?: Hjelpetekst;
-    datoMåVæreIFortid: boolean;
+    datoMåVæreIFortid?: boolean;
 }
 
 export default function Datospørsmål({

@@ -221,9 +221,9 @@ export default function AndreUtbetalingerSteg({
                     {watchAlderspensjon && (
                         <Datospørsmål
                             name="svar.alderspensjon.fraDato"
-                            datoMåVæreIFortid={true}
                             validate={påkrevdAlderspensjonDatofeltValidator}
                             minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
                         >
                             Fra dato
                         </Datospørsmål>
