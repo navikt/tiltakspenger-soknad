@@ -7,7 +7,20 @@ interface FritekstspørsmålProps {
     name: string;
     children: string;
     textFieldProps?: Partial<TextFieldProps>;
-    validate?: ValidatorFunction;
+    validate?: ValidatorFunction | ValidatorFunction[];
+}
+
+function validatorArrayAsObject(validate: ValidatorFunction[]) {
+    const validateObject: { [key: string]: ValidatorFunction } = {};
+    validate.forEach((validatorFunction, index) => (validateObject[`${index}`] = validatorFunction));
+    return validateObject;
+}
+
+function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
+    if (Array.isArray(validate)) {
+        return validatorArrayAsObject(validate);
+    }
+    return validate;
 }
 
 export default function Fritekstspørsmål({ name, children, textFieldProps, validate }: FritekstspørsmålProps) {
@@ -17,7 +30,7 @@ export default function Fritekstspørsmål({ name, children, textFieldProps, val
         <Controller
             name={name}
             control={control}
-            rules={{ validate }}
+            rules={{ validate: setupValidation(validate) }}
             render={({ field }) => (
                 <TextField
                     id={name}

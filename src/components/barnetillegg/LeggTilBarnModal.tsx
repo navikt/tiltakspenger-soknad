@@ -59,6 +59,12 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om barnet bor utenfor EØS');
     }
 
+    function maks25tegnValidator(verdi: string) {
+        if (verdi.length > 25) {
+            return 'Du kan ikke skrive inn mer enn 25 tegn';
+        }
+    }
+
     const tomtBarn = {
         fornavn: '',
         etternavn: '',
@@ -123,14 +129,14 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.fornavn`}
                                     textFieldProps={{ htmlSize: 45 }}
-                                    validate={fornavnValidator}
+                                    validate={[fornavnValidator, maks25tegnValidator]}
                                 >
                                     Fornavn og mellomnavn
                                 </Fritekstspørsmål>
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.etternavn`}
                                     textFieldProps={{ htmlSize: 45 }}
-                                    validate={etternavnValidator}
+                                    validate={[etternavnValidator, maks25tegnValidator]}
                                 >
                                     Etternavn
                                 </Fritekstspørsmål>
