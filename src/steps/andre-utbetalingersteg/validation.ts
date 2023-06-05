@@ -1,5 +1,6 @@
 import { påkrevdDatoValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
 import { FormPeriode } from '@/types/FormPeriode';
+import Spørsmålsbesvarelser from "@/types/Spørsmålsbesvarelser";
 
 export function sykepengerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar sykepenger');
@@ -71,4 +72,14 @@ export function påkrevdAlderspensjonDatofeltValidator(verdi: Date) {
 
 export function mottarAndreUtbetalingerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du mottar andre utbetalinger');
+}
+
+export function minstEnAnnenUtbetalingHvisJaValidator({ sykepenger, alderspensjon, gjenlevendepensjon, pensjonsordning, etterlønn, supplerendestønadover67, supplerendestønadflyktninger, jobbsjansen}: Spørsmålsbesvarelser, mottarAndreUtbetalinger: boolean) {
+    if (mottarAndreUtbetalinger && !((sykepenger && sykepenger.mottar) || (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
+        (alderspensjon && alderspensjon.mottar) || (jobbsjansen && jobbsjansen.mottar) ||
+        (supplerendestønadover67 && supplerendestønadover67.mottar) || (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
+        (pensjonsordning && pensjonsordning.mottar) || (etterlønn && etterlønn.mottar)
+    )) {
+        return "Du må svare ja på at du mottar minst én annen utbetaling"
+    }
 }

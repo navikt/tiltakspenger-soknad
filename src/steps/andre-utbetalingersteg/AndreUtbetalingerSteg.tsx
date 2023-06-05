@@ -13,7 +13,7 @@ import {
     alderspensjonValidator,
     etterlønnValidator,
     gjenlevendepensjonValidator,
-    jobbsjansenValidator,
+    jobbsjansenValidator, minstEnAnnenUtbetalingHvisJaValidator,
     mottarAndreUtbetalingerValidator,
     pensjonsordningValidator,
     påkrevdAlderspensjonDatofeltValidator,
@@ -40,7 +40,7 @@ export default function AndreUtbetalingerSteg({
     onCompleted,
     onGoToPreviousStep,
 }: AndreUtbetalingerStegProps) {
-    const { watch } = useFormContext();
+    const { watch, getValues } = useFormContext();
     const { valgtTiltak } = useContext(UtfyllingContext);
 
     const watchMottarAndreUtbetalinger = watch('svar.mottarAndreUtbetalinger');
@@ -53,6 +53,8 @@ export default function AndreUtbetalingerSteg({
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
     const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
     const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
+
+    const spørsmålbesvarelser = getValues('svar');
 
     return (
         <Step
@@ -76,7 +78,7 @@ export default function AndreUtbetalingerSteg({
         >
             <JaNeiSpørsmål
                 name="svar.mottarAndreUtbetalinger"
-                validate={mottarAndreUtbetalingerValidator}
+                validate={[mottarAndreUtbetalingerValidator, (mottarAndreUtbetalinger) => minstEnAnnenUtbetalingHvisJaValidator(spørsmålbesvarelser, mottarAndreUtbetalinger)]}
                 description={
                     <ul>
                         <li>Sykepenger</li>
