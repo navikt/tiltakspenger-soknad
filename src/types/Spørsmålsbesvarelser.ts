@@ -24,8 +24,6 @@ export interface FormTiltak {
 }
 
 export interface Barnetillegg {
-    søkerOmBarnetillegg: boolean;
-    ønskerÅSøkeBarnetilleggForAndreBarn: boolean;
     manueltRegistrerteBarnSøktBarnetilleggFor: Barn[];
     eøsOppholdForBarnFraAPI: Record<string, boolean>;
     kladd: Barn

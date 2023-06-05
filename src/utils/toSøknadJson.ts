@@ -136,14 +136,10 @@ function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
                 ...barn,
                 fødselsdato: formatDate(barn.fødselsdato),
             }));
-    const ønskerÅSøkeBarnetilleggForAndreBarn = manueltRegistrerteBarnSøktBarnetilleggFor.length > 0;
-    const søkerOmBarnetillegg = registrerteBarn.length > 0 || ønskerÅSøkeBarnetilleggForAndreBarn;
     return {
         ...barnetillegg,
         registrerteBarnSøktBarnetilleggFor: registrerteBarn,
         manueltRegistrerteBarnSøktBarnetilleggFor: manueltRegistrerteBarnSøktBarnetilleggFor,
-        søkerOmBarnetillegg: søkerOmBarnetillegg,
-        ønskerÅSøkeBarnetilleggForAndreBarn: ønskerÅSøkeBarnetilleggForAndreBarn
     };
 }
 
