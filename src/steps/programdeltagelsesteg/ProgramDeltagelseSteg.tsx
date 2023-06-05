@@ -3,34 +3,23 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
+import { gyldigPeriodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { Periode } from '@/types/Periode';
-import { FormPeriode } from '@/types/FormPeriode';
-import { periodenErInnenforTiltaksperiodeValidator } from '@/steps/programdeltagelsesteg/validation';
+import {
+    deltarIIntroprogrammetValidator,
+    deltarIKvpValidator,
+    periodenErInnenforTiltaksperiodeValidator,
+    påkrevdIntroprogramPeriodeValidator,
+    påkrevdKvpPeriodeValidator,
+} from '@/steps/programdeltagelsesteg/validation';
 
 interface ProgramDeltagelseStegProps {
     title: string;
     stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
-}
-
-function deltarIKvpValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i kvalifiseringsprogrammet');
-}
-
-function deltarIIntroprogrammetValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i introduksjonsprogrammet');
-}
-
-function påkrevdKvpPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i kvalifiseringsprogrammet');
-}
-
-function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
 }
 
 export default function ProgramDeltagelseSteg({

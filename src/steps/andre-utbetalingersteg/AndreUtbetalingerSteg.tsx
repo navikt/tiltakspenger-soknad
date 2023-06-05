@@ -3,100 +3,35 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import {
-    gyldigPeriodeValidator,
-    påkrevdDatoValidator,
-    påkrevdJaNeiSpørsmålValidator,
-    påkrevdPeriodeValidator,
-} from '@/utils/formValidators';
+import { gyldigPeriodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import Show from '@/components/show/show';
-import { FormPeriode } from '@/types/FormPeriode';
 import Datospørsmål from '@/components/datospørsmål/Datospørsmål';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import styles from './andreutbetalinger.module.css';
+import {
+    alderspensjonValidator,
+    etterlønnValidator,
+    gjenlevendepensjonValidator,
+    jobbsjansenValidator,
+    mottarAndreUtbetalingerValidator,
+    pensjonsordningValidator,
+    påkrevdAlderspensjonDatofeltValidator,
+    påkrevdGjenlevendepensjonPeriodeValidator,
+    påkrevdJobbsjansenPeriodeValidator,
+    påkrevdSupplerendeStønadFlyktningerPeriodeValidator,
+    påkrevdSupplerendeStønadOver67PeriodeValidator,
+    påkrevdSykepengerPeriodeValidator,
+    supplerendeStønadFlyktningerValidator,
+    supplerendeStønadOver67Validator,
+    sykepengerValidator,
+} from '@/steps/andre-utbetalingersteg/validation';
 
 interface AndreUtbetalingerStegProps {
     title: string;
     stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
-}
-
-function sykepengerValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar sykepenger');
-}
-
-function gjenlevendepensjonValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar gjenlevendepensjon');
-}
-
-function alderspensjonValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar alderspensjon');
-}
-
-function pensjonsordningValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar pensjonsordning');
-}
-
-function jobbsjansenValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar stønad via jobbsjansen');
-}
-
-function etterlønnValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar etterlønn');
-}
-
-function supplerendeStønadOver67Validator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(
-        verdi,
-        'Du må svare på om du har søkt eller mottar supplerende stønad for personer over 67 år'
-    );
-}
-
-function supplerendeStønadFlyktningerValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(
-        verdi,
-        'Du må svare på om du har søkt eller mottar supplerende stønad for uføre flyktninger'
-    );
-}
-
-function påkrevdSykepengerPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar sykepenger');
-}
-
-function påkrevdGjenlevendepensjonPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar gjenlevendepensjon');
-}
-
-function påkrevdJobbsjansenPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar jobbsjansen');
-}
-
-function påkrevdAlderpensjonPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi når startet  alderspensjonen din');
-}
-
-function påkrevdSupplerendeStønadOver67PeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(
-        periode,
-        'Du må oppgi hvilken periode du mottar supplerende stønad for personer over 67 år'
-    );
-}
-
-function påkrevdSupplerendeStønadFlyktningerPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(
-        periode,
-        'Du må oppgi hvilken periode du mottar supplerende stønad for uføre flyktninger'
-    );
-}
-
-function påkrevdAlderspensjonDatofeltValidator(verdi: Date) {
-    return påkrevdDatoValidator(verdi, 'Du må oppgi fra dato til alderspensjonen');
-}
-
-function mottarAndreUtbetalinger(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du mottar andre utbetalinger');
 }
 
 export default function AndreUtbetalingerSteg({
@@ -116,7 +51,8 @@ export default function AndreUtbetalingerSteg({
     const watchSupplerendestønadOver67 = watch('svar.supplerendestønadover67.mottar');
     const watchSupplerendestønadFlyktninger = watch('svar.supplerendestønadflyktninger.mottar');
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
-    const tiltaksperiodeTekst = formatPeriode(brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode);
+    const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
+    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
 
     return (
         <Step
@@ -140,7 +76,7 @@ export default function AndreUtbetalingerSteg({
         >
             <JaNeiSpørsmål
                 name="svar.mottarAndreUtbetalinger"
-                validate={mottarAndreUtbetalinger}
+                validate={mottarAndreUtbetalingerValidator}
                 description={
                     <ul>
                         <li>Sykepenger</li>

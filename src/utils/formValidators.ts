@@ -1,5 +1,5 @@
-import { FormPeriode } from '@/types/FormPeriode';
 import dayjs from 'dayjs';
+import { FormPeriode } from '@/types/FormPeriode';
 import { Periode } from '@/types/Periode';
 
 export function påkrevdJaNeiSpørsmålValidator(verdi: boolean, feilmelding: string) {
