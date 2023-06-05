@@ -37,6 +37,7 @@ export default function Periodevelger({
         defaultSelected: defaultValue?.fra,
         fromDate: minDate,
         toDate: maxDate,
+        defaultMonth: minDate,
     });
 
     const toDatePicker = UNSAFE_useDatepicker({
@@ -46,6 +47,7 @@ export default function Periodevelger({
         defaultSelected: defaultValue?.til,
         fromDate: minDate,
         toDate: maxDate,
+        defaultMonth: maxDate,
     });
 
     return (
