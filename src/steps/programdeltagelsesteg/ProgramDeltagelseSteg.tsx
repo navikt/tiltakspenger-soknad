@@ -102,7 +102,6 @@ export default function ProgramDeltagelseSteg({
                         ]}
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
-                        defaultValue={defaultKvpPeriode}
                     >
                         Når deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
@@ -140,7 +139,6 @@ export default function ProgramDeltagelseSteg({
                         ]}
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
-                        defaultValue={defaultIntroPeriode}
                     >
                         Når deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>

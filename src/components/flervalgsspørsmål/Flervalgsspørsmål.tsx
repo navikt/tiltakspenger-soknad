@@ -15,7 +15,7 @@ interface FlervalgsspørsmålProps {
     children: string;
     validate?: ValidatorFunction;
     hjelpetekst?: Hjelpetekst;
-    afterOnChange: () => void;
+    afterOnChange?: () => void;
 }
 export default function Flervalgsspørsmål({
     name,
@@ -41,7 +41,7 @@ export default function Flervalgsspørsmål({
                     onBlur={onBlur}
                 onChange={(event) => {
                     onChange(event)
-                    afterOnChange()
+                    afterOnChange && afterOnChange()
                 }}
                     error={errorMessage}
                 >

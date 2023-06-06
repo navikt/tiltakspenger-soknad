@@ -109,13 +109,12 @@ export default function Oppsummeringssteg({
         !valgtTiltak?.arenaRegistrertPeriode.fra ||
         !valgtTiltak?.arenaRegistrertPeriode.til;
 
-    const tiltaksperiode = tiltak.søkerHeleTiltaksperioden ? valgtTiltak!.arenaRegistrertPeriode : tiltak.periode;
+    const tiltaksperiode = tiltak.periode;
     const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
     const alleBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
         .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
         .concat(personalia!.barn);
-
     return (
         <Step
             title={title}

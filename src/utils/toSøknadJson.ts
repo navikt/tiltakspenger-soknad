@@ -97,16 +97,6 @@ function institusjon(institusjonsopphold: Institusjonsopphold) {
     return institusjonsopphold;
 }
 
-function brukerregistrertTiltaksperiodeSkalMedVedInnsending({ søkerHeleTiltaksperioden }: FormTiltak, tiltak: Tiltak) {
-    if (søkerHeleTiltaksperioden === false) {
-        return true;
-    }
-    if (!tiltak.arenaRegistrertPeriode?.fra || !tiltak.arenaRegistrertPeriode?.til) {
-        return true;
-    }
-    return false;
-}
-
 function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
     return {
         ...formTiltak,
@@ -114,9 +104,7 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
         type: tiltak.type,
         typeNavn: tiltak.typeNavn,
         arenaRegistrertPeriode: tiltak.arenaRegistrertPeriode,
-        periode: brukerregistrertTiltaksperiodeSkalMedVedInnsending(formTiltak, tiltak)
-            ? formatPeriod(formTiltak.periode!)
-            : tiltak.arenaRegistrertPeriode,
+        periode: formTiltak.periode,
     };
 }
 

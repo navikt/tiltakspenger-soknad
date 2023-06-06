@@ -4,16 +4,20 @@ import { Alert } from '@navikt/ds-react';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import { gyldigPeriodeValidator } from '@/utils/formValidators';
 import { påkrevdTiltaksperiodeSpørsmål } from '@/steps/tiltakssteg/validation';
+import {FormTiltak} from "@/types/Spørsmålsbesvarelser";
 
 interface TiltakMedUfullstendigPeriodeUtfyllingProps {
     valgtTiltakManglerKunTilDato: boolean;
     defaultPeriode?: PeriodevelgerPeriode;
+    valgtTiltak: FormTiltak;
 }
 
 const TiltakMedUfullstendigPeriodeUtfylling = ({
     valgtTiltakManglerKunTilDato,
-    defaultPeriode,
+    valgtTiltak,
 }: TiltakMedUfullstendigPeriodeUtfyllingProps) => {
+    const arenaFra = valgtTiltak.arenaRegistrertPeriode?.fra;
+    const arenaTil = valgtTiltak.arenaRegistrertPeriode?.til;
     return (
         <>
             <Alert variant="info" style={{ marginTop: '2rem' }}>
@@ -24,7 +28,10 @@ const TiltakMedUfullstendigPeriodeUtfylling = ({
             <Periodespørsmål
                 name="svar.tiltak.periode"
                 validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-                defaultValue={defaultPeriode}
+                disabledFra={!!arenaFra}
+                disabledTil={!!arenaTil}
+                minDate={arenaFra ? new Date(arenaFra) : undefined}
+                maxDate={arenaTil ? new Date(arenaTil) : undefined}
             >
                 Hvilken periode søker du tiltakspenger for?
             </Periodespørsmål>

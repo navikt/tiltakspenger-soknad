@@ -74,7 +74,6 @@ export default function InstitusjonsoppholdSteg({
                         ]}
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
-                        defaultValue={defaultInstitusjonsoppholdPeriode}
                     >
                         I hvilken periode bor du på institusjon med gratis opphold, mat og drikke?
                     </Periodespørsmål>

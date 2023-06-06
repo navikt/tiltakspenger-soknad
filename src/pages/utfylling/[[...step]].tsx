@@ -30,7 +30,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
 
     const { step } = router.query;
-    const { getValues, watch, reset } = useFormContext<Søknad>();
+    const { getValues, watch, reset, setValue } = useFormContext<Søknad>();
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak>();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
@@ -38,6 +38,13 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
             setValgtTiltak(matchendeTiltak);
+            const arenaFra = matchendeTiltak.arenaRegistrertPeriode?.fra
+            const arenaTil = matchendeTiltak.arenaRegistrertPeriode?.til
+            setValue('svar.tiltak', {
+                ...getValues('svar.tiltak'),
+                periode: { fra: arenaFra ?? '', til: arenaTil ?? '' },
+                arenaRegistrertPeriode: valgtTiltak?.arenaRegistrertPeriode
+            });
         }
     }, [valgtAktivitetId]);
 
@@ -125,6 +132,24 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             typeNavn: 'Annen utdanning',
             deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
             arenaRegistrertPeriode: { fra: '2025-04-01', til: '2025-04-10' },
+            arrangør: 'Testarrangør',
+            status: 'Aktuell',
+        },
+        {
+            aktivitetId: '12asdad3',
+            type: 'Annen utdaasdanning',
+            typeNavn: 'Annen utdaasdnning',
+            deltakelsePeriode: { fra: '2025-04-02', til: '2025-04-10' },
+            arenaRegistrertPeriode: { },
+            arrangør: 'Testarrangør',
+            status: 'Aktuell',
+        },
+        {
+            aktivitetId: '12sdf3',
+            type: 'Annen utdanwerning',
+            typeNavn: 'Annen utdweranning',
+            deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
+            arenaRegistrertPeriode: { fra: '2025-04-01' },
             arrangør: 'Testarrangør',
             status: 'Aktuell',
         },

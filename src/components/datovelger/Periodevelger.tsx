@@ -9,45 +9,44 @@ export interface PeriodevelgerPeriode {
 interface PeriodevelgerProps {
     onFromChange: (date: Date | undefined) => void;
     onToChange: (date: Date | undefined) => void;
-    defaultValue?: PeriodevelgerPeriode | null;
+    defaultSelected?: PeriodevelgerPeriode | null;
     errorMessage?: string;
     id?: string;
     minDate?: Date;
     maxDate?: Date;
+    disabledFra?: boolean;
+    disabledTil?: boolean;
 }
 
 export default function Periodevelger({
     onFromChange,
     onToChange,
-    defaultValue,
+    defaultSelected,
     errorMessage,
     id,
     minDate,
     maxDate,
+    disabledFra,
+    disabledTil,
 }: PeriodevelgerProps) {
-    React.useEffect(() => {
-        fromDatePicker.setSelected(defaultValue?.fra);
-        toDatePicker.setSelected(defaultValue?.til);
-    }, [defaultValue]);
-
     const fromDatePicker = UNSAFE_useDatepicker({
         onDateChange: (date) => {
             onFromChange(date);
         },
-        defaultSelected: defaultValue?.fra,
+        defaultSelected: defaultSelected?.fra,
         fromDate: minDate,
         toDate: maxDate,
-        defaultMonth: minDate,
+        defaultMonth:  minDate ?? maxDate,
     });
 
     const toDatePicker = UNSAFE_useDatepicker({
         onDateChange: (date) => {
             onToChange(date);
         },
-        defaultSelected: defaultValue?.til,
+        defaultSelected: defaultSelected?.til,
         fromDate: minDate,
         toDate: maxDate,
-        defaultMonth: maxDate,
+        defaultMonth: maxDate ?? minDate,
     });
 
     return (
@@ -60,6 +59,7 @@ export default function Periodevelger({
                         label="Fra"
                         id={`${id}.fra`}
                         error={!!errorMessage}
+                        disabled={disabledFra}
                     />
                 </UNSAFE_DatePicker>
                 <UNSAFE_DatePicker {...toDatePicker.datepickerProps}>
@@ -69,6 +69,7 @@ export default function Periodevelger({
                         label="Til"
                         id={`${id}.til`}
                         error={!!errorMessage}
+                        disabled={disabledTil}
                     />
                 </UNSAFE_DatePicker>
             </div>
