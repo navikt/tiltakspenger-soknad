@@ -30,7 +30,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     const router = useRouter();
 
     const { step } = router.query;
-    const { getValues, watch, reset } = useFormContext<Søknad>();
+    const { getValues, watch, reset, setValue } = useFormContext<Søknad>();
 
     const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak>();
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
@@ -38,6 +38,7 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
             setValgtTiltak(matchendeTiltak);
+            setValue('svar.tiltak.periode', matchendeTiltak.arenaRegistrertPeriode);
         }
     }, [valgtAktivitetId]);
 

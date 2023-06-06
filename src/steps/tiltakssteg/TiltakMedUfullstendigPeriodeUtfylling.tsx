@@ -1,5 +1,4 @@
 import React from 'react';
-import { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
 import { Alert } from '@navikt/ds-react';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import { gyldigPeriodeValidator } from '@/utils/formValidators';
@@ -7,12 +6,10 @@ import { påkrevdTiltaksperiodeSpørsmål } from '@/steps/tiltakssteg/validation
 
 interface TiltakMedUfullstendigPeriodeUtfyllingProps {
     valgtTiltakManglerKunTilDato: boolean;
-    defaultPeriode?: PeriodevelgerPeriode;
 }
 
 const TiltakMedUfullstendigPeriodeUtfylling = ({
     valgtTiltakManglerKunTilDato,
-    defaultPeriode,
 }: TiltakMedUfullstendigPeriodeUtfyllingProps) => {
     return (
         <>
@@ -24,7 +21,6 @@ const TiltakMedUfullstendigPeriodeUtfylling = ({
             <Periodespørsmål
                 name="svar.tiltak.periode"
                 validate={[gyldigPeriodeValidator, påkrevdTiltaksperiodeSpørsmål]}
-                defaultValue={defaultPeriode}
             >
                 Hvilken periode søker du tiltakspenger for?
             </Periodespørsmål>

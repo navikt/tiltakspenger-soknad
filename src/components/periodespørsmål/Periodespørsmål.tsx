@@ -1,10 +1,11 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 import { ReadMore } from '@navikt/ds-react';
-import Periodevelger, { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
+import Periodevelger from '@/components/datovelger/Periodevelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Periodespørsmål.module.css';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
+import dayjs from 'dayjs';
 
 interface PeriodespørsmålProps {
     name: string;
@@ -13,7 +14,6 @@ interface PeriodespørsmålProps {
     minDate?: Date;
     maxDate?: Date;
     hjelpetekst?: Hjelpetekst;
-    defaultValue?: PeriodevelgerPeriode;
 }
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
@@ -36,7 +36,6 @@ export default function Periodespørsmål({
     minDate,
     maxDate,
     hjelpetekst,
-    defaultValue,
 }: PeriodespørsmålProps) {
     const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
@@ -48,27 +47,35 @@ export default function Periodespørsmål({
                 name={name}
                 control={control}
                 rules={{ validate: setupValidation(validate) }}
-                render={({ field: { onChange } }) => (
-                    <Periodevelger
-                        id={name}
-                        onFromChange={(date) => {
-                            onChange({
-                                fra: date || '',
-                                til: getValues(`${name}.til`),
-                            });
-                        }}
-                        onToChange={(date) => {
-                            onChange({
-                                fra: getValues(`${name}.fra`),
-                                til: date || '',
-                            });
-                        }}
-                        defaultValue={defaultValue}
-                        errorMessage={errorMessage}
-                        minDate={minDate}
-                        maxDate={maxDate}
-                    />
-                )}
+                render={({ field: { onChange, value } }) => {
+                    const fra = value?.fra;
+                    const til = value?.til;
+                    const valueAsDate = {
+                        fra: fra ? dayjs(fra).toDate() : null,
+                        til: til ? dayjs(til).toDate() : null,
+                    };
+                    return (
+                        <Periodevelger
+                            id={name}
+                            onFromChange={(date) => {
+                                onChange({
+                                    fra: date || '',
+                                    til: getValues(`${name}.til`),
+                                });
+                            }}
+                            onToChange={(date) => {
+                                onChange({
+                                    fra: getValues(`${name}.fra`),
+                                    til: date || '',
+                                });
+                            }}
+                            value={valueAsDate}
+                            errorMessage={errorMessage}
+                            minDate={minDate}
+                            maxDate={maxDate}
+                        />
+                    );
+                }}
             />
         </fieldset>
     );

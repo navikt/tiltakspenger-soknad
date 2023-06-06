@@ -14,10 +14,9 @@ import { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
 
 interface TiltakMedPeriodeUtfyllingProps {
     valgtTiltak: Tiltak;
-    defaultPeriode?: PeriodevelgerPeriode;
 }
 
-const TiltakMedPeriodeUtfylling = ({ valgtTiltak, defaultPeriode }: TiltakMedPeriodeUtfyllingProps) => {
+const TiltakMedPeriodeUtfylling = ({ valgtTiltak }: TiltakMedPeriodeUtfyllingProps) => {
     const { watch } = useFormContext();
     const søkerHeleTiltaksperioden = watch('svar.tiltak.søkerHeleTiltaksperioden');
     return (
@@ -42,7 +41,6 @@ const TiltakMedPeriodeUtfylling = ({ valgtTiltak, defaultPeriode }: TiltakMedPer
                         (periode) =>
                             innenforArenaRegistrertPeriodeValidator(periode, valgtTiltak.arenaRegistrertPeriode!),
                     ]}
-                    defaultValue={defaultPeriode}
                 >
                     Hvilken periode søker du tiltakspenger for?
                 </Periodespørsmål>

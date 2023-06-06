@@ -40,24 +40,6 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         resetField('svar.tiltak.periode', { defaultValue: null });
     };
 
-    const lagDefaultTiltaksperiode = () => {
-        let defaultVerdi = null;
-        const brukerHarFyltUtPeriodeAllerede = periode?.fra && periode?.til;
-        if (brukerHarFyltUtPeriodeAllerede) {
-            defaultVerdi = {
-                fra: dayjs(periode.fra).toDate(),
-                til: dayjs(periode.til).toDate(),
-            };
-        } else if (valgtTiltakManglerKunTilDato) {
-            defaultVerdi = { fra: dayjs(valgtTiltak?.arenaRegistrertPeriode?.fra).toDate() };
-        }
-        return defaultVerdi;
-    };
-
-    const defaultTiltaksperiode = React.useMemo(() => {
-        return lagDefaultTiltaksperiode();
-    }, [valgtTiltak, søkerHeleTiltaksperioden]);
-
     const submitSectionRenderer = !brukerHarRegistrerteTiltak
         ? () => (
               <Button style={{ margin: '1rem auto', display: 'block' }} type="button">
@@ -88,16 +70,10 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
                 </Flervalgsspørsmål>
             )}
             {brukerHarValgtEtTiltak && !valgtTiltakManglerHelePerioden && !valgtTiltakManglerKunTilDato && (
-                <TiltakMedPeriodeUtfylling
-                    valgtTiltak={valgtTiltak}
-                    defaultPeriode={defaultTiltaksperiode || undefined}
-                />
+                <TiltakMedPeriodeUtfylling valgtTiltak={valgtTiltak} />
             )}
             {brukerHarValgtEtTiltak && (valgtTiltakManglerHelePerioden || valgtTiltakManglerKunTilDato) && (
-                <TiltakMedUfullstendigPeriodeUtfylling
-                    valgtTiltakManglerKunTilDato={valgtTiltakManglerKunTilDato}
-                    defaultPeriode={defaultTiltaksperiode || undefined}
-                />
+                <TiltakMedUfullstendigPeriodeUtfylling valgtTiltakManglerKunTilDato={valgtTiltakManglerKunTilDato} />
             )}
         </Step>
     );

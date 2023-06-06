@@ -1,5 +1,6 @@
 import { ErrorMessage, UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import React from 'react';
+import React, { useRef } from 'react';
+import dayjs from 'dayjs';
 
 export interface PeriodevelgerPeriode {
     fra?: Date;
@@ -9,7 +10,7 @@ export interface PeriodevelgerPeriode {
 interface PeriodevelgerProps {
     onFromChange: (date: Date | undefined) => void;
     onToChange: (date: Date | undefined) => void;
-    defaultValue?: PeriodevelgerPeriode | null;
+    value?: PeriodevelgerPeriode | null;
     errorMessage?: string;
     id?: string;
     minDate?: Date;
@@ -19,22 +20,28 @@ interface PeriodevelgerProps {
 export default function Periodevelger({
     onFromChange,
     onToChange,
-    defaultValue,
+    value,
     errorMessage,
     id,
     minDate,
     maxDate,
 }: PeriodevelgerProps) {
+    const flagg = useRef(false);
+
     React.useEffect(() => {
-        fromDatePicker.setSelected(defaultValue?.fra);
-        toDatePicker.setSelected(defaultValue?.til);
-    }, [defaultValue]);
+        fromDatePicker.setSelected(value?.fra);
+        toDatePicker.setSelected(value?.til);
+        flagg.current = true;
+    }, [value]);
 
     const fromDatePicker = UNSAFE_useDatepicker({
         onDateChange: (date) => {
-            onFromChange(date);
+            if (flagg.current) {
+                onFromChange(date);
+                flagg.current = false;
+            }
         },
-        defaultSelected: defaultValue?.fra,
+        defaultSelected: value?.fra,
         fromDate: minDate,
         toDate: maxDate,
         defaultMonth: minDate,
@@ -42,9 +49,12 @@ export default function Periodevelger({
 
     const toDatePicker = UNSAFE_useDatepicker({
         onDateChange: (date) => {
-            onToChange(date);
+            if (flagg.current) {
+                onToChange(date);
+                flagg.current = false;
+            }
         },
-        defaultSelected: defaultValue?.til,
+        defaultSelected: value?.til,
         fromDate: minDate,
         toDate: maxDate,
         defaultMonth: maxDate,
