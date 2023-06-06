@@ -11,6 +11,7 @@ interface JaNeiSpørsmålProps {
     hjelpetekst?: Hjelpetekst;
     description?: string | JSX.Element;
     reverse?: boolean;
+    afterOnChange?: () => void;
 }
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
@@ -33,6 +34,7 @@ export default function JaNeiSpørsmål({
     hjelpetekst,
     description,
     reverse,
+    afterOnChange,
 }: JaNeiSpørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
@@ -52,6 +54,7 @@ export default function JaNeiSpørsmål({
                     onBlur={onBlur}
                     onChange={(value) => {
                         onChange(value === 'ja');
+                        afterOnChange && afterOnChange();
                     }}
                     {...errorObject}
                 >

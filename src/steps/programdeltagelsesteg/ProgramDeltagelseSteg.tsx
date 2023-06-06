@@ -27,15 +27,27 @@ export default function ProgramDeltagelseSteg({
     onCompleted,
     onGoToPreviousStep,
 }: ProgramDeltagelseStegProps) {
-    const { watch } = useFormContext();
+    const { watch, getValues, resetField } = useFormContext();
     const { valgtTiltak } = useContext(UtfyllingContext);
 
     const brukerregistrertPeriode = watch('svar.tiltak.periode') as Periode;
     const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
     const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
 
+    const defaultKvpPeriode = getValues().svar.kvalifiseringsprogram.periode;
+    const defaultIntroPeriode = getValues().svar.introduksjonsprogram.periode;
+
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
+
+    const resetKvpPeriode = () => {
+        resetField('svar.kvalifiseringsprogram.periode', { defaultValue: null });
+    };
+
+    const resetIntroPeriode = () => {
+        resetField('svar.introduksjonsprogram.periode', { defaultValue: null });
+    };
+
     return (
         <Step
             title={title}
@@ -76,6 +88,7 @@ export default function ProgramDeltagelseSteg({
                             </>
                         ),
                     }}
+                    afterOnChange={resetKvpPeriode}
                 >
                     Deltar du i kvalifiseringsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
@@ -89,6 +102,7 @@ export default function ProgramDeltagelseSteg({
                         ]}
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
+                        defaultValue={defaultKvpPeriode}
                     >
                         Når deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
@@ -112,6 +126,7 @@ export default function ProgramDeltagelseSteg({
                             </>
                         ),
                     }}
+                    afterOnChange={resetIntroPeriode}
                 >
                     Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
@@ -125,6 +140,7 @@ export default function ProgramDeltagelseSteg({
                         ]}
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
+                        defaultValue={defaultIntroPeriode}
                     >
                         Når deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
