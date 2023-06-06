@@ -24,12 +24,17 @@ export default function InstitusjonsoppholdSteg({
     onCompleted,
     onGoToPreviousStep,
 }: InstitusjonsoppholdProps) {
-    const { watch } = useFormContext();
+    const { watch, getValues, resetField } = useFormContext();
     const { valgtTiltak } = useContext(UtfyllingContext);
     const watchBorPåInstitusjon = watch('svar.institusjonsopphold.borPåInstitusjon');
     const brukerregistrertPeriode = watch('svar.tiltak.periode');
     const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
     const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
+    const defaultInstitusjonsoppholdPeriode = getValues().svar.institusjonsopphold.periode;
+
+    const resetInstitusjonsoppholdPeriode = () => {
+        resetField('svar.institusjonsopphold.periode', { defaultValue: null });
+    };
 
     return (
         <Step
@@ -55,6 +60,7 @@ export default function InstitusjonsoppholdSteg({
                         tittel: 'Unntak for barnevernsinstitusjoner og overgangsbolig',
                         tekst: 'Bor du på barnevernsinstitusjon eller i en overgangsbolig har du likevel rett til å få tiltakspenger. Da kan du krysse «nei» på spørsmålet.',
                     }}
+                    afterOnChange={resetInstitusjonsoppholdPeriode}
                 >
                     Bor du i en institusjon med gratis opphold, mat og drikke i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
@@ -68,6 +74,7 @@ export default function InstitusjonsoppholdSteg({
                         ]}
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
+                        defaultValue={defaultInstitusjonsoppholdPeriode}
                     >
                         I hvilken periode bor du på institusjon med gratis opphold, mat og drikke?
                     </Periodespørsmål>
