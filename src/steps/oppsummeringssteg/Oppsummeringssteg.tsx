@@ -22,19 +22,11 @@ interface OppsummeringsstegProps {
     søknadsinnsendingInProgress: boolean;
 }
 
-function oppsummeringDeltarIKvp(deltarIKvp: boolean, periodeMedKvp: Periode | undefined) {
-    if (deltarIKvp) {
-        return `Ja, jeg deltar i kvalifiseringsprogrammet i perioden ${formatPeriode(periodeMedKvp!)}`;
+function hentSvarTilProgramDeltagelse(program: string, deltar: boolean, periode?: Periode) {
+    if (deltar) {
+        return `Ja, jeg deltar i ${program} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
     } else {
-        return 'Nei, jeg deltar ikke i kvalifiseringsprogrammet i perioden jeg deltar på tiltaket';
-    }
-}
-
-function oppsummeringDeltarIIntroprogram(deltarIIntroprogrammet: boolean, periodeMedIntro?: Periode) {
-    if (deltarIIntroprogrammet) {
-        return `Ja, jeg deltar i introduksjonsprogrammet i perioden ${formatPeriode(periodeMedIntro!)}`;
-    } else {
-        return 'Nei, jeg deltar ikke i introduksjonsprogrammet i perioden jeg deltar på tiltaket';
+        return `Nei, jeg deltar ikke i ${program}`;
     }
 }
 
@@ -56,17 +48,9 @@ function oppsummeringAlderspensjon(mottar: boolean, fraDato: string) {
 
 function hentSvarTilSpørsmålene(spørsmålTittel: String, mottar: boolean, periode?: Periode) {
     if (mottar) {
-        return `Ja, jeg mottar ${spørsmålTittel} i perioden ${formatPeriode(periode!)}`;
+        return `Ja, jeg mottar ${spørsmålTittel} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
     } else {
         return `Nei, jeg mottar ikke ${spørsmålTittel}`;
-    }
-}
-
-function visSvarTilAndreUtbetalinger(mottarAndreUtbetalinger: boolean) {
-    if (mottarAndreUtbetalinger) {
-        return 'Ja, jeg mottar andre offentlige, private eller utenlandske trygde- eller pensjonsordninger.';
-    } else {
-        return 'Nei, jeg mottar ikke andre offentlige, private eller utenlandske trygde- eller pensjonsordninger.';
     }
 }
 
@@ -189,30 +173,35 @@ export default function Oppsummeringssteg({
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Introduksjonsprogrammet og kvalifiseringsprogrammet </Accordion.Header>
                     <Accordion.Content>
+                        <Oppsummeringsfelt
+                            feltNavn="Introduksjonsprogrammet"
+                            feltVerdi={hentSvarTilProgramDeltagelse(
+                                "introduksjonsprogrammet",
+                                introduksjonsprogram.deltar,
+                                introduksjonsprogram.periode
+                            )}
+                        />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
-                                feltNavn="Introduksjonsprogrammet"
-                                feltVerdi={oppsummeringDeltarIIntroprogram(
-                                    introduksjonsprogram.deltar,
-                                    introduksjonsprogram.periode
+                                feltNavn="Kvalifiseringsprogrammet"
+                                feltVerdi={hentSvarTilProgramDeltagelse(
+                                    "kvalifiseringsprogrammet",
+                                    kvalifiseringsprogram.deltar,
+                                    kvalifiseringsprogram.periode
                                 )}
                             />
                         </div>
-                        <Oppsummeringsfelt
-                            feltNavn="Kvalifiseringsprogrammet"
-                            feltVerdi={oppsummeringDeltarIKvp(
-                                kvalifiseringsprogram.deltar,
-                                kvalifiseringsprogram.periode
-                            )}
-                        />
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Andre utbetalinger</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
-                            feltNavn="Andreutbetalinger"
-                            feltVerdi={visSvarTilAndreUtbetalinger(mottarAndreUtbetalinger)}
+                            feltNavn=""
+                            feltVerdi={hentSvarTilSpørsmålene(
+                                "andre offentlige, private eller utenlandske trygde- eller pensjonsordninger",
+                                mottarAndreUtbetalinger
+                            )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
@@ -238,18 +227,6 @@ export default function Oppsummeringssteg({
                         </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
-                                feltNavn="Pensjonsordning"
-                                feltVerdi={hentSvarTilSpørsmålene('pensjonsordning', pensjonsordning.mottar)}
-                            />
-                        </div>
-                        <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt
-                                feltNavn="Etterlønn"
-                                feltVerdi={hentSvarTilSpørsmålene('etterlønn', etterlønn.mottar)}
-                            />
-                        </div>
-                        <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt
                                 feltNavn="Supplerende stønad for personer over 67 år med kort botid i Norge"
                                 feltVerdi={hentSvarTilSpørsmålene(
                                     'supplerende stønad for personer over 67 år med kort botid i Norge',
@@ -270,6 +247,18 @@ export default function Oppsummeringssteg({
                         </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
+                                feltNavn="Pensjonsordning"
+                                feltVerdi={hentSvarTilSpørsmålene("pensjonsordning", pensjonsordning.mottar)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Etterlønn"
+                                feltVerdi={hentSvarTilSpørsmålene("etterlønn", etterlønn.mottar)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
                                 feltNavn="Stønad via jobbsjansen"
                                 feltVerdi={hentSvarTilSpørsmålene(
                                     'stønad via jobbsjansen',
@@ -284,7 +273,7 @@ export default function Oppsummeringssteg({
                     <Accordion.Header>Institusjonsopphold</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
-                            feltNavn="Opphold på institusjon"
+                            feltNavn=""
                             feltVerdi={oppsummeringInstitusjon(
                                 institusjonsopphold.borPåInstitusjon,
                                 institusjonsopphold.periode
