@@ -60,7 +60,11 @@ export default function Step({
                 </Heading>
             )}
             {shouldShowErrorSummary && (
-                <ErrorSummary className={styles.step__errorsummary} ref={errorRef}>
+                <ErrorSummary
+                    className={styles.step__errorsummary}
+                    ref={errorRef}
+                    heading="Du må fikse disse feilene før du kan fortsette:"
+                >
                     {allErrors.map(({ message, ref, type, types, root }) => {
                         return (
                             <ErrorSummary.Item key={ref!.name} href={`#${ref!.name}`}>

@@ -61,6 +61,7 @@ export default function Periodevelger({
                         error={!!errorMessage}
                         disabled={disabledFra}
                         aria-controls={`${id}.fra`}
+                        aria-label="fra"
                     />
                 </UNSAFE_DatePicker>
                 <UNSAFE_DatePicker {...toDatePicker.datepickerProps}>
@@ -72,6 +73,7 @@ export default function Periodevelger({
                         error={!!errorMessage}
                         disabled={disabledTil}
                         aria-controls={`${id}.til`}
+                        aria-label="til"
                     />
                 </UNSAFE_DatePicker>
             </div>
