@@ -11,8 +11,8 @@ import { lagFormDataForInnsending, postSøknadMultipart } from '@/utils/innsendi
 import SøknadResponse from '@/types/SøknadResponse';
 import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
-import ProgramDeltagelseSteg from "@/steps/programdeltagelsesteg/ProgramDeltagelseSteg";
-import InstitusjonsoppholdSteg from "@/steps/institusjonsoppholdsteg/InstitusjonsoppholdSteg";
+import ProgramDeltagelseSteg from '@/steps/programdeltagelsesteg/ProgramDeltagelseSteg';
+import InstitusjonsoppholdSteg from '@/steps/institusjonsoppholdsteg/InstitusjonsoppholdSteg';
 
 interface AktivtSøknadsstegProps {
     steg: Søknadssteg | null;
@@ -67,7 +67,7 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
                     onCompleted={() => navigateTo(Søknadssteg.PROGRAM_DELTAGELSE)}
                     onGoToPreviousStep={navigateToHome}
                 />
-        );
+            );
         case Søknadssteg.PROGRAM_DELTAGELSE:
             return (
                 <ProgramDeltagelseSteg
@@ -75,7 +75,6 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
                     stepNumber={2}
                     onCompleted={() => navigateTo(Søknadssteg.ANDRE_UTBETALINGER)}
                     onGoToPreviousStep={goBack}
-                    valgtTiltak={valgtTiltak!}
                 />
             );
         case Søknadssteg.ANDRE_UTBETALINGER:
@@ -85,7 +84,6 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
                     stepNumber={3}
                     onCompleted={() => navigateTo(Søknadssteg.INSTITUSJONSOPPHOLD)}
                     onGoToPreviousStep={goBack}
-                    valgtTiltak={valgtTiltak!}
                 />
             );
         case Søknadssteg.INSTITUSJONSOPPHOLD:
@@ -95,7 +93,6 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
                     stepNumber={4}
                     onCompleted={() => navigateTo(Søknadssteg.BARNETILLEGG)}
                     onGoToPreviousStep={goBack}
-                    valgtTiltak={valgtTiltak!}
                 />
             );
         case Søknadssteg.BARNETILLEGG:

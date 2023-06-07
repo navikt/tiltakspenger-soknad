@@ -1,7 +1,7 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
 import { ReadMore } from '@navikt/ds-react';
-import Periodevelger, { PeriodevelgerPeriode } from '@/components/datovelger/Periodevelger';
+import Periodevelger from '@/components/datovelger/Periodevelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Periodespørsmål.module.css';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
@@ -13,7 +13,8 @@ interface PeriodespørsmålProps {
     minDate?: Date;
     maxDate?: Date;
     hjelpetekst?: Hjelpetekst;
-    defaultValue?: PeriodevelgerPeriode;
+    disabledFra?: boolean;
+    disabledTil?: boolean;
 }
 
 function validatorArrayAsObject(validate: ValidatorFunction[]) {
@@ -36,7 +37,8 @@ export default function Periodespørsmål({
     minDate,
     maxDate,
     hjelpetekst,
-    defaultValue,
+    disabledTil,
+    disabledFra
 }: PeriodespørsmålProps) {
     const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
@@ -48,27 +50,36 @@ export default function Periodespørsmål({
                 name={name}
                 control={control}
                 rules={{ validate: setupValidation(validate) }}
-                render={({ field: { onChange } }) => (
-                    <Periodevelger
-                        id={name}
-                        onFromChange={(date) => {
-                            onChange({
-                                fra: date || '',
-                                til: getValues(`${name}.til`),
-                            });
-                        }}
-                        onToChange={(date) => {
-                            onChange({
-                                fra: getValues(`${name}.fra`),
-                                til: date || '',
-                            });
-                        }}
-                        defaultValue={defaultValue}
-                        errorMessage={errorMessage}
-                        minDate={minDate}
-                        maxDate={maxDate}
-                    />
-                )}
+                render={({ field: { onChange, value } }) => {
+                    const defaultFra = value?.fra ? new Date(value.fra) : undefined;
+                    const defaultTil = value?.til ? new Date(value.til) : undefined;
+                    return (
+                        <Periodevelger
+                            id={name}
+                            onFromChange={(date) => {
+                                onChange({
+                                    fra: date || '',
+                                    til: getValues(`${name}.til`),
+                                });
+                            }}
+                            onToChange={(date) => {
+                                onChange({
+                                    fra: getValues(`${name}.fra`),
+                                    til: date || '',
+                                });
+                            }}
+                            defaultSelected={{
+                                fra: defaultFra,
+                                til: defaultTil
+                            }}
+                            errorMessage={errorMessage}
+                            minDate={minDate}
+                            maxDate={maxDate}
+                            disabledFra={disabledFra}
+                            disabledTil={disabledTil}
+                        />
+                    )
+                }}
             />
         </fieldset>
     );

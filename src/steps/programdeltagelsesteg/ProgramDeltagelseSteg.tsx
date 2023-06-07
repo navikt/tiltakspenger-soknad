@@ -1,45 +1,52 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
-import { gyldigPeriodeValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
-import { FormPeriode } from '@/types/FormPeriode';
+import { gyldigPeriodeValidator, periodenErInnenforTiltaksperiodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
-import { Tiltak } from '@/types/Tiltak';
+import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
+import { Periode } from '@/types/Periode';
+import {
+    deltarIIntroprogrammetValidator,
+    deltarIKvpValidator,
+    påkrevdIntroprogramPeriodeValidator,
+    påkrevdKvpPeriodeValidator,
+} from '@/steps/programdeltagelsesteg/validation';
 
 interface ProgramDeltagelseStegProps {
     title: string;
     stepNumber: number;
     onCompleted: () => void;
     onGoToPreviousStep: () => void;
-    valgtTiltak: Tiltak;
 }
 
-function deltarIKvpValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i kvalifiseringsprogrammet');
-}
+export default function ProgramDeltagelseSteg({
+    title,
+    stepNumber,
+    onCompleted,
+    onGoToPreviousStep,
+}: ProgramDeltagelseStegProps) {
+    const { watch, getValues, resetField } = useFormContext();
+    const { valgtTiltak } = useContext(UtfyllingContext);
 
-function deltarIIntroprogrammetValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du deltar i introduksjonsprogrammet');
-}
+    const brukerregistrertPeriode = watch('svar.tiltak.periode') as Periode;
+    const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
+    const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
 
-function påkrevdKvpPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i kvalifiseringsprogrammet');
-}
-
-function påkrevdIntroprogramPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du deltar i introduksjonsprogrammet');
-}
-
-export default function ProgramDeltagelseSteg({ title, stepNumber, onCompleted, onGoToPreviousStep, valgtTiltak }: ProgramDeltagelseStegProps) {
-    const { watch } = useFormContext();
-
-    const brukerregistrertPeriode = watch('svar.tiltak.periode');
-    const tiltaksperiodeTekst = formatPeriode(brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode);
+    const defaultKvpPeriode = getValues().svar.kvalifiseringsprogram.periode;
+    const defaultIntroPeriode = getValues().svar.introduksjonsprogram.periode;
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
+
+    const resetKvpPeriode = () => {
+        resetField('svar.kvalifiseringsprogram.periode', { defaultValue: null });
+    };
+
+    const resetIntroPeriode = () => {
+        resetField('svar.introduksjonsprogram.periode', { defaultValue: null });
+    };
 
     return (
         <Step
@@ -57,36 +64,6 @@ export default function ProgramDeltagelseSteg({ title, stepNumber, onCompleted, 
             }
         >
             <>
-                <JaNeiSpørsmål
-                    name="svar.introduksjonsprogram.deltar"
-                    validate={deltarIIntroprogrammetValidator}
-                    hjelpetekst={{
-                        tittel: 'Hva er introduksjonsprogrammet?',
-                        tekst: (
-                            <>
-                                <p>Hva er introduksjonsprogrammet?</p>
-                                <p>
-                                    Introduksjonsprogrammet avtales med kommunen du bor i. Det er en ordning for
-                                    nyankomne flyktninger. Hvis du er med i Introduksjonsprogrammet har du fått et brev
-                                    fra kommunen du bor i om dette. Du kan også få utbetalt introduksjonsstønad. Ta
-                                    kontakt med kommunen din hvis du er usikker på om du er med i
-                                    Introduksjonsprogrammet.
-                                </p>
-                                <p>Du kan lese mer om introduksjonsprogrammet på (LENKE til IMDI)</p>
-                            </>
-                        ),
-                    }}
-                >
-                    Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
-                </JaNeiSpørsmål>
-                {watchDeltarIIntroprogrammet && (
-                    <Periodespørsmål
-                        name="svar.introduksjonsprogram.periode"
-                        validate={[gyldigPeriodeValidator, påkrevdIntroprogramPeriodeValidator]}
-                    >
-                        Når deltar du i introduksjonsprogrammet?
-                    </Periodespørsmål>
-                )}
                 <JaNeiSpørsmål
                     name="svar.kvalifiseringsprogram.deltar"
                     validate={deltarIKvpValidator}
@@ -111,15 +88,59 @@ export default function ProgramDeltagelseSteg({ title, stepNumber, onCompleted, 
                             </>
                         ),
                     }}
+                    afterOnChange={resetKvpPeriode}
                 >
                     Deltar du i kvalifiseringsprogrammet i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
                     <Periodespørsmål
                         name="svar.kvalifiseringsprogram.periode"
-                        validate={[gyldigPeriodeValidator, påkrevdKvpPeriodeValidator]}
+                        validate={[
+                            gyldigPeriodeValidator,
+                            påkrevdKvpPeriodeValidator,
+                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                        ]}
+                        minDate={new Date(tiltaksperiode?.fra)}
+                        maxDate={new Date(tiltaksperiode?.til)}
                     >
                         Når deltar du i kvalifiseringsprogrammet?
+                    </Periodespørsmål>
+                )}
+                <JaNeiSpørsmål
+                    name="svar.introduksjonsprogram.deltar"
+                    validate={deltarIIntroprogrammetValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er introduksjonsprogrammet?',
+                        tekst: (
+                            <>
+                                <p>Hva er introduksjonsprogrammet?</p>
+                                <p>
+                                    Introduksjonsprogrammet avtales med kommunen du bor i. Det er en ordning for
+                                    nyankomne flyktninger. Hvis du er med i Introduksjonsprogrammet har du fått et brev
+                                    fra kommunen du bor i om dette. Du kan også få utbetalt introduksjonsstønad. Ta
+                                    kontakt med kommunen din hvis du er usikker på om du er med i
+                                    Introduksjonsprogrammet.
+                                </p>
+                                <p>Du kan lese mer om introduksjonsprogrammet på (LENKE til IMDI)</p>
+                            </>
+                        ),
+                    }}
+                    afterOnChange={resetIntroPeriode}
+                >
+                    Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
+                </JaNeiSpørsmål>
+                {watchDeltarIIntroprogrammet && (
+                    <Periodespørsmål
+                        name="svar.introduksjonsprogram.periode"
+                        validate={[
+                            gyldigPeriodeValidator,
+                            påkrevdIntroprogramPeriodeValidator,
+                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                        ]}
+                        minDate={new Date(tiltaksperiode?.fra)}
+                        maxDate={new Date(tiltaksperiode?.til)}
+                    >
+                        Når deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}
             </>

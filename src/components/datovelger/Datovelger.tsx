@@ -1,6 +1,5 @@
 import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import {useEffect, useState} from "react";
-import {formatDate} from "@/utils/formatDate";
+import { useState } from 'react';
 
 interface DatovelgerProps {
     onDateChange: (date: Date | undefined) => void;
@@ -14,18 +13,19 @@ interface DatovelgerProps {
 }
 
 export default function Datovelger({
-                                        onDateChange,
-                                        errorMessage,
-                                        id,
-                                        label,
-                                        maxDate,
-                                        minDate,
-                                        datoMåVæreIFortid,
-                                        defaultSelected,
-                                    }: DatovelgerProps) {
+    onDateChange,
+    errorMessage,
+    id,
+    label,
+    maxDate,
+    minDate,
+    datoMåVæreIFortid,
+    defaultSelected,
+}: DatovelgerProps) {
     const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
         onDateChange,
         fromDate: minDate,
+        defaultMonth: minDate,
         toDate: datoMåVæreIFortid ? new Date() : maxDate,
         defaultSelected: defaultSelected,
         onValidate: (val) => {
@@ -37,13 +37,7 @@ export default function Datovelger({
 
     return (
         <UNSAFE_DatePicker {...datepickerProps} id={id}>
-            <UNSAFE_DatePicker.Input
-                {...inputProps}
-                label={label}
-                error={hasError && errorMessage}
-                id={id}
-            />
+            <UNSAFE_DatePicker.Input {...inputProps} label={label} error={hasError && errorMessage} id={id} />
         </UNSAFE_DatePicker>
     );
 }
-
