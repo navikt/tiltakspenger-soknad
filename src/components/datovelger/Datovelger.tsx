@@ -37,7 +37,13 @@ export default function Datovelger({
 
     return (
         <UNSAFE_DatePicker {...datepickerProps} id={id}>
-            <UNSAFE_DatePicker.Input {...inputProps} label={label} error={hasError && errorMessage} id={id} />
+            <UNSAFE_DatePicker.Input
+                {...inputProps}
+                label={label}
+                error={hasError && errorMessage}
+                id={id}
+                aria-controls={id}
+            />
         </UNSAFE_DatePicker>
     );
 }

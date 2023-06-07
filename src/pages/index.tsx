@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, GuidePanel, Link } from '@navikt/ds-react';
+import { Button, GuidePanel, Link, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import styles from './index.module.css';
 import Accordion from '@/components/accordion/Accordion';
@@ -25,7 +25,9 @@ export default function App() {
 
     return (
         <form onSubmit={handleSubmit(startSøknad)}>
-            <h2 className={styles.søknadstittel}>Søknad om tiltakspenger</h2>
+            <Heading className={styles.søknadstittel} size="large" level="1">
+                Søknad om tiltakspenger
+            </Heading>
             <GuidePanel poster>
                 <p>Hei! Jeg er her for å veilede deg gjennom søknaden.</p>
                 <p>Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.</p>

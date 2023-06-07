@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ErrorSummary, GuidePanel } from '@navikt/ds-react';
+import { Button, ErrorSummary, GuidePanel, Heading } from '@navikt/ds-react';
 import { useFormContext } from 'react-hook-form';
 import styles from './Step.module.css';
 import findAllErrors from '@/utils/errorState';
@@ -54,7 +54,11 @@ export default function Step({
 
     return (
         <>
-            {!hideTitle && <h2 className={styles.step__title}>{title}</h2>}
+            {!hideTitle && (
+                <Heading className={styles.søknadstittel} size="large" level="1">
+                    {title}
+                </Heading>
+            )}
             {shouldShowErrorSummary && (
                 <ErrorSummary className={styles.step__errorsummary} ref={errorRef}>
                     {allErrors.map(({ message, ref, type, types, root }) => {
@@ -66,7 +70,9 @@ export default function Step({
                     })}
                 </ErrorSummary>
             )}
-            {!hideStepIndicator && <span className={styles.step__stepindicator}> {`${stepNumber} av  ${totalStep}`} </span>}
+            {!hideStepIndicator && (
+                <span className={styles.step__stepindicator}> {`${stepNumber} av  ${totalStep}`} </span>
+            )}
             {guide && <GuidePanel poster>{guide}</GuidePanel>}
             <form onSubmit={onCompleted ? handleSubmit(onCompleted) : () => {}}>
                 <>
