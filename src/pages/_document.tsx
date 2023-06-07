@@ -48,6 +48,7 @@ class PageDocument extends Document<PageDocumentProps> {
             <Html lang="en">
                 <Head>
                     <Styles />
+                    <title>Søknad om tiltakspenger</title>
                 </Head>
                 <body>
                     <Scripts />
