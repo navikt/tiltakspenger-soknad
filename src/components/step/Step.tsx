@@ -55,7 +55,7 @@ export default function Step({
     return (
         <>
             {!hideTitle && (
-                <Heading className={styles.søknadstittel} size="large" level="1">
+                <Heading size="large" level="1" style={{ textAlign: 'center' }}>
                     {title}
                 </Heading>
             )}
