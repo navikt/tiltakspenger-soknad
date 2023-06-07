@@ -4,7 +4,7 @@ import { Søknadssteg } from '@/types/Søknadssteg';
 export function brukerHarFyltUtTiltakssteg({
     tiltak: { aktivitetId, periode },
 }: Spørsmålsbesvarelser) {
-    return !!aktivitetId && !!periode;
+    return !!aktivitetId && !!periode && !!periode.fra && !!periode.til;
 }
 
 export function brukerHarFyltUtProgramDeltagelseSteg({
