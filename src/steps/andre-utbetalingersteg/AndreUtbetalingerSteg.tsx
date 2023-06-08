@@ -27,6 +27,7 @@ import {
     supplerendeStønadOver67Validator,
     sykepengerValidator,
 } from '@/steps/andre-utbetalingersteg/validation';
+import Søknad from "@/types/Søknad";
 
 interface AndreUtbetalingerStegProps {
     title: string;
@@ -57,8 +58,10 @@ export default function AndreUtbetalingerSteg({
     const watchJobbsjansen = watch('svar.jobbsjansen.mottar');
     const watchSupplerendestønadOver67 = watch('svar.supplerendestønadover67.mottar');
     const watchSupplerendestønadFlyktninger = watch('svar.supplerendestønadflyktninger.mottar');
+    const watchEtterlønn = watch('svar.etterlønn.mottar');
+    const watchPensjonsordning = watch('svar.pensjonsordning.mottar');
 
-    const brukerregistrertPeriode = watch('svar.tiltak.periode');
+    const brukerregistrertPeriode = getValues('svar.tiltak.periode');
     const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
     const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
 
@@ -73,22 +76,13 @@ export default function AndreUtbetalingerSteg({
         watchJobbsjansen,
         watchSupplerendestønadOver67,
         watchSupplerendestønadFlyktninger,
+        watchEtterlønn,
+        watchPensjonsordning,
     ]);
 
-    React.useEffect(() => {
-        const søknad = getValues();
-        setValue('svar', {
-            ...søknad.svar,
-            sykepenger: {},
-            gjenlevendepensjon: {},
-            alderspensjon: {},
-            supplerendestønadover67: {},
-            supplerendestønadflyktninger: {},
-            pensjonsordning: {},
-            etterlønn: {},
-            jobbsjansen: {},
-        });
-    }, [watchMottarAndreUtbetalinger]);
+    const slettSvar = (formKey: string) => {
+        setValue(formKey, {});
+    }
 
     return (
         <Step
@@ -129,6 +123,16 @@ export default function AndreUtbetalingerSteg({
                         <li>Stønad via Jobbsjansen</li>
                     </ul>
                 }
+                afterOnChange={() => {
+                    slettSvar('svar.sykepenger')
+                    slettSvar('svar.gjenlevendepensjon')
+                    slettSvar('svar.alderspensjon')
+                    slettSvar('svar.supplerendestønadover67')
+                    slettSvar('svar.supplerendestønadflyktninger')
+                    slettSvar('svar.pensjonsordning')
+                    slettSvar('svar.etterlønn')
+                    slettSvar('svar.jobbsjansen')
+                }}
             >
                 Mottar du noen av disse utbetalingene i perioden {tiltaksperiodeTekst}?
             </JaNeiSpørsmål>
@@ -149,6 +153,7 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
+                        afterOnChange={() => slettSvar('svar.sykepenger.periode')}
                     >
                         Mottar du sykepenger?
                     </JaNeiSpørsmål>
@@ -184,6 +189,7 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
+                        afterOnChange={() => slettSvar('svar.gjenlevendepensjon.periode')}
                     >
                         Mottar du gjenlevendepensjon?
                     </JaNeiSpørsmål>
@@ -215,6 +221,7 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
+                        afterOnChange={() => slettSvar('svar.alderspensjon.fraDato')}
                     >
                         Mottar du alderspensjon?
                     </JaNeiSpørsmål>
@@ -248,6 +255,7 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
+                        afterOnChange={() => slettSvar('svar.supplerendestønadover67.periode')}
                     >
                         Mottar du supplerende stønad for personer over 67 år med kort botid i Norge?
                     </JaNeiSpørsmål>
@@ -282,6 +290,7 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
+                        afterOnChange={() => slettSvar('svar.supplerendestønadflyktninger.periode')}
                     >
                         Mottar du supplerende stønad for uføre flyktninger?
                     </JaNeiSpørsmål>
@@ -360,6 +369,7 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
+                        afterOnChange={() => slettSvar('svar.jobbsjansen.periode')}
                     >
                         Mottar du stønad via jobbsjansen?
                     </JaNeiSpørsmål>
