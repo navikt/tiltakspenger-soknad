@@ -36,7 +36,7 @@ export default function Periodevelger({
         defaultSelected: defaultSelected?.fra,
         fromDate: minDate,
         toDate: maxDate,
-        defaultMonth:  minDate ?? maxDate,
+        defaultMonth: minDate ?? maxDate,
     });
 
     const toDatePicker = UNSAFE_useDatepicker({
@@ -60,6 +60,8 @@ export default function Periodevelger({
                         id={`${id}.fra`}
                         error={!!errorMessage}
                         disabled={disabledFra}
+                        aria-controls={`${id}.fra`}
+                        aria-label="fra"
                     />
                 </UNSAFE_DatePicker>
                 <UNSAFE_DatePicker {...toDatePicker.datepickerProps}>
@@ -70,6 +72,8 @@ export default function Periodevelger({
                         id={`${id}.til`}
                         error={!!errorMessage}
                         disabled={disabledTil}
+                        aria-controls={`${id}.til`}
+                        aria-label="til"
                     />
                 </UNSAFE_DatePicker>
             </div>
