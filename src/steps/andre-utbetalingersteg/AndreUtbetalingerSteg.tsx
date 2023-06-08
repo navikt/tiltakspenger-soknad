@@ -79,8 +79,8 @@ export default function AndreUtbetalingerSteg({
         watchPensjonsordning,
     ]);
 
-    const slettSvar = (formKey: string) => {
-        setValue(formKey, {});
+    const slettSvar = (formKey: string, brukUndefined?: boolean) => {
+        setValue(formKey, brukUndefined ? undefined : {});
     }
 
     return (
@@ -220,7 +220,7 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
-                        afterOnChange={() => slettSvar('svar.alderspensjon.fraDato')}
+                        afterOnChange={() => slettSvar('svar.alderspensjon.fraDato', true)}
                     >
                         Mottar du alderspensjon?
                     </JaNeiSpørsmål>
