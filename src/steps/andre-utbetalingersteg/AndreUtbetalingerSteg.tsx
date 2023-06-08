@@ -27,7 +27,6 @@ import {
     supplerendeStønadOver67Validator,
     sykepengerValidator,
 } from '@/steps/andre-utbetalingersteg/validation';
-import Søknad from "@/types/Søknad";
 
 interface AndreUtbetalingerStegProps {
     title: string;
