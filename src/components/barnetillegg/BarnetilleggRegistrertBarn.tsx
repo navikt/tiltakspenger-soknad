@@ -19,9 +19,7 @@ export default function BarnetilleggRegistrertBarn({ barn }: BarnetilleggRegistr
     const { fødselsdato, fornavn, etternavn, mellomnavn, uuid } = barn;
     return (
         <div className={styles.barnetillegg}>
-            <p>
-                <strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}
-            </p>
+            {fornavn && <p><strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}</p>}
             <p><strong>Fødselsdato:</strong> {formatDate(fødselsdato)}</p>
             <JaNeiSpørsmål
                 reverse

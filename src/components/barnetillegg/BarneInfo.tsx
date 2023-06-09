@@ -11,7 +11,7 @@ export default function BarneInfo({barn, vedlegg}: BarneInfoProps) {
     const {fødselsdato, fornavn, etternavn, mellomnavn, oppholdInnenforEøs} = barn;
     return (
         <div>
-            <p><strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}</p>
+            {fornavn && <p><strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}</p>}
             <p><strong>Fødselsdato:</strong> {formatDate(fødselsdato)}</p>
             <p><strong>Oppholder barnet seg innenfor EØS i søkandsperioden:</strong>{oppholdInnenforEøs ? " Ja" : " Nei"}</p>
             {vedlegg?.map((vedlegg, index) => (
