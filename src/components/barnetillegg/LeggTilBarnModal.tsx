@@ -56,7 +56,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
     }
 
     function barnUtenforEØSValidator(verdi: boolean) {
-        return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om barnet bor utenfor EØS');
+        return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om barnet ditt oppholder seg innenfor EØS i tiltaksperioden');
     }
 
     function maks25tegnValidator(verdi: string) {

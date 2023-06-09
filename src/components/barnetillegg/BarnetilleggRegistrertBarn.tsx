@@ -12,7 +12,7 @@ interface BarnetilleggRegistrertBarnProps {
 }
 
 function barnUtenforEØSValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du søker barnetillegg');
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om barnet ditt oppholder seg innenfor EØS i tiltaksperioden');
 }
 
 export default function BarnetilleggRegistrertBarn({ barn }: BarnetilleggRegistrertBarnProps) {
