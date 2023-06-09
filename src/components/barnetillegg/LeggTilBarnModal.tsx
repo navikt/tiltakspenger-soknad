@@ -79,7 +79,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
             fornavn: barn.fornavn,
             etternavn: barn.etternavn,
             fødselsdato: barn.fødselsdato,
-            oppholdUtenforEØS: barn.oppholdUtenforEØS,
+            oppholdInnenforEøs: barn.oppholdInnenforEøs,
             uuid: åpneMedUuid,
             index: barn.index,
         });
@@ -149,7 +149,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                 </Datospørsmål>
                                 <JaNeiSpørsmål
                                     reverse
-                                    name={`svar.barnetillegg.kladd.oppholdUtenforEØS`}
+                                    name={`svar.barnetillegg.kladd.oppholdInnenforEøs`}
                                     validate={barnUtenforEØSValidator}
                                     hjelpetekst={{
                                         tittel: 'Hvorfor spør vi om dette?',
@@ -172,7 +172,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                         ),
                                     }}
                                 >
-                                    Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
+                                    Oppholder barnet ditt seg innenfor EØS i tiltaksperioden?
                                 </JaNeiSpørsmål>
                     <Button
                         onClick={lukkModal}

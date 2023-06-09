@@ -48,7 +48,7 @@ export default function BarnetilleggRegistrertBarn({ barn }: BarnetilleggRegistr
                     ),
                 }}
             >
-                Oppholder barnet ditt seg utenfor EØS i tiltaksperioden?
+                Oppholder barnet ditt seg innenfor EØS i tiltaksperioden?
             </JaNeiSpørsmål>
         </div>
     );

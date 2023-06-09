@@ -282,8 +282,8 @@ export default function Oppsummeringssteg({
                                         vedlegg={barnetsVedlegg}
                                         barn={{
                                             ...barn,
-                                            oppholdUtenforEØS:
-                                                barn.oppholdUtenforEØS ??
+                                            oppholdInnenforEøs:
+                                                barn.oppholdInnenforEøs ??
                                                 barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
                                         }}
                                     />

@@ -109,14 +109,14 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
 }
 
 function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
-    const oppholdUtenforEØSDict = barnetillegg.eøsOppholdForBarnFraAPI;
+    const oppholdInnenforEøsDict = barnetillegg.eøsOppholdForBarnFraAPI;
     const registrerteBarn = barnFraAPI
             .map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
                 fornavn,
                 fødselsdato,
                 mellomnavn,
                 etternavn,
-                oppholdUtenforEØS: oppholdUtenforEØSDict[uuid],
+                oppholdInnenforEøs: oppholdInnenforEøsDict[uuid],
             }));
     const manueltRegistrerteBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
             .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
