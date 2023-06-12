@@ -1,8 +1,12 @@
+import { createContext, Dispatch, SetStateAction, useState } from 'react';
 import type { AppProps } from 'next/app';
 import '@navikt/ds-css';
 import { initializeFaro } from '@grafana/faro-web-sdk';
 import { FormProvider, useForm } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
+import { UtfyllingContext } from './utfylling/[[...step]]';
+import { Tiltak } from '@/types/Tiltak';
+import { Personalia } from '@/types/Personalia';
 import '../styles/global.css';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
@@ -13,6 +17,14 @@ if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
         },
     });
 }
+
+interface UtfyllingSetStateContextType {
+    setTiltak: Dispatch<SetStateAction<undefined | Tiltak[]>>;
+    setPersonalia: Dispatch<SetStateAction<undefined | Personalia>>;
+    setValgtTiltak: Dispatch<SetStateAction<undefined | Tiltak>>;
+}
+
+export const UtfyllingSetStateContext = createContext<Partial<UtfyllingSetStateContextType>>({});
 
 function App({ Component, pageProps }: AppProps) {
     const formMethods = useForm<Søknad>({
@@ -43,9 +55,17 @@ function App({ Component, pageProps }: AppProps) {
         mode: 'onSubmit',
     });
 
+    const [valgtTiltak, setValgtTiltak] = useState<Tiltak | undefined>();
+    const [personalia, setPersonalia] = useState<Personalia | undefined>();
+    const [tiltak, setTiltak] = useState<Tiltak[] | undefined>();
+
     return (
         <FormProvider {...formMethods}>
-            <Component {...pageProps} />
+            <UtfyllingContext.Provider value={{ valgtTiltak, personalia, tiltak }}>
+                <UtfyllingSetStateContext.Provider value={{ setValgtTiltak, setPersonalia, setTiltak }}>
+                    <Component {...pageProps} />
+                </UtfyllingSetStateContext.Provider>
+            </UtfyllingContext.Provider>
         </FormProvider>
     );
 }

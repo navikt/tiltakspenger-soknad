@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Button, GuidePanel, Link, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import styles from './index.module.css';
@@ -7,6 +7,8 @@ import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekrefte
 import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
+import { Personalia } from '@/types/Personalia';
+import { UtfyllingSetStateContext } from '@/pages/_app';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -15,9 +17,19 @@ function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     );
 }
 
-export default function App() {
+interface IndexPageProps {
+    personalia: Personalia;
+}
+
+export default function IndexPage({ personalia }: IndexPageProps) {
     const router = useRouter();
     const { handleSubmit } = useFormContext<Søknad>();
+
+    const utyllingSetStateContext = useContext(UtfyllingSetStateContext);
+
+    useEffect(() => {
+        utyllingSetStateContext.setPersonalia!(personalia);
+    }, []);
 
     const startSøknad = () => {
         router.push('/utfylling/tiltak');
