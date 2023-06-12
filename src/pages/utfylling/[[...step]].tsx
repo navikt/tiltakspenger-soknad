@@ -160,19 +160,10 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     try {
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();
-        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
-        const personaliaJson = await personaliaResponse.json();
         const svarMedMocketTiltak = !tiltakJson.tiltak || tiltakJson.tiltak.length === 0;
         return {
             props: {
                 tiltak: svarMedMocketTiltak ? mocketTiltak : tiltakJson.tiltak,
-                personalia: {
-                    ...personaliaJson,
-                    barn: personaliaJson.barn.map((barn: any) => ({
-                        ...barn,
-                        uuid: uuidv4(),
-                    })),
-                },
             },
         };
     } catch (error) {
@@ -180,16 +171,6 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         return {
             props: {
                 tiltak: mocketTiltak,
-                personalia: {
-                    fornavn: 'Foo',
-                    mellomnavn: 'Bar',
-                    etternavn: 'Baz',
-                    fødselsnummer: '123',
-                    barn: [
-                        { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
-                        { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
-                    ],
-                },
             },
         };
     }

@@ -5,5 +5,6 @@ export interface Personalia {
     mellomnavn?: string;
     etternavn: string;
     fødselsnummer: string;
+    harFylt18År: boolean;
     barn: Barn[];
 }

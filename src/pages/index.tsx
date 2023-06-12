@@ -9,6 +9,11 @@ import Søknad from '@/types/Søknad';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import { Personalia } from '@/types/Personalia';
 import { UtfyllingSetStateContext } from '@/pages/_app';
+import {GetServerSidePropsContext} from "next";
+import logger from "@/utils/serverLogger";
+import {getOnBehalfOfToken} from "@/utils/authentication";
+import {makeGetRequest} from "@/utils/http";
+import {v4 as uuidv4} from "uuid";
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -110,4 +115,71 @@ export default function IndexPage({ personalia }: IndexPageProps) {
             </div>
         </form>
     );
+}
+
+
+export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+    let token = null;
+    try {
+        logger.info('Henter token');
+        const authorizationHeader = req.headers.authorization;
+        if (!authorizationHeader) {
+            throw new Error('Mangler token');
+        }
+        token = await getOnBehalfOfToken(authorizationHeader);
+    } catch (error) {
+        logger.info('Bruker har ikke tilgang', error);
+
+        return {
+            redirect: {
+                destination: '/oauth2/login',
+                permanent: false,
+            },
+        };
+    }
+
+    const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
+
+    try {
+        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
+        const personaliaJson = await personaliaResponse.json();
+
+        if(!personaliaJson.personalia.harFylt18År) {
+            return {
+                redirect: {
+                    destination: '/ikke-myndig/',
+                    permanent: false,
+                },
+            };
+        }
+
+        return {
+            props: {
+                personalia: {
+                    ...personaliaJson,
+                    barn: personaliaJson.barn.map((barn: any) => ({
+                        ...barn,
+                        uuid: uuidv4(),
+                    })),
+                },
+            },
+        };
+    } catch (error) {
+        logger.error((error as Error).message);
+        return {
+            props: {
+                personalia: {
+                    fornavn: 'Foo',
+                    mellomnavn: 'Bar',
+                    etternavn: 'Baz',
+                    fødselsnummer: '123',
+                    harFylt18År: false,
+                    barn: [
+                        {fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4()},
+                        {fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4()},
+                    ],
+                },
+            },
+        };
+    }
 }
