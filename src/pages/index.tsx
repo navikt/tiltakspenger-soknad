@@ -1,19 +1,20 @@
 import React, { useContext, useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import { Button, GuidePanel, Link, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import styles from './index.module.css';
 import Accordion from '@/components/accordion/Accordion';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
-import { useFormContext } from 'react-hook-form';
+import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import Søknad from '@/types/Søknad';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import { Personalia } from '@/types/Personalia';
 import { UtfyllingSetStateContext } from '@/pages/_app';
-import {GetServerSidePropsContext} from "next";
-import logger from "@/utils/serverLogger";
-import {getOnBehalfOfToken} from "@/utils/authentication";
-import {makeGetRequest} from "@/utils/http";
-import {v4 as uuidv4} from "uuid";
+import { GetServerSidePropsContext } from 'next';
+import logger from '@/utils/serverLogger';
+import { getOnBehalfOfToken } from '@/utils/authentication';
+import { makeGetRequest } from '@/utils/http';
+import styles from './index.module.css';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -39,6 +40,10 @@ export default function IndexPage({ personalia }: IndexPageProps) {
     const startSøknad = () => {
         router.push('/utfylling/tiltak');
     };
+
+    if (!personalia.harFylt18År) {
+        return <IkkeMyndig />;
+    }
 
     return (
         <form onSubmit={handleSubmit(startSøknad)}>
@@ -117,7 +122,6 @@ export default function IndexPage({ personalia }: IndexPageProps) {
     );
 }
 
-
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     let token = null;
     try {
@@ -139,20 +143,9 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     }
 
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
-
     try {
         const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
         const personaliaJson = await personaliaResponse.json();
-
-        if(!personaliaJson.personalia.harFylt18År) {
-            return {
-                redirect: {
-                    destination: '/ikke-myndig/',
-                    permanent: false,
-                },
-            };
-        }
-
         return {
             props: {
                 personalia: {
@@ -175,8 +168,8 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
                     fødselsnummer: '123',
                     harFylt18År: false,
                     barn: [
-                        {fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4()},
-                        {fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4()},
+                        { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
+                        { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
                     ],
                 },
             },

@@ -1,12 +1,12 @@
 import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import type { AppProps } from 'next/app';
 import '@navikt/ds-css';
 import { initializeFaro } from '@grafana/faro-web-sdk';
-import { FormProvider, useForm } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
-import { UtfyllingContext } from './utfylling/[[...step]]';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
+import { UtfyllingContext } from './utfylling/[[...step]]';
 import '../styles/global.css';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
