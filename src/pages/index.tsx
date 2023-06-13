@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid';
 import { Button, GuidePanel, Link, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
-import styles from './index.module.css';
 import Accordion from '@/components/accordion/Accordion';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
-import { useFormContext } from 'react-hook-form';
+import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import Søknad from '@/types/Søknad';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
+import { Personalia } from '@/types/Personalia';
+import { UtfyllingSetStateContext } from '@/pages/_app';
+import { GetServerSidePropsContext } from 'next';
+import logger from '@/utils/serverLogger';
+import { getOnBehalfOfToken } from '@/utils/authentication';
+import { makeGetRequest } from '@/utils/http';
+import styles from './index.module.css';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -15,13 +23,27 @@ function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     );
 }
 
-export default function App() {
+interface IndexPageProps {
+    personalia: Personalia;
+}
+
+export default function IndexPage({ personalia }: IndexPageProps) {
     const router = useRouter();
     const { handleSubmit } = useFormContext<Søknad>();
+
+    const utyllingSetStateContext = useContext(UtfyllingSetStateContext);
+
+    useEffect(() => {
+        utyllingSetStateContext.setPersonalia!(personalia);
+    }, []);
 
     const startSøknad = () => {
         router.push('/utfylling/tiltak');
     };
+
+    if (!personalia.harFylt18År) {
+        return <IkkeMyndig />;
+    }
 
     return (
         <form onSubmit={handleSubmit(startSøknad)}>
@@ -98,4 +120,59 @@ export default function App() {
             </div>
         </form>
     );
+}
+
+export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+    let token = null;
+    try {
+        logger.info('Henter token');
+        const authorizationHeader = req.headers.authorization;
+        if (!authorizationHeader) {
+            throw new Error('Mangler token');
+        }
+        token = await getOnBehalfOfToken(authorizationHeader);
+    } catch (error) {
+        logger.info('Bruker har ikke tilgang', error);
+
+        return {
+            redirect: {
+                destination: '/oauth2/login',
+                permanent: false,
+            },
+        };
+    }
+
+    const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
+    try {
+        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
+        const personaliaJson = await personaliaResponse.json();
+        return {
+            props: {
+                personalia: {
+                    ...personaliaJson,
+                    barn: personaliaJson.barn.map((barn: any) => ({
+                        ...barn,
+                        uuid: uuidv4(),
+                    })),
+                },
+            },
+        };
+    } catch (error) {
+        logger.error((error as Error).message);
+        return {
+            props: {
+                personalia: {
+                    fornavn: 'Foo',
+                    mellomnavn: 'Bar',
+                    etternavn: 'Baz',
+                    fødselsnummer: '123',
+                    harFylt18År: true,
+                    barn: [
+                        { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
+                        { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
+                    ],
+                },
+            },
+        };
+    }
 }
