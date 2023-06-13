@@ -1,4 +1,4 @@
-import { createContext, Dispatch, SetStateAction, useState } from 'react';
+import { createContext, Dispatch, ReactElement, ReactNode, SetStateAction, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { AppProps } from 'next/app';
 import '@navikt/ds-css';
@@ -7,6 +7,7 @@ import Søknad from '@/types/Søknad';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
 import { UtfyllingContext } from './utfylling/[[...step]]';
+import { NextPage } from 'next';
 import '../styles/global.css';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
@@ -26,7 +27,15 @@ interface UtfyllingSetStateContextType {
 
 export const UtfyllingSetStateContext = createContext<Partial<UtfyllingSetStateContextType>>({});
 
-function App({ Component, pageProps }: AppProps) {
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+    getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+    Component: NextPageWithLayout;
+};
+
+function App({ Component, pageProps }: AppPropsWithLayout) {
     const formMethods = useForm<Søknad>({
         defaultValues: {
             svar: {
@@ -59,7 +68,8 @@ function App({ Component, pageProps }: AppProps) {
     const [personalia, setPersonalia] = useState<Personalia | undefined>();
     const [tiltak, setTiltak] = useState<Tiltak[] | undefined>();
 
-    return (
+    const getLayout = Component.getLayout || ((page) => page);
+    return getLayout(
         <FormProvider {...formMethods}>
             <UtfyllingContext.Provider value={{ valgtTiltak, personalia, tiltak }}>
                 <UtfyllingSetStateContext.Provider value={{ setValgtTiltak, setPersonalia, setTiltak }}>

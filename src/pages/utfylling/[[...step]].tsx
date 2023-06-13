@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, ReactElement, useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
@@ -12,6 +12,7 @@ import { Søknadssteg } from '@/types/Søknadssteg';
 import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
 import AktivtSøknadssteg from '@/components/aktivt-søknadssteg/AktivtSøknadssteg';
 import { UtfyllingSetStateContext } from '@/pages/_app';
+import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -106,6 +107,10 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
     }
 }
 
+Utfylling.getLayout = function getLayout(page: ReactElement) {
+    return <SøknadLayout>{page}</SøknadLayout>;
+};
+
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     let token = null;
     try {
@@ -167,9 +172,17 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         };
     } catch (error) {
         logger.error((error as Error).message);
+        if (process.env.NODE_ENV === 'development' || process.env.NAIS_CLUSTER_NAME === 'dev-gcp') {
+            return {
+                props: {
+                    tiltak: mocketTiltak,
+                },
+            };
+        }
         return {
-            props: {
-                tiltak: mocketTiltak,
+            redirect: {
+                destination: '/generell-feil',
+                permanent: false,
             },
         };
     }
