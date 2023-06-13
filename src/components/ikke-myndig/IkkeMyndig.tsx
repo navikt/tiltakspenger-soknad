@@ -31,7 +31,7 @@ export default function IkkeMyndig() {
                 </BodyLong>
             </GuidePanel>
             <div className={styles.sendSøknadMedPostLink}>
-                <Link href="https://www.nav.no/soknader/nb/person/arbeid/tiltakspenger">Send søknad med post</Link>
+                <Link href="https://www.nav.no/fyllut/nav761345?sub=paper">Send søknad med post</Link>
             </div>
         </>
     );
