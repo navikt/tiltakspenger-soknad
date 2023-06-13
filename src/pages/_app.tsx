@@ -33,6 +33,7 @@ function App({ Component, pageProps }: AppProps) {
                 supplerendestønadflyktninger: {},
                 pensjonsordning: {},
                 etterlønn: {},
+                lønnetArbeid: {},
                 jobbsjansen: {},
                 mottarAndreUtbetalinger: undefined,
                 harBekreftetAlleOpplysninger: false,

@@ -30,10 +30,15 @@ export interface Barnetillegg {
 
 export interface Pensjonsordning {
     mottar: boolean;
+    periode: Periode;
 }
 
 export interface Etterlønn {
     mottar: boolean;
+}
+
+export interface LønnetArbeid {
+    erIlønnetArbeid: boolean;
 }
 
 export interface Sykepenger {
@@ -80,6 +85,7 @@ interface Spørsmålsbesvarelser {
     pensjonsordning: Pensjonsordning;
     etterlønn: Etterlønn;
     jobbsjansen: Jobbsjansen;
+    lønnetArbeid: LønnetArbeid
     barnetillegg: Barnetillegg;
     harBekreftetAlleOpplysninger: boolean;
     harBekreftetÅSvareSåGodtManKan: boolean;

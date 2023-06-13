@@ -26,6 +26,8 @@ import {
     supplerendeStønadFlyktningerValidator,
     supplerendeStønadOver67Validator,
     sykepengerValidator,
+    lønnetArbeidValidator,
+    påkrevdPensjonsordningPeriodeValidator,
 } from '@/steps/andre-utbetalingersteg/validation';
 
 interface AndreUtbetalingerStegProps {
@@ -57,7 +59,6 @@ export default function AndreUtbetalingerSteg({
     const watchJobbsjansen = watch('svar.jobbsjansen.mottar');
     const watchSupplerendestønadOver67 = watch('svar.supplerendestønadover67.mottar');
     const watchSupplerendestønadFlyktninger = watch('svar.supplerendestønadflyktninger.mottar');
-    const watchEtterlønn = watch('svar.etterlønn.mottar');
     const watchPensjonsordning = watch('svar.pensjonsordning.mottar');
 
     const brukerregistrertPeriode = getValues('svar.tiltak.periode');
@@ -69,13 +70,11 @@ export default function AndreUtbetalingerSteg({
     React.useEffect(() => {
         if (submitCount > 0) trigger('svar.mottarAndreUtbetalinger');
     }, [
-        watchSykepenger,
         watchGjenlevendepensjon,
         watchAlderspensjon,
         watchJobbsjansen,
         watchSupplerendestønadOver67,
         watchSupplerendestønadFlyktninger,
-        watchEtterlønn,
         watchPensjonsordning,
     ]);
 
@@ -92,17 +91,69 @@ export default function AndreUtbetalingerSteg({
             guide={
                 <>
                     <p>
-                        Vi trenger å vite om du har annen pengestøtte som helt eller delvis skal dekke dine daglige
-                        utgifter. Dette kan være utbetalinger fra:
+                        Vi trenger å vite om du har lønn fordi det kan ha betydning for din rett til tiltakspenger. Vi trenger også å vite om du har pengestøtte som helt eller delvis skal dekke dine daglige utgifter.
                     </p>
-                    <ul>
-                        <li>Offentlige trygde-og pensjonsordninger</li>
-                        <li>Private trygde- og pensjonsordninger</li>
-                        <li>Utenlandske trygde-og pensjonsordninger</li>
-                    </ul>
+                    <p>
+                        Vi spør deg om dette da det ikke er alt vi klarer å hente automatisk fra våre systemer.
+                    </p>
                 </>
             }
         >
+            <div className={styles.blokk}>
+                <JaNeiSpørsmål
+                    name="svar.lønnetArbeid.erILønnetArbeid"
+                    validate={lønnetArbeidValidator}
+                >
+                    Er du i lønnet arbeid når du går på tiltak?
+                </JaNeiSpørsmål>
+            </div>
+            <div className={styles.blokk}>
+                <JaNeiSpørsmål
+                    name="svar.etterlønn.mottar"
+                    validate={etterlønnValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er etterlønn?',
+                        tekst: 'Med etterlønn menes penger du mottar i forbindelse med at du slutter i arbeid og ikke jobber.',
+                    }}
+                >
+                    Mottar du etterlønn fra en tidligere arbeidsgiver i perioden {tiltaksperiodeTekst}?
+                </JaNeiSpørsmål>
+            </div>
+            <div className={watchSykepenger ? styles.blokkUtvidet : styles.blokk}>
+                <JaNeiSpørsmål
+                    name="svar.sykepenger.mottar"
+                    validate={sykepengerValidator}
+                    hjelpetekst={{
+                        tittel: 'Hva er sykepenger? ',
+                        tekst: (
+                            <>
+                                <p>
+                                    Du kan få sykepenger hvis du ikke kan jobbe på grunn av sykdom eller skade. Du
+                                    kan også få sykepenger hvis du blir syk mens du mottar dagpenger.
+                                </p>
+                                <p>Les mer om sykepenger på (LENKE)</p>
+                            </>
+                        ),
+                    }}
+                    afterOnChange={() => slettSvar('svar.sykepenger.periode')}
+                >
+                    Har du nylig mottatt sykepenger og er fortsatt sykemeldt i perioden {tiltaksperiodeTekst}?
+                </JaNeiSpørsmål>
+                {watchSykepenger && (
+                    <Periodespørsmål
+                        name="svar.sykepenger.periode"
+                        validate={[
+                            gyldigPeriodeValidator,
+                            påkrevdSykepengerPeriodeValidator,
+                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                        ]}
+                        minDate={new Date(tiltaksperiode?.fra)}
+                        maxDate={new Date(tiltaksperiode?.til)}
+                    >
+                        Når er du sykemeldt i tiltaksperioden?
+                    </Periodespørsmål>
+                )}
+            </div>
             <JaNeiSpørsmål
                 name="svar.mottarAndreUtbetalinger"
                 validate={[
@@ -112,85 +163,55 @@ export default function AndreUtbetalingerSteg({
                 ]}
                 description={
                     <ul>
-                        <li>Sykepenger</li>
-                        <li>Gjenlevendepensjon</li>
+                        <li>Pengestøtte til gjenlevende ektefelle</li>
                         <li>Alderspensjon</li>
                         <li>Supplerende stønad for personer over 67 år</li>
                         <li>Supplerende stønad for uføre flyktninger</li>
                         <li>Pengestøtte fra andre trygde- eller pensjonsordninger</li>
-                        <li>Etterlønn</li>
                         <li>Stønad via Jobbsjansen</li>
                     </ul>
                 }
+                hjelpetekst={{
+                    tittel: 'Når du har fått innvilget pengestøtte',
+                    tekst: (
+                        <>
+                            <p>
+                                Hvis du er innvilget slik pengestøtte vi spør om her, har du normalt fått et brev eller en digital medling om at du har rett til pengestøtten.
+                            </p>
+                        </>
+                    ),
+                }}
                 afterOnChange={() => {
-                    slettSvar('svar.sykepenger')
                     slettSvar('svar.gjenlevendepensjon')
                     slettSvar('svar.alderspensjon')
                     slettSvar('svar.supplerendestønadover67')
                     slettSvar('svar.supplerendestønadflyktninger')
                     slettSvar('svar.pensjonsordning')
-                    slettSvar('svar.etterlønn')
                     slettSvar('svar.jobbsjansen')
                 }}
             >
-                Mottar du noen av disse utbetalingene i perioden {tiltaksperiodeTekst}?
+                Mottar du noen av disse pengestøttene i perioden {tiltaksperiodeTekst}?
             </JaNeiSpørsmål>
             <Show if={watchMottarAndreUtbetalinger}>
-                <div className={styles.blokk}>
-                    <JaNeiSpørsmål
-                        name="svar.sykepenger.mottar"
-                        validate={sykepengerValidator}
-                        hjelpetekst={{
-                            tittel: 'Hva er sykepenger? ',
-                            tekst: (
-                                <>
-                                    <p>
-                                        Du kan få sykepenger hvis du ikke kan jobbe på grunn av sykdom eller skade. Du
-                                        kan også få sykepenger hvis du blir syk mens du mottar dagpenger.
-                                    </p>
-                                    <p>Les mer om sykepenger på (LENKE)</p>
-                                </>
-                            ),
-                        }}
-                        afterOnChange={() => slettSvar('svar.sykepenger.periode')}
-                    >
-                        Mottar du sykepenger?
-                    </JaNeiSpørsmål>
-                    {watchSykepenger && (
-                        <Periodespørsmål
-                            name="svar.sykepenger.periode"
-                            validate={[
-                                gyldigPeriodeValidator,
-                                påkrevdSykepengerPeriodeValidator,
-                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
-                            ]}
-                            minDate={new Date(tiltaksperiode?.fra)}
-                            maxDate={new Date(tiltaksperiode?.til)}
-                        >
-                            Når mottar du sykepenger?
-                        </Periodespørsmål>
-                    )}
-                </div>
-                <div className={styles.blokk}>
+                <div className={watchGjenlevendepensjon ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
                         name="svar.gjenlevendepensjon.mottar"
                         validate={gjenlevendepensjonValidator}
                         hjelpetekst={{
-                            tittel: 'Hva er gjenlevendepensjon? ',
+                            tittel: 'Mottar du pengestøtte til gjenlevende ektefelle?',
                             tekst: (
                                 <>
                                     <p>
-                                        Du kan få gjenlevendepensjon hvis du har mistet din ektefelle, partner eller
-                                        samboer med felles barn. Du kan også motta gjenlevendepensjon fra for eksempel
-                                        Statens Pensjonskasse eller KLP.
+                                        Når ektefellen, samboeren eller partneren din dør, kan du ha rett til pengestøtte som etterlatt.
+                                        Det kan være gjenlevendepensjon eller overgangstønad.
                                     </p>
-                                    <p>Les mer om gjenlevendepensjon fra NAV (LENKE)</p>
+                                    <p>Les mer om pengestøtte til gjenlevende ektefelle fra NAV (LENKE)</p>
                                 </>
                             ),
                         }}
                         afterOnChange={() => slettSvar('svar.gjenlevendepensjon.periode')}
                     >
-                        Mottar du gjenlevendepensjon?
+                        Mottar du pengestøtte til gjenlevende ektefelle?
                     </JaNeiSpørsmål>
                     {watchGjenlevendepensjon && (
                         <Periodespørsmål
@@ -203,16 +224,16 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du gjenlevendepensjon?
+                            Når mottar du pengestøtte til gjenlevende ektefelle?
                         </Periodespørsmål>
                     )}
                 </div>
-                <div className={styles.blokk}>
+                <div className={watchAlderspensjon ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
                         name="svar.alderspensjon.mottar"
                         validate={alderspensjonValidator}
                         hjelpetekst={{
-                            tittel: 'Når begynner din alderspensjon? ',
+                            tittel: 'Hva er alderspensjon?',
                             tekst: (
                                 <>
                                     <p>Alderspensjon skal sikre deg inntekt når du blir pensjonist.</p>
@@ -230,12 +251,13 @@ export default function AndreUtbetalingerSteg({
                             validate={påkrevdAlderspensjonDatofeltValidator}
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
+                            legend="Når begynner din alderspensjon?"
                         >
                             Fra dato
                         </Datospørsmål>
                     )}
                 </div>
-                <div className={styles.blokk}>
+                <div className={watchSupplerendestønadOver67 ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
                         name="svar.supplerendestønadover67.mottar"
                         validate={supplerendeStønadOver67Validator}
@@ -269,11 +291,11 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du det?
+                            Når mottar du supplerende stønad for personer over 67 år med kort botid i Norge?
                         </Periodespørsmål>
                     )}
                 </div>
-                <div className={styles.blokk}>
+                <div className={watchSupplerendestønadFlyktninger ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
                         name="svar.supplerendestønadflyktninger.mottar"
                         validate={supplerendeStønadFlyktningerValidator}
@@ -304,11 +326,11 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du det?
+                            Når mottar du supplerende stønad for uføre flyktninger?
                         </Periodespørsmål>
                     )}
                 </div>
-                <div className={styles.blokk}>
+                <div className={watchPensjonsordning ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
                         name="svar.pensjonsordning.mottar"
                         validate={pensjonsordningValidator}
@@ -334,23 +356,26 @@ export default function AndreUtbetalingerSteg({
                                 </>
                             ),
                         }}
+                        afterOnChange={() => slettSvar('svar.pensjonsordning.periode')}
                     >
                         Mottar du pengestøtte fra andre trygde- eller pensjonsordninger?
                     </JaNeiSpørsmål>
+                    {watchPensjonsordning && (
+                        <Periodespørsmål
+                            name="svar.pensjonsordning.periode"
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdPensjonsordningPeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
+                        >
+                            Når mottar du pengestøtte fra andre trygde- eller pensjonsordninger?
+                        </Periodespørsmål>
+                    )}
                 </div>
-                <div className={styles.blokk}>
-                    <JaNeiSpørsmål
-                        name="svar.etterlønn.mottar"
-                        validate={etterlønnValidator}
-                        hjelpetekst={{
-                            tittel: 'Hva er etterlønn?',
-                            tekst: 'Med etterlønn menes penger du mottar i forbindelse med at du slutter i arbeid og ikke jobber.',
-                        }}
-                    >
-                        Mottar du etterlønn?
-                    </JaNeiSpørsmål>
-                </div>
-                <div className={styles.blokk}>
+                <div className={watchJobbsjansen ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
                         name="svar.jobbsjansen.mottar"
                         validate={jobbsjansenValidator}
@@ -383,7 +408,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du det?
+                            Når mottar du stønad via jobbsjansen?
                         </Periodespørsmål>
                     )}
                 </div>

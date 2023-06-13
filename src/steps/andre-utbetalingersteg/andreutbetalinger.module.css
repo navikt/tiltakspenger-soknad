@@ -4,7 +4,18 @@
     margin-top: 0rem;
 }
 
+.blokkUtvidet :global(
+.navds-fieldset
+){
+    margin-top: 0rem;
+}
+
 .blokk {
+    padding: 1rem 0 0.5rem 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.blokkUtvidet {
     background-color: var(--a-gray-50);
     padding: 1rem 0 0.5rem 0.5rem;
     margin-top: 0.5rem;

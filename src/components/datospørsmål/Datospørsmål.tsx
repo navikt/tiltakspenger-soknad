@@ -14,6 +14,7 @@ interface DatospørsmålProps {
     maxDate?: Date;
     hjelpetekst?: Hjelpetekst;
     datoMåVæreIFortid?: boolean;
+    legend?: string;
 }
 
 export default function Datospørsmål({
@@ -24,11 +25,13 @@ export default function Datospørsmål({
     maxDate,
     hjelpetekst,
     datoMåVæreIFortid,
+    legend,
 }: DatospørsmålProps) {
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
         <fieldset className={styles.datospørsmål}>
+            <legend className={styles.datospørsmål__legend}>{legend}</legend>
             {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
                 name={name}
