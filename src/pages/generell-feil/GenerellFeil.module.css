@@ -1,0 +1,17 @@
+.generellFeil {
+    padding-top: 10rem;
+    padding-bottom: 10rem;
+}
+
+.generellFeilHeading {
+    text-align: center;
+}
+
+.generellFeilGuidePanel {
+    margin-top: 2rem;
+}
+
+.lastInnSidenPåNyttButton {
+    text-align: center;
+    margin-top: 2rem;
+}

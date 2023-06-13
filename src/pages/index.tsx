@@ -1,11 +1,10 @@
-import React, { useContext, useEffect } from 'react';
+import React, { ReactElement, useContext, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
 import { Button, GuidePanel, Link, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import Accordion from '@/components/accordion/Accordion';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
-import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import Søknad from '@/types/Søknad';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import { Personalia } from '@/types/Personalia';
@@ -15,6 +14,8 @@ import logger from '@/utils/serverLogger';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { makeGetRequest } from '@/utils/http';
 import styles from './index.module.css';
+import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
+import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -122,6 +123,10 @@ export default function IndexPage({ personalia }: IndexPageProps) {
     );
 }
 
+IndexPage.getLayout = function getLayout(page: ReactElement) {
+    return <SøknadLayout>{page}</SøknadLayout>;
+};
+
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     let token = null;
     try {
@@ -158,20 +163,29 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             },
         };
     } catch (error) {
-        logger.error((error as Error).message);
-        return {
-            props: {
-                personalia: {
-                    fornavn: 'Foo',
-                    mellomnavn: 'Bar',
-                    etternavn: 'Baz',
-                    fødselsnummer: '123',
-                    harFylt18År: true,
-                    barn: [
-                        { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
-                        { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
-                    ],
+        if (process.env.NODE_ENV === 'development' || process.env.NAIS_CLUSTER_NAME === 'dev-gcp') {
+            logger.error((error as Error).message);
+            return {
+                props: {
+                    personalia: {
+                        fornavn: 'Foo',
+                        mellomnavn: 'Bar',
+                        etternavn: 'Baz',
+                        fødselsnummer: '123',
+                        harFylt18År: true,
+                        barn: [
+                            { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
+                            { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
+                        ],
+                    },
                 },
+            };
+        }
+
+        return {
+            redirect: {
+                destination: '/generell-feil',
+                permanent: false,
             },
         };
     }
