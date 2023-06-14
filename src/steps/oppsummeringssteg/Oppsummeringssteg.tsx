@@ -50,9 +50,18 @@ function hentSvarTilSpørsmålene(spørsmålTittel: String, mottar: boolean, per
     if (mottar) {
         return `Ja, jeg mottar ${spørsmålTittel} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
     } else {
-        return `Nei, jeg mottar ikke ${spørsmålTittel}`;
+        return `Nei, jeg mottar ikke ${spørsmålTittel} i perioden jeg går på tiltak`;
     }
 }
+
+function svarLønnetArbeid(erILønnetArbeid: boolean) {
+    if (erILønnetArbeid) {
+        return 'Ja, jeg er i lønnet arbeid i perioden jeg går på tiltak';
+    } else {
+        return 'Nei, jeg er ikke i lønnet arbeid i perioden jeg går på tiltak';
+    }
+}
+
 
 function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
@@ -72,6 +81,7 @@ export default function Oppsummeringssteg({
     const {
         kvalifiseringsprogram,
         introduksjonsprogram,
+        lønnetArbeid,
         pensjonsordning,
         etterlønn,
         mottarAndreUtbetalinger,
@@ -187,23 +197,35 @@ export default function Oppsummeringssteg({
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
-                    <Accordion.Header>Andre utbetalinger</Accordion.Header>
+                    <Accordion.Header>Utbetalinger</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
-                            feltNavn=""
-                            feltVerdi={hentSvarTilSpørsmålene(
-                                "andre offentlige, private eller utenlandske trygde- eller pensjonsordninger",
-                                mottarAndreUtbetalinger
-                            )}
+                            feltNavn="Lønn"
+                            feltVerdi={svarLønnetArbeid(lønnetArbeid.erIlønnetArbeid)}
                         />
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Etterlønn"
+                                feltVerdi={hentSvarTilSpørsmålene("etterlønn", etterlønn.mottar)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Sykepenger"
+                                feltVerdi={hentSvarTilSpørsmålene("sykepenger", sykepenger.mottar, sykepenger.periode)}
+                            />
+                        </div>
+                        <div style={{ marginTop: '2rem' }}>
+                            <Oppsummeringsfelt
+                                feltNavn="Annen pengestøtte"
+                                feltVerdi={hentSvarTilSpørsmålene(
+                                    "andre offentlige, private eller utenlandske trygde- eller pensjonsordninger",
+                                    mottarAndreUtbetalinger
+                                )}
+                            />
+                        </div>
                         {mottarAndreUtbetalinger && (
                             <>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Sykepenger"
-                                        feltVerdi={hentSvarTilSpørsmålene("sykepenger", sykepenger.mottar, sykepenger.periode)}
-                                    />
-                                </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
                                         feltNavn="Gjenlevendepensjon"
@@ -239,13 +261,7 @@ export default function Oppsummeringssteg({
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
                                         feltNavn="Pensjonsordning"
-                                        feltVerdi={hentSvarTilSpørsmålene("pensjonsordning", pensjonsordning.mottar)}
-                                    />
-                                </div>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Etterlønn"
-                                        feltVerdi={hentSvarTilSpørsmålene("etterlønn", etterlønn.mottar)}
+                                        feltVerdi={hentSvarTilSpørsmålene("pensjonsordning", pensjonsordning.mottar, pensjonsordning.periode)}
                                     />
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
