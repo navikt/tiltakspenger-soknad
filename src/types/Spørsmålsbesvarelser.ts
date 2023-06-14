@@ -38,7 +38,7 @@ export interface Etterlønn {
 }
 
 export interface LønnetArbeid {
-    erIlønnetArbeid: boolean;
+    erILønnetArbeid: boolean;
 }
 
 export interface Sykepenger {

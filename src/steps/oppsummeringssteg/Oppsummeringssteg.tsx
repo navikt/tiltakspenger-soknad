@@ -201,7 +201,7 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Lønn"
-                            feltVerdi={svarLønnetArbeid(lønnetArbeid.erIlønnetArbeid)}
+                            feltVerdi={svarLønnetArbeid(lønnetArbeid.erILønnetArbeid)}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
