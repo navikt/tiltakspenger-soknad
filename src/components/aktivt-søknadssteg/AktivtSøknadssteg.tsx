@@ -80,7 +80,7 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
         case Søknadssteg.ANDRE_UTBETALINGER:
             return (
                 <AndreUtbetalingerSteg
-                    title="Andre utbetalinger"
+                    title="Utbetalinger"
                     stepNumber={3}
                     onCompleted={() => navigateTo(Søknadssteg.INSTITUSJONSOPPHOLD)}
                     onGoToPreviousStep={goBack}

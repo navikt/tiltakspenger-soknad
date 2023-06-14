@@ -26,6 +26,10 @@ export function etterlønnValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar etterlønn');
 }
 
+export function lønnetArbeidValidator(verdi: boolean) {
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du er i lønnet arbeid');
+}
+
 export function supplerendeStønadOver67Validator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(
         verdi,
@@ -52,6 +56,10 @@ export function påkrevdJobbsjansenPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar jobbsjansen');
 }
 
+export function påkrevdPensjonsordningPeriodeValidator(periode: FormPeriode) {
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar pengestøtte fra andre ordninger');
+}
+
 export function påkrevdSupplerendeStønadOver67PeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(
         periode,
@@ -74,12 +82,12 @@ export function mottarAndreUtbetalingerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du mottar andre utbetalinger');
 }
 
-export function minstEnAnnenUtbetalingHvisJaValidator({ sykepenger, alderspensjon, gjenlevendepensjon, pensjonsordning, etterlønn, supplerendestønadover67, supplerendestønadflyktninger, jobbsjansen}: Spørsmålsbesvarelser, mottarAndreUtbetalinger: boolean) {
-    if (mottarAndreUtbetalinger && !((sykepenger && sykepenger.mottar) || (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
+export function minstEnAnnenUtbetalingHvisJaValidator({ alderspensjon, gjenlevendepensjon, pensjonsordning, supplerendestønadover67, supplerendestønadflyktninger, jobbsjansen}: Spørsmålsbesvarelser, mottarAndreUtbetalinger: boolean) {
+    if (mottarAndreUtbetalinger && !((gjenlevendepensjon && gjenlevendepensjon.mottar) ||
         (alderspensjon && alderspensjon.mottar) || (jobbsjansen && jobbsjansen.mottar) ||
         (supplerendestønadover67 && supplerendestønadover67.mottar) || (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
-        (pensjonsordning && pensjonsordning.mottar) || (etterlønn && etterlønn.mottar)
-    )) {
+        (pensjonsordning && pensjonsordning.mottar))
+    ) {
         return "Du må svare ja på at du mottar minst én annen utbetaling"
     }
 }

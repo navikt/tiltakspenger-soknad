@@ -50,9 +50,21 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
     const { mottarAndreUtbetalinger, sykepenger, alderspensjon,
             gjenlevendepensjon, pensjonsordning, etterlønn,
             supplerendestønadover67, supplerendestønadflyktninger,
-            jobbsjansen} = spørsmålsbesvarelser;
+            jobbsjansen, lønnetArbeid} = spørsmålsbesvarelser;
 
     if (mottarAndreUtbetalinger === undefined) {
+        return false;
+    }
+
+    if (lønnetArbeid === undefined) {
+        return false;
+    }
+
+    if (etterlønn === undefined) {
+        return false;
+    }
+
+    if (sykepenger === undefined) {
         return false;
     }
 
@@ -80,12 +92,10 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
         }
     }
 
-    if (pensjonsordning === undefined) {
-        return false;
-    }
-
-    if (etterlønn === undefined) {
-        return false;
+    if (pensjonsordning && pensjonsordning.mottar) {
+        if (!pensjonsordning.periode) {
+            return false;
+        }
     }
 
     if (supplerendestønadover67 && supplerendestønadover67.mottar) {
@@ -100,10 +110,10 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
         }
     }
 
-    if (mottarAndreUtbetalinger && !((sykepenger && sykepenger.mottar) || (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
+    if (mottarAndreUtbetalinger && !((gjenlevendepensjon && gjenlevendepensjon.mottar) ||
         (alderspensjon && alderspensjon.mottar) || (jobbsjansen && jobbsjansen.mottar) ||
         (supplerendestønadover67 && supplerendestønadover67.mottar) || (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
-        (pensjonsordning && pensjonsordning.mottar) || (etterlønn && etterlønn.mottar)
+        (pensjonsordning && pensjonsordning.mottar)
     )) {
         return false;
     }

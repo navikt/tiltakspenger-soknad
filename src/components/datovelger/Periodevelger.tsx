@@ -55,7 +55,6 @@ export default function Periodevelger({
                 <UNSAFE_DatePicker {...fromDatePicker.datepickerProps}>
                     <UNSAFE_DatePicker.Input
                         {...fromDatePicker.inputProps}
-                        size="small"
                         label="Fra"
                         id={`${id}.fra`}
                         error={!!errorMessage}
@@ -67,7 +66,6 @@ export default function Periodevelger({
                 <UNSAFE_DatePicker {...toDatePicker.datepickerProps}>
                     <UNSAFE_DatePicker.Input
                         {...toDatePicker.inputProps}
-                        size="small"
                         label="Til"
                         id={`${id}.til`}
                         error={!!errorMessage}

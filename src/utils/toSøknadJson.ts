@@ -7,6 +7,7 @@ import Spørsmålsbesvarelser, {
     Introduksjonsprogram,
     Jobbsjansen,
     Kvalifiseringsprogram,
+    Pensjonsordning,
     Supplerendestønadover67,
     Sykepenger,
 } from '@/types/Spørsmålsbesvarelser';
@@ -89,6 +90,13 @@ function supplerendestønadflyktninger({ mottar, periode }: Supplerendestønadov
     return { mottar };
 }
 
+function pensjonsordning ({ mottar, periode }: Pensjonsordning) {
+    if (mottar) {
+        return { mottar, periode: formatPeriod(periode as Periode)}
+    }
+    return { mottar };
+}
+
 function institusjon(institusjonsopphold: Institusjonsopphold) {
     const { periode, borPåInstitusjon } = institusjonsopphold;
     if (borPåInstitusjon) {
@@ -147,6 +155,7 @@ export default function toSøknadJson(
         supplerendestønadover67: supplerendestønadover67(spørsmålsbesvarelser.supplerendestønadover67),
         supplerendestønadflyktninger: supplerendestønadflyktninger(spørsmålsbesvarelser.supplerendestønadflyktninger),
         jobbsjansen: jobbsjansen(spørsmålsbesvarelser.jobbsjansen),
+        pensjonsordning: pensjonsordning(spørsmålsbesvarelser.pensjonsordning),
         institusjonsopphold: institusjon(spørsmålsbesvarelser.institusjonsopphold),
         tiltak: tiltak(spørsmålsbesvarelser.tiltak, valgtTiltak),
     });
