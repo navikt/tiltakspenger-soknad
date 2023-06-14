@@ -1,5 +1,4 @@
-import React, { createContext } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { createContext, ReactElement, useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
@@ -12,6 +11,8 @@ import Søknad from '@/types/Søknad';
 import { Søknadssteg } from '@/types/Søknadssteg';
 import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
 import AktivtSøknadssteg from '@/components/aktivt-søknadssteg/AktivtSøknadssteg';
+import { UtfyllingSetStateContext } from '@/pages/_app';
+import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -26,24 +27,29 @@ interface UtfyllingContextType {
 
 export const UtfyllingContext = createContext<Partial<UtfyllingContextType>>({});
 
-export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
+export default function Utfylling({ tiltak }: UtfyllingProps) {
     const router = useRouter();
 
     const { step } = router.query;
     const { getValues, watch, reset, setValue } = useFormContext<Søknad>();
-
-    const [valgtTiltak, setValgtTiltak] = React.useState<Tiltak>();
+    const { setTiltak, setValgtTiltak } = useContext(UtfyllingSetStateContext);
+    const { valgtTiltak } = useContext(UtfyllingContext);
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
+
+    React.useEffect(() => {
+        setTiltak!(tiltak);
+    }, []);
+
     React.useEffect(() => {
         const matchendeTiltak = tiltak.find(({ aktivitetId }) => aktivitetId === valgtAktivitetId);
         if (matchendeTiltak) {
-            setValgtTiltak(matchendeTiltak);
-            const arenaFra = matchendeTiltak.arenaRegistrertPeriode?.fra
-            const arenaTil = matchendeTiltak.arenaRegistrertPeriode?.til
+            setValgtTiltak!(matchendeTiltak);
+            const arenaFra = matchendeTiltak.arenaRegistrertPeriode?.fra;
+            const arenaTil = matchendeTiltak.arenaRegistrertPeriode?.til;
             setValue('svar.tiltak', {
                 ...getValues('svar.tiltak'),
                 periode: { fra: arenaFra ?? '', til: arenaTil ?? '' },
-                arenaRegistrertPeriode: valgtTiltak?.arenaRegistrertPeriode
+                arenaRegistrertPeriode: valgtTiltak?.arenaRegistrertPeriode,
             });
         }
     }, [valgtAktivitetId]);
@@ -95,15 +101,15 @@ export default function Utfylling({ tiltak, personalia }: UtfyllingProps) {
     }, [step]);
 
     if (brukerErIGyldigTilstand) {
-        return (
-            <UtfyllingContext.Provider value={{ tiltak, personalia, valgtTiltak }}>
-                <AktivtSøknadssteg steg={aktivtSøknadssteg} />
-            </UtfyllingContext.Provider>
-        );
+        return <AktivtSøknadssteg steg={aktivtSøknadssteg} />;
     } else {
         return null;
     }
 }
+
+Utfylling.getLayout = function getLayout(page: ReactElement) {
+    return <SøknadLayout>{page}</SøknadLayout>;
+};
 
 export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     let token = null;
@@ -140,7 +146,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             type: 'Annen utdaasdanning',
             typeNavn: 'Annen utdaasdnning',
             deltakelsePeriode: { fra: '2025-04-02', til: '2025-04-10' },
-            arenaRegistrertPeriode: { },
+            arenaRegistrertPeriode: {},
             arrangør: 'Testarrangør',
             status: 'Aktuell',
         },
@@ -158,36 +164,25 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     try {
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();
-        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
-        const personaliaJson = await personaliaResponse.json();
         const svarMedMocketTiltak = !tiltakJson.tiltak || tiltakJson.tiltak.length === 0;
         return {
             props: {
                 tiltak: svarMedMocketTiltak ? mocketTiltak : tiltakJson.tiltak,
-                personalia: {
-                    ...personaliaJson,
-                    barn: personaliaJson.barn.map((barn: any) => ({
-                        ...barn,
-                        uuid: uuidv4(),
-                    })),
-                },
             },
         };
     } catch (error) {
         logger.error((error as Error).message);
-        return {
-            props: {
-                tiltak: mocketTiltak,
-                personalia: {
-                    fornavn: 'Foo',
-                    mellomnavn: 'Bar',
-                    etternavn: 'Baz',
-                    fødselsnummer: '123',
-                    barn: [
-                        { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
-                        { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
-                    ],
+        if (process.env.NODE_ENV === 'development' || process.env.NAIS_CLUSTER_NAME === 'dev-gcp') {
+            return {
+                props: {
+                    tiltak: mocketTiltak,
                 },
+            };
+        }
+        return {
+            redirect: {
+                destination: '/generell-feil',
+                permanent: false,
             },
         };
     }

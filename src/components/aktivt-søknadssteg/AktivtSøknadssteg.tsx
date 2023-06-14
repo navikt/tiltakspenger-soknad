@@ -48,7 +48,7 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
         return router.push('/', undefined, { shallow: false });
     }
 
-    const navigateToError = () => router.push('/feil', undefined, { shallow: false });
+    const navigateToError = () => router.push('/feil-ved-innsending', undefined, { shallow: false });
 
     function navigateTo(søknadssteg: Søknadssteg, shallow: boolean = true) {
         return router.push(`/utfylling/${søknadssteg}`, undefined, { shallow });
