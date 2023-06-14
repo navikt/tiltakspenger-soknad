@@ -137,7 +137,7 @@ export default function AndreUtbetalingerSteg({
                     }}
                     afterOnChange={() => slettSvar('svar.sykepenger.periode')}
                 >
-                    Har du nylig mottatt sykepenger og er fortsatt sykemeldt i perioden {tiltaksperiodeTekst}?
+                    Har du nylig mottatt sykepenger og er fortsatt sykmeldt i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
                 {watchSykepenger && (
                     <Periodespørsmål
@@ -150,7 +150,7 @@ export default function AndreUtbetalingerSteg({
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
                     >
-                        Når er du sykemeldt i tiltaksperioden?
+                        Når er du sykmeldt i tiltaksperioden?
                     </Periodespørsmål>
                 )}
             </div>

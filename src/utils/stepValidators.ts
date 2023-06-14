@@ -56,6 +56,18 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
         return false;
     }
 
+    if (lønnetArbeid === undefined) {
+        return false;
+    }
+
+    if (etterlønn === undefined) {
+        return false;
+    }
+
+    if (sykepenger === undefined) {
+        return false;
+    }
+
     if (sykepenger && sykepenger.mottar) {
         if (!sykepenger.periode) {
             return false;
@@ -84,14 +96,6 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
         if (!pensjonsordning.periode) {
             return false;
         }
-    }
-
-    if (etterlønn === undefined) {
-        return false;
-    }
-
-    if (lønnetArbeid === undefined) {
-        return false;
     }
 
     if (supplerendestønadover67 && supplerendestønadover67.mottar) {
