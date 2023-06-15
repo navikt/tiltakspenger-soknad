@@ -164,7 +164,8 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     try {
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();
-        const svarMedMocketTiltak = !tiltakJson.tiltak || tiltakJson.tiltak.length === 0;
+        const svarMedMocketTiltak =
+            process.env.NODE_ENV === 'development' && (!tiltakJson.tiltak || tiltakJson.tiltak.length === 0);
         return {
             props: {
                 tiltak: svarMedMocketTiltak ? mocketTiltak : tiltakJson.tiltak,
