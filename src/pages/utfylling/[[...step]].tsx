@@ -172,7 +172,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         };
     } catch (error) {
         logger.error((error as Error).message);
-        if (process.env.NODE_ENV === 'development' || process.env.NAIS_CLUSTER_NAME === 'dev-gcp') {
+        if (process.env.NODE_ENV === 'development') {
             return {
                 props: {
                     tiltak: mocketTiltak,

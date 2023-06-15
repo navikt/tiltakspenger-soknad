@@ -163,7 +163,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             },
         };
     } catch (error) {
-        if (process.env.NODE_ENV === 'development' || process.env.NAIS_CLUSTER_NAME === 'dev-gcp') {
+        if (process.env.NODE_ENV === 'development') {
             logger.error((error as Error).message);
             return {
                 props: {
