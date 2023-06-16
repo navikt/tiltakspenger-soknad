@@ -103,7 +103,7 @@ export default function ProgramDeltagelseSteg({
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
                     >
-                        Når deltar du i kvalifiseringsprogrammet?
+                        I hvilken del av perioden deltar du i kvalifiseringsprogrammet?
                     </Periodespørsmål>
                 )}
                 <JaNeiSpørsmål
@@ -140,7 +140,7 @@ export default function ProgramDeltagelseSteg({
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
                     >
-                        Når deltar du i introduksjonsprogrammet?
+                        I hvilken del av perioden deltar du i introduksjonsprogrammet?
                     </Periodespørsmål>
                 )}
             </>

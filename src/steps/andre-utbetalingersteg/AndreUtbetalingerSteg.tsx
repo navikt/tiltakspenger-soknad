@@ -80,7 +80,7 @@ export default function AndreUtbetalingerSteg({
 
     const slettSvar = (formKey: string, brukUndefined?: boolean) => {
         setValue(formKey, brukUndefined ? undefined : {});
-    }
+    };
 
     return (
         <Step
@@ -91,19 +91,16 @@ export default function AndreUtbetalingerSteg({
             guide={
                 <>
                     <p>
-                        Vi trenger å vite om du har lønn fordi det kan ha betydning for din rett til tiltakspenger. Vi trenger også å vite om du har pengestøtte som helt eller delvis skal dekke dine daglige utgifter.
+                        Vi trenger å vite om du har lønn fordi det kan ha betydning for din rett til tiltakspenger. Vi
+                        trenger også å vite om du har pengestøtte som helt eller delvis skal dekke dine daglige
+                        utgifter.
                     </p>
-                    <p>
-                        Vi spør deg om dette da det ikke er alt vi klarer å hente automatisk fra våre systemer.
-                    </p>
+                    <p>Vi spør deg om dette da det ikke er alt vi klarer å hente automatisk fra våre systemer.</p>
                 </>
             }
         >
             <div className={styles.blokk}>
-                <JaNeiSpørsmål
-                    name="svar.lønnetArbeid.erILønnetArbeid"
-                    validate={lønnetArbeidValidator}
-                >
+                <JaNeiSpørsmål name="svar.lønnetArbeid.erILønnetArbeid" validate={lønnetArbeidValidator}>
                     Er du i lønnet arbeid når du går på tiltak?
                 </JaNeiSpørsmål>
             </div>
@@ -128,8 +125,8 @@ export default function AndreUtbetalingerSteg({
                         tekst: (
                             <>
                                 <p>
-                                    Du kan få sykepenger hvis du ikke kan jobbe på grunn av sykdom eller skade. Du
-                                    kan også få sykepenger hvis du blir syk mens du mottar dagpenger.
+                                    Du kan få sykepenger hvis du ikke kan jobbe på grunn av sykdom eller skade. Du kan
+                                    også få sykepenger hvis du blir syk mens du mottar dagpenger.
                                 </p>
                                 <p>Les mer om sykepenger på (LENKE)</p>
                             </>
@@ -150,7 +147,7 @@ export default function AndreUtbetalingerSteg({
                         minDate={new Date(tiltaksperiode?.fra)}
                         maxDate={new Date(tiltaksperiode?.til)}
                     >
-                        Når er du sykmeldt i tiltaksperioden?
+                        I hvilken del av perioden er du sykmeldt?
                     </Periodespørsmål>
                 )}
             </div>
@@ -176,18 +173,19 @@ export default function AndreUtbetalingerSteg({
                     tekst: (
                         <>
                             <p>
-                                Hvis du er innvilget slik pengestøtte vi spør om her, har du normalt fått et brev eller en digital medling om at du har rett til pengestøtten.
+                                Hvis du er innvilget slik pengestøtte vi spør om her, har du normalt fått et brev eller
+                                en digital medling om at du har rett til pengestøtten.
                             </p>
                         </>
                     ),
                 }}
                 afterOnChange={() => {
-                    slettSvar('svar.gjenlevendepensjon')
-                    slettSvar('svar.alderspensjon')
-                    slettSvar('svar.supplerendestønadover67')
-                    slettSvar('svar.supplerendestønadflyktninger')
-                    slettSvar('svar.pensjonsordning')
-                    slettSvar('svar.jobbsjansen')
+                    slettSvar('svar.gjenlevendepensjon');
+                    slettSvar('svar.alderspensjon');
+                    slettSvar('svar.supplerendestønadover67');
+                    slettSvar('svar.supplerendestønadflyktninger');
+                    slettSvar('svar.pensjonsordning');
+                    slettSvar('svar.jobbsjansen');
                 }}
             >
                 Mottar du noen av disse pengestøttene i perioden {tiltaksperiodeTekst}?
@@ -202,8 +200,8 @@ export default function AndreUtbetalingerSteg({
                             tekst: (
                                 <>
                                     <p>
-                                        Når ektefellen, samboeren eller partneren din dør, kan du ha rett til pengestøtte som etterlatt.
-                                        Det kan være gjenlevendepensjon eller overgangstønad.
+                                        Når ektefellen, samboeren eller partneren din dør, kan du ha rett til
+                                        pengestøtte som etterlatt. Det kan være gjenlevendepensjon eller overgangstønad.
                                     </p>
                                     <p>Les mer om pengestøtte til gjenlevende ektefelle fra NAV (LENKE)</p>
                                 </>
@@ -211,7 +209,7 @@ export default function AndreUtbetalingerSteg({
                         }}
                         afterOnChange={() => slettSvar('svar.gjenlevendepensjon.periode')}
                     >
-                        Mottar du pengestøtte til gjenlevende ektefelle?
+                        Mottar du pengestøtte til gjenlevende ektefelle i perioden {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchGjenlevendepensjon && (
                         <Periodespørsmål
@@ -224,7 +222,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du pengestøtte til gjenlevende ektefelle?
+                            I hvilken del av perioden mottar du pengestøtte til gjenlevende ektefelle?
                         </Periodespørsmål>
                     )}
                 </div>
@@ -243,7 +241,7 @@ export default function AndreUtbetalingerSteg({
                         }}
                         afterOnChange={() => slettSvar('svar.alderspensjon.fraDato', true)}
                     >
-                        Mottar du alderspensjon?
+                        Mottar du alderspensjon i perioden {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchAlderspensjon && (
                         <Datospørsmål
@@ -278,7 +276,8 @@ export default function AndreUtbetalingerSteg({
                         }}
                         afterOnChange={() => slettSvar('svar.supplerendestønadover67.periode')}
                     >
-                        Mottar du supplerende stønad for personer over 67 år med kort botid i Norge?
+                        Mottar du supplerende stønad for personer over 67 år med kort botid i Norge i perioden{' '}
+                        {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchSupplerendestønadOver67 && (
                         <Periodespørsmål
@@ -291,7 +290,8 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du supplerende stønad for personer over 67 år med kort botid i Norge?
+                            I hvilken del av perioden mottar du supplerende stønad for personer over 67 år med kort
+                            botid i Norge?
                         </Periodespørsmål>
                     )}
                 </div>
@@ -313,7 +313,7 @@ export default function AndreUtbetalingerSteg({
                         }}
                         afterOnChange={() => slettSvar('svar.supplerendestønadflyktninger.periode')}
                     >
-                        Mottar du supplerende stønad for uføre flyktninger?
+                        Mottar du supplerende stønad for uføre flyktninger i perioden {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchSupplerendestønadFlyktninger && (
                         <Periodespørsmål
@@ -326,7 +326,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du supplerende stønad for uføre flyktninger?
+                            I hvilken del av perioden mottar du supplerende stønad for uføre flyktninger?
                         </Periodespørsmål>
                     )}
                 </div>
@@ -358,7 +358,8 @@ export default function AndreUtbetalingerSteg({
                         }}
                         afterOnChange={() => slettSvar('svar.pensjonsordning.periode')}
                     >
-                        Mottar du pengestøtte fra andre trygde- eller pensjonsordninger?
+                        Mottar du pengestøtte fra andre trygde- eller pensjonsordninger i perioden {tiltaksperiodeTekst}
+                        ?
                     </JaNeiSpørsmål>
                     {watchPensjonsordning && (
                         <Periodespørsmål
@@ -371,7 +372,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du pengestøtte fra andre trygde- eller pensjonsordninger?
+                            I hvilken del av perioden mottar du pengestøtte fra andre trygde- eller pensjonsordninger?
                         </Periodespørsmål>
                     )}
                 </div>
@@ -395,7 +396,7 @@ export default function AndreUtbetalingerSteg({
                         }}
                         afterOnChange={() => slettSvar('svar.jobbsjansen.periode')}
                     >
-                        Mottar du stønad via jobbsjansen?
+                        Mottar du stønad via jobbsjansen i perioden {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchJobbsjansen && (
                         <Periodespørsmål
@@ -408,7 +409,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            Når mottar du stønad via jobbsjansen?
+                            I hvilken del av perioden mottar du stønad via jobbsjansen?
                         </Periodespørsmål>
                     )}
                 </div>
