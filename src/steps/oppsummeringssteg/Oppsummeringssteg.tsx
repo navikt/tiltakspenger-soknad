@@ -219,7 +219,7 @@ export default function Oppsummeringssteg({
                             <Oppsummeringsfelt
                                 feltNavn="Annen pengestøtte"
                                 feltVerdi={hentSvarTilSpørsmålene(
-                                    "andre offentlige, private eller utenlandske trygde- eller pensjonsordninger",
+                                    "annen pengestøtte i perioden jeg går på tiltak",
                                     mottarAndreUtbetalinger
                                 )}
                             />
@@ -260,8 +260,8 @@ export default function Oppsummeringssteg({
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
-                                        feltNavn="Pensjonsordning"
-                                        feltVerdi={hentSvarTilSpørsmålene("pensjonsordning", pensjonsordning.mottar, pensjonsordning.periode)}
+                                        feltNavn="Pengestøtte fra andre trygde- eller pensjonsordninger"
+                                        feltVerdi={hentSvarTilSpørsmålene("pengestøtte fra andre trygde- eller pensjonsordninger", pensjonsordning.mottar, pensjonsordning.periode)}
                                     />
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>

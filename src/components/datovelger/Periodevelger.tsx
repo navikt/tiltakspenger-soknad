@@ -47,6 +47,7 @@ export default function Periodevelger({
         fromDate: minDate,
         toDate: maxDate,
         defaultMonth: maxDate ?? minDate,
+        openOnFocus: false
     });
 
     return (
