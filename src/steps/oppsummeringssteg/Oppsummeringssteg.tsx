@@ -206,7 +206,7 @@ export default function Oppsummeringssteg({
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Etterlønn"
-                                feltVerdi={hentSvarTilSpørsmålene("etterlønn", etterlønn.mottar)}
+                                feltVerdi={hentSvarTilSpørsmålene("etterlønn fra en tidligere arbeidsgiver i perioden jeg går på tiltak", etterlønn.mottar)}
                             />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
@@ -215,7 +215,7 @@ export default function Oppsummeringssteg({
                                 feltVerdi={hentSvarTilSpørsmålene("sykepenger", sykepenger.mottar, sykepenger.periode)}
                             />
                         </div>
-                        <div style={{ marginTop: '2rem' }}>
+                        <div style={{ marginTop: '2rem' }}>xw
                             <Oppsummeringsfelt
                                 feltNavn="Annen pengestøtte"
                                 feltVerdi={hentSvarTilSpørsmålene(
