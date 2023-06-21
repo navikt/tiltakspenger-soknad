@@ -215,7 +215,7 @@ export default function Oppsummeringssteg({
                                 feltVerdi={hentSvarTilSpørsmålene("sykepenger", sykepenger.mottar, sykepenger.periode)}
                             />
                         </div>
-                        <div style={{ marginTop: '2rem' }}>xw
+                        <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Annen pengestøtte"
                                 feltVerdi={hentSvarTilSpørsmålene(
