@@ -43,6 +43,7 @@ export default function Datovelger({
                 error={hasError && errorMessage}
                 id={id}
                 aria-controls={id}
+                autoComplete="off"
             />
         </UNSAFE_DatePicker>
     );

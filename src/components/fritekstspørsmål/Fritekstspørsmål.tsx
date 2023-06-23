@@ -39,6 +39,7 @@ export default function Fritekstspørsmål({ name, children, textFieldProps, val
                     {...field}
                     value={field.value || ''}
                     error={errorMessage}
+                    autoComplete="off"
                 />
             )}
         />

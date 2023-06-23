@@ -47,7 +47,7 @@ export default function Periodevelger({
         fromDate: minDate,
         toDate: maxDate,
         defaultMonth: maxDate ?? minDate,
-        openOnFocus: false
+        openOnFocus: false,
     });
 
     return (
@@ -62,6 +62,7 @@ export default function Periodevelger({
                         disabled={disabledFra}
                         aria-controls={`${id}.fra`}
                         aria-label="fra"
+                        autoComplete="off"
                     />
                 </UNSAFE_DatePicker>
                 <UNSAFE_DatePicker {...toDatePicker.datepickerProps}>
@@ -73,6 +74,7 @@ export default function Periodevelger({
                         disabled={disabledTil}
                         aria-controls={`${id}.til`}
                         aria-label="til"
+                        autoComplete="off"
                     />
                 </UNSAFE_DatePicker>
             </div>
