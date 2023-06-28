@@ -1,9 +1,14 @@
 import { ErrorMessage, UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
-import React from 'react';
+import React, {useState} from 'react';
 
 export interface PeriodevelgerPeriode {
     fra?: Date;
     til?: Date;
+}
+
+export interface RangeError {
+    from?: string;
+    to?: string;
 }
 
 interface PeriodevelgerProps {
@@ -29,6 +34,7 @@ export default function Periodevelger({
     disabledFra,
     disabledTil,
 }: PeriodevelgerProps) {
+    const [rangeError, setRangeError] = useState<RangeError>({});
     const fromDatePicker = UNSAFE_useDatepicker({
         onDateChange: (date) => {
             onFromChange(date);
@@ -37,6 +43,13 @@ export default function Periodevelger({
         fromDate: minDate,
         toDate: maxDate,
         defaultMonth: minDate ?? maxDate,
+        onValidate: (validation) => {
+            if (validation.isBefore || validation.isAfter) {
+                setRangeError({from: 'Fra-dato kan ikke være utenfor tiltaksperioden'});
+            } else {
+                setRangeError({...rangeError, from: undefined});
+            }
+        },
     });
 
     const toDatePicker = UNSAFE_useDatepicker({
@@ -48,7 +61,16 @@ export default function Periodevelger({
         toDate: maxDate,
         defaultMonth: maxDate ?? minDate,
         openOnFocus: false,
+        onValidate: (validation) => {
+            if (validation.isBefore || validation.isAfter) {
+                setRangeError({to: 'Til-dato kan ikke være utenfor tiltaksperioden'});
+            } else {
+                setRangeError({...rangeError, to: undefined});
+            }
+        },
     });
+
+    const computedError = rangeError?.from || rangeError?.to || errorMessage;
 
     return (
         <>
@@ -58,7 +80,7 @@ export default function Periodevelger({
                         {...fromDatePicker.inputProps}
                         label="Fra"
                         id={`${id}.fra`}
-                        error={!!errorMessage}
+                        error={!!computedError}
                         disabled={disabledFra}
                         aria-controls={`${id}.fra`}
                         aria-label="fra"
@@ -70,7 +92,7 @@ export default function Periodevelger({
                         {...toDatePicker.inputProps}
                         label="Til"
                         id={`${id}.til`}
-                        error={!!errorMessage}
+                        error={!!computedError}
                         disabled={disabledTil}
                         aria-controls={`${id}.til`}
                         aria-label="til"
@@ -78,7 +100,7 @@ export default function Periodevelger({
                     />
                 </UNSAFE_DatePicker>
             </div>
-            {errorMessage ? <ErrorMessage size={'small'}>{`• ${errorMessage}`}</ErrorMessage> : ''}
+            {computedError ? <ErrorMessage size={'small'}>{`• ${computedError}`}</ErrorMessage> : ''}
         </>
     );
 }
