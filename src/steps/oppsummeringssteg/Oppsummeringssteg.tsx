@@ -293,7 +293,7 @@ export default function Oppsummeringssteg({
                             alleBarnSøktBarnetilleggFor.map((barn, index) => {
                             const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid);
                             return (
-                                <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }}>
+                                <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }} key={barn.uuid}>
                                     <BarneInfo
                                         vedlegg={barnetsVedlegg}
                                         barn={{
