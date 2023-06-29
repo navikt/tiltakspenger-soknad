@@ -107,14 +107,6 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                 <b>Vi stoler på deg</b>
             </Bekreftelsesspørsmål>
             <div className={styles.knappeseksjon}>
-                <Button
-                    onClick={() => console.log('Hva skal vi gjøre når bruker avbryter søknaden?')}
-                    type="button"
-                    size="small"
-                    variant="secondary"
-                >
-                    Avbryt søknaden
-                </Button>
                 <Button type="submit" size="small">
                     Start søknaden
                 </Button>
