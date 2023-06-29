@@ -43,7 +43,7 @@ export default function Periodespørsmål({
     const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
-        <fieldset className={styles.periodespørsmål}>
+        <fieldset className={styles.periodespørsmål} id={name}>
             <legend className={styles.periodespørsmål__legend}>{children}</legend>
             {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
