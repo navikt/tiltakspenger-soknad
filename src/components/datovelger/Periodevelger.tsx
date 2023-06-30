@@ -74,7 +74,7 @@ export default function Periodevelger({
 
     return (
         <>
-            <div style={{ display: 'flex', gap: '1rem', paddingBottom: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', paddingBottom: '0.5rem', flexWrap: 'wrap' }}>
                 <UNSAFE_DatePicker {...fromDatePicker.datepickerProps}>
                     <UNSAFE_DatePicker.Input
                         {...fromDatePicker.inputProps}

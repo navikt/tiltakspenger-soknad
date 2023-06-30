@@ -128,14 +128,12 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     </Heading>
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.fornavn`}
-                                    textFieldProps={{ htmlSize: 45 }}
                                     validate={[fornavnValidator, maks25tegnValidator]}
                                 >
                                     Fornavn og mellomnavn
                                 </Fritekstspørsmål>
                                 <Fritekstspørsmål
                                     name={`svar.barnetillegg.kladd.etternavn`}
-                                    textFieldProps={{ htmlSize: 45 }}
                                     validate={[etternavnValidator, maks25tegnValidator]}
                                 >
                                     Etternavn
@@ -205,15 +203,15 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     </Button>
 
                     <Alert variant="info">
-                        Du må legge ved:
-                        <ul>
-                            <li>
-                                Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller
-                                adopsjonstidspunkt). Dette kan for eksempel være fødselsattest eller
-                                adopsjonsdokumenter.
-                            </li>
-                        </ul>
-                        Dersom du må ettersende vedlegg kan du sende disse pr post.
+                        <div style={{width: "initial", wordWrap: "break-word", wordBreak: "break-word"}}>
+                            <b>Du må legge ved:</b>
+
+                            <p>Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller
+                            adopsjonstidspunkt). Dette kan for eksempel være fødselsattest eller
+                                adopsjonsdokumenter.</p>
+
+                            Dersom du må ettersende vedlegg kan du sende disse pr post.
+                        </div>
                     </Alert>
                     <p>
                         Hvis du har vedlegg på papir, kan du skanne det inn og laste det opp. Hvis du ikke har skanner,

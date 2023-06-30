@@ -34,8 +34,8 @@ const tekster = {
 
 export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) => {
     return (
-        <div style={{display:'flex'}}>
-            <div style={{display:'flex', flexDirection: 'column'}}>
+        <div style={{display:'flex', flexWrap: "wrap"}}>
+            <div style={{display:'flex', flexDirection: 'column', maxWidth: "15rem"}}>
                 <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem'}}>
                     <ScanningIcon status={'good'} title={tekster?.alert?.exampleLabelGood} />
                     <div style={{padding: '0.5rem'}}>
@@ -59,7 +59,7 @@ export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) 
                     </div>
                 </div>
             </div>
-            <div style={{display:'flex', flexDirection: 'column'}}>
+            <div style={{display:'flex', flexDirection: 'column', maxWidth: "15rem"}}>
                 <div>
                     <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem'}}>
                         <ScanningIcon status={'horizontal'} title={tekster?.alert?.exampleLabelBad} />

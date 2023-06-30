@@ -1,6 +1,5 @@
 .søknadLayout {
     margin: 0 auto;
     max-width: 600px;
-    padding-top: 2rem;
-    padding-bottom: 2rem;
+    padding: 2rem 1rem 2rem 1rem;
 }
