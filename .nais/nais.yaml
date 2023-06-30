@@ -26,6 +26,9 @@ spec:
     outbound:
       rules:
         - application: tiltakspenger-soknad-api
+        - application: poao-unleash
+          namespace: poao
+          cluster: dev-gcp
   idporten:
     enabled: true
     sidecar:
