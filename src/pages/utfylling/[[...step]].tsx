@@ -25,9 +25,18 @@ interface UtfyllingContextType {
     valgtTiltak?: Tiltak;
 }
 
+// Usikker testfunksjon for CodeQL
+function createObjectWrite(key: String) {
+    const assignment = `obj[${JSON.stringify(key)}]=42`;
+    return `(function(){${assignment}})` // NOT OK
+}
+
 export const UtfyllingContext = createContext<Partial<UtfyllingContextType>>({});
 
 export default function Utfylling({ tiltak }: UtfyllingProps) {
+
+    createObjectWrite(tiltak.toString())
+
     const router = useRouter();
 
     const { step } = router.query;
