@@ -47,6 +47,18 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
     const handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
         e.preventDefault();
         setDragOver(false);
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            const file = e.dataTransfer.files[0];
+            if (file && validerStørrelse(file)) {
+                setError("")
+                append({
+                    file,
+                    uuid
+                });
+            } else {
+                setError(`Filen er for stor`)
+            }
+        }
     };
 
     const cls = classNames(styles.fileInput, {
@@ -131,7 +143,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         className={styles.visuallyHidden}
                         tabIndex={-1}
                         ref={fileUploadInputElement}
-                        accept="image/jpg,image/png,.pdf"
+                        accept="image/jpg,image/jpeg,image/png,application/pdf"
                     />
                     <BodyShort>{'Dra og slipp'}</BodyShort>
                     <BodyShort className={styles.bodyShort}>{'eller'}</BodyShort>
