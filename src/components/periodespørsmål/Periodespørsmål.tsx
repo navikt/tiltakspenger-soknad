@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import { ReadMore } from '@navikt/ds-react';
+import {Label, ReadMore} from '@navikt/ds-react';
 import Periodevelger from '@/components/datovelger/Periodevelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Periodespørsmål.module.css';
@@ -43,8 +43,8 @@ export default function Periodespørsmål({
     const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
-        <fieldset className={styles.periodespørsmål} id={name}>
-            <legend className={styles.periodespørsmål__legend}>{children}</legend>
+        <div className={styles.periodespørsmål} id={name}>
+            <Label>{children}</Label>
             {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
                 name={name}
@@ -81,6 +81,6 @@ export default function Periodespørsmål({
                     )
                 }}
             />
-        </fieldset>
+        </div>
     );
 }

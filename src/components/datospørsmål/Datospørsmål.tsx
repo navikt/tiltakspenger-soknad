@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import { ReadMore } from '@navikt/ds-react';
+import {Label, ReadMore} from '@navikt/ds-react';
 import Datovelger from '@/components/datovelger/Datovelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Datospørsmål.module.css';
@@ -30,8 +30,8 @@ export default function Datospørsmål({
     const { control, formState } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
-        <fieldset className={styles.datospørsmål}>
-            <legend className={styles.datospørsmål__legend}>{legend}</legend>
+        <div className={styles.datospørsmål}>
+            <Label>{legend}</Label>
             {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
                 name={name}
@@ -50,6 +50,6 @@ export default function Datospørsmål({
                     />
                 )}
             />
-        </fieldset>
+        </div>
     );
 }
