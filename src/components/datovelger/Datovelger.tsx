@@ -41,8 +41,6 @@ export default function Datovelger({
                 {...inputProps}
                 label={label}
                 error={hasError && errorMessage}
-                id={id}
-                aria-controls={id}
                 autoComplete="off"
             />
         </DatePicker>

@@ -75,26 +75,24 @@ export default function Periodevelger({
     return (
         <>
             <div style={{ display: 'flex', gap: '1rem', paddingBottom: '0.5rem', flexWrap: 'wrap' }}>
-                <DatePicker {...fromDatePicker.datepickerProps}>
+                <DatePicker {...fromDatePicker.datepickerProps} id={`${id}`}>
                     <DatePicker.Input
                         {...fromDatePicker.inputProps}
                         label="Fra"
                         id={`${id}.fra`}
                         error={!!computedError}
                         disabled={disabledFra}
-                        aria-controls={`${id}.fra`}
                         aria-label="fra"
                         autoComplete="off"
                     />
                 </DatePicker>
-                <DatePicker {...toDatePicker.datepickerProps}>
+                <DatePicker {...toDatePicker.datepickerProps} id={`${id}`}>
                     <DatePicker.Input
                         {...toDatePicker.inputProps}
                         label="Til"
                         id={`${id}.til`}
                         error={!!computedError}
                         disabled={disabledTil}
-                        aria-controls={`test`}
                         aria-label="til"
                         autoComplete="off"
                     />
