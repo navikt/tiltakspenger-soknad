@@ -1,4 +1,4 @@
-import { UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
+import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface DatovelgerProps {
@@ -22,7 +22,7 @@ export default function Datovelger({
     datoMåVæreIFortid,
     defaultSelected,
 }: DatovelgerProps) {
-    const { datepickerProps, inputProps } = UNSAFE_useDatepicker({
+    const { datepickerProps, inputProps } = useDatepicker({
         onDateChange,
         fromDate: minDate,
         defaultMonth: minDate,
@@ -36,8 +36,8 @@ export default function Datovelger({
     const [hasError, setHasError] = useState(false);
 
     return (
-        <UNSAFE_DatePicker {...datepickerProps} id={id}>
-            <UNSAFE_DatePicker.Input
+        <DatePicker {...datepickerProps} id={id}>
+            <DatePicker.Input
                 {...inputProps}
                 label={label}
                 error={hasError && errorMessage}
@@ -45,6 +45,6 @@ export default function Datovelger({
                 aria-controls={id}
                 autoComplete="off"
             />
-        </UNSAFE_DatePicker>
+        </DatePicker>
     );
 }

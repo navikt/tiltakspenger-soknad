@@ -1,4 +1,4 @@
-import { ErrorMessage, UNSAFE_DatePicker, UNSAFE_useDatepicker } from '@navikt/ds-react';
+import { ErrorMessage, DatePicker, useDatepicker } from '@navikt/ds-react';
 import React, {useState} from 'react';
 
 export interface PeriodevelgerPeriode {
@@ -35,7 +35,7 @@ export default function Periodevelger({
     disabledTil,
 }: PeriodevelgerProps) {
     const [rangeError, setRangeError] = useState<RangeError>({});
-    const fromDatePicker = UNSAFE_useDatepicker({
+    const fromDatePicker = useDatepicker({
         onDateChange: (date) => {
             onFromChange(date);
         },
@@ -52,7 +52,7 @@ export default function Periodevelger({
         },
     });
 
-    const toDatePicker = UNSAFE_useDatepicker({
+    const toDatePicker = useDatepicker({
         onDateChange: (date) => {
             onToChange(date);
         },
@@ -75,8 +75,8 @@ export default function Periodevelger({
     return (
         <>
             <div style={{ display: 'flex', gap: '1rem', paddingBottom: '0.5rem', flexWrap: 'wrap' }}>
-                <UNSAFE_DatePicker {...fromDatePicker.datepickerProps}>
-                    <UNSAFE_DatePicker.Input
+                <DatePicker {...fromDatePicker.datepickerProps}>
+                    <DatePicker.Input
                         {...fromDatePicker.inputProps}
                         label="Fra"
                         id={`${id}.fra`}
@@ -86,19 +86,19 @@ export default function Periodevelger({
                         aria-label="fra"
                         autoComplete="off"
                     />
-                </UNSAFE_DatePicker>
-                <UNSAFE_DatePicker {...toDatePicker.datepickerProps}>
-                    <UNSAFE_DatePicker.Input
+                </DatePicker>
+                <DatePicker {...toDatePicker.datepickerProps}>
+                    <DatePicker.Input
                         {...toDatePicker.inputProps}
                         label="Til"
                         id={`${id}.til`}
                         error={!!computedError}
                         disabled={disabledTil}
-                        aria-controls={`${id}.til`}
+                        aria-controls={`test`}
                         aria-label="til"
                         autoComplete="off"
                     />
-                </UNSAFE_DatePicker>
+                </DatePicker>
             </div>
             {computedError ? <ErrorMessage size={'small'}>{`• ${computedError}`}</ErrorMessage> : ''}
         </>
