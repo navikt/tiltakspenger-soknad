@@ -130,7 +130,7 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         }
         token = await getOnBehalfOfToken(authorizationHeader);
     } catch (error) {
-        logger.info('Bruker har ikke tilgang', error);
+        logger.error('Bruker har ikke tilgang', error);
         return {
             redirect: {
                 destination: '/oauth2/login',
