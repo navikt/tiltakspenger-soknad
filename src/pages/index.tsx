@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, GuidePanel, Link, Heading } from '@navikt/ds-react';
+import { Button, Link, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import Accordion from '@/components/accordion/Accordion';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';
@@ -16,6 +16,7 @@ import { makeGetRequest } from '@/utils/http';
 import styles from './index.module.css';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
 import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
+import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -51,13 +52,13 @@ export default function IndexPage({ personalia }: IndexPageProps) {
             <Heading className={styles.søknadstittel} size="large" level="1">
                 Søknad om tiltakspenger
             </Heading>
-            <GuidePanel poster>
+            <CustomGuidePanel poster>
                 <p>Hei! Jeg er her for å veilede deg gjennom søknaden.</p>
                 <p>Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.</p>
                 <p>
                     OBS: Hvis du tar pause på mer enn X minutter, slettes skjemaet på grunn av sikkerhetsinnstillinger.
                 </p>
-            </GuidePanel>
+            </CustomGuidePanel>
             <div className={styles.accordions}>
                 <Accordion header="Tiltakspenger og annen inntekt">
                     <span>Du kan ikke få tiltakspenger hvis du</span>

@@ -71,13 +71,15 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
     const getLayout = Component.getLayout || ((page) => page);
     return getLayout(
-        <FormProvider {...formMethods}>
-            <UtfyllingContext.Provider value={{ valgtTiltak, personalia, tiltak }}>
-                <UtfyllingSetStateContext.Provider value={{ setValgtTiltak, setPersonalia, setTiltak }}>
-                    <Component {...pageProps} />
-                </UtfyllingSetStateContext.Provider>
-            </UtfyllingContext.Provider>
-        </FormProvider>
+        <main>
+            <FormProvider {...formMethods}>
+                <UtfyllingContext.Provider value={{ valgtTiltak, personalia, tiltak }}>
+                    <UtfyllingSetStateContext.Provider value={{ setValgtTiltak, setPersonalia, setTiltak }}>
+                        <Component {...pageProps} />
+                    </UtfyllingSetStateContext.Provider>
+                </UtfyllingContext.Provider>
+            </FormProvider>
+        </main>
     );
 }
 

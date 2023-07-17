@@ -3,6 +3,7 @@ import { Button, ErrorSummary, GuidePanel, Heading } from '@navikt/ds-react';
 import { useFormContext } from 'react-hook-form';
 import styles from './Step.module.css';
 import findAllErrors from '@/utils/errorState';
+import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 
 interface StepProps {
     title: string;
@@ -75,9 +76,9 @@ export default function Step({
                 </ErrorSummary>
             )}
             {!hideStepIndicator && (
-                <span className={styles.step__stepindicator}> {`${stepNumber} av  ${totalStep}`} </span>
+                <span className={styles.step__stepindicator}> {`Steg ${stepNumber} av ${totalStep}`} </span>
             )}
-            {guide && <GuidePanel poster>{guide}</GuidePanel>}
+            {guide && <CustomGuidePanel poster>{guide}</CustomGuidePanel>}
             <form onSubmit={onCompleted ? handleSubmit(onCompleted) : () => {}}>
                 <>
                     {children}

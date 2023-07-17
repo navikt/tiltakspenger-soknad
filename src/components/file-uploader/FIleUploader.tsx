@@ -1,10 +1,10 @@
-import React, {DragEventHandler, useEffect, useRef} from 'react';
+import React, { DragEventHandler, useEffect, useRef } from 'react';
 import styles from './FileUploader.module.css';
-import {Alert, BodyShort, Detail, Link, Panel} from '@navikt/ds-react';
+import { Alert, BodyShort, Detail, Link, Panel } from '@navikt/ds-react';
 import { UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
-import {Delete, Download, FileSuccess} from '@navikt/ds-icons';
+import { Delete, Download, FileSuccess } from '@navikt/ds-icons';
 import Søknad from '@/types/Søknad';
 
 interface FileUploaderProps {
@@ -14,14 +14,14 @@ interface FileUploaderProps {
     uuid: string;
 }
 export default function FileUploader({ name, control, knappTekst, uuid }: FileUploaderProps) {
-    const [error, setError] = React.useState( "");
+    const [error, setError] = React.useState('');
     const [dragOver, setDragOver] = React.useState<boolean>(false);
     const fileUploadInputElement = React.useRef<HTMLInputElement>(null);
     const objectUrls = useRef<Array<string>>([]);
-    useEffect(()=>{
+    useEffect(() => {
         return () => {
             objectUrls.current.map((url) => window.URL.revokeObjectURL(url));
-        }
+        };
     }, []);
     const inputId = 'test';
     const { append, remove, fields } = useFieldArray({
@@ -50,13 +50,13 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
         if (e.dataTransfer.files && e.dataTransfer.files[0]) {
             const file = e.dataTransfer.files[0];
             if (file && validerStørrelse(file)) {
-                setError("")
+                setError('');
                 append({
                     file,
-                    uuid
+                    uuid,
                 });
             } else {
-                setError(`Filen er for stor`)
+                setError(`Filen er for stor`);
             }
         }
     };
@@ -66,9 +66,9 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
     });
 
     const validerStørrelse = (file: File): Boolean => {
-        const samletStørrelse = fields.reduce((acc, fil) => acc + fil.file.size, 0)
-        return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE
-    }
+        const samletStørrelse = fields.reduce((acc, fil) => acc + fil.file.size, 0);
+        return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE;
+    };
 
     const fileSizeString = (size: number) => {
         const kb = size / 1024;
@@ -77,44 +77,42 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
 
     return (
         <div className={cls}>
-            {fields?.filter((attachment) =>
-                attachment.uuid ===  uuid
-            ).map((attachment, index) => {
-                const url = window.URL.createObjectURL(
-                    new Blob([attachment.file]),
-                );
-                objectUrls.current.push(url);
-                return (
-                    <Panel className={styles.fileCard} key={attachment.id}>
-                        <div className={styles.fileCardLeftContent}>
-                            <div className={styles.fileSuccess}>
-                                <FileSuccess color={'var(--a-icon-success)'} />
+            {fields
+                ?.filter((attachment) => attachment.uuid === uuid)
+                .map((attachment, index) => {
+                    const url = window.URL.createObjectURL(new Blob([attachment.file]));
+                    objectUrls.current.push(url);
+                    return (
+                        <Panel className={styles.fileCard} key={attachment.id}>
+                            <div className={styles.fileCardLeftContent}>
+                                <div className={styles.fileSuccess}>
+                                    <FileSuccess color={'var(--a-icon-success)'} />
+                                </div>
+                                <div className={styles.fileInputText}>
+                                    <Link href={url} download={attachment.file.name}>
+                                        {attachment.file.name}
+                                        <Download title="Last ned vedlegg" />
+                                    </Link>
+                                    <Detail>{fileSizeString(attachment.file.size)}</Detail>
+                                </div>
                             </div>
-                            <div className={styles.fileInputText}>
-                                <Link href={url} download={attachment.file.name}>
-                                    {attachment.file.name}
-                                    <Download title="Last ned vedlegg" />
-                                </Link>
-                                <Detail>{fileSizeString(attachment.file.size)}</Detail>
-                            </div>
-                        </div>
-                        <button
-                            type={'button'}
-                            onClick={() => remove(index)}
-                            tabIndex={0}
-                            onKeyPress={(event) => {
-                                if (event.key === 'Enter') {
-                                    remove(index);
-                                }
-                            }}
-                            className={styles.deleteAttachment}
-                        >
-                            <Delete title={'Slett'} />
-                            <BodyShort>{'Slett'}</BodyShort>
-                        </button>
-                    </Panel>
-                );
-            })}
+                            <button
+                                type={'button'}
+                                onClick={() => remove(index)}
+                                tabIndex={0}
+                                onKeyPress={(event) => {
+                                    if (event.key === 'Enter') {
+                                        remove(index);
+                                    }
+                                }}
+                                className={styles.deleteAttachment}
+                            >
+                                <Delete aria-hidden={true} />
+                                <BodyShort>{'Slett'}</BodyShort>
+                            </button>
+                        </Panel>
+                    );
+                })}
 
             <div
                 className={styles.dropZone}
@@ -131,13 +129,13 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         onChange={(e) => {
                             const file = e?.target?.files?.[0];
                             if (file && validerStørrelse(file)) {
-                                setError("")
+                                setError('');
                                 append({
                                     file,
-                                    uuid
+                                    uuid,
                                 });
                             } else {
-                                setError(`Filen er for stor`)
+                                setError(`Filen er for stor`);
                             }
                         }}
                         className={styles.visuallyHidden}
@@ -163,11 +161,11 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                             {knappTekst}
                         </span>
                     </label>
-                    {error != "" &&
+                    {error != '' && (
                         <Alert size="small" variant="error" className={styles.alert}>
                             {error}
                         </Alert>
-                    }
+                    )}
                 </>
             </div>
         </div>

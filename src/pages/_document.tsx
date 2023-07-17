@@ -45,7 +45,7 @@ class PageDocument extends Document<PageDocumentProps> {
             decoratorFragments: { Header, Footer, Styles, Scripts },
         } = this.props;
         return (
-            <Html lang="en">
+            <Html lang="no">
                 <Head>
                     <Styles />
                     <title>Søknad om tiltakspenger</title>
