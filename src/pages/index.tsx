@@ -130,7 +130,6 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         token = await getOnBehalfOfToken(authorizationHeader);
     } catch (error) {
         logger.info('Bruker har ikke tilgang', error);
-
         return {
             redirect: {
                 destination: '/oauth2/login',
@@ -141,8 +140,10 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
 
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
     try {
+        logger.info('Hent personalia start');
         const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
         const personaliaJson = await personaliaResponse.json();
+        logger.info('Hent personalia-kall OK');
         return {
             props: {
                 personalia: {
@@ -174,6 +175,10 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             };
         }
 
+        logger.error(
+            'Noe gikk galt ved henting av personalia, redirecter bruker til /generell-feil',
+            (error as Error).message
+        );
         return {
             redirect: {
                 destination: '/generell-feil',

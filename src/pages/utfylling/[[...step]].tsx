@@ -28,7 +28,6 @@ interface UtfyllingContextType {
 export const UtfyllingContext = createContext<Partial<UtfyllingContextType>>({});
 
 export default function Utfylling({ tiltak }: UtfyllingProps) {
-
     const router = useRouter();
 
     const { step } = router.query;
@@ -163,8 +162,10 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
     ];
 
     try {
+        logger.info('Hent data om tiltak start');
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         const tiltakJson = await tiltakResponse.json();
+        logger.info('Hent data om tiltak OK');
         const svarMedMocketTiltak =
             process.env.NODE_ENV === 'development' && (!tiltakJson.tiltak || tiltakJson.tiltak.length === 0);
         return {
@@ -173,14 +174,18 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             },
         };
     } catch (error) {
-        logger.error((error as Error).message);
         if (process.env.NODE_ENV === 'development') {
+            logger.error((error as Error).message);
             return {
                 props: {
                     tiltak: mocketTiltak,
                 },
             };
         }
+        logger.error(
+            'Noe gikk galt ved henting av tiltak, redirecter bruker til /generell-feil',
+            (error as Error).message
+        );
         return {
             redirect: {
                 destination: '/generell-feil',

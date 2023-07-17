@@ -44,10 +44,11 @@ export default async function middleware(request: NextApiRequest, response: Next
                     logger.info('Returnerer respons');
                     response.status(res.status).json(body);
                 } catch (error) {
+                    logger.error(`Respons er ikke gyldig JSON, returnerer 502. Message: ${(error as Error).message}`);
                     response.status(502).json({ message: 'Bad Gateway' });
                 }
             } else {
-                logger.info('Respons var ikke OK');
+                logger.info(`Respons var ikke OK. Status: ${res.status}`);
                 const error = await res.text();
                 response.status(res.status).json({ error: !error ? res.statusText : error });
             }
