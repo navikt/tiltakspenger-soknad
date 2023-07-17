@@ -1,5 +1,5 @@
 import { ErrorMessage, DatePicker, useDatepicker } from '@navikt/ds-react';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 
 export interface PeriodevelgerPeriode {
     fra?: Date;
@@ -45,11 +45,12 @@ export default function Periodevelger({
         defaultMonth: minDate ?? maxDate,
         onValidate: (validation) => {
             if (validation.isBefore || validation.isAfter) {
-                setRangeError({from: 'Fra-dato kan ikke være utenfor tiltaksperioden'});
+                setRangeError({ from: 'Fra-dato kan ikke være utenfor tiltaksperioden' });
             } else {
-                setRangeError({...rangeError, from: undefined});
+                setRangeError({ ...rangeError, from: undefined });
             }
         },
+        openOnFocus: false,
     });
 
     const toDatePicker = useDatepicker({
@@ -63,9 +64,9 @@ export default function Periodevelger({
         openOnFocus: false,
         onValidate: (validation) => {
             if (validation.isBefore || validation.isAfter) {
-                setRangeError({to: 'Til-dato kan ikke være utenfor tiltaksperioden'});
+                setRangeError({ to: 'Til-dato kan ikke være utenfor tiltaksperioden' });
             } else {
-                setRangeError({...rangeError, to: undefined});
+                setRangeError({ ...rangeError, to: undefined });
             }
         },
     });

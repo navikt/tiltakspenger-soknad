@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { BodyLong, GuidePanel, Heading, Link } from '@navikt/ds-react';
+import { BodyLong, Heading, Link } from '@navikt/ds-react';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
+import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import styles from './IkkeMyndig.module.css';
 
 export default function IkkeMyndig() {
@@ -10,7 +11,7 @@ export default function IkkeMyndig() {
             <Heading size="large" className={styles.ikkeMyndigHeading}>
                 Søknad om tiltakspenger
             </Heading>
-            <GuidePanel poster className={styles.ikkeMyndigGuidePanel}>
+            <CustomGuidePanel poster className={styles.ikkeMyndigGuidePanel}>
                 <BodyLong spacing>
                     Hei,{' '}
                     {`${personalia?.fornavn} ${personalia?.mellomnavn ? `${personalia?.mellomnavn} ` : ''}${
@@ -29,7 +30,7 @@ export default function IkkeMyndig() {
                     Hvis du skal sende søknaden i posten kan du følge lenken "Send søknad med post". Her vil du få
                     instruksjoner for hvordan du skal gå fram.
                 </BodyLong>
-            </GuidePanel>
+            </CustomGuidePanel>
             <div className={styles.sendSøknadMedPostLink}>
                 <Link href="https://www.nav.no/fyllut/nav761345?sub=paper">Send søknad med post</Link>
             </div>

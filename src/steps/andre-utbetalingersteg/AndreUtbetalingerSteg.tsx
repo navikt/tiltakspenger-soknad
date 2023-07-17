@@ -110,7 +110,10 @@ export default function AndreUtbetalingerSteg({
                                 <p>Du har ikke rett på tiltakspenger hvis du:</p>
                                 <ul>
                                     <li>får lønn fra en tiltaksarrangør for tiden du deltar i tiltaket</li>
-                                    <li>blir fulgt opp av en tiltaksarrangør på arbeidsplassen din, og mottar lønn fra arbeidsgiveren</li>
+                                    <li>
+                                        blir fulgt opp av en tiltaksarrangør på arbeidsplassen din, og mottar lønn fra
+                                        arbeidsgiveren
+                                    </li>
                                     <li>gjennomfører lønnet arbeid i stedet for å delta i tiltaket ditt</li>
                                 </ul>
                                 <p>Du må da krysse «ja» på dette spørsmålet.</p>
@@ -124,7 +127,6 @@ export default function AndreUtbetalingerSteg({
                         ),
                     }}
                 >
-
                     Er du i lønnet arbeid når du går på tiltak?
                 </JaNeiSpørsmål>
             </div>
@@ -183,7 +185,7 @@ export default function AndreUtbetalingerSteg({
                         minstEnAnnenUtbetalingHvisJaValidator(spørsmålbesvarelser, mottarAndreUtbetalinger),
                 ]}
                 description={
-                    <ul>
+                    <ul tabIndex={0}>
                         <li>Pengestøtte til gjenlevende ektefelle</li>
                         <li>Alderspensjon</li>
                         <li>Supplerende stønad for personer over 67 år</li>

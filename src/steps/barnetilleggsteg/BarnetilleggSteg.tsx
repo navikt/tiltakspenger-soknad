@@ -18,7 +18,12 @@ interface BarnetilleggStegProps {
     onGoToPreviousStep: () => void;
 }
 
-export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoToPreviousStep }: BarnetilleggStegProps) {
+export default function BarnetilleggSteg({
+    title,
+    stepNumber,
+    onCompleted,
+    onGoToPreviousStep,
+}: BarnetilleggStegProps) {
     const { getValues } = useFormContext<Søknad>();
     const { personalia } = useContext(UtfyllingContext);
     const fieldArray = useFieldArray<Søknad>({ name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor' });
@@ -90,37 +95,40 @@ export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoTo
                         </Heading>
                         <div className="marginTop">
                             {fieldArray.fields.map((field, index) => {
-                                const manglerVedlegg = !vedlegg.find(vedlegg => vedlegg.uuid === field.uuid)
+                                const manglerVedlegg = !vedlegg.find((vedlegg) => vedlegg.uuid === field.uuid);
                                 return (
                                     <div className={styles.barnetillegg} key={field.id}>
                                         <BarneInfo
                                             barn={field as Barn}
                                             vedlegg={vedlegg.filter((vedlegg) => vedlegg.uuid === field.uuid)}
                                         />
-                                        {manglerVedlegg &&
+                                        {manglerVedlegg && (
                                             <Alert
-                                                variant={"warning"}
-                                                size={"small"}
-                                                style={{margin: "1rem 0 1rem 0"}}
+                                                variant={'warning'}
+                                                size={'small'}
+                                                style={{ margin: '1rem 0 1rem 0' }}
                                             >
-                                                Du har ikke dokumentert at du er forelder til barnet. Trykk på "endre informasjon" hvis du vil legge til dokumentasjon.
-                                                <br/>Hvis du skal ettersende dokumentasjon anbefaler vi at du gjør dette så raskt som mulig.
+                                                Du har ikke dokumentert at du er forelder til barnet. Trykk på "endre
+                                                informasjon" hvis du vil legge til dokumentasjon.
+                                                <br />
+                                                Hvis du skal ettersende dokumentasjon anbefaler vi at du gjør dette så
+                                                raskt som mulig.
                                             </Alert>
-                                        }
+                                        )}
                                         <div className={styles.knapperEgenregistertBarn}>
                                             <Button
-                                                icon={<PencilIcon aria-hidden/>}
+                                                icon={<PencilIcon aria-hidden />}
                                                 size="small"
                                                 variant="tertiary"
                                                 onClick={(e) => {
                                                     e.preventDefault();
-                                                    refEndring.current?.åpneModal({...(field as Barn), index: index});
+                                                    refEndring.current?.åpneModal({ ...(field as Barn), index: index });
                                                 }}
                                             >
                                                 Endre informasjon
                                             </Button>
                                             <Button
-                                                icon={<TrashIcon aria-hidden/>}
+                                                icon={<TrashIcon aria-hidden />}
                                                 size="small"
                                                 variant="tertiary"
                                                 onClick={() => {
@@ -132,7 +140,7 @@ export default function BarnetilleggSteg({title, stepNumber, onCompleted, onGoTo
                                             </Button>
                                         </div>
                                     </div>
-                                )
+                                );
                             })}
                         </div>
                     </>
