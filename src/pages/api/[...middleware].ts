@@ -1,7 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import logger from './../../utils/serverLogger';
-import { getToken } from '@/utils/authentication';
+import { getOnBehalfOfToken } from '@/utils/authentication';
 import { makeGetRequest, makePostRequest } from '@/utils/http';
+import { validateIdportenToken } from '@navikt/next-auth-wonderwall';
 
 const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
@@ -22,7 +23,19 @@ async function makeApiRequest(request: NextApiRequest, oboToken: string): Promis
 }
 
 export default async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
-    let oboToken = await getToken(request.headers.authorization!!);
+    let oboToken = null;
+    try {
+        logger.info('Henter token');
+        const authorizationHeader = request.headers['authorization'];
+        if (!authorizationHeader) {
+            throw Error('Mangler token');
+        }
+        await validateIdportenToken(authorizationHeader);
+        oboToken = await getOnBehalfOfToken(request.headers.authorization!!);
+    } catch (error) {
+        logger.error('Bruker har ikke tilgang', error);
+        response.status(401).json({ message: 'Bruker har ikke tilgang' });
+    }
     if (oboToken) {
         logger.info('Starter http kall');
         try {

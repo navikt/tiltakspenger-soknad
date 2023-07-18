@@ -2,7 +2,7 @@ import React, { createContext, ReactElement, useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { getToken, pageWithAuthentication } from '@/utils/authentication';
+import { getOnBehalfOfToken, pageWithAuthentication } from '@/utils/authentication';
 import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
 import { Tiltak } from '@/types/Tiltak';
@@ -114,7 +114,7 @@ Utfylling.getLayout = function getLayout(page: ReactElement) {
 export const getServerSideProps = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     let token = null;
     try {
-        token = await getToken(context.req.headers.authorization!!);
+        token = await getOnBehalfOfToken(context.req.headers.authorization!!);
     } catch (error) {
         logger.error('Bruker har ikke tilgang', error);
         return {

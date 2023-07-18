@@ -90,16 +90,6 @@ export async function getOnBehalfOfToken(authorizationHeader: string) {
     return accessToken;
 }
 
-export async function getToken(authorizationHeader: string) {
-    try {
-        const token = await getOnBehalfOfToken(authorizationHeader);
-        return token;
-    } catch (error) {
-        logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
-        throw error;
-    }
-}
-
 const defaultGetServerSideProps = async () => ({
     props: {},
 });
