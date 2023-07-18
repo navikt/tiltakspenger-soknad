@@ -3,6 +3,7 @@ import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import BannerLayout from '@/components/banner-layout/BannerLayout';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import styles from './FeilVedInnsending.module.css';
+import { pageWithAuthentication } from '@/utils/authentication';
 
 export default function FeilVedInnsending() {
     return (
@@ -28,3 +29,5 @@ export default function FeilVedInnsending() {
 FeilVedInnsending.getLayout = function getLayout(page: ReactElement) {
     return <BannerLayout>{page}</BannerLayout>;
 };
+
+export const getServerSideProps = pageWithAuthentication();

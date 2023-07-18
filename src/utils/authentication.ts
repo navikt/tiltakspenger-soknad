@@ -1,9 +1,10 @@
+import { validateIdportenToken } from '@navikt/next-auth-wonderwall';
 import logger from '@/utils/serverLogger';
 import nodeJose from 'node-jose';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import nodeFetch from 'node-fetch';
-import {validateIdportenToken, ValidationError} from "@navikt/next-auth-wonderwall";
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 async function getKey(jwk: any) {
     if (!jwk) {
@@ -69,25 +70,57 @@ function removeBearer(authorizationHeader: string) {
     return authorizationHeader.replace('Bearer ', '');
 }
 
-async function validateAuthorizationHeader(authorizationHeader: string | undefined) {
+export async function validateAuthorizationHeader(authorizationHeader: string | undefined) {
     if (!authorizationHeader) {
         throw new Error('Mangler authorization header');
     }
-
     try {
-        const validationResult = await validateIdportenToken(authorizationHeader)
+        const validationResult = await validateIdportenToken(authorizationHeader);
         if (validationResult !== 'valid') {
-            throw validationResult
+            throw validationResult;
         }
-
     } catch (e) {
-        throw e
+        throw e;
     }
 }
 
 export async function getOnBehalfOfToken(authorizationHeader: string) {
-    await validateAuthorizationHeader(authorizationHeader);
     const subjectToken = removeBearer(authorizationHeader || '');
     const accessToken = await exchangeToken(subjectToken);
     return accessToken;
+}
+
+export async function getToken(authorizationHeader: string) {
+    try {
+        const token = await getOnBehalfOfToken(authorizationHeader);
+        return token;
+    } catch (error) {
+        logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
+        throw error;
+    }
+}
+
+const defaultGetServerSideProps = async () => ({
+    props: {},
+});
+
+export function pageWithAuthentication(getServerSideProps: GetServerSideProps = defaultGetServerSideProps) {
+    return async (context: GetServerSidePropsContext) => {
+        try {
+            const authorizationHeader = context.req.headers.authorization;
+            if (!authorizationHeader) {
+                throw new Error('Fant ingen token i authorization header');
+            }
+            await validateAuthorizationHeader(authorizationHeader);
+        } catch (error) {
+            logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
+            return {
+                redirect: {
+                    destination: '/oauth2/login',
+                    permanent: false,
+                },
+            };
+        }
+        return getServerSideProps(context);
+    };
 }

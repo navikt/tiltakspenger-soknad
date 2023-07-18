@@ -11,7 +11,7 @@ import { Personalia } from '@/types/Personalia';
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import { GetServerSidePropsContext } from 'next';
 import logger from '@/utils/serverLogger';
-import { getOnBehalfOfToken } from '@/utils/authentication';
+import { getToken, pageWithAuthentication } from '@/utils/authentication';
 import { makeGetRequest } from '@/utils/http';
 import styles from './index.module.css';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
@@ -120,17 +120,14 @@ IndexPage.getLayout = function getLayout(page: ReactElement) {
     return <SøknadLayout>{page}</SøknadLayout>;
 };
 
-export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+export const getServerSideProps = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
+    const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
+
     let token = null;
     try {
-        logger.info('Henter token');
-        const authorizationHeader = req.headers.authorization;
-        if (!authorizationHeader) {
-            throw new Error('Mangler token');
-        }
-        token = await getOnBehalfOfToken(authorizationHeader);
+        token = await getToken(context.req.headers.authorization!!);
     } catch (error) {
-        logger.error('Bruker har ikke tilgang', error);
+        logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
         return {
             redirect: {
                 destination: '/oauth2/login',
@@ -139,12 +136,9 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
         };
     }
 
-    const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
     try {
-        logger.info('Hent personalia start');
         const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
         const personaliaJson = await personaliaResponse.json();
-        logger.info('Hent personalia-kall OK');
         return {
             props: {
                 personalia: {
@@ -187,4 +181,4 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             },
         };
     }
-}
+});
