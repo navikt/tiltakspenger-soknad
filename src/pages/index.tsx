@@ -11,12 +11,13 @@ import { Personalia } from '@/types/Personalia';
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import { GetServerSidePropsContext } from 'next';
 import logger from '@/utils/serverLogger';
-import { getOnBehalfOfToken, pageWithAuthentication } from '@/utils/authentication';
+import { getOnBehalfOfToken } from '@/utils/authentication';
 import { makeGetRequest } from '@/utils/http';
 import styles from './index.module.css';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
 import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
+import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(

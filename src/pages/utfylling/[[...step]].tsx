@@ -2,7 +2,7 @@ import React, { createContext, ReactElement, useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { getOnBehalfOfToken, pageWithAuthentication } from '@/utils/authentication';
+import { getOnBehalfOfToken } from '@/utils/authentication';
 import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
 import { Tiltak } from '@/types/Tiltak';
@@ -13,6 +13,7 @@ import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
 import AktivtSøknadssteg from '@/components/aktivt-søknadssteg/AktivtSøknadssteg';
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
+import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
