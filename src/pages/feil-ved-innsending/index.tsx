@@ -3,7 +3,7 @@ import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import BannerLayout from '@/components/banner-layout/BannerLayout';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import styles from './FeilVedInnsending.module.css';
-import { pageWithAuthentication } from '@/utils/authentication';
+import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 
 export default function FeilVedInnsending() {
     return (
