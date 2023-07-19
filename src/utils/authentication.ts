@@ -1,4 +1,4 @@
-import { validateIdportenToken } from '@navikt/next-auth-wonderwall';
+import { validateIdportenToken, ValidationError } from '@navikt/next-auth-wonderwall';
 import logger from '@/utils/serverLogger';
 import nodeJose from 'node-jose';
 import { v4 as uuidv4 } from 'uuid';
@@ -79,8 +79,9 @@ export async function validateAuthorizationHeader(authorizationHeader: string | 
         if (validationResult !== 'valid') {
             throw validationResult;
         }
+        return validationResult;
     } catch (e) {
-        throw e;
+        throw new Error((e as ValidationError<any>).message);
     }
 }
 
