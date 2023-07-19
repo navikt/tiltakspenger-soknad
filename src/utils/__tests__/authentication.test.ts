@@ -1,6 +1,10 @@
 import { validateAuthorizationHeader } from '../authentication';
 
-jest.mock('../authentication');
+jest.mock('../authentication', () => {
+    return {
+        validateAuthorizationHeader: jest.fn(),
+    };
+});
 
 describe('teste autentisering', () => {
     it('testet', () => {
