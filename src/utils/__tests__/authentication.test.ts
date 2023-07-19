@@ -1,4 +1,4 @@
-import { validateAuthorizationHeader } from '../authentication';
+import { validateAuthorizationHeader } from '@/utils/authentication';
 
 jest.mock('../authentication', () => {
     return {
