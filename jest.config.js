@@ -6,9 +6,20 @@ const compilerOptions = tsConfig.compilerOptions;
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
     preset: 'ts-jest',
-    testEnvironment: 'node',
+    testEnvironment: 'jsdom',
     modulePaths: [compilerOptions.baseUrl],
     moduleNameMapper: {
         ...pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+        '@navikt/ds-css': '<rootDir>/styleMock.js',
+        '^.+\\.(css|svg)$': '<rootDir>/styleMock.js',
+        jose: 'identity-obj-proxy',
+    },
+    transform: {
+        '^.+\\.tsx?$': [
+            'ts-jest',
+            {
+                babelConfig: true,
+            },
+        ],
     },
 };
