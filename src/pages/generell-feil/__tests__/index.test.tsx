@@ -14,7 +14,7 @@ function contextMock(authorizationHeader: string | undefined) {
     return { req: { headers: { authorization: authorizationHeader } } } as GetServerSidePropsContext;
 }
 
-describe('test av utfylling-page', () => {
+describe('test av generell-feil-page', () => {
     it('generell-feil-page skal kreve at man har gyldig token ved hjelp av pageWithAuthentication', async () => {
         getServerSideProps(contextMock('Bearer test'));
         expect(pageWithAuthentication).toHaveBeenCalled();
