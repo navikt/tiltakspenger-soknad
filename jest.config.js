@@ -18,7 +18,7 @@ module.exports = {
         '^.+\\.tsx?$': [
             'ts-jest',
             {
-                babelConfig: true,
+                babelConfig: '<rootDir>/babel.test.config.js',
             },
         ],
     },
