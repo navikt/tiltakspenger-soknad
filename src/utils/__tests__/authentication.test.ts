@@ -7,12 +7,6 @@ jest.mock('@navikt/next-auth-wonderwall', () => {
     };
 });
 
-jest.mock('@/utils/authentication', () => {
-    return {
-        ...jest.requireActual('@/utils/authentication'),
-    };
-});
-
 describe('test av validateAuthorizationHeader', () => {
     it('promise skal rejectes hvis authorizationHeader mangler', async () => {
         const result = validateAuthorizationHeader(undefined);
