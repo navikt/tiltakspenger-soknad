@@ -13,6 +13,7 @@ import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
 import AktivtSøknadssteg from '@/components/aktivt-søknadssteg/AktivtSøknadssteg';
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
+import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -111,17 +112,12 @@ Utfylling.getLayout = function getLayout(page: ReactElement) {
     return <SøknadLayout>{page}</SøknadLayout>;
 };
 
-export async function getServerSideProps({ req }: GetServerSidePropsContext) {
+export const getServerSideProps = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     let token = null;
     try {
-        logger.info('Henter token');
-        const authorizationHeader = req.headers.authorization;
-        if (!authorizationHeader) {
-            throw new Error('Mangler token');
-        }
-        token = await getOnBehalfOfToken(authorizationHeader);
+        token = await getOnBehalfOfToken(context.req.headers.authorization!!);
     } catch (error) {
-        logger.info('Bruker har ikke tilgang', error);
+        logger.error('Bruker har ikke tilgang', error);
         return {
             redirect: {
                 destination: '/oauth2/login',
@@ -193,4 +189,4 @@ export async function getServerSideProps({ req }: GetServerSidePropsContext) {
             },
         };
     }
-}
+});

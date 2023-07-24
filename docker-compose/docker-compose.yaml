@@ -53,7 +53,9 @@ services:
                             "match": "*",
                             "claims": {
                                 "sub": "12345678901",
-                                "pid": "12345678901"
+                                "pid": "12345678901",
+                                "client_id": "321",
+                                "acr": "Level4"
                             }
                         }
                     ]

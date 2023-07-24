@@ -3,6 +3,7 @@ import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import BannerLayout from '@/components/banner-layout/BannerLayout';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import styles from './GenerellFeil.module.css';
+import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 
 export default function GenerellFeil() {
     return (
@@ -29,3 +30,5 @@ export default function GenerellFeil() {
 GenerellFeil.getLayout = function getLayout(page: ReactElement) {
     return <BannerLayout>{page}</BannerLayout>;
 };
+
+export const getServerSideProps = pageWithAuthentication();

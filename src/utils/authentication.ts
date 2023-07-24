@@ -1,8 +1,10 @@
+import { validateIdportenToken, ValidationError } from '@navikt/next-auth-wonderwall';
 import logger from '@/utils/serverLogger';
 import nodeJose from 'node-jose';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import nodeFetch from 'node-fetch';
+import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 
 async function getKey(jwk: any) {
     if (!jwk) {
@@ -68,20 +70,22 @@ function removeBearer(authorizationHeader: string) {
     return authorizationHeader.replace('Bearer ', '');
 }
 
-const tokenRegex = /^Bearer (?<token>(\.?([A-Za-z0-9-_]+)){3})$/m;
-
-function validateAuthorizationHeader(authorizationHeader: string | undefined) {
+export async function validateAuthorizationHeader(authorizationHeader: string | undefined) {
     if (!authorizationHeader) {
-        throw new Error('Ingen tilgang');
+        throw new Error('Mangler authorization header');
     }
-    const authToken = authorizationHeader.match(tokenRegex)?.groups?.token;
-    if (!authToken) {
-        throw new Error('Ingen tilgang');
+    try {
+        const validationResult = await validateIdportenToken(authorizationHeader);
+        if (validationResult !== 'valid') {
+            throw validationResult;
+        }
+        return validationResult;
+    } catch (e) {
+        throw new Error((e as ValidationError<any>).message);
     }
 }
 
 export async function getOnBehalfOfToken(authorizationHeader: string) {
-    validateAuthorizationHeader(authorizationHeader);
     const subjectToken = removeBearer(authorizationHeader || '');
     const accessToken = await exchangeToken(subjectToken);
     return accessToken;

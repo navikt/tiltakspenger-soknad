@@ -9,7 +9,7 @@ import BarneInfo from '@/components/barnetillegg/BarneInfo';
 import { Barn } from '@/types/Barn';
 import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
-import styles from '@/components/barnetillegg//Barnetillegg.module.css';
+import styles from './../../components/barnetillegg/Barnetillegg.module.css';
 
 interface BarnetilleggStegProps {
     title: string;
