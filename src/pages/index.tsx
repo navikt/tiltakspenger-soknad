@@ -18,6 +18,8 @@ import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
 import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
+import { mockedPersonalia } from '@/mocks/mockedPersonalia';
+import { featureIsEnabled } from '@/utils/featureToggling';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -121,8 +123,32 @@ IndexPage.getLayout = function getLayout(page: ReactElement) {
     return <SøknadLayout>{page}</SøknadLayout>;
 };
 
+function redirectBrukerTilGammelSøknad() {
+    return {
+        // Mangler å få bekreftet url her, nav.no som placeholder sålenge
+        redirect: { destination: 'https://nav.no', permanent: false },
+    };
+}
+
 export const getServerSideProps = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
+
+    if (process.env.NODE_ENV === 'production') {
+        try {
+            const brukerSkalRedirectesTilGammelSøknad = await featureIsEnabled('REDIRECT_TIL_GAMMEL_SOKNAD');
+            if (brukerSkalRedirectesTilGammelSøknad) {
+                logger.info('Bruker redirectes til gammel søknad');
+                return redirectBrukerTilGammelSøknad();
+            }
+        } catch (error) {
+            logger.error(
+                `Noe gikk galt ved oppsett av unleash: ${
+                    (error as Error).message
+                }. Bruker redirectes til gammel søknad.`
+            );
+            return redirectBrukerTilGammelSøknad();
+        }
+    }
 
     let token = null;
     try {
@@ -156,17 +182,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
             logger.error((error as Error).message);
             return {
                 props: {
-                    personalia: {
-                        fornavn: 'Foo',
-                        mellomnavn: 'Bar',
-                        etternavn: 'Baz',
-                        fødselsnummer: '123',
-                        harFylt18År: true,
-                        barn: [
-                            { fornavn: 'Test', etternavn: 'Testesen', fødselsdato: '2025-01-01', uuid: uuidv4() },
-                            { fornavn: 'Fest', etternavn: 'Festesen', fødselsdato: '2020-12-31', uuid: uuidv4() },
-                        ],
-                    },
+                    personalia: mockedPersonalia,
                 },
             };
         }
