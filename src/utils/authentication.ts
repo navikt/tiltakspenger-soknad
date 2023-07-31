@@ -4,7 +4,7 @@ import nodeJose from 'node-jose';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import nodeFetch from 'node-fetch';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
+import { GetServerSidePropsContext } from 'next';
 
 async function getKey(jwk: any) {
     if (!jwk) {
@@ -89,4 +89,13 @@ export async function getOnBehalfOfToken(authorizationHeader: string) {
     const subjectToken = removeBearer(authorizationHeader || '');
     const accessToken = await exchangeToken(subjectToken);
     return accessToken;
+}
+
+export function redirectToLogin(context: GetServerSidePropsContext) {
+    return {
+        redirect: {
+            destination: `/oauth2/login?redirect=${context.resolvedUrl}`,
+            permanent: false,
+        },
+    };
 }

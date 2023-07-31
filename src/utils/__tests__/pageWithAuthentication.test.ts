@@ -1,22 +1,27 @@
-import {validateAuthorizationHeader} from '@/utils/authentication';
-import {pageWithAuthentication} from '@/utils/pageWithAuthentication';
-import {GetServerSidePropsContext} from 'next';
+import { validateAuthorizationHeader } from '@/utils/authentication';
+import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
+import { GetServerSidePropsContext } from 'next';
 
 jest.mock('@/utils/authentication', () => {
     return {
         validateAuthorizationHeader: jest.fn(),
+        redirectToLogin: jest
+            .fn()
+            .mockReturnValue({ redirect: { destination: '/oauth2/login?redirect=testUrl', permanent: false } }),
     };
 });
 
 const getServersidePropsMock = jest.fn();
 
 function contextMock(authorizationHeader: string | undefined) {
-    return {req: {headers: {authorization: authorizationHeader}}} as GetServerSidePropsContext;
+    return {
+        req: { headers: { authorization: authorizationHeader } },
+    } as GetServerSidePropsContext;
 }
 
 const redirectToLogin = {
     redirect: {
-        destination: '/oauth2/login',
+        destination: '/oauth2/login?redirect=testUrl',
         permanent: false,
     },
 };
@@ -26,7 +31,6 @@ describe('test av pageWithAuthentication', () => {
         const authenticatedPageHandler = pageWithAuthentication(getServersidePropsMock);
         const contextWithoutAuthorization = contextMock(undefined);
         await expect(authenticatedPageHandler(contextWithoutAuthorization)).resolves.toEqual(redirectToLogin);
-
         expect(getServersidePropsMock).not.toHaveBeenCalled();
     });
 
