@@ -1,0 +1,7 @@
+ingress:
+  - https://tiltakspengesoknad.nav.no
+TILTAKSPENGER_SOKNAD_API_URL: http://tiltakspenger-soknad-api
+NEXT_PUBLIC_TELEMETRY_URL: https://telemetry.nav.no/collect
+unleash:
+  environment: production
+  url: https://tiltakspenger-unleash-api.nav.cloud.nais.io/api
