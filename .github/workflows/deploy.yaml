@@ -86,6 +86,6 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/nais.yaml
+          RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
           VAR: image=${{ env.IMAGE }}-test,name=${{ github.event.repository.name }}
           VARS: .nais/vars/dev.yaml
