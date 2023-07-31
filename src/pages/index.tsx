@@ -125,8 +125,7 @@ IndexPage.getLayout = function getLayout(page: ReactElement) {
 
 function redirectBrukerTilGammelSøknad() {
     return {
-        // Mangler å få bekreftet url her, nav.no som placeholder sålenge
-        redirect: { destination: 'https://nav.no', permanent: false },
+        redirect: { destination: 'https://tjenester.nav.no/soknadtiltakspenger/app/start', permanent: false },
     };
 }
 
