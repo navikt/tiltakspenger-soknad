@@ -19,7 +19,7 @@ import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 import { mockedPersonalia } from '@/mocks/mockedPersonalia';
-import { featureIsEnabled } from '@/utils/featureToggling';
+import { brukerSkalRedirectesTilGammelSøknad } from '@/utils/featureToggling';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -134,8 +134,8 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
 
     if (process.env.NODE_ENV === 'production') {
         try {
-            const brukerSkalRedirectesTilGammelSøknad = await featureIsEnabled('REDIRECT_TIL_GAMMEL_SOKNAD');
-            if (brukerSkalRedirectesTilGammelSøknad) {
+            const skalRedirectes = await brukerSkalRedirectesTilGammelSøknad(context.req.headers.authorization!);
+            if (skalRedirectes) {
                 logger.info('Bruker redirectes til gammel søknad');
                 return redirectBrukerTilGammelSøknad();
             }
