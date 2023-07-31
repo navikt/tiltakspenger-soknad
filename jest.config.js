@@ -13,6 +13,7 @@ module.exports = {
         '@navikt/ds-css': '<rootDir>/styleMock.js',
         '^.+\\.(css|svg)$': '<rootDir>/styleMock.js',
         jose: 'identity-obj-proxy',
+        '@unleash/nextjs': 'identity-obj-proxy',
     },
     transform: {
         '^.+\\.tsx?$': [
