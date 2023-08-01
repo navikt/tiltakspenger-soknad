@@ -13,6 +13,7 @@ import {
     påkrevdIntroprogramPeriodeValidator,
     påkrevdKvpPeriodeValidator,
 } from '@/steps/programdeltagelsesteg/validation';
+import { Link } from '@navikt/ds-react';
 
 interface ProgramDeltagelseStegProps {
     title: string;
@@ -27,15 +28,12 @@ export default function ProgramDeltagelseSteg({
     onCompleted,
     onGoToPreviousStep,
 }: ProgramDeltagelseStegProps) {
-    const { watch, getValues, resetField } = useFormContext();
+    const { watch, resetField } = useFormContext();
     const { valgtTiltak } = useContext(UtfyllingContext);
 
     const brukerregistrertPeriode = watch('svar.tiltak.periode') as Periode;
     const tiltaksperiode = brukerregistrertPeriode || valgtTiltak?.arenaRegistrertPeriode;
     const tiltaksperiodeTekst = formatPeriode(tiltaksperiode);
-
-    const defaultKvpPeriode = getValues().svar.kvalifiseringsprogram.periode;
-    const defaultIntroPeriode = getValues().svar.introduksjonsprogram.periode;
 
     const watchDeltarIKvp = watch('svar.kvalifiseringsprogram.deltar');
     const watchDeltarIIntroprogrammet = watch('svar.introduksjonsprogram.deltar');
@@ -84,7 +82,9 @@ export default function ProgramDeltagelseSteg({
                                     hvis du er usikker på om du er med i kvalifiseringsprogrammet.
                                 </p>
 
-                                <p>Les mer om kvalifiseringsprogrammet på (LENKE)</p>
+                                <Link href="https://www.nav.no/kvalifiseringsprogrammet" target="_blank">
+                                    Les mer om kvalifiseringsprogrammet (åpnes i ny fane)
+                                </Link>
                             </>
                         ),
                     }}
@@ -121,7 +121,12 @@ export default function ProgramDeltagelseSteg({
                                     kontakt med kommunen din hvis du er usikker på om du er med i
                                     Introduksjonsprogrammet.
                                 </p>
-                                <p>Du kan lese mer om introduksjonsprogrammet på (LENKE til IMDI)</p>
+                                <Link
+                                    href="https://www.imdi.no/om-imdi/brosjyrer-handboker-og-veiledere/velkommen-til-introduksjonsprogram/"
+                                    target="_blank"
+                                >
+                                    Les mer om introduksjonsprogrammet (åpnes i ny fane)
+                                </Link>
                             </>
                         ),
                     }}
