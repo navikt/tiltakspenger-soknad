@@ -45,6 +45,13 @@ jobs:
       - name: Build app
         run: npm run build
 
+      - name: Upload static files to NAV CDN
+        uses: navikt/frontend/actions/cdn-upload/v1@main
+        with:
+          cdn-team-name: tpts
+          source: ./.next/static
+          destination: "/tiltakspenger-soknad/_next"
+
       - name: Docker build and push image for dev-gcp
         if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v3
@@ -55,6 +62,19 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+#      - name: Copy appropriate env file
+#        run: cp .env.prod .env.production
+#
+#      - name: Build app
+#        run: npm run build
+#
+#      - name: Upload static files to NAV CDN
+#        uses: navikt/frontend/actions/cdn-upload/v1@main
+#        with:
+#          cdn-team-name: tpts
+#          source: ./.next/static
+#          destination: "/tiltakspenger-soknad/_next"
+#
 #      - name: Docker build and push for prod-gcp
 #        if: github.ref == 'refs/heads/main'
 #        uses: docker/build-push-action@v3
