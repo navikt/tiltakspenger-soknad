@@ -2,7 +2,7 @@ import React, { createContext, ReactElement, useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { GetServerSidePropsContext } from 'next';
 import { useRouter } from 'next/router';
-import { getOnBehalfOfToken } from '@/utils/authentication';
+import { getOnBehalfOfToken, redirectToLogin } from '@/utils/authentication';
 import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
 import { Tiltak } from '@/types/Tiltak';
@@ -118,12 +118,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
         token = await getOnBehalfOfToken(context.req.headers.authorization!!);
     } catch (error) {
         logger.error('Bruker har ikke tilgang', error);
-        return {
-            redirect: {
-                destination: '/oauth2/login',
-                permanent: false,
-            },
-        };
+        return redirectToLogin(context);
     }
 
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;

@@ -11,7 +11,7 @@ import { Personalia } from '@/types/Personalia';
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import { GetServerSidePropsContext } from 'next';
 import logger from '@/utils/serverLogger';
-import { getOnBehalfOfToken } from '@/utils/authentication';
+import { getOnBehalfOfToken, redirectToLogin } from '@/utils/authentication';
 import { makeGetRequest } from '@/utils/http';
 import styles from './index.module.css';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
@@ -154,12 +154,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
         token = await getOnBehalfOfToken(context.req.headers.authorization!!);
     } catch (error) {
         logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
-        return {
-            redirect: {
-                destination: '/oauth2/login',
-                permanent: false,
-            },
-        };
+        return redirectToLogin(context);
     }
 
     try {
