@@ -1,6 +1,6 @@
 const { buildCspHeader } = require('@navikt/nav-dekoratoren-moduler/ssr');
-
 let isDevelopment = process.env.NODE_ENV === 'development';
+let isProduction = process.env.NODE_ENV === 'production';
 
 const appDirectives = {
     'script-src-elem': ["'self'"],
@@ -14,6 +14,7 @@ const appDirectives = {
 /** @type {import('next').NextConfig} */
 module.exports = {
     output: 'standalone',
+    assetPrefix: isProduction ? 'https://cdn.nav.no/tpts/tiltakspenger-soknad' : undefined,
     async headers() {
         const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
         const csp = await buildCspHeader(appDirectives, { env: environment });
