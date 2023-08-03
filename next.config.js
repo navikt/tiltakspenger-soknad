@@ -14,6 +14,7 @@ const appDirectives = {
 /** @type {import('next').NextConfig} */
 module.exports = {
     output: 'standalone',
+    assetPrefix: process.env.ASSET_PREFIX,
     async headers() {
         const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
         const csp = await buildCspHeader(appDirectives, { env: environment });
