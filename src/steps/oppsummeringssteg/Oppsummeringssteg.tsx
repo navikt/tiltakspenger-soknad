@@ -266,8 +266,8 @@ export default function Oppsummeringssteg({
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
-                                        feltNavn="Stønad via Jobbsjansen"
-                                        feltVerdi={hentSvarTilSpørsmålene("stønad via Jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
+                                        feltNavn="Stønad gjennom Jobbsjansen"
+                                        feltVerdi={hentSvarTilSpørsmålene("stønad gjennom Jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
                                     />
                                 </div>
                             </>
@@ -306,7 +306,7 @@ export default function Oppsummeringssteg({
                                     {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
                                 </div>
                             );
-                            }) : 'Jeg vil ikke søke på barnetillegg'
+                            }) : 'Jeg søker ikke om barnetillegg'
                         }
                     </Accordion.Content>
                 </Accordion.Item>

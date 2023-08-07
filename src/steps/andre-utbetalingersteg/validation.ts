@@ -19,7 +19,7 @@ export function pensjonsordningValidator(verdi: boolean) {
 }
 
 export function jobbsjansenValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar stønad via Jobbsjansen');
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar stønad gjennom Jobbsjansen');
 }
 
 export function etterlønnValidator(verdi: boolean) {

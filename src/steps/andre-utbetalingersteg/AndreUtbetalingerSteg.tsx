@@ -416,7 +416,7 @@ export default function AndreUtbetalingerSteg({
                         name="svar.jobbsjansen.mottar"
                         validate={jobbsjansenValidator}
                         hjelpetekst={{
-                            tittel: 'Hva er stønad via Jobbsjansen?',
+                            tittel: 'Hva er stønad gjennom Jobbsjansen?',
                             tekst: (
                                 <>
                                     <span>
@@ -433,7 +433,7 @@ export default function AndreUtbetalingerSteg({
                         }}
                         afterOnChange={() => slettSvar('svar.jobbsjansen.periode')}
                     >
-                        Mottar du stønad via Jobbsjansen i perioden {tiltaksperiodeTekst}?
+                        Mottar du stønad gjennom Jobbsjansen i perioden {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchJobbsjansen && (
                         <Periodespørsmål
@@ -446,7 +446,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            I hvilken del av perioden mottar du stønad via Jobbsjansen?
+                            I hvilken del av perioden mottar du stønad gjennom Jobbsjansen?
                         </Periodespørsmål>
                     )}
                 </div>
