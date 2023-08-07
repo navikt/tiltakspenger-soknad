@@ -113,7 +113,6 @@ export default function ProgramDeltagelseSteg({
                         tittel: 'Hva er introduksjonsprogrammet?',
                         tekst: (
                             <>
-                                <p>Hva er introduksjonsprogrammet?</p>
                                 <p>
                                     Introduksjonsprogrammet avtales med kommunen du bor i. Det er en ordning for
                                     nyankomne flyktninger. Hvis du er med i Introduksjonsprogrammet har du fått et brev

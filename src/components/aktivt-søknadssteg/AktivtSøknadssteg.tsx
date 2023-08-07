@@ -71,7 +71,7 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
         case Søknadssteg.PROGRAM_DELTAGELSE:
             return (
                 <ProgramDeltagelseSteg
-                    title="Introduksjonsprogrammet og Kvalifiseringsprogrammet"
+                    title="Introduksjonsprogrammet og kvalifiseringsprogrammet"
                     stepNumber={2}
                     onCompleted={() => navigateTo(Søknadssteg.ANDRE_UTBETALINGER)}
                     onGoToPreviousStep={goBack}

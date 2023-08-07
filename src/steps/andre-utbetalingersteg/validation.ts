@@ -19,7 +19,7 @@ export function pensjonsordningValidator(verdi: boolean) {
 }
 
 export function jobbsjansenValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar stønad via jobbsjansen');
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar stønad via Jobbsjansen');
 }
 
 export function etterlønnValidator(verdi: boolean) {
@@ -53,7 +53,7 @@ export function påkrevdGjenlevendepensjonPeriodeValidator(periode: FormPeriode)
 }
 
 export function påkrevdJobbsjansenPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar jobbsjansen');
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar Jobbsjansen');
 }
 
 export function påkrevdPensjonsordningPeriodeValidator(periode: FormPeriode) {

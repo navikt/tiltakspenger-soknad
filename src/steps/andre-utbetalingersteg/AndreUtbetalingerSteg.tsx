@@ -416,24 +416,24 @@ export default function AndreUtbetalingerSteg({
                         name="svar.jobbsjansen.mottar"
                         validate={jobbsjansenValidator}
                         hjelpetekst={{
-                            tittel: 'Hva er stønad via jobbsjansen?',
+                            tittel: 'Hva er stønad via Jobbsjansen?',
                             tekst: (
                                 <>
                                     <span>
                                         Jobbsjansen er en ordning for hjemmeværende innvandrerkvinner. Jobbsjansen skal
                                         styrke mulighetene for arbeid og økonomisk selvstendighet. Du kan få også få
-                                        utbetalt jobbsjansenstønad. Hvis du deltar i jobbsjansen, har du avtalt dette
+                                        utbetalt jobbsjansenstønad. Hvis du deltar i Jobbsjansen, har du avtalt dette
                                         med kommunen du bor i.
                                     </span>
                                     <Link href="https://www.imdi.no/tilskudd/jobbsjansen/" target="_blank">
-                                        Les mer om jobbsjansen (åpnes i ny fane)
+                                        Les mer om Jobbsjansen (åpnes i ny fane)
                                     </Link>
                                 </>
                             ),
                         }}
                         afterOnChange={() => slettSvar('svar.jobbsjansen.periode')}
                     >
-                        Mottar du stønad via jobbsjansen i perioden {tiltaksperiodeTekst}?
+                        Mottar du stønad via Jobbsjansen i perioden {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchJobbsjansen && (
                         <Periodespørsmål
@@ -446,7 +446,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            I hvilken del av perioden mottar du stønad via jobbsjansen?
+                            I hvilken del av perioden mottar du stønad via Jobbsjansen?
                         </Periodespørsmål>
                     )}
                 </div>

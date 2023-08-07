@@ -82,7 +82,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                 <Accordion header="Vi henter og bruker informasjon om deg">
                     <p>I tillegg til den informasjonen du oppgir i søknaden, henter vi:</p>
                     <ul>
-                        <li>Personinformasjon om deg fra Folkeregisteret.</li>
+                        <li>Personinformasjon om deg fra Folkeregisteret</li>
                         <li>Personinformasjon om barna dine hvis du søker om barnetillegg</li>
                         <li>Inntektsinformasjon fra Skatteetaten</li>
                         <li>Opplysninger om hvilket arbeidsmarkedstiltak du deltar på</li>

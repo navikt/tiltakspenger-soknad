@@ -174,7 +174,7 @@ export default function Oppsummeringssteg({
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
-                    <Accordion.Header>Introduksjonsprogrammet og Kvalifiseringsprogrammet </Accordion.Header>
+                    <Accordion.Header>Introduksjonsprogrammet og kvalifiseringsprogrammet </Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Introduksjonsprogrammet"
@@ -266,8 +266,8 @@ export default function Oppsummeringssteg({
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
-                                        feltNavn="Stønad via jobbsjansen"
-                                        feltVerdi={hentSvarTilSpørsmålene("stønad via jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
+                                        feltNavn="Stønad via Jobbsjansen"
+                                        feltVerdi={hentSvarTilSpørsmålene("stønad via Jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
                                     />
                                 </div>
                             </>

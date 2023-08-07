@@ -43,11 +43,11 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
 
             <Alert variant="success">
                 <span>
-                    Vi har mottatt søknaden din om Tiltakspenger. <br />
+                    Vi har mottatt søknaden din om tiltakspenger. <br />
                     Saken din er nå til behandling hos NAV.
                 </span>
 
-                <p>Vi vil kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.</p>
+                <p>Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.</p>
             </Alert>
 
             <Show if={manueltRegistrerteBarnUtenVedlegg.length > 0}>
@@ -70,7 +70,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
                             </Link>{' '}
                             eller levere
                         </p>
-                        <p>dokumntasjon på ditt lokale NAV-kontor.</p>
+                        <p>dokumentasjon på ditt lokale NAV-kontor.</p>
                     </span>
                 </Alert>
             </Show>
@@ -82,7 +82,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             </p>
 
             <Link href="https://www.nav.no/minside" target="_blank" className={styles.button}>
-                <Button as="a">Følg saken på Min Side</Button>
+                <Button as="a">Følg saken på Min side</Button>
             </Link>
         </div>
     );
