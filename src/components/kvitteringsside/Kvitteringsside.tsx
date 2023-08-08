@@ -73,12 +73,12 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             </Show>
 
             <p>
-                <Link href="https://www.nav.no/saksbehandlingstider">
-                    Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstider.
+                <Link href="https://www.nav.no/saksbehandlingstider" target="_blank">
+                    Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstider (åpnes i ny fane).
                 </Link>
             </p>
 
-            <Link href="https://www.nav.no/minside" target="_blank" className={styles.button}>
+            <Link href="https://www.nav.no/minside" className={styles.button}>
                 <Button as="a">Følg saken på Min side</Button>
             </Link>
         </div>
