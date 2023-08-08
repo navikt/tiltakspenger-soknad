@@ -86,10 +86,10 @@ export default function Step({
                         (submitSectionRenderer as any)()
                     ) : (
                         <div className={styles.step__buttonsection}>
-                            <Button type="button" size="small" variant="secondary" onClick={goToPreviousStepHandler}>
+                            <Button type="button" variant="secondary" onClick={goToPreviousStepHandler}>
                                 Forrige steg
                             </Button>
-                            <Button type="submit" size="small">
+                            <Button type="submit">
                                 Neste steg
                             </Button>
                         </div>

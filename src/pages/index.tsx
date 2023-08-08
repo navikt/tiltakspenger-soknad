@@ -111,7 +111,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                 <b>Vi stoler på deg</b>
             </Bekreftelsesspørsmål>
             <div className={styles.knappeseksjon}>
-                <Button type="submit" size="small">
+                <Button type="submit">
                     Start søknaden
                 </Button>
             </div>

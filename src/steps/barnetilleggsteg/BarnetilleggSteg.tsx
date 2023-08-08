@@ -118,7 +118,6 @@ export default function BarnetilleggSteg({
                                         <div className={styles.knapperEgenregistertBarn}>
                                             <Button
                                                 icon={<PencilIcon aria-hidden />}
-                                                size="small"
                                                 variant="tertiary"
                                                 onClick={(e) => {
                                                     e.preventDefault();
@@ -129,7 +128,6 @@ export default function BarnetilleggSteg({
                                             </Button>
                                             <Button
                                                 icon={<TrashIcon aria-hidden />}
-                                                size="small"
                                                 variant="tertiary"
                                                 onClick={() => {
                                                     fieldArray.remove(index);

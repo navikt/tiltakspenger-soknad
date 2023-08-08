@@ -120,7 +120,6 @@ export default function Oppsummeringssteg({
                     <Button
                         type="button"
                         onClick={onGoToPreviousStep}
-                        size="small"
                         variant="secondary"
                         disabled={søknadsinnsendingInProgress}
                         loading={søknadsinnsendingInProgress}
@@ -129,7 +128,6 @@ export default function Oppsummeringssteg({
                     </Button>
                     <Button
                         type="submit"
-                        size="small"
                         style={{ marginLeft: '1rem' }}
                         disabled={søknadsinnsendingInProgress}
                         loading={søknadsinnsendingInProgress}
