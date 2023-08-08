@@ -5,8 +5,8 @@ import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import Show from '@/components/show/show';
 import { Personalia } from '@/types/Personalia';
 import { dateStrWithHourMinute, dateStrWithMonthName } from '@/utils/formatDate';
-import {useFormContext} from "react-hook-form";
-import Søknad from "@/types/Søknad";
+import { useFormContext } from 'react-hook-form';
+import Søknad from '@/types/Søknad';
 
 interface KvitteringssideProps {
     personalia: Personalia;
@@ -17,13 +17,10 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
     const { getValues } = useFormContext<Søknad>();
     const manueltRegistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
     const vedlegg = getValues('vedlegg');
-    const manueltRegistrerteBarnUtenVedlegg = manueltRegistrerteBarn.filter(
-        barn => {
-            const ikkeFunnet = !vedlegg.find(
-                vedlegg => barn.uuid === vedlegg.uuid)
-            return ikkeFunnet
-        }
-    );
+    const manueltRegistrerteBarnUtenVedlegg = manueltRegistrerteBarn.filter((barn) => {
+        const ikkeFunnet = !vedlegg.find((vedlegg) => barn.uuid === vedlegg.uuid);
+        return ikkeFunnet;
+    });
     const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
         innsendingstidspunkt
     )}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
@@ -76,7 +73,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             </Show>
 
             <p>
-                <Link href="https://www.nav.no/saksbehandlingstider" target="_blank">
+                <Link href="https://www.nav.no/saksbehandlingstider">
                     Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstider.
                 </Link>
             </p>
