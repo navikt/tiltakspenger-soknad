@@ -38,7 +38,13 @@ export default function Datovelger({
 
     return (
         <DatePicker {...datepickerProps} id={id}>
-            <DatePicker.Input {...inputProps} label={label} error={hasError && errorMessage} autoComplete="off" />
+            <DatePicker.Input
+                {...inputProps}
+                label={label}
+                error={hasError && errorMessage}
+                autoComplete="off"
+                id={id}
+            />
         </DatePicker>
     );
 }

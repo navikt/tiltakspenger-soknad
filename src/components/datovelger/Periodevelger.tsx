@@ -80,10 +80,9 @@ export default function Periodevelger({
                     <DatePicker.Input
                         {...fromDatePicker.inputProps}
                         label="Fra"
-                        id={`${id}.fra`}
                         error={!!computedError}
                         disabled={disabledFra}
-                        aria-label="fra"
+                        aria-label={`${id}.fra`}
                         autoComplete="off"
                     />
                 </DatePicker>
@@ -91,10 +90,9 @@ export default function Periodevelger({
                     <DatePicker.Input
                         {...toDatePicker.inputProps}
                         label="Til"
-                        id={`${id}.til`}
                         error={!!computedError}
                         disabled={disabledTil}
-                        aria-label="til"
+                        aria-label={`${id}.til`}
                         autoComplete="off"
                     />
                 </DatePicker>
