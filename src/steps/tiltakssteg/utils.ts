@@ -3,14 +3,14 @@ import { formatDate } from '@/utils/formatDate';
 import { formatPeriode } from '@/utils/formatPeriode';
 
 export const lagTiltaksalternativTekst = ({ typeNavn, arrangør, arenaRegistrertPeriode }: Tiltak) => {
-    const tiltakstypeOgArrangør = `${typeNavn} - ${arrangør}`;
+    const tiltaksbeskrivelse = arrangør ? `${typeNavn} - ${arrangør}` : typeNavn;
     if (arenaRegistrertPeriode?.fra && !arenaRegistrertPeriode?.til) {
-        return `${tiltakstypeOgArrangør}. Startdato: ${formatDate(arenaRegistrertPeriode!.fra)}`;
+        return `${tiltaksbeskrivelse}. Startdato: ${formatDate(arenaRegistrertPeriode!.fra)}`;
     }
     if (arenaRegistrertPeriode?.fra && arenaRegistrertPeriode?.til) {
-        return `${tiltakstypeOgArrangør}. Periode: ${formatPeriode(arenaRegistrertPeriode!)}`;
+        return `${tiltaksbeskrivelse}. Periode: ${formatPeriode(arenaRegistrertPeriode!)}`;
     }
-    return tiltakstypeOgArrangør;
+    return tiltaksbeskrivelse;
 };
 
 export const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
