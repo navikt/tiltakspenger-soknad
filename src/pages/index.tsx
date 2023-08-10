@@ -58,9 +58,6 @@ export default function IndexPage({ personalia }: IndexPageProps) {
             <CustomGuidePanel poster>
                 <p>Hei! Jeg er her for å veilede deg gjennom søknaden.</p>
                 <p>Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.</p>
-                <p>
-                    OBS: Hvis du tar pause på mer enn X minutter, slettes skjemaet på grunn av sikkerhetsinnstillinger.
-                </p>
             </CustomGuidePanel>
             <div className={styles.accordions}>
                 <Accordion header="Tiltakspenger og annen inntekt">
@@ -112,9 +109,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                 <b>Vi stoler på deg</b>
             </Bekreftelsesspørsmål>
             <div className={styles.knappeseksjon}>
-                <Button type="submit">
-                    Start søknaden
-                </Button>
+                <Button type="submit">Start søknaden</Button>
             </div>
         </form>
     );
