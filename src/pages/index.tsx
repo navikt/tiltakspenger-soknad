@@ -64,10 +64,11 @@ export default function IndexPage({ personalia }: IndexPageProps) {
             </CustomGuidePanel>
             <div className={styles.accordions}>
                 <Accordion header="Tiltakspenger og annen inntekt">
-                    <span>Du kan ikke få tiltakspenger hvis du</span>
+                    <span>Du kan ikke få tiltakspenger hvis:</span>
                     <ul>
-                        <li>får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter</li>
-                        <li>får lønn samtidig som du deltar i tiltaket</li>
+                        <li>du får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter</li>
+                        <li>du har en jobb som hindrer deg i å delta på tiltaket</li>
+                        <li>jobben du får lønn for er en del av tiltaket</li>
                     </ul>
                     <span>Det har ikke betydning hvor mye du får i annen pengestøtte eller lønn.</span>
                 </Accordion>
