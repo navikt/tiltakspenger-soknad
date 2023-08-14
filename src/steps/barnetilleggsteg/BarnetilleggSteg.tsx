@@ -64,7 +64,7 @@ export default function BarnetilleggSteg({
             {barnFraApi && barnFraApi.length > 0 ? (
                 <>
                     <ReadMore className="marginTop" header={'Hvilke barn viser vi?'}>
-                        Vi viser dine barn under 16 år som er registrert i folkeregisteret.
+                        Vi viser dine barn under 16 år som er registrert i Folkeregisteret.
                     </ReadMore>
                     <div className="marginTop">
                         {barnFraApi.map((barn) => (
@@ -118,7 +118,6 @@ export default function BarnetilleggSteg({
                                         <div className={styles.knapperEgenregistertBarn}>
                                             <Button
                                                 icon={<PencilIcon aria-hidden />}
-                                                size="small"
                                                 variant="tertiary"
                                                 onClick={(e) => {
                                                     e.preventDefault();
@@ -129,7 +128,6 @@ export default function BarnetilleggSteg({
                                             </Button>
                                             <Button
                                                 icon={<TrashIcon aria-hidden />}
-                                                size="small"
                                                 variant="tertiary"
                                                 onClick={() => {
                                                     fieldArray.remove(index);

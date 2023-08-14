@@ -11,7 +11,7 @@ import { Personalia } from '@/types/Personalia';
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import { GetServerSidePropsContext } from 'next';
 import logger from '@/utils/serverLogger';
-import { getOnBehalfOfToken } from '@/utils/authentication';
+import { getOnBehalfOfToken, redirectToLogin } from '@/utils/authentication';
 import { makeGetRequest } from '@/utils/http';
 import styles from './index.module.css';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
@@ -19,7 +19,7 @@ import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 import { mockedPersonalia } from '@/mocks/mockedPersonalia';
-import { featureIsEnabled } from '@/utils/featureToggling';
+import { brukerSkalRedirectesTilGammelSøknad } from '@/utils/featureToggling';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -58,16 +58,14 @@ export default function IndexPage({ personalia }: IndexPageProps) {
             <CustomGuidePanel poster>
                 <p>Hei! Jeg er her for å veilede deg gjennom søknaden.</p>
                 <p>Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.</p>
-                <p>
-                    OBS: Hvis du tar pause på mer enn X minutter, slettes skjemaet på grunn av sikkerhetsinnstillinger.
-                </p>
             </CustomGuidePanel>
             <div className={styles.accordions}>
                 <Accordion header="Tiltakspenger og annen inntekt">
-                    <span>Du kan ikke få tiltakspenger hvis du</span>
+                    <span>Du kan ikke få tiltakspenger hvis:</span>
                     <ul>
-                        <li>får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter</li>
-                        <li>får lønn samtidig som du deltar i tiltaket</li>
+                        <li>du får annen pengestøtte som helt eller delvis skal dekke dine daglige utgifter</li>
+                        <li>du har en jobb som hindrer deg i å delta på tiltaket</li>
+                        <li>jobben du får lønn for er en del av tiltaket</li>
                     </ul>
                     <span>Det har ikke betydning hvor mye du får i annen pengestøtte eller lønn.</span>
                 </Accordion>
@@ -82,7 +80,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                 <Accordion header="Vi henter og bruker informasjon om deg">
                     <p>I tillegg til den informasjonen du oppgir i søknaden, henter vi:</p>
                     <ul>
-                        <li>Personinformasjon om deg fra Folkeregisteret.</li>
+                        <li>Personinformasjon om deg fra Folkeregisteret</li>
                         <li>Personinformasjon om barna dine hvis du søker om barnetillegg</li>
                         <li>Inntektsinformasjon fra Skatteetaten</li>
                         <li>Opplysninger om hvilket arbeidsmarkedstiltak du deltar på</li>
@@ -111,9 +109,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                 <b>Vi stoler på deg</b>
             </Bekreftelsesspørsmål>
             <div className={styles.knappeseksjon}>
-                <Button type="submit" size="small">
-                    Start søknaden
-                </Button>
+                <Button type="submit">Start søknaden</Button>
             </div>
         </form>
     );
@@ -134,8 +130,8 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
 
     if (process.env.NODE_ENV === 'production') {
         try {
-            const brukerSkalRedirectesTilGammelSøknad = await featureIsEnabled('REDIRECT_TIL_GAMMEL_SOKNAD');
-            if (brukerSkalRedirectesTilGammelSøknad) {
+            const skalRedirectes = await brukerSkalRedirectesTilGammelSøknad(context.req.headers.authorization!);
+            if (skalRedirectes) {
                 logger.info('Bruker redirectes til gammel søknad');
                 return redirectBrukerTilGammelSøknad();
             }
@@ -154,12 +150,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
         token = await getOnBehalfOfToken(context.req.headers.authorization!!);
     } catch (error) {
         logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
-        return {
-            redirect: {
-                destination: '/oauth2/login',
-                permanent: false,
-            },
-        };
+        return redirectToLogin(context);
     }
 
     try {

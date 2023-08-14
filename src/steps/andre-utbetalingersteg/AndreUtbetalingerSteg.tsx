@@ -29,6 +29,7 @@ import {
     lønnetArbeidValidator,
     påkrevdPensjonsordningPeriodeValidator,
 } from '@/steps/andre-utbetalingersteg/validation';
+import { Link } from '@navikt/ds-react';
 
 interface AndreUtbetalingerStegProps {
     title: string;
@@ -154,7 +155,9 @@ export default function AndreUtbetalingerSteg({
                                     Du kan få sykepenger hvis du ikke kan jobbe på grunn av sykdom eller skade. Du kan
                                     også få sykepenger hvis du blir syk mens du mottar dagpenger.
                                 </p>
-                                <p>Les mer om sykepenger på (LENKE)</p>
+                                <Link href="https://www.nav.no/sykepenger" target="_blank">
+                                    Les mer om sykepenger (åpnes i ny fane)
+                                </Link>
                             </>
                         ),
                     }}
@@ -229,7 +232,9 @@ export default function AndreUtbetalingerSteg({
                                         Når ektefellen, samboeren eller partneren din dør, kan du ha rett til
                                         pengestøtte som etterlatt. Det kan være gjenlevendepensjon eller overgangstønad.
                                     </p>
-                                    <p>Les mer om pengestøtte til gjenlevende ektefelle fra NAV (LENKE)</p>
+                                    <Link href="https://www.nav.no/gjenlevendepensjon" target="_blank">
+                                        Les mer om pengestøtte til gjenlevende ektefelle fra NAV (åpnes i ny fane)
+                                    </Link>
                                 </>
                             ),
                         }}
@@ -261,7 +266,9 @@ export default function AndreUtbetalingerSteg({
                             tekst: (
                                 <>
                                     <p>Alderspensjon skal sikre deg inntekt når du blir pensjonist.</p>
-                                    <p>Les mer om alderspensjon fra NAV (LENKE)</p>
+                                    <Link href="https://www.nav.no/alderspensjon" target="_blank">
+                                        Les mer om alderspensjon fra NAV (åpnes i ny fane)
+                                    </Link>
                                 </>
                             ),
                         }}
@@ -293,10 +300,10 @@ export default function AndreUtbetalingerSteg({
                                         Du kan motta supplerende stønad hvis du er over 67 år, og ikke har bodd lenge
                                         nok i Norge til å ha rett på alderspensjon.
                                     </span>
-                                    <p>
+                                    <Link href="https://www.nav.no/supplerende-stonad-over-67" target="_blank">
                                         Les mer om supplerende stønad for personer over 67 år med kort botid i Norge
-                                        (LENKE)
-                                    </p>
+                                        (åpnes i ny fane)
+                                    </Link>
                                 </>
                             ),
                         }}
@@ -333,7 +340,9 @@ export default function AndreUtbetalingerSteg({
                                         Du kan motta supplerende stønad hvis du er både ufør og har flyktningstatus. Du
                                         må ha oppholdstillatelse og være bosatt i Norge.
                                     </span>
-                                    <p>Les mer om supplerende stønad for uføre flyktninger (LENKE)</p>
+                                    <Link href="https://www.nav.no/supplerende-stonad-flyktninger" target="_blank">
+                                        Les mer om supplerende stønad for uføre flyktninger (åpnes i ny fane)
+                                    </Link>
                                 </>
                             ),
                         }}
@@ -407,22 +416,24 @@ export default function AndreUtbetalingerSteg({
                         name="svar.jobbsjansen.mottar"
                         validate={jobbsjansenValidator}
                         hjelpetekst={{
-                            tittel: 'Hva er stønad via jobbsjansen?',
+                            tittel: 'Hva er stønad gjennom Jobbsjansen?',
                             tekst: (
                                 <>
                                     <span>
                                         Jobbsjansen er en ordning for hjemmeværende innvandrerkvinner. Jobbsjansen skal
                                         styrke mulighetene for arbeid og økonomisk selvstendighet. Du kan få også få
-                                        utbetalt jobbsjansenstønad. Hvis du deltar i jobbsjansen, har du avtalt dette
+                                        utbetalt jobbsjansenstønad. Hvis du deltar i Jobbsjansen, har du avtalt dette
                                         med kommunen du bor i.
                                     </span>
-                                    <p>Du kan lese mer om jobbsjansen på (LENKE TIL IMDI)</p>
+                                    <Link href="https://www.imdi.no/tilskudd/jobbsjansen/" target="_blank">
+                                        Les mer om Jobbsjansen (åpnes i ny fane)
+                                    </Link>
                                 </>
                             ),
                         }}
                         afterOnChange={() => slettSvar('svar.jobbsjansen.periode')}
                     >
-                        Mottar du stønad via jobbsjansen i perioden {tiltaksperiodeTekst}?
+                        Mottar du stønad gjennom Jobbsjansen i perioden {tiltaksperiodeTekst}?
                     </JaNeiSpørsmål>
                     {watchJobbsjansen && (
                         <Periodespørsmål
@@ -435,7 +446,7 @@ export default function AndreUtbetalingerSteg({
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
                         >
-                            I hvilken del av perioden mottar du stønad via jobbsjansen?
+                            I hvilken del av perioden mottar du stønad gjennom Jobbsjansen?
                         </Periodespørsmål>
                     )}
                 </div>

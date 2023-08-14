@@ -15,9 +15,8 @@ export default () => {
             </p>
             <ul>
                 <li>
-                    Kontakte veilederen din gjennom{' '}
-                    <Link href="https://pto.dev.nav.no/arbeid/dialog" target="_blank">
-                        dialogen (åpnes i ny fane)
+                    <Link href="https://www.nav.no/kontaktoss" target="_blank">
+                        Kontakte oss (åpnes i ny fane)
                     </Link>
                 </li>
                 <li>Vente noen dager og prøve igjen</li>

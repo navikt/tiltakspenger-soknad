@@ -5,8 +5,8 @@ import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
 import Show from '@/components/show/show';
 import { Personalia } from '@/types/Personalia';
 import { dateStrWithHourMinute, dateStrWithMonthName } from '@/utils/formatDate';
-import {useFormContext} from "react-hook-form";
-import Søknad from "@/types/Søknad";
+import { useFormContext } from 'react-hook-form';
+import Søknad from '@/types/Søknad';
 
 interface KvitteringssideProps {
     personalia: Personalia;
@@ -17,13 +17,10 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
     const { getValues } = useFormContext<Søknad>();
     const manueltRegistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
     const vedlegg = getValues('vedlegg');
-    const manueltRegistrerteBarnUtenVedlegg = manueltRegistrerteBarn.filter(
-        barn => {
-            const ikkeFunnet = !vedlegg.find(
-                vedlegg => barn.uuid === vedlegg.uuid)
-            return ikkeFunnet
-        }
-    );
+    const manueltRegistrerteBarnUtenVedlegg = manueltRegistrerteBarn.filter((barn) => {
+        const ikkeFunnet = !vedlegg.find((vedlegg) => barn.uuid === vedlegg.uuid);
+        return ikkeFunnet;
+    });
     const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
         innsendingstidspunkt
     )}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
@@ -43,11 +40,11 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
 
             <Alert variant="success">
                 <span>
-                    Vi har mottatt søknaden din om Tiltakspenger. <br />
+                    Vi har mottatt søknaden din om tiltakspenger. <br />
                     Saken din er nå til behandling hos NAV.
                 </span>
 
-                <p>Vi vil kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.</p>
+                <p>Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.</p>
             </Alert>
 
             <Show if={manueltRegistrerteBarnUtenVedlegg.length > 0}>
@@ -70,19 +67,19 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
                             </Link>{' '}
                             eller levere
                         </p>
-                        <p>dokumntasjon på ditt lokale NAV-kontor.</p>
+                        <p>dokumentasjon på ditt lokale NAV-kontor.</p>
                     </span>
                 </Alert>
             </Show>
 
             <p>
-                <Link href="https://www.nav.no/saksbehandlingstider" target="_blank">
-                    Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstider.
+                <Link href="https://www.nav.no/saksbehandlingstider#tiltakspenger" target="_blank">
+                    Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstider (åpnes i ny fane).
                 </Link>
             </p>
 
-            <Link href="https://www.nav.no/minside" target="_blank" className={styles.button}>
-                <Button as="a">Følg saken på Min Side</Button>
+            <Link href="https://www.nav.no/minside" className={styles.button}>
+                <Button as="a">Følg saken på Min side</Button>
             </Link>
         </div>
     );

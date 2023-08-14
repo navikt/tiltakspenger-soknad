@@ -120,7 +120,6 @@ export default function Oppsummeringssteg({
                     <Button
                         type="button"
                         onClick={onGoToPreviousStep}
-                        size="small"
                         variant="secondary"
                         disabled={søknadsinnsendingInProgress}
                         loading={søknadsinnsendingInProgress}
@@ -129,7 +128,6 @@ export default function Oppsummeringssteg({
                     </Button>
                     <Button
                         type="submit"
-                        size="small"
                         style={{ marginLeft: '1rem' }}
                         disabled={søknadsinnsendingInProgress}
                         loading={søknadsinnsendingInProgress}
@@ -174,7 +172,7 @@ export default function Oppsummeringssteg({
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
-                    <Accordion.Header>Introduksjonsprogrammet og Kvalifiseringsprogrammet </Accordion.Header>
+                    <Accordion.Header>Introduksjonsprogrammet og kvalifiseringsprogrammet </Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Introduksjonsprogrammet"
@@ -266,8 +264,8 @@ export default function Oppsummeringssteg({
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
-                                        feltNavn="Stønad via jobbsjansen"
-                                        feltVerdi={hentSvarTilSpørsmålene("stønad via jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
+                                        feltNavn="Stønad gjennom Jobbsjansen"
+                                        feltVerdi={hentSvarTilSpørsmålene("stønad gjennom Jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
                                     />
                                 </div>
                             </>
@@ -306,7 +304,7 @@ export default function Oppsummeringssteg({
                                     {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
                                 </div>
                             );
-                            }) : 'Jeg vil ikke søke på barnetillegg'
+                            }) : 'Jeg søker ikke om barnetillegg'
                         }
                     </Accordion.Content>
                 </Accordion.Item>
