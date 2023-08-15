@@ -67,29 +67,29 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-#      - name: Copy appropriate env file
-#        run: cp .env.prod .env.production
-#
-#      - name: Build app
-#        run: npm run build
-#
-#      - name: Upload static files to NAV CDN
-#        uses: navikt/frontend/actions/cdn-upload/v1@main
-#        with:
-#          cdn-team-name: tpts
-#          source: ./.next/static
-#          destination: "/tiltakspenger-soknad/_next"
-#
-#      - name: Docker build and push for prod-gcp
-#        if: github.ref == 'refs/heads/main'
-#        uses: docker/build-push-action@v3
-#        with:
-#          context: .
-#          tags: ${{ env.IMAGE }}-production
-#          push: true
-#          cache-from: type=gha
-#          cache-to: type=gha,mode=max
-#          environment: production
+      - name: Copy appropriate env file
+        run: cp .env.prod .env.production
+
+      - name: Build app
+        run: npm run build
+
+      - name: Upload static files to NAV CDN
+        uses: navikt/frontend/actions/cdn-upload/v1@main
+        with:
+          cdn-team-name: tpts
+          source: ./.next/static
+          destination: "/tiltakspenger-soknad/_next"
+
+      - name: Docker build and push for prod-gcp
+        if: github.ref == 'refs/heads/main'
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          tags: ${{ env.IMAGE }}-production
+          push: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          environment: production
 
       - name: Notify Slack in case of build failure
         if: ${{ failure() && (github.ref == 'refs/heads/main') }}
@@ -114,3 +114,18 @@ jobs:
           RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
           VAR: image=${{ env.IMAGE }}-test,name=${{ github.event.repository.name }}
           VARS: .nais/vars/dev.yaml
+
+  deploy-prod:
+    name: Deploy to NAIS prod
+    needs: deploy-dev
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_KEY }}
+          CLUSTER: prod-gcp
+          RESOURCE: .nais/nais.yaml,.nais/unleash-apitoken.yaml
+          VAR: image=${{ env.IMAGE }}-production,name=${{ github.event.repository.name }}
+          VARS: .nais/vars/prod.yaml
