@@ -17,6 +17,8 @@ spec:
         value: {{ NEXT_PUBLIC_TELEMETRY_URL }}
       - name: UNLEASH_SERVER_API_URL
         value: {{ unleash.url }}
+      - name: DEKORATOR_ENV
+        value: {{ dekorator.env }}
   envFrom:
     - secret: tiltakspenger-soknad-unleash-secrets
   ingresses:

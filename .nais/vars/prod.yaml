@@ -5,3 +5,5 @@ NEXT_PUBLIC_TELEMETRY_URL: https://telemetry.nav.no/collect
 unleash:
   environment: production
   url: https://tiltakspenger-unleash-api.nav.cloud.nais.io/api
+dekorator:
+  env: prod
