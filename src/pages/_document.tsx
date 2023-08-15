@@ -4,6 +4,7 @@ import {
     Components as DecoratorComponents,
     Components,
 } from '@navikt/nav-dekoratoren-moduler/ssr';
+import serverLogger from '@/utils/serverLogger';
 
 interface PageDocumentProps {
     decoratorFragments: DecoratorComponents;
@@ -11,9 +12,10 @@ interface PageDocumentProps {
 
 class PageDocument extends Document<PageDocumentProps> {
     static async getDecoratorFragments(): Promise<Components> {
+        serverLogger.info(`Setter opp dekoratør med env satt til: ${(process.env.DEKORATOR_ENV as any) || 'dev'}`);
         try {
             const fragments = await fetchDecoratorReact({
-                env: process.env.NAIS_CLUSTER_NAME === 'prod-gcp' ? 'prod' : 'dev',
+                env: (process.env.DEKORATOR_ENV as any) || 'dev',
                 context: 'privatperson',
                 simple: true,
                 chatbot: false,
