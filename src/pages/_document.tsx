@@ -13,7 +13,7 @@ class PageDocument extends Document<PageDocumentProps> {
     static async getDecoratorFragments(): Promise<Components> {
         try {
             const fragments = await fetchDecoratorReact({
-                env: process.env.NAIS_CLUSTER_NAME === 'prod-gcp' ? 'prod' : 'dev',
+                env: 'prod', //TODO: Revert
                 context: 'privatperson',
                 simple: true,
                 chatbot: false,
