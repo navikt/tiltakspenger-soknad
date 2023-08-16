@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
-import { Button } from '@navikt/ds-react';
+import {Button, Link} from '@navikt/ds-react';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
 import TiltakMedUfullstendigPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedUfullstendigPeriodeUtfylling';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
@@ -30,9 +30,11 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
 
     const submitSectionRenderer = !brukerHarRegistrerteTiltak
         ? () => (
-              <Button style={{ margin: '1rem auto', display: 'block' }} type="button">
+            <Link href="https://www.nav.no/minside" style={{ margin: '1rem auto', display: 'block', width: "fit-content"}}>
+              <Button type="button" as="a">
                   Avbryt søknaden og gå til Min side
               </Button>
+            </Link>
           )
         : undefined;
 
