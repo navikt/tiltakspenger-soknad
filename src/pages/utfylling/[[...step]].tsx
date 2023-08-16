@@ -169,7 +169,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
             logger.error((error as Error).message);
             return {
                 props: {
-                    tiltak: mocketTiltak,
+                    tiltak: [],
                 },
             };
         }
