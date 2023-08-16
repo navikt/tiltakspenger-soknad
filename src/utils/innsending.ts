@@ -21,7 +21,8 @@ export function lagFormDataForInnsending(søknad: Søknad, personalia: Personali
 }
 
 export function postSøknadMultipart(formData: FormData) {
-    return fetch('/api/soknad', {
+    const url = `${process.env.NEXT_PUBLIC_BASE_PATH}/api/soknad`;
+    return fetch(url, {
         method: 'POST',
         body: formData,
     });

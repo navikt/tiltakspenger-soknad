@@ -36,6 +36,7 @@ spec:
           namespace: personbruker
       external:
         - host: tiltakspenger-unleash-api.nav.cloud.nais.io
+        - host: nav.no
   idporten:
     enabled: true
     sidecar:
