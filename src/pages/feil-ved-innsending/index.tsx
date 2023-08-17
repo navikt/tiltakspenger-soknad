@@ -18,7 +18,13 @@ export default function FeilVedInnsending() {
                 </BodyLong>
             </CustomGuidePanel>
             <div className={styles.lastInnSidenPåNyttButton}>
-                <Button type="button" onClick={() => ((window.location as any) = '/')}>
+                <Button
+                    type="button"
+                    onClick={() => {
+                        const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+                        (window.location as any) = basePath;
+                    }}
+                >
                     Start søknaden på nytt
                 </Button>
             </div>
