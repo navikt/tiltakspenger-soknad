@@ -30,7 +30,10 @@ export default async function middleware(request: NextApiRequest, response: Next
         if (!authorizationHeader) {
             throw Error('Mangler token');
         }
-        await validateIdportenToken(authorizationHeader);
+        const validationResult = await validateIdportenToken(authorizationHeader);
+        if (validationResult !== 'valid') {
+            throw validationResult;
+        }
         oboToken = await getOnBehalfOfToken(request.headers.authorization!!);
     } catch (error) {
         logger.error('Bruker har ikke tilgang', error);
