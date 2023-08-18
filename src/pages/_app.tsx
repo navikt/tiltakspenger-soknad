@@ -8,6 +8,7 @@ import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
 import { UtfyllingContext } from './utfylling/[[...step]]';
 import { NextPage } from 'next';
+import defaultValues from '@/defaultValues';
 import '../styles/global.css';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
@@ -37,31 +38,7 @@ type AppPropsWithLayout = AppProps & {
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
     const formMethods = useForm<Søknad>({
-        defaultValues: {
-            svar: {
-                tiltak: {},
-                barnetillegg: {
-                    eøsOppholdForBarnFraAPI: {},
-                    manueltRegistrerteBarnSøktBarnetilleggFor: [],
-                },
-                institusjonsopphold: {},
-                introduksjonsprogram: {},
-                kvalifiseringsprogram: {},
-                sykepenger: {},
-                gjenlevendepensjon: {},
-                alderspensjon: {},
-                supplerendestønadover67: {},
-                supplerendestønadflyktninger: {},
-                pensjonsordning: {},
-                etterlønn: {},
-                lønnetArbeid: {},
-                jobbsjansen: {},
-                mottarAndreUtbetalinger: undefined,
-                harBekreftetAlleOpplysninger: false,
-                harBekreftetÅSvareSåGodtManKan: false,
-            },
-            vedlegg: [],
-        },
+        defaultValues: defaultValues,
         mode: 'onSubmit',
     });
 
