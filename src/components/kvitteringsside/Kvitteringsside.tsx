@@ -7,6 +7,7 @@ import { Personalia } from '@/types/Personalia';
 import { dateStrWithHourMinute, dateStrWithMonthName } from '@/utils/formatDate';
 import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
+import { useRouter } from 'next/router';
 
 interface KvitteringssideProps {
     personalia: Personalia;
@@ -14,6 +15,7 @@ interface KvitteringssideProps {
 }
 
 export default function Kvitteringsside({ personalia, innsendingstidspunkt }: KvitteringssideProps) {
+    const router = useRouter();
     const { getValues } = useFormContext<Søknad>();
     const manueltRegistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
     const vedlegg = getValues('vedlegg');
@@ -24,6 +26,20 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
     const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
         innsendingstidspunkt
     )}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
+
+    React.useEffect(() => {
+        router.beforePopState(({ as }) => {
+            if (as !== router.asPath) {
+                (window.location as any) = process.env.NEXT_PUBLIC_BASE_URL ?? '/';
+                return false;
+            }
+            return true;
+        });
+
+        return () => {
+            router.beforePopState(() => true);
+        };
+    }, [router]);
 
     return (
         <div>
