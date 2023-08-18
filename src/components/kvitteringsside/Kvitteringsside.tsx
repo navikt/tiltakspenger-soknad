@@ -30,7 +30,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
     React.useEffect(() => {
         router.beforePopState(({ as }) => {
             if (as !== router.asPath) {
-                (window.location as any) = process.env.NEXT_PUBLIC_BASE_URL ?? '/';
+                (window.location as any) = process.env.NEXT_PUBLIC_BASE_PATH ?? '/';
                 return false;
             }
             return true;
