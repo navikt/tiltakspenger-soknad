@@ -19,7 +19,13 @@ export default function GenerellFeil() {
                 </BodyLong>
             </CustomGuidePanel>
             <div className={styles.lastInnSidenPåNyttButton}>
-                <Button type="button" onClick={() => ((window.location as any) = '/')}>
+                <Button
+                    type="button"
+                    onClick={() => {
+                        const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+                        (window.location as any) = basePath;
+                    }}
+                >
                     Last inn siden på nytt
                 </Button>
             </div>
