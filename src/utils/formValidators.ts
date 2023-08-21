@@ -56,7 +56,12 @@ export function periodeInngårIAnnenPeriodeValidator(
     const fraDato = dayjs(periode?.fra);
     const tilDato = dayjs(periode?.til);
 
-    if (fraDato.isBefore(periodeÅValidereMot.fra) || tilDato.isAfter(periodeÅValidereMot.til)) {
+    if (
+        fraDato.isBefore(periodeÅValidereMot.fra) ||
+        fraDato.isAfter(periodeÅValidereMot.til) ||
+        tilDato.isBefore(periodeÅValidereMot.fra) ||
+        tilDato.isAfter(periodeÅValidereMot.til)
+    ) {
         return feilmelding;
     }
 }
