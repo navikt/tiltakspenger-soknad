@@ -15,10 +15,10 @@ For å få tilgang til alle dependencies må man generere en personal access-tok
 ### Hvordan kjøre opp lokalt utviklingsmiljø
 
 Dette oppsettet antar at man har [tiltakspenger-soknad-api](https://github.com/navikt/tiltakspenger-soknad-api)
-liggende på `../` relativt til tiltakspenger-soknad. Tiltakspenger-soknad-api må bygges med `./gradlew clean build --info installDist --stacktrace` før man går til neste steg. Eventuelt: kjør opp tiltakspenger-soknad-api fra f.eks. IntelliJ
-på localhost:8080 (må matche `TILTAKSPENGER_SOKNAD_API_URL` i `.env.local`).
+liggende på `../` relativt til tiltakspenger-soknad. Eventuelt: kjør opp tiltakspenger-soknad-api fra f.eks. IntelliJ
+på localhost:8080 (må matche `TILTAKSPENGER_SOKNAD_API_URL` i `.env.local`). Tiltakspenger-soknad-api må bygges med `./gradlew clean build --info installDist --stacktrace` før man går til neste steg.
 
-Autentisering og TokenX er mocket ut med docker-compose i `./docker-compose` på rot av repoet. Dette kan kjøres opp med docker-compose up -d --build fra /docker-compose-mappa på rot av repository.
+Autentisering og TokenX er mocket ut med docker-compose i `./docker-compose` på rot av repoet. Dette kan kjøres opp med `docker-compose up -d --build` fra /docker-compose-mappa på rot av repository.
 
 For at ting skal funke som forventet lokalt, må man også sette opp noen miljøvariabler for selve NextJS-appen,
 i tillegg til en miljøvariabel for [Wonderwall](https://github.com/nais/wonderwall) som er mocket ut i
