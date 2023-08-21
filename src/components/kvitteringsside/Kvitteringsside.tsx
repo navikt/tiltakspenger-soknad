@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Alert, Button, Link } from '@navikt/ds-react';
 import styles from './kvittering.module.css';
 import { CheckmarkCircleFillIcon } from '@navikt/aksel-icons';
@@ -20,8 +20,9 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
     const { getValues, reset } = useFormContext<Søknad>();
     const manueltRegistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
     const vedlegg = getValues('vedlegg');
-    const manueltRegistrerteBarnUtenVedlegg = manueltRegistrerteBarn.filter((barn) => {
-        const ikkeFunnet = !vedlegg.find((vedlegg) => barn.uuid === vedlegg.uuid);
+    const manueltRegistrerteBarnUtenVedlegg = (manueltRegistrerteBarn || []).filter((barn) => {
+        const vedleggListe = vedlegg || [];
+        const ikkeFunnet = !vedleggListe.find((vedlegg) => barn?.uuid === vedlegg?.uuid);
         return ikkeFunnet;
     });
     const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
@@ -51,7 +52,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             </p>
 
             <h4 className={styles.centerText}>
-                Takk for søknaden, {personalia.fornavn} {personalia.etternavn}!
+                Takk for søknaden, {personalia?.fornavn} {personalia?.etternavn}!
             </h4>
 
             <h6 className={styles.centerText}>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
@@ -65,7 +66,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
                 <p>Vi vil ta kontakt med deg hvis vi trenger mer informasjon eller dokumentasjon fra deg.</p>
             </Alert>
 
-            <Show if={manueltRegistrerteBarnUtenVedlegg.length > 0}>
+            <Show if={(manueltRegistrerteBarnUtenVedlegg || []).length > 0}>
                 <Alert variant="warning" style={{ marginTop: '2rem' }}>
                     <span>
                         <span>Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. </span>
