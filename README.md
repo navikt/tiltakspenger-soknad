@@ -10,7 +10,7 @@ For å installere dependencies:
 npm install
 ```
 
-For å få tilgang til alle dependencies må man generere en personal access-token som legges til i `.npmrc` på ~. Denne genereres via Github, trenger tilgangen `read:packages`, og må autentiseres via NAV.
+For å få tilgang til alle dependencies må man generere en personal access-token som legges til i `.npmrc` på ~. Denne genereres via Github, trenger tilgangen `read:packages`, og må autentiseres via NAV. Se dokumentasjon [her](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
 
 ### Hvordan kjøre opp lokalt utviklingsmiljø
 
@@ -40,7 +40,7 @@ docker-compose oppsettet.
     TOKEN_X_PRIVATE_JWK=<generert JWK>
     PDL_ENDPOINT_URL=<en eller annen baseurl>
     ```
-3. Legg til følgende innhold i hosts-filen på ~ (Om man bruker mac):
+3. Legg til følgende innhold i hosts-filen på `/etc/hosts` (Om man bruker mac):
     ```
     127.0.0.1 host.docker.internal
     ```
