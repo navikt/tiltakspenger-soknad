@@ -52,7 +52,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             </p>
 
             <h4 className={styles.centerText}>
-                Takk for søknaden, {personalia?.fornavn} {personalia?.etternavn}!
+                Takk for søknaden, {personalia.fornavn} {personalia.etternavn}!
             </h4>
 
             <h6 className={styles.centerText}>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
