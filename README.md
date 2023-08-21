@@ -10,7 +10,7 @@ For å installere dependencies:
 npm install
 ```
 
-For å få tilgang til alle dependencies må man generere en personal access-token som legges til i `.npmrc` på ~. Denne genereres via Github, og trenger tilgangen `read:packages` og må autentiseres via NAV.
+For å få tilgang til alle dependencies må man generere en personal access-token som legges til i `.npmrc` på ~. Denne genereres via Github, trenger tilgangen `read:packages`, og må autentiseres via NAV.
 
 ### Hvordan kjøre opp lokalt utviklingsmiljø
 
