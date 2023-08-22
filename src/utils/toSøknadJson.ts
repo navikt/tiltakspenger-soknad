@@ -14,7 +14,7 @@ import Spørsmålsbesvarelser, {
 import dayjs from 'dayjs';
 import { Tiltak } from '@/types/Tiltak';
 import { Barn } from '@/types/Barn';
-import {Nullable} from "@/utils/eller-null";
+import { Nullable } from '@/utils/eller-null';
 
 interface Periode {
     fra: string;
@@ -47,52 +47,52 @@ function introduksjonsprogram({ deltar, periode }: Introduksjonsprogram) {
     return { deltar };
 }
 
-function sykepenger({mottar, periode}: Sykepenger) {
+function sykepenger({ mottar, periode }: Sykepenger) {
     if (mottar) {
-        return { mottar: mottar, periode: formatPeriod( periode as Periode)}
+        return { mottar: mottar, periode: formatPeriod(periode as Periode) };
     }
     return { mottar: mottar };
 }
 
 function gjenlevendepensjon({ mottar, periode }: Gjenlevendepensjon) {
     if (mottar) {
-        return { mottar, periode: formatPeriod(periode as Periode)}
+        return { mottar, periode: formatPeriod(periode as Periode) };
     }
     return { mottar };
 }
 
 function alderspensjon(alderspensjon: Alderspensjon) {
-    const { mottar, fraDato} = alderspensjon;
+    const { mottar, fraDato } = alderspensjon;
     if (mottar) {
-        return { mottar, fraDato: formatDate(fraDato)}
+        return { mottar, fraDato: formatDate(fraDato) };
     }
     return alderspensjon;
 }
 
 function supplerendestønadover67({ mottar, periode }: Supplerendestønadover67) {
     if (mottar) {
-        return { mottar, periode: formatPeriod(periode as Periode)}
+        return { mottar, periode: formatPeriod(periode as Periode) };
     }
     return { mottar };
 }
 
 function jobbsjansen({ mottar, periode }: Jobbsjansen) {
     if (mottar) {
-        return { mottar, periode: formatPeriod(periode as Periode)}
+        return { mottar, periode: formatPeriod(periode as Periode) };
     }
     return { mottar };
 }
 
 function supplerendestønadflyktninger({ mottar, periode }: Supplerendestønadover67) {
     if (mottar) {
-        return { mottar, periode: formatPeriod(periode as Periode)}
+        return { mottar, periode: formatPeriod(periode as Periode) };
     }
     return { mottar };
 }
 
-function pensjonsordning ({ mottar, periode }: Pensjonsordning) {
+function pensjonsordning({ mottar, periode }: Pensjonsordning) {
     if (mottar) {
-        return { mottar, periode: formatPeriod(periode as Periode)}
+        return { mottar, periode: formatPeriod(periode as Periode) };
     }
     return { mottar };
 }
@@ -112,26 +112,25 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
         type: tiltak.type,
         typeNavn: tiltak.typeNavn,
         arenaRegistrertPeriode: tiltak.arenaRegistrertPeriode,
-        periode: formTiltak.periode,
+        periode: formatPeriod(formTiltak.periode!),
     };
 }
 
 function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
     const oppholdInnenforEøsDict = barnetillegg.eøsOppholdForBarnFraAPI;
-    const registrerteBarn = barnFraAPI
-            .map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
-                fornavn,
-                fødselsdato,
-                mellomnavn,
-                etternavn,
-                oppholdInnenforEøs: oppholdInnenforEøsDict[uuid],
-            }));
+    const registrerteBarn = barnFraAPI.map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
+        fornavn,
+        fødselsdato,
+        mellomnavn,
+        etternavn,
+        oppholdInnenforEøs: oppholdInnenforEøsDict[uuid],
+    }));
     const manueltRegistrerteBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
-            .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
-            .map((barn) => ({
-                ...barn,
-                fødselsdato: formatDate(barn.fødselsdato),
-            }));
+        .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
+        .map((barn) => ({
+            ...barn,
+            fødselsdato: formatDate(barn.fødselsdato),
+        }));
     return {
         ...barnetillegg,
         registrerteBarnSøktBarnetilleggFor: registrerteBarn,
