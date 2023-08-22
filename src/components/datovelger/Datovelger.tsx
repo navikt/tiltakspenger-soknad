@@ -1,4 +1,4 @@
-import { DatePicker, useDatepicker } from '@navikt/ds-react';
+import { DatePicker, ErrorMessage, useDatepicker } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface DatovelgerProps {
@@ -11,7 +11,6 @@ interface DatovelgerProps {
     datoMåVæreIFortid?: boolean;
     defaultSelected: Date;
 }
-
 export default function Datovelger({
     onDateChange,
     errorMessage,
@@ -22,29 +21,41 @@ export default function Datovelger({
     datoMåVæreIFortid,
     defaultSelected,
 }: DatovelgerProps) {
+    const [dateError, setDateError] = useState<string>('');
+
     const { datepickerProps, inputProps } = useDatepicker({
         onDateChange,
         fromDate: minDate,
         defaultMonth: minDate,
         toDate: datoMåVæreIFortid ? new Date() : maxDate,
         defaultSelected: defaultSelected,
-        onValidate: (val) => {
-            setHasError(!val.isValidDate);
+        onValidate: (validation) => {
+            if (validation.isAfter) {
+                setDateError('Dato kan ikke være i fremtiden');
+            } else {
+                setDateError('');
+            }
         },
         openOnFocus: false,
-    });
+        });
+        
+        const computedError = dateError || errorMessage;
 
-    const [hasError, setHasError] = useState(false);
 
     return (
+        <>
+        <div style={{paddingBottom: '0.5rem'}}>
         <DatePicker {...datepickerProps} id={id}>
             <DatePicker.Input
                 {...inputProps}
                 label={label}
-                error={hasError && errorMessage}
+                error={!!computedError}
                 autoComplete="off"
                 id={id}
             />
         </DatePicker>
+        </div>
+        {computedError ? <ErrorMessage size={'medium'}>{`• ${computedError}`}</ErrorMessage> : ''}
+        </>
     );
 }
