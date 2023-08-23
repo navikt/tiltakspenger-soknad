@@ -9,12 +9,26 @@ import { Hjelpetekst } from '@/types/Hjelpetekst';
 interface DatospørsmålProps {
     name: string;
     children: string;
-    validate?: ValidatorFunction;
+    validate?: ValidatorFunction | ValidatorFunction[];
     minDate?: Date;
     maxDate?: Date;
     hjelpetekst?: Hjelpetekst;
     datoMåVæreIFortid?: boolean;
     legend?: string;
+}
+
+function validatorArrayAsObject(validate: ValidatorFunction[]) {
+    const validateObject: { [key: string]: ValidatorFunction } = {};
+    validate.forEach((validatorFunction, index) => (validateObject[`${index}`] = validatorFunction));
+    return validateObject;
+}
+
+
+function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
+    if (Array.isArray(validate)) {
+        return validatorArrayAsObject(validate);
+    }
+    return validate;
 }
 
 export default function Datospørsmål({
@@ -36,7 +50,7 @@ export default function Datospørsmål({
             <Controller
                 name={name}
                 control={control}
-                rules={{validate}}
+                rules={{ validate: setupValidation(validate) }}
                 render={({ field: { onChange, value } }) => (
                     <Datovelger
                         id={name}
