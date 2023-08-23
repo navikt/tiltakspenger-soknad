@@ -1,4 +1,4 @@
-import { createContext, Dispatch, ReactElement, ReactNode, SetStateAction, useState } from 'react';
+import React, { createContext, Dispatch, ReactElement, ReactNode, SetStateAction, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { AppProps } from 'next/app';
 import '@navikt/ds-css';
