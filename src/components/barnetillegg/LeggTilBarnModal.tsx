@@ -4,6 +4,7 @@ import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './Barnetillegg.module.css';
+import stepStyles from './../../components/step/Step.module.css';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import {
     påkrevdDatoValidator,
@@ -212,7 +213,8 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                 />
                             </div>
                         </div>
-                        <Button onClick={lukkModal} className={styles.knappAvbrytModal} variant="secondary">
+                        <div className={stepStyles.step__buttonsection}>
+                        <Button onClick={lukkModal} variant="secondary">
                             Avbryt
                         </Button>
                         <Button
@@ -232,11 +234,12 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                     setOpen(false);
                                 }
                             }}
-                            className={styles.knappLagreModal}
+                        
                             variant="primary"
                         >
                             Lagre
                         </Button>
+                        </div>
                     </Modal.Content>
                 </Modal>
             </>
