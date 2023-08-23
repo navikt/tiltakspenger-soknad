@@ -1,4 +1,4 @@
-import { DatePicker, ErrorMessage, useDatepicker } from '@navikt/ds-react';
+import { DatePicker, useDatepicker } from '@navikt/ds-react';
 import { useState } from 'react';
 
 interface DatovelgerProps {
@@ -43,19 +43,14 @@ export default function Datovelger({
 
 
     return (
-        <>
-        <div style={{paddingBottom: '0.5rem'}}>
         <DatePicker {...datepickerProps} id={id}>
             <DatePicker.Input
                 {...inputProps}
                 label={label}
-                error={!!computedError}
+                error={computedError}
                 autoComplete="off"
                 id={id}
             />
         </DatePicker>
-        </div>
-        {computedError ? <ErrorMessage size={'medium'}>{`• ${computedError}`}</ErrorMessage> : ''}
-        </>
     );
 }
