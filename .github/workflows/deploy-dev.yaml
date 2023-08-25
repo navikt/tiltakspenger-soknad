@@ -45,7 +45,6 @@ jobs:
         run: npm run build
 
       - name: Docker build and push image for dev-gcp
-        if: github.ref == 'refs/heads/main'
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -57,7 +56,6 @@ jobs:
   deploy-dev:
     name: Deploy to NAIS dev
     needs: build
-    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
