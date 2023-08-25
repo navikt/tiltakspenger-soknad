@@ -154,7 +154,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                             datoMåVæreIFortid={true}
                             validate={datofeltValidator}
                         >
-                            Fødselsdato
+                            Fødselsdato (dd.mm.åååå)
                         </Datospørsmål>
                         <JaNeiSpørsmål
                             reverse
