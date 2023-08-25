@@ -76,7 +76,7 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
         }
     }
 
-    const svar = getValues().svar;
+    const svar = watch().svar;
     const aktivtSøknadssteg = utledSøknadsstegFraRoute(step && step[0]);
 
     function navigateTo(path: string, shallow: boolean = false) {
