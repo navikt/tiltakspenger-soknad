@@ -1,4 +1,4 @@
-FROM node:16-alpine as runtime
+FROM node:18-alpine as runtime
 
 ARG ENVIRONMENT
 

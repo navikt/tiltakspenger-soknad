@@ -1,9 +1,5 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
-import {
-    fetchDecoratorReact,
-    Components as DecoratorComponents,
-    Components,
-} from '@navikt/nav-dekoratoren-moduler/ssr';
+import { fetchDecoratorReact, DecoratorComponents } from '@navikt/nav-dekoratoren-moduler/ssr';
 import serverLogger from '@/utils/serverLogger';
 
 interface PageDocumentProps {
@@ -11,17 +7,18 @@ interface PageDocumentProps {
 }
 
 class PageDocument extends Document<PageDocumentProps> {
-    static async getDecoratorFragments(): Promise<Components> {
+    static async getDecoratorFragments(): Promise<DecoratorComponents> {
         serverLogger.info(`Setter opp dekoratør med env satt til: ${(process.env.DEKORATOR_ENV as any) || 'dev'}`);
         try {
             const fragments = await fetchDecoratorReact({
                 env: (process.env.DEKORATOR_ENV as any) || 'dev',
-                context: 'privatperson',
-                simple: true,
-                chatbot: false,
-                level: 'Level4',
-                // todo: hvordan løse dette i dev?
-                enforceLogin: process.env.NODE_ENV === 'production',
+                params: {
+                    context: 'privatperson',
+                    simple: true,
+                    chatbot: false,
+                    level: 'Level4',
+                    enforceLogin: process.env.NODE_ENV === 'production',
+                },
             });
             return fragments;
         } catch (error) {
