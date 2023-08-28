@@ -19,7 +19,6 @@ import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 import { mockedPersonalia } from '@/mocks/mockedPersonalia';
-import { brukerSkalRedirectesTilGammelSøknad } from '@/utils/featureToggling';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -128,23 +127,6 @@ function redirectBrukerTilGammelSøknad() {
 
 export const getServerSideProps = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
-
-    if (process.env.NODE_ENV === 'production') {
-        try {
-            const skalRedirectes = await brukerSkalRedirectesTilGammelSøknad(context.req.headers.authorization!);
-            if (skalRedirectes) {
-                logger.info('Bruker redirectes til gammel søknad');
-                return redirectBrukerTilGammelSøknad();
-            }
-        } catch (error) {
-            logger.error(
-                `Noe gikk galt ved oppsett av unleash: ${
-                    (error as Error).message
-                }. Bruker redirectes til gammel søknad.`
-            );
-            return redirectBrukerTilGammelSøknad();
-        }
-    }
 
     let token = null;
     try {
