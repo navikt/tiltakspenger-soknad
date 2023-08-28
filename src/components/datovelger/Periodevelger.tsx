@@ -79,7 +79,7 @@ export default function Periodevelger({
                 <DatePicker {...fromDatePicker.datepickerProps} id={`${id}`}>
                     <DatePicker.Input
                         {...fromDatePicker.inputProps}
-                        label="Fra"
+                        label="Fra (dd.mm.åååå)"
                         error={!!computedError}
                         disabled={disabledFra}
                         aria-label={`${id}.fra`}
@@ -89,7 +89,7 @@ export default function Periodevelger({
                 <DatePicker {...toDatePicker.datepickerProps} id={`${id}`}>
                     <DatePicker.Input
                         {...toDatePicker.inputProps}
-                        label="Til"
+                        label="Til (dd.mm.åååå)"
                         error={!!computedError}
                         disabled={disabledTil}
                         aria-label={`${id}.til`}

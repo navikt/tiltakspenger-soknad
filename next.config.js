@@ -5,7 +5,7 @@ let isDevelopment = process.env.NODE_ENV === 'development';
 const appDirectives = {
     'script-src-elem': ["'self'"],
     'style-src-elem': ["'self'"],
-    'img-src': isDevelopment ? ["data:", "'self'"] : ["data:"],
+    'img-src': isDevelopment ? ['data:', "'self'"] : ['data:'],
     'connect-src': isDevelopment
         ? ["'self'", process.env.NEXT_PUBLIC_TELEMETRY_URL]
         : [process.env.NEXT_PUBLIC_TELEMETRY_URL],
@@ -16,6 +16,7 @@ module.exports = {
     basePath: process.env.NEXT_PUBLIC_BASE_PATH,
     output: 'standalone',
     assetPrefix: process.env.ASSET_PREFIX,
+    productionBrowserSourceMaps: true,
     async headers() {
         const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
         const csp = await buildCspHeader(appDirectives, { env: environment });

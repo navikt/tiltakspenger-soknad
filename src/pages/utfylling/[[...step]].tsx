@@ -76,7 +76,9 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
         }
     }
 
-    const svar = getValues().svar;
+    const søknad = watch();
+    const { svar } = søknad;
+
     const aktivtSøknadssteg = utledSøknadsstegFraRoute(step && step[0]);
 
     function navigateTo(path: string, shallow: boolean = false) {
@@ -95,10 +97,16 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
     const brukerErIGyldigTilstand = brukerErPåSteg(aktivtSøknadssteg);
 
     React.useEffect(() => {
-        setTimeout(() => reset(getValues(), { keepValues: true }));
+        // fikser noe timing issues med valideringsmeldinger som dukker opp for tidlig
+        const timeoutId = setTimeout(() => {
+            reset(søknad, { keepValues: true });
+        });
         if (!brukerErIGyldigTilstand) {
             navigateTo('/');
         }
+        return () => {
+            clearTimeout(timeoutId);
+        };
     }, [step]);
 
     if (brukerErIGyldigTilstand) {

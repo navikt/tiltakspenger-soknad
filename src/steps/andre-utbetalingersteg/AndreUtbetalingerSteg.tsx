@@ -284,7 +284,7 @@ export default function AndreUtbetalingerSteg({
                             maxDate={new Date(tiltaksperiode?.til)}
                             legend="Når begynner din alderspensjon?"
                         >
-                            Fra dato
+                            Fra dato (dd.mm.åååå)
                         </Datospørsmål>
                     )}
                 </div>

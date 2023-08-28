@@ -58,6 +58,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
             <CustomGuidePanel poster>
                 <p>Hei! Jeg er her for å veilede deg gjennom søknaden.</p>
                 <p>Du kan ha rett til tiltakspenger hvis du deltar i et arbeidsmarkedstiltak som NAV har godkjent.</p>
+                <p>Du må lese gjennom informasjonen under før du starter søknaden.</p>
             </CustomGuidePanel>
             <div className={styles.accordions}>
                 <Accordion header="Tiltakspenger og annen inntekt">

@@ -11,17 +11,6 @@
     margin-top: 1rem;
 }
 
-.knappAvbrytModal{
-    width: 100%;
-    margin-top: 1rem;
-}
-
-.knappLagreModal{
-    width: 100%;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-}
-
 .modalLeggTilBarn {
     background-color: var(--a-gray-50);
     width: 100%;
