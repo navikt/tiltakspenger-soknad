@@ -49,10 +49,6 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
             []
         );
 
-        useEffect(() => {
-            Modal.setAppElement('#__next');
-        }, []);
-
         function fornavnValidator(verdi: string) {
             return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi fornavn');
         }
@@ -133,7 +129,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     aria-labelledby="modal-heading"
                     className={styles.modalLeggTilBarn}
                 >
-                    <Modal.Content role="dialog">
+                    <Modal.Body role="dialog">
                         <Heading spacing level="1" size="large" id="modal-heading">
                             Andre barn
                         </Heading>
@@ -234,13 +230,13 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                     setOpen(false);
                                 }
                             }}
-                        
+
                             variant="primary"
                         >
                             Lagre
                         </Button>
                         </div>
-                    </Modal.Content>
+                    </Modal.Body>
                 </Modal>
             </>
         );
