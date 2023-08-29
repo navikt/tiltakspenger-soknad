@@ -68,7 +68,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         function barnUtenforEØSValidator(verdi: boolean) {
             return påkrevdJaNeiSpørsmålValidator(
                 verdi,
-                'Du må svare på om barnet ditt oppholder seg innenfor EØS i tiltaksperioden'
+                'Du må svare på om barnet ditt oppholder seg i Norge eller et annet EØS-land i tiltaksperioden'
             );
         }
 
