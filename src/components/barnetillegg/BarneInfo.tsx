@@ -13,7 +13,7 @@ export default function BarneInfo({barn, vedlegg}: BarneInfoProps) {
         <div>
             {fornavn && <p><strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}</p>}
             <p><strong>Fødselsdato:</strong> {formatDate(fødselsdato)}</p>
-            <p>{oppholdInnenforEøs ? "Ja" : "Nei"}, barnet oppholder seg {oppholdInnenforEøs ? "" : " ikke"} innenfor EØS i tiltaksperioden</p>
+            <p>{oppholdInnenforEøs ? "Ja" : "Nei"}, barnet oppholder seg {oppholdInnenforEøs ? "" : " ikke"} i Norge eller et annet EØS-land i tiltaksperioden</p>
             {vedlegg?.map((vedlegg, index) => (
                 <p key={`${vedlegg.uuid}-${index}`}><strong>{`Vedlegg ${index + 1}: `}</strong>{vedlegg.file.name}</p>
             ))}
