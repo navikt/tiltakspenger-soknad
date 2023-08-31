@@ -161,8 +161,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
         }
 
         logger.error(
-            'Noe gikk galt ved henting av personalia, redirecter bruker til /generell-feil',
-            (error as Error).message
+            `Noe gikk galt ved henting av personalia: ${(error as Error).message}. Redirecter bruker til /generell-feil`
         );
         return {
             redirect: {
