@@ -172,7 +172,7 @@ export default function Oppsummeringssteg({
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
-                    <Accordion.Header>Introduksjonsprogrammet og kvalifiseringsprogrammet </Accordion.Header>
+                    <Accordion.Header>Introduksjonsstønad og kvalifiseringsstønad</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Introduksjonsprogrammet"
