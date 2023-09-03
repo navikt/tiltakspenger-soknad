@@ -141,7 +141,7 @@ export default function ProgramDeltagelseSteg({
                 {watchDeltarIIntroprogrammet && (
                     <>
                         <Alert variant="info">
-                            Du får ikke tiltakspenger for samme periode som du mottar kvalifiseringsstønad
+                            Du får ikke tiltakspenger for samme periode som du mottar introduksjonsstønad
                         </Alert>
                         <Periodespørsmål
                             name="svar.introduksjonsprogram.periode"
