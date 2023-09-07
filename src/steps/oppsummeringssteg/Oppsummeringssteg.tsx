@@ -24,9 +24,9 @@ interface OppsummeringsstegProps {
 
 function hentSvarTilProgramDeltagelse(program: string, deltar: boolean, periode?: Periode) {
     if (deltar) {
-        return `Ja, jeg deltar i ${program} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
+        return `Ja, jeg mottar ${program} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
     } else {
-        return `Nei, jeg deltar ikke i ${program}`;
+        return `Nei, jeg mottar ikke i ${program}`;
     }
 }
 
