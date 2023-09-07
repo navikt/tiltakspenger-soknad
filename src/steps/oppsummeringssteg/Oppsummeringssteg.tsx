@@ -175,18 +175,18 @@ export default function Oppsummeringssteg({
                     <Accordion.Header>Introduksjonsstønad og kvalifiseringsstønad</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
-                            feltNavn="Introduksjonsprogrammet"
+                            feltNavn="Introduksjonsstønad"
                             feltVerdi={hentSvarTilProgramDeltagelse(
-                                "introduksjonsprogrammet",
+                                "introduksjonsstønad",
                                 introduksjonsprogram.deltar,
                                 introduksjonsprogram.periode
                             )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
-                                feltNavn="Kvalifiseringsprogrammet"
+                                feltNavn="Kvalifiseringsstønad"
                                 feltVerdi={hentSvarTilProgramDeltagelse(
-                                    "kvalifiseringsprogrammet",
+                                    "kvalifiseringsstønad",
                                     kvalifiseringsprogram.deltar,
                                     kvalifiseringsprogram.periode
                                 )}
