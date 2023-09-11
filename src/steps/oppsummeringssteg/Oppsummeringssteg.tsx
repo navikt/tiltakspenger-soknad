@@ -26,7 +26,7 @@ function hentSvarTilProgramDeltagelse(program: string, deltar: boolean, periode?
     if (deltar) {
         return `Ja, jeg mottar ${program} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
     } else {
-        return `Nei, jeg mottar ikke i ${program}`;
+        return `Nei, jeg mottar ikke ${program}`;
     }
 }
 
