@@ -47,7 +47,7 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
                 <Alert variant="warning" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
                     <List as="ul" title="Vi har funnet tiltak som mangler start- eller sluttdato">
                         {tiltakMedUgyldigPeriode.map((t) => (
-                            <List.Item key={tiltak.aktivitetId}>{lagTiltaksalternativTekst(t)}</List.Item>
+                            <List.Item key={t.aktivitetId}>{lagTiltaksalternativTekst(t)}</List.Item>
                         ))}
                     </List>
                     Dersom du ønsker å søke tiltakspenger for et av disse tiltakene, må du sende søknad på
