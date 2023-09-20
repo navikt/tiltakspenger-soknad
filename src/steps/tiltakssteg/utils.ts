@@ -19,3 +19,7 @@ export const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
         value: tiltak.aktivitetId,
     };
 };
+
+export const harFullstendigPeriode = (tiltak: Tiltak) => {
+    return tiltak.arenaRegistrertPeriode?.fra && tiltak.arenaRegistrertPeriode?.til;
+};

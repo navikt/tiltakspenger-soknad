@@ -1,12 +1,11 @@
 import React, { useContext } from 'react';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
-import {Button, Link} from '@navikt/ds-react';
+import {Alert, Button, Link, List} from '@navikt/ds-react';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
-import TiltakMedUfullstendigPeriodeUtfylling from '@/steps/tiltakssteg/TiltakMedUfullstendigPeriodeUtfylling';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { valgtTiltakValidator } from '@/steps/tiltakssteg/validation';
-import { lagSvaralternativForTiltak } from '@/steps/tiltakssteg/utils';
+import {harFullstendigPeriode, lagSvaralternativForTiltak, lagTiltaksalternativTekst} from '@/steps/tiltakssteg/utils';
 
 interface TiltaksstegProps {
     title: string;
@@ -16,19 +15,14 @@ interface TiltaksstegProps {
 }
 
 export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPreviousStep }: TiltaksstegProps) {
-    const { tiltak, valgtTiltak } = useContext(UtfyllingContext);
+    const { tiltak } = useContext(UtfyllingContext);
     const brukerHarRegistrerteTiltak = !!tiltak && tiltak.length > 0;
-    const brukerHarValgtEtTiltak = !!valgtTiltak;
-    const valgtTiltakManglerHelePerioden =
-        !valgtTiltak?.arenaRegistrertPeriode || (
-        !valgtTiltak?.arenaRegistrertPeriode?.fra &&
-        !valgtTiltak?.arenaRegistrertPeriode?.til);
-    const valgtTiltakManglerKunTilDato =
-        !!valgtTiltak?.arenaRegistrertPeriode &&
-        !!valgtTiltak?.arenaRegistrertPeriode.fra &&
-        !valgtTiltak?.arenaRegistrertPeriode.til;
+    const tiltakMedGyldigPeriode = tiltak?.filter(harFullstendigPeriode);
+    const tiltakMedUgyldigPeriode = tiltak?.filter(tiltak => !harFullstendigPeriode(tiltak));
+    const brukerHarRegistrerteTiltakMedGyldigPeriode = !!tiltakMedGyldigPeriode && tiltakMedGyldigPeriode.length > 0;
+    const brukerHarRegistrerteTiltakMedUgyldigPeriode = !!tiltakMedUgyldigPeriode && tiltakMedUgyldigPeriode.length > 0;
 
-    const submitSectionRenderer = !brukerHarRegistrerteTiltak
+    const submitSectionRenderer = !brukerHarRegistrerteTiltakMedGyldigPeriode
         ? () => (
             <Link href="https://www.nav.no/minside" style={{ margin: '1rem auto', display: 'block', width: "fit-content"}}>
               <Button type="button" as="a">
@@ -46,29 +40,28 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
             onGoToPreviousStep={onGoToPreviousStep}
             guide={<Veiledningstekst brukerHarRegistrerteTiltak={brukerHarRegistrerteTiltak} />}
             submitSectionRenderer={submitSectionRenderer}
-            hideStepIndicator={!brukerHarRegistrerteTiltak}
+            hideStepIndicator={!brukerHarRegistrerteTiltakMedGyldigPeriode}
             hideTitle={!brukerHarRegistrerteTiltak}
         >
-            {brukerHarRegistrerteTiltak && (
+            {brukerHarRegistrerteTiltakMedUgyldigPeriode && (
+                <Alert variant="warning" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
+                    <List as="ul" title="Vi har funnet tiltak som mangler start- eller sluttdato">
+                        {tiltakMedUgyldigPeriode.map((t) => (
+                            <List.Item key={tiltak.aktivitetId}>{lagTiltaksalternativTekst(t)}</List.Item>
+                        ))}
+                    </List>
+                    Dersom du ønsker å søke tiltakspenger for et av disse tiltakene, må du sende søknad på
+                    papir eller kontakte oss slik at vi kan registrere fullstendig periode på tiltaket.
+                </Alert>
+            )}
+            {brukerHarRegistrerteTiltakMedGyldigPeriode && (
                 <Flervalgsspørsmål
-                    alternativer={tiltak.map(lagSvaralternativForTiltak)}
+                    alternativer={tiltakMedGyldigPeriode.map(lagSvaralternativForTiltak)}
                     name="svar.tiltak.aktivitetId"
                     validate={valgtTiltakValidator}
                 >
                     Hvilket tiltak ønsker du å søke tiltakspenger for?
                 </Flervalgsspørsmål>
-            )}
-            {(brukerHarValgtEtTiltak && valgtTiltakManglerHelePerioden ) && (
-                <TiltakMedUfullstendigPeriodeUtfylling
-                    valgtTiltakManglerKunTilDato={valgtTiltakManglerKunTilDato}
-                    valgtTiltak={valgtTiltak}
-                />
-            )}
-            {(brukerHarValgtEtTiltak && valgtTiltakManglerKunTilDato ) && (
-                <TiltakMedUfullstendigPeriodeUtfylling
-                    valgtTiltakManglerKunTilDato={valgtTiltakManglerKunTilDato}
-                    valgtTiltak={valgtTiltak}
-                />
             )}
         </Step>
     );
