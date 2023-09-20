@@ -18,7 +18,7 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
     const { tiltak } = useContext(UtfyllingContext);
     const brukerHarRegistrerteTiltak = !!tiltak && tiltak.length > 0;
     const tiltakMedGyldigPeriode = tiltak?.filter(harFullstendigPeriode);
-    const tiltakMedUgyldigPeriode = tiltak?.filter(tiltak => !harFullstendigPeriode(tiltak));
+    const tiltakMedUgyldigPeriode = tiltak?.filter(t => !harFullstendigPeriode(t));
     const brukerHarRegistrerteTiltakMedGyldigPeriode = !!tiltakMedGyldigPeriode && tiltakMedGyldigPeriode.length > 0;
     const brukerHarRegistrerteTiltakMedUgyldigPeriode = !!tiltakMedUgyldigPeriode && tiltakMedUgyldigPeriode.length > 0;
 
