@@ -7,6 +7,9 @@ export const lagTiltaksalternativTekst = ({ typeNavn, arrangør, arenaRegistrert
     if (arenaRegistrertPeriode?.fra && !arenaRegistrertPeriode?.til) {
         return `${tiltaksbeskrivelse}. Startdato: ${formatDate(arenaRegistrertPeriode!.fra)}`;
     }
+    if (!arenaRegistrertPeriode?.fra && arenaRegistrertPeriode?.til) {
+        return `${tiltaksbeskrivelse}. Sluttdato: ${formatDate(arenaRegistrertPeriode!.fra)}`;
+    }
     if (arenaRegistrertPeriode?.fra && arenaRegistrertPeriode?.til) {
         return `${tiltaksbeskrivelse}. Periode: ${formatPeriode(arenaRegistrertPeriode!)}`;
     }
