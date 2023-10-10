@@ -28,7 +28,8 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
         name,
         control,
     });
-    const MAKS_TOTAL_FILSTØRRELSE = 20000000;
+    const MAKS_TOTAL_FILSTØRRELSE = 20000000; //bytes
+    const MAKS_DIMENSJON = 3000; //pixels
 
     const handleDragLeave: DragEventHandler<HTMLDivElement> = (e) => {
         setDragOver(false);
@@ -70,6 +71,22 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
         return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE;
     };
 
+    const validerOppløsningVedCallback = (bildefil: Blob, url: string, index: number) => {
+        const fileReader = new FileReader;
+        fileReader.onload = () => {
+            const img = new Image;
+            img.onload = () => {
+                if (img.naturalWidth > MAKS_DIMENSJON || img.naturalHeight > MAKS_DIMENSJON) {
+                    setError('Bildet er for stort');
+                    window.URL.revokeObjectURL(url);
+                    remove(index);
+                }
+            };
+            img.src = fileReader.result as string;
+        };
+        fileReader.readAsDataURL(bildefil);
+    }
+
     const fileSizeString = (size: number) => {
         const kb = size / 1024;
         return kb > 1000 ? `${(kb / 1024).toFixed(1)} mB` : `${Math.floor(kb)} kB`;
@@ -80,8 +97,10 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
             {fields
                 ?.filter((attachment) => attachment.uuid === uuid)
                 .map((attachment, index) => {
-                    const url = window.URL.createObjectURL(new Blob([attachment.file]));
+                    const blob = new Blob([attachment.file]);
+                    const url = window.URL.createObjectURL(blob);
                     objectUrls.current.push(url);
+                    if (!attachment.file.name.endsWith('.pdf')) validerOppløsningVedCallback(blob, url, index);
                     return (
                         <Panel className={styles.fileCard} key={attachment.id}>
                             <div className={styles.fileCardLeftContent}>
