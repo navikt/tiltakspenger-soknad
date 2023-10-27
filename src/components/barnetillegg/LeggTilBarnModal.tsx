@@ -181,7 +181,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                 ),
                             }}
                         >
-                            Oppholder barnet ditt seg innenfor EØS i tiltaksperioden?
+                            Oppholder barnet ditt seg i Norge eller et annet EØS-land i tiltaksperioden?
                         </JaNeiSpørsmål>
                         <div style={{ marginTop: '1rem' }}>
                             <Alert variant="info">
@@ -234,7 +234,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                     setOpen(false);
                                 }
                             }}
-                        
+
                             variant="primary"
                         >
                             Lagre
