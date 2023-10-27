@@ -24,9 +24,9 @@ interface OppsummeringsstegProps {
 
 function hentSvarTilProgramDeltagelse(program: string, deltar: boolean, periode?: Periode) {
     if (deltar) {
-        return `Ja, jeg deltar i ${program} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
+        return `Ja, jeg mottar ${program} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
     } else {
-        return `Nei, jeg deltar ikke i ${program}`;
+        return `Nei, jeg mottar ikke ${program}`;
     }
 }
 
@@ -172,21 +172,21 @@ export default function Oppsummeringssteg({
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
-                    <Accordion.Header>Introduksjonsprogrammet og kvalifiseringsprogrammet </Accordion.Header>
+                    <Accordion.Header>Introduksjonsstønad og kvalifiseringsstønad</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
-                            feltNavn="Introduksjonsprogrammet"
+                            feltNavn="Introduksjonsstønad"
                             feltVerdi={hentSvarTilProgramDeltagelse(
-                                "introduksjonsprogrammet",
+                                "introduksjonsstønad",
                                 introduksjonsprogram.deltar,
                                 introduksjonsprogram.periode
                             )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
-                                feltNavn="Kvalifiseringsprogrammet"
+                                feltNavn="Kvalifiseringsstønad"
                                 feltVerdi={hentSvarTilProgramDeltagelse(
-                                    "kvalifiseringsprogrammet",
+                                    "kvalifiseringsstønad",
                                     kvalifiseringsprogram.deltar,
                                     kvalifiseringsprogram.periode
                                 )}
