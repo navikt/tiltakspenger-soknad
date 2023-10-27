@@ -49,6 +49,10 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
             []
         );
 
+        useEffect(() => {
+            Modal.setAppElement('#__next');
+        }, []);
+
         function fornavnValidator(verdi: string) {
             return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi fornavn');
         }
@@ -129,7 +133,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     aria-labelledby="modal-heading"
                     className={styles.modalLeggTilBarn}
                 >
-                    <Modal.Body role="dialog">
+                    <Modal.Content role="dialog">
                         <Heading spacing level="1" size="large" id="modal-heading">
                             Andre barn
                         </Heading>
@@ -177,7 +181,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                 ),
                             }}
                         >
-                            Oppholder barnet ditt seg innenfor EØS i tiltaksperioden?
+                            Oppholder barnet ditt seg i Norge eller et annet EØS-land i tiltaksperioden?
                         </JaNeiSpørsmål>
                         <div style={{ marginTop: '1rem' }}>
                             <Alert variant="info">
@@ -236,7 +240,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                             Lagre
                         </Button>
                         </div>
-                    </Modal.Body>
+                    </Modal.Content>
                 </Modal>
             </>
         );
