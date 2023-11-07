@@ -26,7 +26,6 @@ import {
     supplerendeStønadFlyktningerValidator,
     supplerendeStønadOver67Validator,
     sykepengerValidator,
-    lønnetArbeidValidator,
     påkrevdPensjonsordningPeriodeValidator,
 } from '@/steps/andre-utbetalingersteg/validation';
 import { Link } from '@navikt/ds-react';
@@ -100,37 +99,6 @@ export default function AndreUtbetalingerSteg({
                 </>
             }
         >
-            <div className={styles.blokk}>
-                <JaNeiSpørsmål
-                    name="svar.lønnetArbeid.erILønnetArbeid"
-                    validate={lønnetArbeidValidator}
-                    hjelpetekst={{
-                        tittel: 'Hvorfor spør vi om du er i lønnet arbeid?',
-                        tekst: (
-                            <>
-                                <p>Du har ikke rett på tiltakspenger hvis du:</p>
-                                <ul>
-                                    <li>får lønn fra en tiltaksarrangør for tiden du deltar i tiltaket</li>
-                                    <li>
-                                        blir fulgt opp av en tiltaksarrangør på arbeidsplassen din, og mottar lønn fra
-                                        arbeidsgiveren
-                                    </li>
-                                    <li>gjennomfører lønnet arbeid i stedet for å delta i tiltaket ditt</li>
-                                </ul>
-                                <p>Du må da krysse «ja» på dette spørsmålet.</p>
-                                <p>Du har rett på tiltakspenger hvis du:</p>
-                                <ul>
-                                    <li>ikke får lønn fra en tiltaksarrangør mens du er i tiltaket</li>
-                                    <li>ikke får oppfølging av en tiltaksarrangør i det lønnede arbeidet ditt</li>
-                                    <li>får lønn for arbeid som du gjør ved siden av det avtalte tiltaket</li>
-                                </ul>
-                            </>
-                        ),
-                    }}
-                >
-                    Er du i lønnet arbeid når du går på tiltak?
-                </JaNeiSpørsmål>
-            </div>
             <div className={styles.blokk}>
                 <JaNeiSpørsmål
                     name="svar.etterlønn.mottar"

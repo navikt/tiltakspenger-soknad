@@ -66,7 +66,6 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
         setValue('svar.supplerendestønadflyktninger', {});
         setValue('svar.pensjonsordning', {});
         setValue('svar.etterlønn', {});
-        setValue('svar.lønnetArbeid', {});
         setValue('svar.jobbsjansen', {});
         setValue('svar.mottarAndreUtbetalinger', undefined);
         setValue('svar.harBekreftetAlleOpplysninger', undefined);

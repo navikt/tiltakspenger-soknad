@@ -26,10 +26,6 @@ export function etterlønnValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar etterlønn');
 }
 
-export function lønnetArbeidValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du er i lønnet arbeid');
-}
-
 export function supplerendeStønadOver67Validator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(
         verdi,

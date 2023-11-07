@@ -15,7 +15,6 @@ const defaultValues = {
         supplerendestønadflyktninger: {},
         pensjonsordning: {},
         etterlønn: {},
-        lønnetArbeid: {},
         jobbsjansen: {},
         mottarAndreUtbetalinger: undefined,
         harBekreftetAlleOpplysninger: false,
