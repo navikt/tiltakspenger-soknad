@@ -91,9 +91,7 @@ export default function AndreUtbetalingerSteg({
             guide={
                 <>
                     <p>
-                        Vi trenger å vite om du har lønn fordi det kan ha betydning for din rett til tiltakspenger. Vi
-                        trenger også å vite om du har pengestøtte som helt eller delvis skal dekke dine daglige
-                        utgifter.
+                        Vi trenger å vite om du har pengestøtte som helt eller delvis skal dekke dine daglige utgifter.
                     </p>
                     <p>Vi spør deg om dette da det ikke er alt vi klarer å hente automatisk fra våre systemer.</p>
                 </>
