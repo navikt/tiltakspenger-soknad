@@ -54,15 +54,6 @@ function hentSvarTilSpørsmålene(spørsmålTittel: String, mottar: boolean, per
     }
 }
 
-function svarLønnetArbeid(erILønnetArbeid: boolean) {
-    if (erILønnetArbeid) {
-        return 'Ja, jeg er i lønnet arbeid i perioden jeg går på tiltak';
-    } else {
-        return 'Nei, jeg er ikke i lønnet arbeid i perioden jeg går på tiltak';
-    }
-}
-
-
 function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(verdi, 'Du må bekrefte at alle opplysninger du har oppgitt er korrekte');
 }
@@ -81,7 +72,6 @@ export default function Oppsummeringssteg({
     const {
         kvalifiseringsprogram,
         introduksjonsprogram,
-        lønnetArbeid,
         pensjonsordning,
         etterlønn,
         mottarAndreUtbetalinger,
@@ -198,15 +188,9 @@ export default function Oppsummeringssteg({
                     <Accordion.Header>Utbetalinger</Accordion.Header>
                     <Accordion.Content>
                         <Oppsummeringsfelt
-                            feltNavn="Lønn"
-                            feltVerdi={svarLønnetArbeid(lønnetArbeid.erILønnetArbeid)}
+                            feltNavn="Etterlønn"
+                            feltVerdi={hentSvarTilSpørsmålene("etterlønn fra en tidligere arbeidsgiver i perioden jeg går på tiltak", etterlønn.mottar)}
                         />
-                        <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt
-                                feltNavn="Etterlønn"
-                                feltVerdi={hentSvarTilSpørsmålene("etterlønn fra en tidligere arbeidsgiver i perioden jeg går på tiltak", etterlønn.mottar)}
-                            />
-                        </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Sykepenger"

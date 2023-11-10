@@ -50,13 +50,9 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
     const { mottarAndreUtbetalinger, sykepenger, alderspensjon,
             gjenlevendepensjon, pensjonsordning, etterlønn,
             supplerendestønadover67, supplerendestønadflyktninger,
-            jobbsjansen, lønnetArbeid} = spørsmålsbesvarelser;
+            jobbsjansen} = spørsmålsbesvarelser;
 
     if (mottarAndreUtbetalinger === undefined) {
-        return false;
-    }
-
-    if (lønnetArbeid === undefined) {
         return false;
     }
 
