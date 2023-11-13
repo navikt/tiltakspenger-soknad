@@ -32,9 +32,10 @@ spec:
     outbound:
       rules:
         - application: tiltakspenger-soknad-api
+        - application: nav-dekoratoren
+          namespace: personbruker
       external:
         - host: tiltakspenger-unleash-api.nav.cloud.nais.io
-        - host: nav.no
   idporten:
     enabled: true
     sidecar:

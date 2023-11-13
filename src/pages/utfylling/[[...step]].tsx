@@ -7,7 +7,6 @@ import logger from './../../utils/serverLogger';
 import { makeGetRequest } from '@/utils/http';
 import { Tiltak } from '@/types/Tiltak';
 import { Personalia } from '@/types/Personalia';
-import Søknad from '@/types/Søknad';
 import { Søknadssteg } from '@/types/Søknadssteg';
 import { brukerHarFyltUtNødvendigeOpplysninger } from '@/utils/stepValidators';
 import AktivtSøknadssteg from '@/components/aktivt-søknadssteg/AktivtSøknadssteg';
@@ -32,7 +31,7 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
     const router = useRouter();
 
     const { step } = router.query;
-    const { getValues, watch, reset, setValue } = useFormContext<Søknad>();
+    const { getValues, watch, reset, setValue } = useFormContext();
     const { setTiltak, setValgtTiltak } = useContext(UtfyllingSetStateContext);
     const { valgtTiltak } = useContext(UtfyllingContext);
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
@@ -47,6 +46,7 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
             setValgtTiltak!(matchendeTiltak);
             const arenaFra = matchendeTiltak.arenaRegistrertPeriode?.fra;
             const arenaTil = matchendeTiltak.arenaRegistrertPeriode?.til;
+            slettSvarVedEndretTiltak()
             setValue('svar.tiltak', {
                 ...getValues('svar.tiltak'),
                 periode: { fra: arenaFra ?? '', til: arenaTil ?? '' },
@@ -54,6 +54,23 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
             });
         }
     }, [valgtAktivitetId]);
+
+    const slettSvarVedEndretTiltak = () => {
+        setValue('svar.institusjonsopphold', {});
+        setValue('svar.introduksjonsprogram', {});
+        setValue('svar.kvalifiseringsprogram', {});
+        setValue('svar.sykepenger', {});
+        setValue('svar.gjenlevendepensjon', {});
+        setValue('svar.alderspensjon', {});
+        setValue('svar.supplerendestønadover67', {});
+        setValue('svar.supplerendestønadflyktninger', {});
+        setValue('svar.pensjonsordning', {});
+        setValue('svar.etterlønn', {});
+        setValue('svar.jobbsjansen', {});
+        setValue('svar.mottarAndreUtbetalinger', undefined);
+        setValue('svar.harBekreftetAlleOpplysninger', undefined);
+        setValue('svar.harBekreftetÅSvareSåGodtManKan', true);
+    };
 
     function utledSøknadsstegFraRoute(route: string | undefined): Søknadssteg | null {
         switch (route) {

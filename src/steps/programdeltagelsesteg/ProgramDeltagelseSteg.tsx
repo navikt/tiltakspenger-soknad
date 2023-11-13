@@ -13,7 +13,7 @@ import {
     påkrevdIntroprogramPeriodeValidator,
     påkrevdKvpPeriodeValidator,
 } from '@/steps/programdeltagelsesteg/validation';
-import { Link } from '@navikt/ds-react';
+import {Alert, Link} from '@navikt/ds-react';
 
 interface ProgramDeltagelseStegProps {
     title: string;
@@ -55,7 +55,7 @@ export default function ProgramDeltagelseSteg({
             guide={
                 <React.Fragment>
                     <p>
-                        Hvis du deltar i kvalifiseringsprogrammet eller introduksjonsprogrammet har du <b>ikke</b> rett
+                        Hvis du mottar kvalifiseringsstønad eller introduksjonsstønad har du <b>ikke</b> rett
                         på tiltakspenger. Du må derfor svare på spørsmål om dette.
                     </p>
                 </React.Fragment>
@@ -66,20 +66,20 @@ export default function ProgramDeltagelseSteg({
                     name="svar.kvalifiseringsprogram.deltar"
                     validate={deltarIKvpValidator}
                     hjelpetekst={{
-                        tittel: 'Hva er kvalifiseringsprogrammet?',
+                        tittel: 'Hva er kvalifiseringsstønad?',
                         tekst: (
                             <>
                                 <p>
-                                    Kvalifiseringsprogrammet arrangeres av NAV. Det kan være aktuelt for personer som
-                                    har levd på sosialhjelp over lang tid, eller står i fare for å komme i en slik
-                                    situasjon. Programmet er et tilbud om opplæring og arbeidstrening, og oppfølging for
-                                    å komme i arbeid eller meningsfull aktivitet.
+                                    Du får utbetalt kvalifiseringsstønad når du deltar i kvalifiseringsprogrammet.
+                                    Det kan være aktuelt for personer som har levd på sosialhjelp over lang tid,
+                                    eller står i fare for å komme i en slik situasjon. Programmet er et tilbud om
+                                    opplæring og arbeidstrening, og oppfølging for å komme i meningsfull aktivitet.
                                 </p>
 
                                 <p>
                                     Hvis du er med i kvalifiseringsprogrammet har du fått et brev fra NAV-kontoret om
-                                    dette. Du kan også få utbetalt kvalifiseringsstønad. Ta kontakt med ditt NAV-kontor
-                                    hvis du er usikker på om du er med i kvalifiseringsprogrammet.
+                                    dette. Ta kontakt med ditt NAV-kontor hvis du er usikker på om du er med i
+                                    kvalifiseringsprogrammet.
                                 </p>
 
                                 <Link href="https://www.nav.no/kvalifiseringsprogrammet" target="_blank">
@@ -90,35 +90,40 @@ export default function ProgramDeltagelseSteg({
                     }}
                     afterOnChange={resetKvpPeriode}
                 >
-                    Deltar du i kvalifiseringsprogrammet i perioden {tiltaksperiodeTekst}?
+                    Mottar du kvalifiseringsstønad i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
                 {watchDeltarIKvp && (
-                    <Periodespørsmål
-                        name="svar.kvalifiseringsprogram.periode"
-                        validate={[
-                            gyldigPeriodeValidator,
-                            påkrevdKvpPeriodeValidator,
-                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
-                        ]}
-                        minDate={new Date(tiltaksperiode?.fra)}
-                        maxDate={new Date(tiltaksperiode?.til)}
-                    >
-                        I hvilken del av perioden deltar du i kvalifiseringsprogrammet?
-                    </Periodespørsmål>
+                    <>
+                        <Alert variant="info">
+                            Du får ikke tiltakspenger for samme periode som du mottar kvalifiseringsstønad
+                        </Alert>
+                        <Periodespørsmål
+                            name="svar.kvalifiseringsprogram.periode"
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdKvpPeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
+                        >
+                            I hvilken del av perioden mottar du kvalifiseringsstønad?
+                        </Periodespørsmål>
+                    </>
                 )}
                 <JaNeiSpørsmål
                     name="svar.introduksjonsprogram.deltar"
                     validate={deltarIIntroprogrammetValidator}
                     hjelpetekst={{
-                        tittel: 'Hva er introduksjonsprogrammet?',
+                        tittel: 'Hva er introduksjonsstønad?',
                         tekst: (
                             <>
                                 <p>
-                                    Introduksjonsprogrammet avtales med kommunen du bor i. Det er en ordning for
-                                    nyankomne flyktninger. Hvis du er med i Introduksjonsprogrammet har du fått et brev
-                                    fra kommunen du bor i om dette. Du kan også få utbetalt introduksjonsstønad. Ta
+                                    Du får utbetalt introduksjonsstønad når du deltar i introduksjonsprogrammet.
+                                    Dette er en ordning for nyankomne flyktninger. Hvis du er med i
+                                    introduksjonsprogrammet har du fått et brev fra kommunen du bor i om dette. Ta
                                     kontakt med kommunen din hvis du er usikker på om du er med i
-                                    Introduksjonsprogrammet.
+                                    introduksjonsprogrammet.
                                 </p>
                                 <Link
                                     href="https://www.imdi.no/om-imdi/brosjyrer-handboker-og-veiledere/velkommen-til-introduksjonsprogram/"
@@ -131,21 +136,26 @@ export default function ProgramDeltagelseSteg({
                     }}
                     afterOnChange={resetIntroPeriode}
                 >
-                    Deltar du i introduksjonsprogrammet i perioden {tiltaksperiodeTekst}?
+                    Mottar du introduksjonsstønad i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
                 {watchDeltarIIntroprogrammet && (
-                    <Periodespørsmål
-                        name="svar.introduksjonsprogram.periode"
-                        validate={[
-                            gyldigPeriodeValidator,
-                            påkrevdIntroprogramPeriodeValidator,
-                            (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
-                        ]}
-                        minDate={new Date(tiltaksperiode?.fra)}
-                        maxDate={new Date(tiltaksperiode?.til)}
-                    >
-                        I hvilken del av perioden deltar du i introduksjonsprogrammet?
-                    </Periodespørsmål>
+                    <>
+                        <Alert variant="info">
+                            Du får ikke tiltakspenger for samme periode som du mottar introduksjonsstønad
+                        </Alert>
+                        <Periodespørsmål
+                            name="svar.introduksjonsprogram.periode"
+                            validate={[
+                                gyldigPeriodeValidator,
+                                påkrevdIntroprogramPeriodeValidator,
+                                (periode) => periodenErInnenforTiltaksperiodeValidator(periode, tiltaksperiode),
+                            ]}
+                            minDate={new Date(tiltaksperiode?.fra)}
+                            maxDate={new Date(tiltaksperiode?.til)}
+                        >
+                            I hvilken del av perioden mottar du introduksjonsstønad?
+                        </Periodespørsmål>
+                    </>
                 )}
             </>
         </Step>
