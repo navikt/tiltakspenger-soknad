@@ -33,7 +33,7 @@ services:
       - 6379:6379
 
   auth:
-    image: "ghcr.io/navikt/mock-oauth2-server:0.5.1"
+    image: "ghcr.io/navikt/mock-oauth2-server:2.0.0"
     container_name: auth
     ports:
       - "6969:6969"
