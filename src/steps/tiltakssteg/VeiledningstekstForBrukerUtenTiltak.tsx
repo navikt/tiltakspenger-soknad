@@ -6,8 +6,8 @@ export default () => {
         <>
             <p>For å ha rett til tiltakspenger må du delta i et arbeidsmarkedstiltak som er godkjent av NAV. </p>
             <p>
-                Det er ikke registrert at du er påmeldt, deltar på eller nylig har deltatt på et arbeidsmarkedstiltak
-                som gir rett til tiltakspenger.
+                Det er ikke registrert at du har fått plass på, deltar på eller nylig har deltatt på et
+                arbeidsmarkedstiltak som gir rett til tiltakspenger.
             </p>
             <span>Hvis du mener dette ikke er riktig kan du </span>
             <ul>
