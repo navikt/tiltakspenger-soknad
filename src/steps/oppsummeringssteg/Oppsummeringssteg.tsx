@@ -210,8 +210,8 @@ export default function Oppsummeringssteg({
                             <>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
-                                        feltNavn="Gjenlevendepensjon"
-                                        feltVerdi={hentSvarTilSpørsmålene("gjenlevendepensjon", gjenlevendepensjon.mottar, gjenlevendepensjon.periode)}
+                                        feltNavn="Gjenlevendepensjon og omstillingsstønad"
+                                        feltVerdi={hentSvarTilSpørsmålene("gjenlevendepensjon eller omstillingsstønad", gjenlevendepensjon.mottar, gjenlevendepensjon.periode)}
                                     />
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
