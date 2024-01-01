@@ -196,9 +196,9 @@ export default function AndreUtbetalingerSteg({
                                 <>
                                     <p>
                                         Når ektefellen, samboeren eller partneren din dør, kan du ha rett til
-                                        pengestøtte som etterlatt. Det kan være gjenlevendepensjon eller overgangstønad.
+                                        pengestøtte som etterlatt. Det kan være omstillingsstønad, overgangstønad eller gjenlevendepensjon.
                                     </p>
-                                    <Link href="https://www.nav.no/gjenlevendepensjon" target="_blank">
+                                    <Link href="https://www.nav.no/omstillingsstønad" target="_blank">
                                         Les mer om pengestøtte til gjenlevende ektefelle fra NAV (åpnes i ny fane)
                                     </Link>
                                 </>

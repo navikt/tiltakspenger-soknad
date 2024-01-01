@@ -47,10 +47,6 @@ export default function BarnetilleggSteg({
                             barn du har bidragsplikt for, selv om du ikke betaler bidrag akkurat nå.
                         </li>
                         <li className="marginTop">
-                            Hvis både du og den andre forelderen mottar tiltakspenger, gis barnetillegget bare til en av
-                            dere.
-                        </li>
-                        <li className="marginTop">
                             Du får ikke barnetillegg hvis barnet oppholder seg utenfor EØS i over 90 dager i løpet av en
                             tolvmånedersperiode eller er bosatt utenfor EØS.
                         </li>

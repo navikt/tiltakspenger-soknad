@@ -7,7 +7,7 @@ export function sykepengerValidator(verdi: boolean) {
 }
 
 export function gjenlevendepensjonValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar gjenlevendepensjon');
+    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar gjenlevendepensjon eller omstillingsstønad');
 }
 
 export function alderspensjonValidator(verdi: boolean) {
@@ -45,7 +45,7 @@ export function påkrevdSykepengerPeriodeValidator(periode: FormPeriode) {
 }
 
 export function påkrevdGjenlevendepensjonPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar gjenlevendepensjon');
+    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar gjenlevendepensjon eller omstillingsstønad');
 }
 
 export function påkrevdJobbsjansenPeriodeValidator(periode: FormPeriode) {
