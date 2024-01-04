@@ -85,6 +85,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                         <li>Inntektsinformasjon fra Skatteetaten</li>
                         <li>Opplysninger om hvilket arbeidsmarkedstiltak du deltar på</li>
                         <li>Opplysninger om du får andre utbetalinger fra NAV</li>
+                        <li>Hvis du har barn, sjekker vi om barnets andre forelder har barnetillegg</li>
                     </ul>
                     <p>Dette gjør vi for å vurdere om du har rett til tiltakspenger.</p>
                     <p>
