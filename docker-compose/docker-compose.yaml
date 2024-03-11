@@ -13,12 +13,18 @@ services:
       TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspenger-soknad-api
       PDL_AUDIENCE: mock_audience
       PDL_SCOPE: mock_scope
-      PDF_ENDPOINT_URL: "http://localhost:8081"
+      PDF_ENDPOINT_URL: "http://localhost:8096"
       JOARK_ENDPOINT_URL: "http://localhost"
       JOARK_AUDIENCE: "mock_audience"
       JOARK_SCOPE: "mock_scope"
-      TILTAKSPENGER_ARENA_URL: "http://localhost:8080"
+      TILTAKSPENGER_ARENA_URL: "http://localhost:8092"
       TILTAKSPENGER_ARENA_AUDIENCE: "mock-audience"
+      UNLEASH_SERVER_API_URL: "http://localhost:8093"
+      UNLEASH_SERVER_API_TOKEN: "blabla"
+      UNLEASH_ENVIRONMENT: "blabla"
+      AV_ENDPOINT_URL: "http://localhost:8094"
+      TILTAKSPENGER_TILTAK_ENDPOINT_URL: "http://localhost:8095"
+      TILTAKSPENGER_TILTAK_AUDIENCE: "mock_audience"
     env_file:
       - .env
     depends_on:
