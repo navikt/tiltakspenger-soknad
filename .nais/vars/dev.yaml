@@ -1,5 +1,5 @@
 ingress:
-  - https://tiltakspenger-soknad.intern.dev.nav.no
+  - https://tiltakspenger-soknad.ansatt.dev.nav.no
 TILTAKSPENGER_SOKNAD_API_URL: http://tiltakspenger-soknad-api
 NEXT_PUBLIC_TELEMETRY_URL: https://telemetry.ekstern.dev.nav.no/collect
 unleash:
