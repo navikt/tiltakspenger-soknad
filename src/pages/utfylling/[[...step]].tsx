@@ -46,7 +46,7 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
             setValgtTiltak!(matchendeTiltak);
             const arenaFra = matchendeTiltak.arenaRegistrertPeriode?.fra;
             const arenaTil = matchendeTiltak.arenaRegistrertPeriode?.til;
-            slettSvarVedEndretTiltak()
+            slettSvarVedEndretTiltak();
             setValue('svar.tiltak', {
                 ...getValues('svar.tiltak'),
                 periode: { fra: arenaFra ?? '', til: arenaTil ?? '' },
@@ -180,15 +180,19 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
     try {
         logger.info('Hent data om tiltak start');
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
-        const tiltakJson = await tiltakResponse.json();
-        logger.info('Hent data om tiltak OK');
-        const svarMedMocketTiltak =
-            process.env.NODE_ENV === 'development' && (!tiltakJson.tiltak || tiltakJson.tiltak.length === 0);
-        return {
-            props: {
-                tiltak: svarMedMocketTiltak ? mocketTiltak : tiltakJson.tiltak,
-            },
-        };
+        if (tiltakResponse.ok) {
+            const tiltakJson = await tiltakResponse.json();
+            logger.info('Hent data om tiltak OK');
+            const svarMedMocketTiltak =
+                process.env.NODE_ENV === 'development' && (!tiltakJson.tiltak || tiltakJson.tiltak.length === 0);
+            return {
+                props: {
+                    tiltak: svarMedMocketTiltak ? mocketTiltak : tiltakJson.tiltak,
+                },
+            };
+        } else {
+            throw new Error(`${tiltakResponse.status} ${tiltakResponse.statusText}`);
+        }
     } catch (error) {
         if (process.env.NODE_ENV === 'development') {
             logger.error((error as Error).message);
@@ -199,8 +203,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
             };
         }
         logger.error(
-            'Noe gikk galt ved henting av tiltak, redirecter bruker til /generell-feil',
-            (error as Error).message
+            `Noe gikk galt ved henting av tiltak: ${(error as Error).message}, redirecter bruker til /generell-feil`,
         );
         return {
             redirect: {
