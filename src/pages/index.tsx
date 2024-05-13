@@ -23,7 +23,7 @@ import { mockedPersonalia } from '@/mocks/mockedPersonalia';
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
         verdi,
-        'Du må bekrefte at du vil svare så godt du kan på spørsmålene som blir stilt i søknaden'
+        'Du må bekrefte at du vil svare så godt du kan på spørsmålene som blir stilt i søknaden',
     );
 }
 
@@ -137,18 +137,22 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
 
     try {
         const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
-        const personaliaJson = await personaliaResponse.json();
-        return {
-            props: {
-                personalia: {
-                    ...personaliaJson,
-                    barn: personaliaJson.barn.map((barn: any) => ({
-                        ...barn,
-                        uuid: uuidv4(),
-                    })),
+        if (personaliaResponse.ok) {
+            const personaliaJson = await personaliaResponse.json();
+            return {
+                props: {
+                    personalia: {
+                        ...personaliaJson,
+                        barn: personaliaJson.barn.map((barn: any) => ({
+                            ...barn,
+                            uuid: uuidv4(),
+                        })),
+                    },
                 },
-            },
-        };
+            };
+        } else {
+            throw new Error(`${personaliaResponse.status} ${personaliaResponse.statusText}`);
+        }
     } catch (error) {
         if (process.env.NODE_ENV === 'development') {
             logger.error((error as Error).message);
@@ -160,7 +164,7 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
         }
 
         logger.error(
-            `Noe gikk galt ved henting av personalia: ${(error as Error).message}. Redirecter bruker til /generell-feil`
+            `Noe gikk galt ved henting av personalia: ${(error as Error).message}. Redirecter bruker til /generell-feil`,
         );
         return {
             redirect: {
