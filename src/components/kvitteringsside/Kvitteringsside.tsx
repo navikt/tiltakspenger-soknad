@@ -26,7 +26,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
         return ikkeFunnet;
     });
     const formatertInnsendingsTidspunkt = `${dateStrWithMonthName(
-        innsendingstidspunkt
+        innsendingstidspunkt,
     )}, klokken ${dateStrWithHourMinute(innsendingstidspunkt)}`;
 
     React.useEffect(() => {
@@ -72,7 +72,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
                         <span>Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. </span>
                         <p>Saken din er nå til behandling hos NAV.</p>
                         <p>
-                            <Link href="https://www.nav.no/person/ettersende/" target="_blank">
+                            <Link href="https://www.nav.no/ettersende#tiltakspenger" target="_blank">
                                 Her kan du ettersende dokumentasjon digitalt (åpnes i nytt vindu)
                             </Link>
                         </p>
