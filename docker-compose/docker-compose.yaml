@@ -1,37 +1,6 @@
 version: "3.7"
 
 services:
-  backend:
-    build:
-      context: ../../tiltakspenger-soknad-api
-      dockerfile: Dockerfile
-    environment:
-      AZURE_APP_WELL_KNOWN_URL: "http://host.docker.internal:6969/azure/.well-known/openid-configuration"
-      AZURE_APP_CLIENT_SECRET: mocked_secret
-      AZURE_APP_CLIENT_ID: mocked_client_id
-      TOKEN_X_WELL_KNOWN_URL: "http://host.docker.internal:6969/tokendings/.well-known/openid-configuration"
-      TOKEN_X_CLIENT_ID: localhost:tpts:tiltakspenger-soknad-api
-      PDL_AUDIENCE: mock_audience
-      PDL_SCOPE: mock_scope
-      PDF_ENDPOINT_URL: "http://localhost:8096"
-      JOARK_ENDPOINT_URL: "http://localhost"
-      JOARK_AUDIENCE: "mock_audience"
-      JOARK_SCOPE: "mock_scope"
-      TILTAKSPENGER_ARENA_URL: "http://localhost:8092"
-      TILTAKSPENGER_ARENA_AUDIENCE: "mock-audience"
-      UNLEASH_SERVER_API_URL: "http://localhost:8093"
-      UNLEASH_SERVER_API_TOKEN: "blabla"
-      UNLEASH_ENVIRONMENT: "blabla"
-      AV_ENDPOINT_URL: "http://localhost:8094"
-      TILTAKSPENGER_TILTAK_ENDPOINT_URL: "http://localhost:8095"
-      TILTAKSPENGER_TILTAK_AUDIENCE: "mock_audience"
-    env_file:
-      - .env
-    depends_on:
-      - auth
-    ports:
-      - 8080:8080
-
   redis:
     image: redis:7-alpine
     restart: always
@@ -60,7 +29,7 @@ services:
                             "claims": {
                                 "sub": "12345678901",
                                 "pid": "12345678901",
-                                "client_id": "321",
+                                "client_id": "localhost:tpts:tiltakspenger-soknad",
                                 "acr": "Level4"
                             }
                         }
