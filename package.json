@@ -39,7 +39,7 @@
     "devDependencies": {
         "@babel/core": "^7.22.9",
         "@babel/preset-env": "^7.24.7",
-        "@babel/preset-react": "^7.24.1",
+        "@babel/preset-react": "^7.24.7",
         "@types/jest": "^29.5.12",
         "@types/jsonwebtoken": "^9.0.2",
         "@types/node-fetch": "^2.6.11",
