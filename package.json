@@ -24,7 +24,7 @@
         "classnames": "^2.5.1",
         "dayjs": "^1.11.11",
         "jsonwebtoken": "^9.0.1",
-        "next": "14.2.4",
+        "next": "14.2.5",
         "node-fetch": "^2.7.0",
         "node-jose": "^2.2.0",
         "pino": "^9.3.2",
