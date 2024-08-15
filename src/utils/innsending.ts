@@ -3,6 +3,7 @@ import { Personalia } from '@/types/Personalia';
 import { Tiltak } from '@/types/Tiltak';
 import toSøknadJson from '@/utils/toSøknadJson';
 import SøknadResponse from "@/types/SøknadResponse";
+import Router, {BaseRouter} from "next/dist/shared/lib/router/router";
 
 export function lagFormDataForInnsending(søknad: Søknad, personalia: Personalia, valgtTiltak: Tiltak): FormData {
     const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
@@ -30,18 +31,19 @@ export function postSøknadMultipart(formData: FormData) {
     });
 }
 
+type RouterType = BaseRouter & Pick<Router, "push" | "replace" | "reload" | "back" | "forward" | "prefetch" | "beforePopState" | "events" | "isFallback" | "isReady" | "isPreview">;
 
-const navigateToError = (router) => router.push('/feil-ved-innsending', undefined, { shallow: false });
+const navigateToError = (router: RouterType) => router.push('/feil-ved-innsending', undefined, { shallow: false });
 
-const navigateToKvittering = (router) => router.push('/kvittering', undefined, { shallow: false });
+const navigateToKvittering = (router: RouterType) => router.push('/kvittering', undefined, { shallow: false });
 
 export async function sendInnSøknad(
-    router,
-    søknad,
-    personalia,
-    valgtTiltak,
-    setSøknadsinnsendingInProgress,
-    setInnsendingstidspunkt,
+    router: RouterType,
+    søknad: Søknad,
+    personalia: Personalia,
+    valgtTiltak: Tiltak,
+    setSøknadsinnsendingInProgress: (value: boolean) => void,
+    setInnsendingstidspunkt: (value: string) => void,
 ) {
     try {
         setSøknadsinnsendingInProgress(true);
