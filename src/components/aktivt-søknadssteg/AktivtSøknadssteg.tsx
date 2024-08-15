@@ -5,14 +5,13 @@ import Tiltakssteg from '@/steps/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/steps/andre-utbetalingersteg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/steps/barnetilleggsteg/BarnetilleggSteg';
 import Oppsummeringssteg from '@/steps/oppsummeringssteg/Oppsummeringssteg';
-import Kvitteringsside from '@/components/kvitteringsside/Kvitteringsside';
 import { useRouter } from 'next/router';
-import { lagFormDataForInnsending, postSøknadMultipart } from '@/utils/innsending';
-import SøknadResponse from '@/types/SøknadResponse';
 import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
 import ProgramDeltagelseSteg from '@/steps/programdeltagelsesteg/ProgramDeltagelseSteg';
 import InstitusjonsoppholdSteg from '@/steps/institusjonsoppholdsteg/InstitusjonsoppholdSteg';
+import {InnsendingContext} from "@/pages/_app";
+import {sendInnSøknad} from "@/utils/innsending";
 
 interface AktivtSøknadsstegProps {
     steg: Søknadssteg | null;
@@ -21,34 +20,16 @@ interface AktivtSøknadsstegProps {
 const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
     const router = useRouter();
     const { personalia, valgtTiltak } = useContext(UtfyllingContext);
+    const {
+        søknadsinnsendingInProgress,
+        setSøknadsinnsendingInProgress,
+        setInnsendingstidspunkt
+    } = useContext(InnsendingContext);
     const { getValues } = useFormContext<Søknad>();
-    const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
-    const [innsendingstidspunkt, setInnsendingstidspunkt] = React.useState<string>();
-
-    async function sendInnSøknad() {
-        const søknad = getValues();
-        const formData = lagFormDataForInnsending(søknad, personalia!, valgtTiltak!);
-        try {
-            setSøknadsinnsendingInProgress(true);
-            const response = await postSøknadMultipart(formData);
-            if (response.status !== 201) {
-                return navigateToError();
-            }
-            const innsendingstidspunktFraApi = await response
-                .json()
-                .then((json: SøknadResponse) => json.innsendingTidspunkt);
-            setInnsendingstidspunkt(innsendingstidspunktFraApi);
-            return navigateTo(Søknadssteg.KVITTERING);
-        } catch {
-            return navigateToError();
-        }
-    }
 
     function navigateToHome() {
         return router.push('/', undefined, { shallow: false });
     }
-
-    const navigateToError = () => router.push('/feil-ved-innsending', undefined, { shallow: false });
 
     function navigateTo(søknadssteg: Søknadssteg, shallow: boolean = true) {
         return router.push(`/utfylling/${søknadssteg}`, undefined, { shallow });
@@ -110,12 +91,10 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
                     title="Oppsummering"
                     stepNumber={6}
                     onGoToPreviousStep={goBack}
-                    søknadsinnsendingInProgress={søknadsinnsendingInProgress}
-                    onCompleted={sendInnSøknad}
+                    søknadsinnsendingInProgress={!!søknadsinnsendingInProgress}
+                    onCompleted={() => sendInnSøknad(router, getValues(), personalia!, valgtTiltak!, setSøknadsinnsendingInProgress!, setInnsendingstidspunkt!)}
                 />
             );
-        case Søknadssteg.KVITTERING:
-            return <Kvitteringsside personalia={personalia!} innsendingstidspunkt={innsendingstidspunkt!} />;
         default:
             return <></>;
     }

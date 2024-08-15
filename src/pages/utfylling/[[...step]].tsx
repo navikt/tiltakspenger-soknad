@@ -86,8 +86,6 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
                 return Søknadssteg.BARNETILLEGG;
             case Søknadssteg.OPPSUMMERING:
                 return Søknadssteg.OPPSUMMERING;
-            case Søknadssteg.KVITTERING:
-                return Søknadssteg.KVITTERING;
             default:
                 return null;
         }

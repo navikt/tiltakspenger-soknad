@@ -5,5 +5,4 @@ export enum Søknadssteg {
     INSTITUSJONSOPPHOLD = 'institusjonsopphold',
     BARNETILLEGG = 'barnetillegg',
     OPPSUMMERING = 'oppsummering',
-    KVITTERING = 'kvittering',
 }
