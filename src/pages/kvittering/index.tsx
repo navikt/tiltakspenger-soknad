@@ -11,7 +11,7 @@ import defaultValues from '@/defaultValues';
 import {InnsendingContext} from "@/pages/_app";
 import {UtfyllingContext} from "@/pages/utfylling/[[...step]]";
 
-export default function Index() {
+export default function Kvittering() {
     const { personalia} = useContext(UtfyllingContext);
     const { innsendingstidspunkt } = useContext(InnsendingContext);
     const router = useRouter();
@@ -42,11 +42,6 @@ export default function Index() {
         };
     }, [router]);
 
-    if ( !personalia && !innsendingstidspunkt) {
-        console.log("ingen context")
-        return null;
-    }
-
     return (
         <div className={styles.container}>
             <div className={styles.body}>
@@ -56,7 +51,7 @@ export default function Index() {
                 </p>
 
                 <h4 className={styles.centerText}>
-                    Takk for søknaden, {personalia.fornavn} {personalia.etternavn}!
+                    Takk for søknaden, {personalia?.fornavn} {personalia?.etternavn}!
                 </h4>
 
                 <h6 className={styles.centerText}>Søknaden ble sendt til NAV {formatertInnsendingsTidspunkt}.</h6>
