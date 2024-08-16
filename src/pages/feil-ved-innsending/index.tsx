@@ -44,8 +44,9 @@ export default function FeilVedInnsending() {
             </Heading>
             <CustomGuidePanel poster className={styles.feilVedInnsendingGuidePanel}>
                 <BodyLong>
-                    Det har dessverre skjedd en feil hos oss ved innsending av tiltakspengesøknaden. Vi jobber med
-                    saken. Du må fylle ut søknaden på nytt og sende inn, eller logge ut og prøve igjen senere.
+                    Det har dessverre skjedd en feil hos oss ved innsending av søknaden for tiltakspenger.
+                    Du kan prøve å sende inn søknaden på nytt. Hvis du fortsatt ikke får sendt inn søknaden,
+                    kan du prøve igjen på et senere tidspunkt. Du må da fylle ut søknaden på nytt.
                 </BodyLong>
             </CustomGuidePanel>
             <div className={styles.lastInnSidenPåNyttButton}>
@@ -55,7 +56,7 @@ export default function FeilVedInnsending() {
                     disabled={søknadsinnsendingInProgress}
                     loading={søknadsinnsendingInProgress}
                 >
-                    Send inn på nytt
+                    Send inn søknaden på nytt
                 </Button>
             </div>
             <div className={styles.lastInnSidenPåNyttButton}>
