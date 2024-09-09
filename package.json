@@ -22,7 +22,7 @@
         "@types/react-dom": "18.3.0",
         "@unleash/nextjs": "^1.4.4",
         "classnames": "^2.5.1",
-        "dayjs": "^1.11.11",
+        "dayjs": "^1.11.13",
         "jsonwebtoken": "^9.0.2",
         "next": "14.2.5",
         "node-fetch": "^2.7.0",
