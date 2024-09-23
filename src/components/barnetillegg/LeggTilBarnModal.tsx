@@ -1,11 +1,9 @@
-import { Add } from '@navikt/ds-icons';
-import { Alert, Button, Heading, Link, Modal, ReadMore } from '@navikt/ds-react';
-import React, { useEffect, useImperativeHandle, useRef, useState } from 'react';
+import { Alert, Button, Link, Modal, ReadMore } from '@navikt/ds-react';
+import React, { useImperativeHandle, useRef, useState } from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './Barnetillegg.module.css';
-import stepStyles from './../../components/step/Step.module.css';
-import { ExternalLinkIcon } from '@navikt/aksel-icons';
+import { ExternalLinkIcon, PlusIcon } from '@navikt/aksel-icons';
 import {
     påkrevdDatoValidator,
     påkrevdFritekstfeltValidator,
@@ -34,23 +32,15 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         const [open, setOpen] = useState(false);
         const uuid = useRef(uuidv4());
 
-        useImperativeHandle(
-            ref,
-            () => {
-                return {
-                    åpneModal(barn: Barn) {
-                        åpneModal(barn);
-                    },
-                    slettVedleggUtenTilknytningTilBarn() {
-                        slettVedleggUtenTilknytningTilBarn();
-                    },
-                };
-            },
-            []
-        );
-
-        useEffect(() => {
-            Modal.setAppElement('#__next');
+        useImperativeHandle(ref, () => {
+            return {
+                åpneModal(barn: Barn) {
+                    åpneModal(barn);
+                },
+                slettVedleggUtenTilknytningTilBarn() {
+                    slettVedleggUtenTilknytningTilBarn();
+                },
+            };
         }, []);
 
         function fornavnValidator(verdi: string) {
@@ -68,7 +58,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         function barnUtenforEØSValidator(verdi: boolean) {
             return påkrevdJaNeiSpørsmålValidator(
                 verdi,
-                'Du må svare på om barnet ditt oppholder seg i Norge eller et annet EØS-land i tiltaksperioden'
+                'Du må svare på om barnet ditt oppholder seg i Norge eller et annet EØS-land i tiltaksperioden',
             );
         }
 
@@ -103,7 +93,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         const slettVedleggUtenTilknytningTilBarn = () => {
             const barnLagtTil = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
             const vedleggMedTilknytning = getValues('vedlegg').filter((vedlegg) =>
-                barnLagtTil.find((barn) => barn.uuid === vedlegg.uuid)
+                barnLagtTil.find((barn) => barn.uuid === vedlegg.uuid),
             );
             setValue('vedlegg', vedleggMedTilknytning);
         };
@@ -121,7 +111,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     className={styles.knappLeggTilBarn}
                     variant="secondary"
                     type="button"
-                    icon={<Add aria-hidden />}
+                    icon={<PlusIcon aria-hidden />}
                 >
                     Legg til barn
                 </Button>
@@ -132,11 +122,9 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                     onClose={lukkModal}
                     aria-labelledby="modal-heading"
                     className={styles.modalLeggTilBarn}
+                    header={{ heading: 'Andre barn' }}
                 >
-                    <Modal.Content role="dialog">
-                        <Heading spacing level="1" size="large" id="modal-heading">
-                            Andre barn
-                        </Heading>
+                    <Modal.Body role="dialog">
                         <Fritekstspørsmål
                             name={`svar.barnetillegg.kladd.fornavn`}
                             validate={[fornavnValidator, maks25tegnValidator]}
@@ -183,37 +171,36 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                         >
                             Oppholder barnet ditt seg i Norge eller et annet EØS-land i tiltaksperioden?
                         </JaNeiSpørsmål>
-                        <div style={{ marginTop: '1rem' }}>
-                            <Alert variant="info">
-                                <div style={{ width: 'initial', wordWrap: 'break-word', wordBreak: 'break-word' }}>
-                                    <b>Du må legge ved:</b>
-                                    <p>
-                                        Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller
-                                        adopsjonstidspunkt). Dette kan for eksempel være fødselsattest eller
-                                        adopsjonsdokumenter.
-                                    </p>
-                                    Dersom du må ettersende vedlegg kan du sende disse pr post.
-                                </div>
-                            </Alert>
-                            <p>
-                                Hvis du har vedlegg på papir, kan du skanne det inn og laste det opp. Hvis du ikke har
-                                skanner, kan du i stedet ta bilde av dokumentet med mobiltelefonen din.
-                            </p>
-                            <ReadMore header="Slik tar du et godt bilde av dokumentet">
-                                <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: 'white' }}>
-                                    <ScanningGuide />
-                                </div>
-                            </ReadMore>
-                            <div className={styles.marginTop}>
-                                <FileUploader
-                                    name="vedlegg"
-                                    uuid={uuid.current}
-                                    knappTekst="Last opp fødselsattest eller adopsjonsbevis"
-                                    control={control}
-                                />
+                        <Alert variant="info" style={{ marginTop: '1rem' }}>
+                            <div style={{ width: 'initial', wordWrap: 'break-word', wordBreak: 'break-word' }}>
+                                <b>Du må legge ved:</b>
+                                <p>
+                                    Bekreftelse på at du er forelder til barnet, og fra når (fødselstidspunkt eller
+                                    adopsjonstidspunkt). Dette kan for eksempel være fødselsattest eller
+                                    adopsjonsdokumenter.
+                                </p>
+                                Dersom du må ettersende vedlegg kan du sende disse pr post.
                             </div>
+                        </Alert>
+                        <p>
+                            Hvis du har vedlegg på papir, kan du skanne det inn og laste det opp. Hvis du ikke har
+                            skanner, kan du i stedet ta bilde av dokumentet med mobiltelefonen din.
+                        </p>
+                        <ReadMore header="Slik tar du et godt bilde av dokumentet">
+                            <div style={{ display: 'flex', justifyContent: 'center', backgroundColor: 'white' }}>
+                                <ScanningGuide />
+                            </div>
+                        </ReadMore>
+                        <div className={styles.marginTop}>
+                            <FileUploader
+                                name="vedlegg"
+                                uuid={uuid.current}
+                                knappTekst="Last opp fødselsattest eller adopsjonsbevis"
+                                control={control}
+                            />
                         </div>
-                        <div className={stepStyles.step__buttonsection}>
+                    </Modal.Body>
+                    <Modal.Footer>
                         <Button onClick={lukkModal} variant="secondary">
                             Avbryt
                         </Button>
@@ -234,15 +221,13 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                                     setOpen(false);
                                 }
                             }}
-
                             variant="primary"
                         >
                             Lagre
                         </Button>
-                        </div>
-                    </Modal.Content>
+                    </Modal.Footer>
                 </Modal>
             </>
         );
-    }
+    },
 );

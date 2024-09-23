@@ -62,11 +62,9 @@ export default function BarnetilleggSteg({
                     <ReadMore className="marginTop" header={'Hvilke barn viser vi?'}>
                         Vi viser dine barn under 16 år som er registrert i Folkeregisteret.
                     </ReadMore>
-                    <div className="marginTop">
-                        {barnFraApi.map((barn) => (
-                            <BarnetilleggRegistrertBarn key={barn.uuid} barn={barn} />
-                        ))}
-                    </div>
+                    {barnFraApi.map((barn) => (
+                        <BarnetilleggRegistrertBarn key={barn.uuid} barn={barn} />
+                    ))}
                 </>
             ) : (
                 <>
@@ -83,7 +81,7 @@ export default function BarnetilleggSteg({
                 </Alert>
             )}
 
-            <div className="marginTop">
+            <>
                 {fieldArray.fields && fieldArray.fields.length > 0 && (
                     <>
                         <Heading className="marginTopHeading" level="3" size="xsmall">
@@ -139,7 +137,7 @@ export default function BarnetilleggSteg({
                         </div>
                     </>
                 )}
-            </div>
+            </>
             <Heading className="marginTopHeading" level="3" size="small">
                 Andre barn
             </Heading>

@@ -10,6 +10,8 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    background-color: white;
+    padding: 1rem
 }
 
 .fileCardLeftContent {
@@ -33,18 +35,6 @@
 
 .fileInputText {
     word-break: break-all;
-}
-
-.deleteAttachment {
-    border: none;
-    background-color: transparent;
-    outline: none;
-    cursor: pointer;
-    color: var(--a-icon-action);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
 .deleteAttachment:hover {

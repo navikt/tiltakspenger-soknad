@@ -1,14 +1,13 @@
 import React, { DragEventHandler, useEffect, useRef } from 'react';
 import styles from './FileUploader.module.css';
-import { Alert, BodyShort, Detail, Link, Panel } from '@navikt/ds-react';
-import { UploadIcon } from '@navikt/aksel-icons';
+import { Alert, BodyShort, Button, Detail, Link, Panel } from '@navikt/ds-react';
+import { UploadIcon, FileCheckmarkIcon, TrashIcon, DownloadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
-import { Delete, Download, FileSuccess } from '@navikt/ds-icons';
 import Søknad from '@/types/Søknad';
 
 interface FileUploaderProps {
-    name: 'vedlegg'; // TODO: Kan dele opp i flere vedleggskategorier, feks "vedleggBarn" | "vedkeggKVP"
+    name: 'vedlegg';
     control: Control<Søknad>;
     knappTekst: string;
     uuid: string;
@@ -72,9 +71,9 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
     };
 
     const validerOppløsningVedCallback = (bildefil: Blob, url: string, index: number) => {
-        const fileReader = new FileReader;
+        const fileReader = new FileReader();
         fileReader.onload = () => {
-            const img = new Image;
+            const img = new Image();
             img.onload = () => {
                 if (img.naturalWidth > MAKS_DIMENSJON || img.naturalHeight > MAKS_DIMENSJON) {
                     setError('Bildet er for stort');
@@ -85,7 +84,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
             img.src = fileReader.result as string;
         };
         fileReader.readAsDataURL(bildefil);
-    }
+    };
 
     const fileSizeString = (size: number) => {
         const kb = size / 1024;
@@ -102,34 +101,35 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                     objectUrls.current.push(url);
                     if (!attachment.file.name.endsWith('.pdf')) validerOppløsningVedCallback(blob, url, index);
                     return (
-                        <Panel className={styles.fileCard} key={attachment.id}>
+                        <div className={styles.fileCard} key={attachment.id}>
                             <div className={styles.fileCardLeftContent}>
                                 <div className={styles.fileSuccess}>
-                                    <FileSuccess color={'var(--a-icon-success)'} />
+                                    <FileCheckmarkIcon title="Filen ble lastet opp" color={'var(--a-icon-success)'} />
                                 </div>
                                 <div className={styles.fileInputText}>
                                     <Link href={url} download={attachment.file.name}>
                                         {attachment.file.name}
-                                        <Download title="Last ned vedlegg" />
+                                        <DownloadIcon title="Last ned vedlegg" />
                                     </Link>
                                     <Detail>{fileSizeString(attachment.file.size)}</Detail>
                                 </div>
                             </div>
-                            <button
+                            <Button
                                 type={'button'}
                                 onClick={() => remove(index)}
                                 tabIndex={0}
-                                onKeyPress={(event) => {
+                                onKeyDown={(event) => {
                                     if (event.key === 'Enter') {
                                         remove(index);
                                     }
                                 }}
-                                className={styles.deleteAttachment}
+                                variant="secondary"
+                                size="small"
+                                icon={<TrashIcon title="Slett fil" aria-hidden={true} />}
                             >
-                                <Delete aria-hidden={true} />
-                                <BodyShort>{'Slett'}</BodyShort>
-                            </button>
-                        </Panel>
+                                Slett
+                            </Button>
+                        </div>
                     );
                 })}
 
@@ -170,7 +170,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                             role={'button'}
                             aria-controls={inputId}
                             tabIndex={0}
-                            onKeyPress={(event) => {
+                            onKeyDown={(event) => {
                                 if (event.key === 'Enter') {
                                     fileUploadInputElement?.current?.click();
                                 }
