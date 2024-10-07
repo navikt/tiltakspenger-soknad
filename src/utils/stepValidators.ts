@@ -150,13 +150,6 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
             brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
             brukerHarFyltUtInstitusjonsoppholdSteg(svar)
         );
-    } else if (steg === Søknadssteg.KVITTERING) {
-        return (
-            brukerHarFyltUtTiltakssteg(svar) &&
-            brukerHarFyltUtProgramDeltagelseSteg(svar) &&
-            brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
-            brukerHarFyltUtOppsummeringssteg(svar)
-        );
     } else {
         return false;
     }

@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, {ReactElement, useContext} from 'react';
 import { BodyLong, Button, Heading } from '@navikt/ds-react';
 import BannerLayout from '@/components/banner-layout/BannerLayout';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
@@ -8,10 +8,19 @@ import defaultValues from '@/defaultValues';
 import { useRouter } from 'next/router';
 import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
+import {UtfyllingContext} from "@/pages/utfylling/[[...step]]";
+import {InnsendingContext} from "@/pages/_app";
+import {sendInnSøknad} from "@/utils/innsending";
 
 export default function FeilVedInnsending() {
     const router = useRouter();
-    const { reset } = useFormContext<Søknad>();
+    const { reset, getValues } = useFormContext<Søknad>();
+    const { personalia, valgtTiltak } = useContext(UtfyllingContext);
+    const { setSøknadsinnsendingInProgress, setInnsendingstidspunkt, søknadsinnsendingInProgress } = useContext(InnsendingContext);
+
+    function navigateToHome() {
+        return router.push('/', undefined, { shallow: false });
+    }
 
     React.useEffect(() => {
         router.beforePopState(({ as }) => {
@@ -35,17 +44,26 @@ export default function FeilVedInnsending() {
             </Heading>
             <CustomGuidePanel poster className={styles.feilVedInnsendingGuidePanel}>
                 <BodyLong>
-                    Det har dessverre skjedd en feil hos oss ved innsending av tiltakspengesøknaden. Vi jobber med
-                    saken. Du må fylle ut søknaden på nytt og sende inn, eller logge ut og prøve igjen senere.
+                    Det har dessverre skjedd en feil hos oss ved innsending av søknaden for tiltakspenger.
+                    Du kan prøve å sende inn søknaden på nytt. Hvis du fortsatt ikke får sendt inn søknaden,
+                    kan du prøve igjen på et senere tidspunkt. Du må da fylle ut søknaden på nytt.
                 </BodyLong>
             </CustomGuidePanel>
             <div className={styles.lastInnSidenPåNyttButton}>
                 <Button
                     type="button"
-                    onClick={() => {
-                        const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-                        (window.location as any) = basePath;
-                    }}
+                    onClick={ () => sendInnSøknad(router, getValues(), personalia!, valgtTiltak!, setSøknadsinnsendingInProgress!, setInnsendingstidspunkt!) }
+                    disabled={søknadsinnsendingInProgress}
+                    loading={søknadsinnsendingInProgress}
+                >
+                    Send inn søknaden på nytt
+                </Button>
+            </div>
+            <div className={styles.lastInnSidenPåNyttButton}>
+                <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={navigateToHome}
                 >
                     Start søknaden på nytt
                 </Button>

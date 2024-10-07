@@ -26,7 +26,16 @@ interface UtfyllingSetStateContextType {
     setValgtTiltak: Dispatch<SetStateAction<undefined | Tiltak>>;
 }
 
+interface InnsendingContextType {
+    søknadsinnsendingInProgress: boolean;
+    setSøknadsinnsendingInProgress: Dispatch<SetStateAction<undefined | boolean>>;
+    innsendingstidspunkt: string;
+    setInnsendingstidspunkt: Dispatch<SetStateAction<undefined | string>>;
+}
+
 export const UtfyllingSetStateContext = createContext<Partial<UtfyllingSetStateContextType>>({});
+
+export const InnsendingContext = createContext<Partial<InnsendingContextType>>({});
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
@@ -44,6 +53,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
     const [valgtTiltak, setValgtTiltak] = useState<Tiltak | undefined>();
     const [personalia, setPersonalia] = useState<Personalia | undefined>();
+    const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = useState<boolean | undefined>();
+    const [innsendingstidspunkt, setInnsendingstidspunkt] = useState<string | undefined>();
     const [tiltak, setTiltak] = useState<Tiltak[] | undefined>();
 
     const getLayout = Component.getLayout || ((page) => page);
@@ -52,7 +63,9 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
             <FormProvider {...formMethods}>
                 <UtfyllingContext.Provider value={{ valgtTiltak, personalia, tiltak }}>
                     <UtfyllingSetStateContext.Provider value={{ setValgtTiltak, setPersonalia, setTiltak }}>
-                        <Component {...pageProps} />
+                        <InnsendingContext.Provider value={{søknadsinnsendingInProgress, setSøknadsinnsendingInProgress, innsendingstidspunkt, setInnsendingstidspunkt}}>
+                            <Component {...pageProps} />
+                        </InnsendingContext.Provider>
                     </UtfyllingSetStateContext.Provider>
                 </UtfyllingContext.Provider>
             </FormProvider>
