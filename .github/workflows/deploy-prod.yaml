@@ -1,0 +1,65 @@
+name: Build, push, and deploy to prod
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  test:
+    name: Run tests
+    uses: ./.github/workflows/.run-tests.yml
+    permissions:
+      contents: read
+    secrets:
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+
+  build-dev:
+    name: Build and push (dev)
+    uses: ./.github/workflows/.build-app.yml
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      ENV: dev
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      SLACK_INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+
+  build-prod:
+    name: Build and push
+    uses: ./.github/workflows/.build-app.yml
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      ENV: prod
+    secrets:
+      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
+      SLACK_INCOMING_WEBHOOK_URL: ${{ secrets.SLACK_INCOMING_WEBHOOK_URL }}
+
+  deploy-dev:
+    name: Deploy to NAIS (dev)
+    needs: [test, build-dev]
+    uses: ./.github/workflows/.deploy-to-nais.yml
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      NAIS_ENV: dev
+      IMAGE: ${{ needs.build.outputs.IMAGE }}
+
+  deploy-prod:
+    name: Deploy to NAIS prod
+    needs: [test, build-prod]
+    uses: ./.github/workflows/.deploy-to-nais.yml
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      NAIS_ENV: prod
+      IMAGE: ${{ needs.build.outputs.IMAGE }}
