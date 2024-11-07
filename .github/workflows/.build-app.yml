@@ -24,7 +24,7 @@ on:
 
 jobs:
   build:
-    name: Build app for (${{ inputs.ENV }})
+    name: Build app for ${{ inputs.ENV }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
