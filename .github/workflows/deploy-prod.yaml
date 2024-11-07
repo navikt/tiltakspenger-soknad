@@ -14,7 +14,7 @@ jobs:
     permissions:
       contents: read
     secrets:
-      READER_TOKEN: ${{ secret.READER_TOKEN }}
+      READER_TOKEN: ${{ secrets.READER_TOKEN }}
 
   build-dev:
     name: Build and push (dev)
