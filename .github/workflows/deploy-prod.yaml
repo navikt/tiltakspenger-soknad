@@ -51,10 +51,10 @@ jobs:
       id-token: write
     with:
       NAIS_ENV: dev
-      IMAGE: ${{ needs.build.outputs.IMAGE }}
+      IMAGE: ${{ needs.build-dev.outputs.IMAGE }}
 
   deploy-prod:
-    name: Deploy to NAIS prod
+    name: Deploy to NAIS (prod)
     needs: [test, build-prod]
     uses: ./.github/workflows/.deploy-to-nais.yml
     permissions:
@@ -62,4 +62,4 @@ jobs:
       id-token: write
     with:
       NAIS_ENV: prod
-      IMAGE: ${{ needs.build.outputs.IMAGE }}
+      IMAGE: ${{ needs.build-prod.outputs.IMAGE }}
