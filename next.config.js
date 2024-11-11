@@ -17,6 +17,9 @@ module.exports = {
     output: 'standalone',
     assetPrefix: process.env.ASSET_PREFIX,
     productionBrowserSourceMaps: true,
+    experimental: {
+        optimizePackageImports: ['@navikt/ds-react', '@navikt/aksel-icons'],
+    },
     async headers() {
         const environment = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
         const csp = await buildCspHeader(appDirectives, { env: environment });

@@ -10,6 +10,7 @@ import { UtfyllingContext } from './utfylling/[[...step]]';
 import { NextPage } from 'next';
 import defaultValues from '@/defaultValues';
 import '../styles/global.css';
+import { Head } from 'next/document';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
     initializeFaro({
@@ -48,15 +49,20 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
     const getLayout = Component.getLayout || ((page) => page);
     return getLayout(
-        <main>
-            <FormProvider {...formMethods}>
-                <UtfyllingContext.Provider value={{ valgtTiltak, personalia, tiltak }}>
-                    <UtfyllingSetStateContext.Provider value={{ setValgtTiltak, setPersonalia, setTiltak }}>
-                        <Component {...pageProps} />
-                    </UtfyllingSetStateContext.Provider>
-                </UtfyllingContext.Provider>
-            </FormProvider>
-        </main>
+        <>
+            <Head>
+                <title>Søknad om tiltakspenger</title>
+            </Head>
+            <main>
+                <FormProvider {...formMethods}>
+                    <UtfyllingContext.Provider value={{ valgtTiltak, personalia, tiltak }}>
+                        <UtfyllingSetStateContext.Provider value={{ setValgtTiltak, setPersonalia, setTiltak }}>
+                            <Component {...pageProps} />
+                        </UtfyllingSetStateContext.Provider>
+                    </UtfyllingContext.Provider>
+                </FormProvider>
+            </main>
+        </>,
     );
 }
 
