@@ -84,13 +84,15 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                         <li>Personinformasjon om barna dine hvis du søker om barnetillegg</li>
                         <li>Inntektsinformasjon fra Skatteetaten</li>
                         <li>Opplysninger om hvilket arbeidsmarkedstiltak du deltar på</li>
-                        <li>Opplysninger om du får andre utbetalinger fra NAV</li>
+                        <li>Opplysninger om du får andre utbetalinger fra Nav</li>
                     </ul>
                     <p>Dette gjør vi for å vurdere om du har rett til tiltakspenger.</p>
-                    <p>
-                        Vi deler opplysninger om hva du får utbetalt i tiltakspenger med Skatteetaten og Statistisk
-                        sentralbyrå. Vi kan bruke opplysninger om deg til å forbedre våre tjenester.
-                    </p>
+                    <p>Vi deler informasjon med andre systemer i Nav:</p>
+                    <ul>
+                        <li>om du har tiltakspenger</li>
+                        <li>hvilken periode du har tiltakspenger</li>
+                    </ul>
+                    <p>hvis informasjonen har betydning for andre ytelser du har søkt om eller oppfølgingen du får av Nav.</p>
                     <Link
                         href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten"
                         target="_blank"
