@@ -39,3 +39,4 @@ docker-compose/.env
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+/.gradle/
