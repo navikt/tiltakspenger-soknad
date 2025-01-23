@@ -1,13 +1,13 @@
 import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
-import { fetchDecoratorReact } from '@navikt/nav-dekoratoren-moduler/ssr';
+import { DecoratorComponentsReact, fetchDecoratorReact } from '@navikt/nav-dekoratoren-moduler/ssr';
 import serverLogger from '@/utils/serverLogger';
 
 interface PageDocumentProps {
-    decoratorFragments: DecoratorComponents;
+    decoratorFragments: DecoratorComponentsReact;
 }
 
 class PageDocument extends Document<PageDocumentProps> {
-    static async getDecoratorFragments(): Promise<DecoratorComponents> {
+    static async getDecoratorFragments(): Promise<DecoratorComponentsReact> {
         serverLogger.info(`Setter opp dekoratør med env satt til: ${(process.env.DEKORATOR_ENV as any) || 'dev'}`);
         try {
             const fragments = await fetchDecoratorReact({
@@ -17,7 +17,6 @@ class PageDocument extends Document<PageDocumentProps> {
                     simple: true,
                     chatbot: false,
                     level: 'Level4',
-                    enforceLogin: process.env.NODE_ENV === 'production',
                 },
             });
             return fragments;
@@ -25,7 +24,7 @@ class PageDocument extends Document<PageDocumentProps> {
             console.error('Henting av dekoratøren feilet', error);
             const emptyElement = () => <></>;
             return {
-                Styles: emptyElement,
+                HeadAssets: emptyElement,
                 Scripts: emptyElement,
                 Header: emptyElement,
                 Footer: emptyElement,
@@ -41,13 +40,12 @@ class PageDocument extends Document<PageDocumentProps> {
 
     render() {
         const {
-            decoratorFragments: { Header, Footer, Styles, Scripts },
+            decoratorFragments: { Header, Footer, HeadAssets, Scripts },
         } = this.props;
         return (
             <Html lang="no">
                 <Head>
-                    <Styles />
-                    <title>Søknad om tiltakspenger</title>
+                    <HeadAssets />
                 </Head>
                 <body>
                     <Scripts />
