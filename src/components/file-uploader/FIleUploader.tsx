@@ -1,6 +1,6 @@
 import React, { DragEventHandler, useEffect, useRef } from 'react';
 import styles from './FileUploader.module.css';
-import { Alert, BodyShort, Button, Detail, Link, Panel } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Detail, Link } from '@navikt/ds-react';
 import { UploadIcon, FileCheckmarkIcon, TrashIcon, DownloadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
