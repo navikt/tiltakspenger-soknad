@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, ErrorSummary, GuidePanel, Heading } from '@navikt/ds-react';
+import { Button, ErrorSummary, Heading } from '@navikt/ds-react';
 import { useFormContext } from 'react-hook-form';
 import styles from './Step.module.css';
 import findAllErrors from '@/utils/errorState';
@@ -66,7 +66,7 @@ export default function Step({
                     ref={errorRef}
                     heading="Du må fikse disse feilene før du kan fortsette:"
                 >
-                    {allErrors.map(({ message, ref, type, types, root }) => {
+                    {allErrors.map(({ message, ref }) => {
                         return (
                             <ErrorSummary.Item key={ref!.name} href={`#${ref!.name}`}>
                                 {message}
@@ -89,9 +89,7 @@ export default function Step({
                             <Button type="button" variant="secondary" onClick={goToPreviousStepHandler}>
                                 Forrige steg
                             </Button>
-                            <Button type="submit">
-                                Neste steg
-                            </Button>
+                            <Button type="submit">Neste steg</Button>
                         </div>
                     )}
                 </>
