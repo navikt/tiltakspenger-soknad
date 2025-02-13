@@ -14,9 +14,9 @@ spec:
     - name: DEKORATOR_ENV
       value: dev
     - name: IS_DEMO_MODE
-      value: true
+      value: "true"
     - name: NEXT_PUBLIC_BASE_PATH
-      value: '/demo'
+      value: "/demo"
   ingresses:
     - {{ ingress }}/demo
   replicas:
