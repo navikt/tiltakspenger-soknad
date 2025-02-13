@@ -13,6 +13,7 @@ import AktivtSøknadssteg from '@/components/aktivt-søknadssteg/AktivtSøknadss
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
+import { mocketTiltak } from '@/mocks/mockedTiltak';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -137,7 +138,7 @@ Utfylling.getLayout = function getLayout(page: ReactElement) {
     return <SøknadLayout>{page}</SøknadLayout>;
 };
 
-export const getServerSideProps = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
+const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     let token = null;
     try {
         token = await getOnBehalfOfToken(context.req.headers.authorization!!);
@@ -147,35 +148,6 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
     }
 
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
-    const mocketTiltak = [
-        {
-            aktivitetId: '123',
-            type: 'Annen utdanning',
-            typeNavn: 'Annen utdanning',
-            deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
-            arenaRegistrertPeriode: { fra: '2025-04-01', til: '2025-04-10' },
-            arrangør: 'Testarrangør',
-            status: 'Aktuell',
-        },
-        {
-            aktivitetId: '12asdad3',
-            type: 'Annen utdaasdanning',
-            typeNavn: 'Annen utdaasdnning',
-            deltakelsePeriode: { fra: '2025-04-02', til: '2025-04-10' },
-            arenaRegistrertPeriode: {},
-            arrangør: 'Testarrangør',
-            status: 'Aktuell',
-        },
-        {
-            aktivitetId: '12sdf3',
-            type: 'Annen utdanwerning',
-            typeNavn: 'Annen utdweranning',
-            deltakelsePeriode: { fra: '2025-04-01', til: '2025-04-10' },
-            arenaRegistrertPeriode: { fra: '2025-04-01' },
-            arrangør: 'Testarrangør',
-            status: 'Aktuell',
-        },
-    ];
 
     try {
         logger.info('Hent data om tiltak start');
@@ -213,3 +185,13 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
         };
     }
 });
+
+const getServerSidePropsDemo = async () => {
+    return {
+        props: {
+            tiltak: mocketTiltak,
+        },
+    };
+};
+
+export const getServerSideProps = process.env.IS_DEMO_MODE === 'true' ? getServerSidePropsDemo : getServerSidePropsLive;

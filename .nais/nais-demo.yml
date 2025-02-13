@@ -1,0 +1,29 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: tiltakspenger-soknad-demo
+  namespace: tpts
+  labels:
+    team: tpts
+spec:
+  image: {{ image }}
+  port: 3000
+  env:
+    - name: TILTAKSPENGER_SOKNAD_API_URL
+      value: {{ TILTAKSPENGER_SOKNAD_API_URL }}
+    - name: DEKORATOR_ENV
+      value: dev
+    - name: IS_DEMO_MODE
+      value: true
+    - name: NEXT_PUBLIC_BASE_PATH
+      value: '/demo'
+  ingresses:
+    - {{ ingress }}/demo
+  replicas:
+    min: 1
+    max: 1
+  accessPolicy:
+    outbound:
+      rules:
+        - application: nav-dekoratoren
+          namespace: personbruker
