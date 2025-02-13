@@ -9,6 +9,10 @@ on:
       IMAGE:
         required: true
         type: string
+      NAIS_RESOURCES:
+        required: false
+        type: string
+        default: '.nais/nais.yml,.nais/unleash-apitoken.yml'
 
 jobs:
   deploy:
@@ -25,6 +29,6 @@ jobs:
         uses: nais/deploy/actions/deploy@v2
         env:
           CLUSTER: ${{ inputs.NAIS_ENV }}-gcp
-          RESOURCE: .nais/nais.yml,.nais/unleash-apitoken.yml
+          RESOURCE: ${{ inputs.NAIS_RESOURCES }}
           VAR: image=${{ inputs.IMAGE }}
           VARS: .nais/vars/${{ inputs.NAIS_ENV }}.yml

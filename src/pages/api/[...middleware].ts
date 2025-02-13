@@ -22,7 +22,7 @@ async function makeApiRequest(request: NextApiRequest, oboToken: string): Promis
     return Promise.reject(`Unsupported method ${request.method}`);
 }
 
-export default async function middleware(request: NextApiRequest, response: NextApiResponse): Promise<void> {
+const middlewareLive = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
     let oboToken = null;
     try {
         logger.info('Henter token');
@@ -62,7 +62,14 @@ export default async function middleware(request: NextApiRequest, response: Next
             response.status(502).json({ message: 'Bad Gateway' });
         }
     }
-}
+};
+
+const middlewareDemo = async (request: NextApiRequest, response: NextApiResponse) => {
+    console.log('Hello', request);
+    return response.status(201).json({
+        innsendingTidspunkt: new Date().toISOString(),
+    });
+};
 
 // sørger for at NextJS sin default bodyParser ikke ødelegger for vedleggsopplastning
 export const config = {
@@ -70,3 +77,7 @@ export const config = {
         bodyParser: false,
     },
 };
+
+const middleware = process.env.IS_DEMO_MODE === 'true' ? middlewareDemo : middlewareLive;
+
+export default middleware;

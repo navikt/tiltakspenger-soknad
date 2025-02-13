@@ -92,7 +92,10 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                         <li>om du har tiltakspenger</li>
                         <li>hvilken periode du har tiltakspenger</li>
                     </ul>
-                    <p>hvis informasjonen har betydning for andre ytelser du har søkt om eller oppfølgingen du får av Nav.</p>
+                    <p>
+                        hvis informasjonen har betydning for andre ytelser du har søkt om eller oppfølgingen du får av
+                        Nav.
+                    </p>
                     <Link
                         href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten"
                         target="_blank"
@@ -126,7 +129,7 @@ function redirectBrukerTilGammelSøknad() {
     };
 }
 
-export const getServerSideProps = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
+const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
     let token = null;
@@ -176,3 +179,13 @@ export const getServerSideProps = pageWithAuthentication(async (context: GetServ
         };
     }
 });
+
+const getServerSidePropsDemo = async () => {
+    return {
+        props: {
+            personalia: mockedPersonalia,
+        },
+    };
+};
+
+export const getServerSideProps = process.env.IS_DEMO_MODE === 'true' ? getServerSidePropsDemo : getServerSidePropsLive;
