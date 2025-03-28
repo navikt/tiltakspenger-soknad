@@ -24,5 +24,5 @@ export const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
 };
 
 export const harFullstendigPeriode = (tiltak: Tiltak) => {
-    return tiltak.arenaRegistrertPeriode?.fra && tiltak.arenaRegistrertPeriode?.til;
+    return !!tiltak.arenaRegistrertPeriode?.fra && !!tiltak.arenaRegistrertPeriode?.til;
 };
