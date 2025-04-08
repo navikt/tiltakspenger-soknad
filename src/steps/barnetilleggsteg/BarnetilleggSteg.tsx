@@ -55,7 +55,7 @@ export default function BarnetilleggSteg({
             }
         >
             <Heading className="marginTopHeading" level="3" size="small">
-                Barn vi har funnet registrert på deg
+                Barn fra Folkeregisteret
             </Heading>
             {barnFraApi && barnFraApi.length > 0 ? (
                 <>
