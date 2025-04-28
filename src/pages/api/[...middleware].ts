@@ -65,7 +65,6 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
 };
 
 const middlewareDemo = async (request: NextApiRequest, response: NextApiResponse) => {
-    console.log('Hello', request);
     return response.status(201).json({
         innsendingTidspunkt: new Date().toISOString(),
     });

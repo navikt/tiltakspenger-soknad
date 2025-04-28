@@ -3,7 +3,6 @@ import logger from '@/utils/serverLogger';
 import nodeJose from 'node-jose';
 import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
-import nodeFetch from 'node-fetch';
 import { GetServerSidePropsContext } from 'next';
 
 async function getKey(jwk: any) {
@@ -54,7 +53,7 @@ async function exchangeToken(subjectToken: string) {
     params.append('subject_token', subjectToken);
     params.append('audience', `${cluster}:tpts:tiltakspenger-soknad-api`);
 
-    const response = await nodeFetch(tokenEndpoint || '', {
+    const response = await fetch(tokenEndpoint || '', {
         method: 'post',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

@@ -19,7 +19,7 @@ export const mocketTiltak = [
         aktivitetId: '12sdf3',
         type: 'Annen utdanwerning',
         typeNavn: 'Annen utdweranning',
-        arenaRegistrertPeriode: { fra: '2025-04-01' },
+        arenaRegistrertPeriode: { fra: '2025-04-01', til: '2026-03-01' },
         arrangør: 'Testarrangør',
         status: 'Aktuell',
     },
