@@ -1,4 +1,4 @@
-import { validateIdportenToken, ValidationError } from '@navikt/next-auth-wonderwall';
+import { validateIdportenToken } from '@navikt/oasis';
 import logger from '@/utils/serverLogger';
 import nodeJose from 'node-jose';
 import { v4 as uuidv4 } from 'uuid';
@@ -20,7 +20,7 @@ function createClientAssertion(key: any) {
     const assertionHeaders = {
         kid: key.kid,
         typ: 'JWT',
-        alg: 'RS256',
+        alg: 'RS256'
     };
 
     const now = Math.floor(Date.now() / 1000);
@@ -32,7 +32,7 @@ function createClientAssertion(key: any) {
         jti: uuidv4(),
         nbf: now,
         iat: now,
-        exp: now + 10,
+        exp: now + 10
     };
 
     return jwt.sign(assertionClaims, key.toPEM(true), { header: assertionHeaders, algorithm: 'RS256' });
@@ -56,9 +56,9 @@ async function exchangeToken(subjectToken: string) {
     const response = await fetch(tokenEndpoint || '', {
         method: 'post',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/x-www-form-urlencoded'
         },
-        body: params,
+        body: params
     });
 
     const data = await response.json();
@@ -73,28 +73,25 @@ export async function validateAuthorizationHeader(authorizationHeader: string | 
     if (!authorizationHeader) {
         throw new Error('Mangler authorization header');
     }
-    try {
-        const validationResult = await validateIdportenToken(authorizationHeader);
-        if (validationResult !== 'valid') {
-            throw validationResult;
-        }
-        return validationResult;
-    } catch (e) {
-        throw new Error((e as ValidationError<any>).message);
+
+    const validationResult = await validateIdportenToken(authorizationHeader);
+    if (!validationResult.ok) {
+        throw validationResult.error;
     }
+
+    return validationResult;
 }
 
 export async function getOnBehalfOfToken(authorizationHeader: string) {
     const subjectToken = removeBearer(authorizationHeader || '');
-    const accessToken = await exchangeToken(subjectToken);
-    return accessToken;
+    return exchangeToken(subjectToken);
 }
 
 export function redirectToLogin(context: GetServerSidePropsContext) {
     return {
         redirect: {
             destination: `/oauth2/login?redirect=${context.resolvedUrl}`,
-            permanent: false,
-        },
+            permanent: false
+        }
     };
 }

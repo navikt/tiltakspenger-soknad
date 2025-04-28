@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import logger from './../../utils/serverLogger';
 import { getOnBehalfOfToken } from '@/utils/authentication';
 import { makeGetRequest, makePostRequest } from '@/utils/http';
-import { validateIdportenToken } from '@navikt/next-auth-wonderwall';
+import { validateIdportenToken } from '@navikt/oasis';
 
 const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
@@ -31,14 +31,15 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
             throw Error('Mangler token');
         }
         const validationResult = await validateIdportenToken(authorizationHeader);
-        if (validationResult !== 'valid') {
-            throw validationResult;
+        if (!validationResult.ok) {
+            throw validationResult.error;
         }
         oboToken = await getOnBehalfOfToken(request.headers.authorization!!);
     } catch (error) {
         logger.error('Bruker har ikke tilgang', error);
         response.status(401).json({ message: 'Bruker har ikke tilgang' });
     }
+
     if (oboToken) {
         logger.info('Starter http kall');
         try {
