@@ -5,9 +5,10 @@ import { Alert, BodyLong, Button, Heading, ReadMore } from '@navikt/ds-react';
 import Søknad from '@/types/Søknad';
 import BarnetilleggRegistrertBarn from '@/components/barnetillegg/BarnetilleggRegistrertBarn';
 import { LeggTilBarnModal, LeggTilBarnModalImperativeHandle } from '@/components/barnetillegg/LeggTilBarnModal';
+import { SlettBarnModal } from '@/components/barnetillegg/SlettBarnModal';
 import BarneInfo from '@/components/barnetillegg/BarneInfo';
 import { Barn } from '@/types/Barn';
-import { PencilIcon, TrashIcon } from '@navikt/aksel-icons';
+import { PencilIcon } from '@navikt/aksel-icons';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import styles from './../../components/barnetillegg/Barnetillegg.module.css';
 
@@ -122,16 +123,13 @@ export default function BarnetilleggSteg({
                                             >
                                                 Endre informasjon
                                             </Button>
-                                            <Button
-                                                icon={<TrashIcon aria-hidden />}
-                                                variant="tertiary"
-                                                onClick={() => {
+                                            <SlettBarnModal
+                                                barn={field as Barn}
+                                                onDelete={() => {
                                                     fieldArray.remove(index);
                                                     refEndring.current?.slettVedleggUtenTilknytningTilBarn();
                                                 }}
-                                            >
-                                                Slett barn
-                                            </Button>
+                                            />
                                         </div>
                                     </div>
                                 );
