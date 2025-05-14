@@ -123,12 +123,6 @@ IndexPage.getLayout = function getLayout(page: ReactElement) {
     return <SøknadLayout>{page}</SøknadLayout>;
 };
 
-function redirectBrukerTilGammelSøknad() {
-    return {
-        redirect: { destination: 'https://tjenester.nav.no/soknadtiltakspenger/app/start', permanent: false },
-    };
-}
-
 const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
