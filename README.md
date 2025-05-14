@@ -10,14 +10,15 @@ For å installere dependencies:
 npm install
 ```
 
-For å få tilgang til alle dependencies må man generere en personal access-token som legges til i `.npmrc` på ~. Denne genereres via Github, trenger tilgangen `read:packages`, og må autentiseres via NAV. Se dokumentasjon [her](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
+For å få tilgang til alle dependencies må man generere en personal access-token som legges til i `.npmrc` på ~. Denne genereres via Github, trenger tilgangen `read:packages`, og må autentiseres via Nav. Se dokumentasjon [her](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
 
-### Hvordan kjøre opp lokalt utviklingsmiljø
+## Hvordan kjøre opp lokalt utviklingsmiljø
 
-#### Demo mode med mock data
+### Demo mode med mock data
 Kopier `.env.demo` til `.env.local` og kjør `npm run dev`. Demo-modus er tilgjengelig på http://localhost:3000/demo
 
-#### Med hele verdikjeden
+### Med hele verdikjeden 
+**Obs!** Mulig dette ikke fungerer akkurat nå..
 
 1. Opprett en `.env.local` fil på rot av repoet, og legg inn følgende miljøvariabler:
     ```
@@ -57,6 +58,6 @@ på hvordan man kan kjøre opp søknads-APIet fra IntelliJ.
 
 Spørsmål knyttet til koden eller prosjektet kan stilles som issues her på GitHub
 
-## For NAV-ansatte
+## For Nav-ansatte
 
-Interne henvendelser kan sendes via Slack i kanalen #tiltakspenger-utvikling.
+Interne henvendelser kan sendes via Slack i kanalen #tp-utvikling.
