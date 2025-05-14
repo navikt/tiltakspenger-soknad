@@ -14,6 +14,11 @@ For å få tilgang til alle dependencies må man generere en personal access-tok
 
 ### Hvordan kjøre opp lokalt utviklingsmiljø
 
+#### Demo mode med mock data
+Kopier `.env.demo` til `.env.local` og kjør `npm run dev`. Demo-modus er tilgjengelig på http://localhost:3000/demo
+
+#### Med hele verdikjeden
+
 1. Opprett en `.env.local` fil på rot av repoet, og legg inn følgende miljøvariabler:
     ```
     TILTAKSPENGER_SOKNAD_API_URL=http://localhost:8080
