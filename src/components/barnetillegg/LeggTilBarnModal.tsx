@@ -31,6 +31,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         const { trigger, getValues, control, setValue, clearErrors } = useFormContext<Søknad>();
         const uuid = useRef(uuidv4());
         const modalRef = useRef<HTMLDialogElement>(null);
+        const modalErLukket = !modalRef?.current?.open;
 
         useImperativeHandle(ref, () => {
             return {
@@ -44,22 +45,22 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         }, []);
 
         function fornavnValidator(verdi: string) {
-            if (!modalRef?.current?.open) return;
+            if (modalErLukket) return;
             return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi fornavn');
         }
 
         function etternavnValidator(verdi: string) {
-            if (!modalRef?.current?.open) return;
+            if (modalErLukket) return;
             return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi etternavn');
         }
 
         function datofeltValidator(verdi: Date) {
-            if (!modalRef?.current?.open) return;
+            if (modalErLukket) return;
             return påkrevdDatoValidator(verdi, 'Du må oppgi fødselsdato');
         }
 
         function barnUtenforEØSValidator(verdi: boolean) {
-            if (!modalRef?.current?.open) return;
+            if (modalErLukket) return;
             return påkrevdJaNeiSpørsmålValidator(
                 verdi,
                 'Du må svare på om barnet ditt oppholder seg i Norge eller et annet EØS-land i tiltaksperioden',
