@@ -50,7 +50,6 @@ export default function Periodevelger({
                 setRangeError({ ...rangeError, from: undefined });
             }
         },
-        openOnFocus: false,
     });
 
     const toDatePicker = useDatepicker({
@@ -61,7 +60,6 @@ export default function Periodevelger({
         fromDate: minDate,
         toDate: maxDate,
         defaultMonth: maxDate ?? minDate,
-        openOnFocus: false,
         onValidate: (validation) => {
             if (validation.isBefore || validation.isAfter) {
                 setRangeError({ to: 'Til-dato kan ikke være utenfor tiltaksperioden' });
