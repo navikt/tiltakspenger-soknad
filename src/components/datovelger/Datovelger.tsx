@@ -11,6 +11,7 @@ interface DatovelgerProps {
     datoMåVæreIFortid?: boolean;
     defaultSelected: Date;
 }
+
 export default function Datovelger({
     onDateChange,
     errorMessage,
@@ -36,21 +37,13 @@ export default function Datovelger({
                 setDateError('');
             }
         },
-        openOnFocus: false,
-        });
-        
-        const computedError = dateError || errorMessage;
+    });
 
+    const computedError = dateError || errorMessage;
 
     return (
         <DatePicker {...datepickerProps} id={id}>
-            <DatePicker.Input
-                {...inputProps}
-                label={label}
-                error={computedError}
-                autoComplete="off"
-                id={id}
-            />
+            <DatePicker.Input {...inputProps} label={label} error={computedError} autoComplete="off" id={id} />
         </DatePicker>
     );
 }
