@@ -14,8 +14,15 @@
 .modalLeggTilBarn {
     background-color: var(--a-gray-50);
     width: 100%;
-    max-width: 600px;
-    padding: 5px;
+    max-width: 37.5rem;
+    padding: 1rem;
+}
+
+.modalSlettBarn {
+    background-color: var(--a-gray-50);
+    width: 100%;
+    max-width: 37.5rem;
+    padding: 1rem;
 }
 
 .knapperEgenregistertBarn {
