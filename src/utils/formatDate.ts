@@ -15,5 +15,5 @@ export const dateStrWithMonthName = (dateStr: Nullable<string>): string => {
 
 export const dateStrWithHourMinute = (dateStr: Nullable<string>): string => {
     if (!dateStr) return '';
-    return dayjs(dateStr).format('H.mm');
+    return dayjs(dateStr).format('HH.mm');
 };
