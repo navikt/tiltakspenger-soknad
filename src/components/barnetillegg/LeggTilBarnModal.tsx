@@ -28,10 +28,18 @@ export interface LeggTilBarnModalImperativeHandle {
 
 export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandle, LeggTilBarnModalProps>(
     function LeggTilBarnModal({ fieldArray }: LeggTilBarnModalProps, ref) {
-        const { trigger, getValues, control, setValue, resetField, clearErrors } = useFormContext<Søknad>();
+        const { trigger, getValues, control, setValue, resetField, setFocus, clearErrors } = useFormContext<Søknad>();
         const uuid = useRef(uuidv4());
         const modalRef = useRef<HTMLDialogElement>(null);
-        const modalErLukket = !modalRef?.current?.open;
+        const modalErÅpen = modalRef?.current?.open;
+
+        React.useEffect(() => {
+            // Setter fokus på første felt i modalen når den åpnes slik at bruker kan fylle inn informasjon med en gang.
+            // Spesielt nyttig for skjermlesere.
+            if (modalErÅpen) {
+                setFocus('svar.barnetillegg.kladd.fornavn');
+            }
+        }, [modalErÅpen, setFocus]);
 
         useImperativeHandle(ref, () => {
             return {
@@ -45,22 +53,22 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         }, []);
 
         function fornavnValidator(verdi: string) {
-            if (modalErLukket) return;
+            if (!modalErÅpen) return;
             return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi fornavn');
         }
 
         function etternavnValidator(verdi: string) {
-            if (modalErLukket) return;
+            if (!modalErÅpen) return;
             return påkrevdFritekstfeltValidator(verdi, 'Du må oppgi etternavn');
         }
 
         function datofeltValidator(verdi: Date) {
-            if (modalErLukket) return;
+            if (!modalErÅpen) return;
             return påkrevdDatoValidator(verdi, 'Du må oppgi fødselsdato');
         }
 
         function barnUtenforEØSValidator(verdi: boolean) {
-            if (modalErLukket) return;
+            if (!modalErÅpen) return;
             return påkrevdJaNeiSpørsmålValidator(
                 verdi,
                 'Du må svare på om barnet ditt oppholder seg i Norge eller et annet EØS-land i tiltaksperioden',
