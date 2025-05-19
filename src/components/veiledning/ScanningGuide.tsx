@@ -1,6 +1,6 @@
 import { Error, Success } from '@navikt/ds-icons';
 import { BodyShort, Label } from '@navikt/ds-react';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import ScanningIcon from './ScanningIcon';
 
@@ -34,52 +34,54 @@ const tekster = {
 
 export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) => {
     return (
-        <div style={{display:'flex', flexWrap: "wrap"}}>
-            <div style={{display:'flex', flexDirection: 'column', maxWidth: "15rem"}}>
-                <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem'}}>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '15rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', paddingTop: '0.5rem' }}>
                     <ScanningIcon status={'good'} title={tekster?.alert?.exampleLabelGood} />
-                    <div style={{padding: '0.5rem'}}>
+                    <div style={{ padding: '0.5rem' }}>
                         <span>
-                          <Success color={'var(--a-green-600)'} />
-                          <Label as="span">{tekster?.alert?.exampleLabelGood}</Label>
+                            <Success color={'var(--a-green-600)'} />
+                            <Label as="span">{tekster?.alert?.exampleLabelGood}</Label>
                         </span>
                         <BodyShort>{tekster?.alert?.exampleGood}</BodyShort>
                     </div>
                 </div>
                 <div>
-                    <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem'}}>
+                    <div style={{ display: 'flex', alignItems: 'center', paddingTop: '0.5rem' }}>
                         <ScanningIcon status={'keystone'} title={tekster?.alert?.exampleLabelBad} />
-                        <div style={{padding: '0.5rem'}}>
-                        <span>
-                          <Error color={'var(--a-nav-red)'} />
-                          <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
-                        </span>
+                        <div style={{ padding: '0.5rem' }}>
+                            <span>
+                                <Error color={'var(--a-nav-red)'} />
+                                <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
+                            </span>
                             <BodyShort>{tekster?.alert?.exampleKeystone}</BodyShort>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style={{display:'flex', flexDirection: 'column', maxWidth: "15rem"}}>
+            <div style={{ display: 'flex', flexDirection: 'column', maxWidth: '15rem' }}>
                 <div>
-                    <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem'}}>
+                    <div style={{ display: 'flex', alignItems: 'center', paddingTop: '0.5rem' }}>
                         <ScanningIcon status={'horizontal'} title={tekster?.alert?.exampleLabelBad} />
-                        <div style={{padding: '0.5rem'}}>
+                        <div style={{ padding: '0.5rem' }}>
                             <span className={'scanning-example-status'}>
-                              <Error color={'var(--a-nav-red)'} />
-                              <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
+                                <Error color={'var(--a-nav-red)'} />
+                                <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
                             </span>
                             <BodyShort>{tekster?.alert?.exampleHorizontal}</BodyShort>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <div style={{display:'flex', alignItems: 'center', paddingTop: '0.5rem', paddingBottom: '0.5rem'}}>
+                    <div
+                        style={{ display: 'flex', alignItems: 'center', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}
+                    >
                         <ScanningIcon status={'shadow'} title={tekster?.alert?.exampleLabelBad} />
-                        <div style={{padding: '0.5rem'}}>
-                        <span className={'scanning-example-status'}>
-                          <Error color={'var(--a-nav-red)'} />
-                          <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
-                        </span>
+                        <div style={{ padding: '0.5rem' }}>
+                            <span className={'scanning-example-status'}>
+                                <Error color={'var(--a-nav-red)'} />
+                                <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
+                            </span>
                             <BodyShort>{tekster?.alert?.exampleShaddow}</BodyShort>
                         </div>
                     </div>

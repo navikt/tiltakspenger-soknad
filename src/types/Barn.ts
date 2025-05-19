@@ -7,5 +7,4 @@ export interface Barn {
     uuid: string;
     oppholdInnenforEøs?: boolean;
     index?: number;
-
 }

@@ -6,8 +6,8 @@ export default () => {
         <>
             <p>
                 For å ha rett til tiltakspenger må du delta i et arbeidsmarkedstiltak som er godkjent av NAV. Under
-                vises arbeidsmarkedstiltak som du enten har fått plass på, deltar på eller nylig har deltatt på.
-                Vi viser bare dine arbeidsmarkedstiltak som gir rett til tiltakspenger.
+                vises arbeidsmarkedstiltak som du enten har fått plass på, deltar på eller nylig har deltatt på. Vi
+                viser bare dine arbeidsmarkedstiltak som gir rett til tiltakspenger.
             </p>
 
             <p>

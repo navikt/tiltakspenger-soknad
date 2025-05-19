@@ -20,7 +20,7 @@ function createClientAssertion(key: any) {
     const assertionHeaders = {
         kid: key.kid,
         typ: 'JWT',
-        alg: 'RS256'
+        alg: 'RS256',
     };
 
     const now = Math.floor(Date.now() / 1000);
@@ -32,7 +32,7 @@ function createClientAssertion(key: any) {
         jti: uuidv4(),
         nbf: now,
         iat: now,
-        exp: now + 10
+        exp: now + 10,
     };
 
     return jwt.sign(assertionClaims, key.toPEM(true), { header: assertionHeaders, algorithm: 'RS256' });
@@ -56,9 +56,9 @@ async function exchangeToken(subjectToken: string) {
     const response = await fetch(tokenEndpoint || '', {
         method: 'post',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: params
+        body: params,
     });
 
     const data = await response.json();
@@ -91,7 +91,7 @@ export function redirectToLogin(context: GetServerSidePropsContext) {
     return {
         redirect: {
             destination: `/oauth2/login?redirect=${context.resolvedUrl}`,
-            permanent: false
-        }
+            permanent: false,
+        },
     };
 }

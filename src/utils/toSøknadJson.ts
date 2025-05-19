@@ -141,7 +141,7 @@ function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
 export default function toSøknadJson(
     spørsmålsbesvarelser: Spørsmålsbesvarelser,
     barnFraApi: Barn[],
-    valgtTiltak: Tiltak
+    valgtTiltak: Tiltak,
 ): String {
     return JSON.stringify({
         ...spørsmålsbesvarelser,

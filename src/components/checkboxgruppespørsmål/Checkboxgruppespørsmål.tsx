@@ -1,6 +1,6 @@
 import React from 'react';
-import { Controller, useFormContext, get } from 'react-hook-form';
-import { CheckboxGroup, Checkbox, ReadMore } from '@navikt/ds-react';
+import { Controller, get, useFormContext } from 'react-hook-form';
+import { Checkbox, CheckboxGroup, ReadMore } from '@navikt/ds-react';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
 
@@ -16,6 +16,7 @@ interface CheckboxgruppespørsmålProps {
     validate?: ValidatorFunction;
     hjelpetekst?: Hjelpetekst;
 }
+
 export default function Checkboxgruppespørsmål({
     name,
     alternativer,

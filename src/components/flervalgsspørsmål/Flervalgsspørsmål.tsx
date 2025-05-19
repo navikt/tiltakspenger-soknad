@@ -1,6 +1,6 @@
 import React from 'react';
-import { Controller, useFormContext, get } from 'react-hook-form';
-import { RadioGroup, Radio, ReadMore } from '@navikt/ds-react';
+import { Controller, get, useFormContext } from 'react-hook-form';
+import { Radio, RadioGroup, ReadMore } from '@navikt/ds-react';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import { Hjelpetekst } from '@/types/Hjelpetekst';
 
@@ -17,6 +17,7 @@ interface FlervalgsspørsmålProps {
     hjelpetekst?: Hjelpetekst;
     afterOnChange?: () => void;
 }
+
 export default function Flervalgsspørsmål({
     name,
     alternativer,
@@ -39,10 +40,10 @@ export default function Flervalgsspørsmål({
                     value={value || ''}
                     name={name}
                     onBlur={onBlur}
-                onChange={(event) => {
-                    onChange(event)
-                    afterOnChange && afterOnChange()
-                }}
+                    onChange={(event) => {
+                        onChange(event);
+                        afterOnChange && afterOnChange();
+                    }}
                     error={errorMessage}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}

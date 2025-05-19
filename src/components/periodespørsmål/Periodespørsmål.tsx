@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import {Label, ReadMore} from '@navikt/ds-react';
+import { Label, ReadMore } from '@navikt/ds-react';
 import Periodevelger from '@/components/datovelger/Periodevelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Periodespørsmål.module.css';
@@ -38,7 +38,7 @@ export default function Periodespørsmål({
     maxDate,
     hjelpetekst,
     disabledTil,
-    disabledFra
+    disabledFra,
 }: PeriodespørsmålProps) {
     const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
@@ -70,7 +70,7 @@ export default function Periodespørsmål({
                             }}
                             defaultSelected={{
                                 fra: defaultFra,
-                                til: defaultTil
+                                til: defaultTil,
                             }}
                             errorMessage={errorMessage}
                             minDate={minDate}
@@ -78,7 +78,7 @@ export default function Periodespørsmål({
                             disabledFra={disabledFra}
                             disabledTil={disabledTil}
                         />
-                    )
+                    );
                 }}
             />
         </div>

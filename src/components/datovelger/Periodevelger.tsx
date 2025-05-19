@@ -1,4 +1,4 @@
-import { ErrorMessage, DatePicker, useDatepicker } from '@navikt/ds-react';
+import { DatePicker, ErrorMessage, useDatepicker } from '@navikt/ds-react';
 import React, { useState } from 'react';
 
 export interface PeriodevelgerPeriode {

@@ -1,9 +1,7 @@
 import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { Søknadssteg } from '@/types/Søknadssteg';
 
-export function brukerHarFyltUtTiltakssteg({
-    tiltak: { aktivitetId, periode },
-}: Spørsmålsbesvarelser) {
+export function brukerHarFyltUtTiltakssteg({ tiltak: { aktivitetId, periode } }: Spørsmålsbesvarelser) {
     return !!aktivitetId && !!periode && !!periode.fra && !!periode.til;
 }
 
@@ -11,10 +9,7 @@ export function brukerHarFyltUtProgramDeltagelseSteg({
     kvalifiseringsprogram,
     introduksjonsprogram,
 }: Spørsmålsbesvarelser) {
-    if (
-        kvalifiseringsprogram.deltar === undefined ||
-        introduksjonsprogram.deltar === undefined
-    ) {
+    if (kvalifiseringsprogram.deltar === undefined || introduksjonsprogram.deltar === undefined) {
         return false;
     }
 
@@ -47,10 +42,17 @@ export function brukerHarFyltUtInstitusjonsoppholdSteg({ institusjonsopphold }: 
 }
 
 export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Spørsmålsbesvarelser) {
-    const { mottarAndreUtbetalinger, sykepenger, alderspensjon,
-            gjenlevendepensjon, pensjonsordning, etterlønn,
-            supplerendestønadover67, supplerendestønadflyktninger,
-            jobbsjansen} = spørsmålsbesvarelser;
+    const {
+        mottarAndreUtbetalinger,
+        sykepenger,
+        alderspensjon,
+        gjenlevendepensjon,
+        pensjonsordning,
+        etterlønn,
+        supplerendestønadover67,
+        supplerendestønadflyktninger,
+        jobbsjansen,
+    } = spørsmålsbesvarelser;
 
     if (mottarAndreUtbetalinger === undefined) {
         return false;
@@ -106,11 +108,17 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
         }
     }
 
-    if (mottarAndreUtbetalinger && !((gjenlevendepensjon && gjenlevendepensjon.mottar) ||
-        (alderspensjon && alderspensjon.mottar) || (jobbsjansen && jobbsjansen.mottar) ||
-        (supplerendestønadover67 && supplerendestønadover67.mottar) || (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
-        (pensjonsordning && pensjonsordning.mottar)
-    )) {
+    if (
+        mottarAndreUtbetalinger &&
+        !(
+            (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
+            (alderspensjon && alderspensjon.mottar) ||
+            (jobbsjansen && jobbsjansen.mottar) ||
+            (supplerendestønadover67 && supplerendestønadover67.mottar) ||
+            (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
+            (pensjonsordning && pensjonsordning.mottar)
+        )
+    ) {
         return false;
     }
 
@@ -127,8 +135,7 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
     } else if (steg === Søknadssteg.PROGRAM_DELTAGELSE) {
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
-        return brukerHarFyltUtTiltakssteg(svar) &&
-               brukerHarFyltUtProgramDeltagelseSteg(svar);
+        return brukerHarFyltUtTiltakssteg(svar) && brukerHarFyltUtProgramDeltagelseSteg(svar);
     } else if (steg === Søknadssteg.INSTITUSJONSOPPHOLD) {
         return (
             brukerHarFyltUtTiltakssteg(svar) &&

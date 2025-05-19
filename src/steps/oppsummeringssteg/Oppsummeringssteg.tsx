@@ -144,13 +144,16 @@ export default function Oppsummeringssteg({
                     <Accordion.Header>Tiltak</Accordion.Header>
                     <Accordion.Content>
                         <div>
-                            <span>{valgtTiltak?.arrangør || ''}
-                                  {valgtTiltak?.arrangør && valgtTiltak?.typeNavn && ' - '}
-                                  {valgtTiltak?.typeNavn || ''}
-                            </span><br/>
-                            <span>{formatDate(opprinneligTiltaksperiode!.fra)}
-                                  {opprinneligTiltaksperiode!.fra && opprinneligTiltaksperiode!.til && ' - '}
-                                  {formatDate(opprinneligTiltaksperiode!.til  || '')}
+                            <span>
+                                {valgtTiltak?.arrangør || ''}
+                                {valgtTiltak?.arrangør && valgtTiltak?.typeNavn && ' - '}
+                                {valgtTiltak?.typeNavn || ''}
+                            </span>
+                            <br />
+                            <span>
+                                {formatDate(opprinneligTiltaksperiode!.fra)}
+                                {opprinneligTiltaksperiode!.fra && opprinneligTiltaksperiode!.til && ' - '}
+                                {formatDate(opprinneligTiltaksperiode!.til || '')}
                             </span>
                         </div>
                         <div style={{ marginTop: '1rem' }}>
@@ -167,18 +170,18 @@ export default function Oppsummeringssteg({
                         <Oppsummeringsfelt
                             feltNavn="Introduksjonsstønad"
                             feltVerdi={hentSvarTilProgramDeltagelse(
-                                "introduksjonsstønad",
+                                'introduksjonsstønad',
                                 introduksjonsprogram.deltar,
-                                introduksjonsprogram.periode
+                                introduksjonsprogram.periode,
                             )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Kvalifiseringsstønad"
                                 feltVerdi={hentSvarTilProgramDeltagelse(
-                                    "kvalifiseringsstønad",
+                                    'kvalifiseringsstønad',
                                     kvalifiseringsprogram.deltar,
-                                    kvalifiseringsprogram.periode
+                                    kvalifiseringsprogram.periode,
                                 )}
                             />
                         </div>
@@ -189,20 +192,23 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <Oppsummeringsfelt
                             feltNavn="Etterlønn"
-                            feltVerdi={hentSvarTilSpørsmålene("etterlønn fra en tidligere arbeidsgiver i perioden jeg går på tiltak", etterlønn.mottar)}
+                            feltVerdi={hentSvarTilSpørsmålene(
+                                'etterlønn fra en tidligere arbeidsgiver i perioden jeg går på tiltak',
+                                etterlønn.mottar,
+                            )}
                         />
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Sykepenger"
-                                feltVerdi={hentSvarTilSpørsmålene("sykepenger", sykepenger.mottar, sykepenger.periode)}
+                                feltVerdi={hentSvarTilSpørsmålene('sykepenger', sykepenger.mottar, sykepenger.periode)}
                             />
                         </div>
                         <div style={{ marginTop: '2rem' }}>
                             <Oppsummeringsfelt
                                 feltNavn="Annen pengestøtte"
                                 feltVerdi={hentSvarTilSpørsmålene(
-                                    "annen pengestøtte i perioden jeg går på tiltak",
-                                    mottarAndreUtbetalinger
+                                    'annen pengestøtte i perioden jeg går på tiltak',
+                                    mottarAndreUtbetalinger,
                                 )}
                             />
                         </div>
@@ -211,22 +217,29 @@ export default function Oppsummeringssteg({
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
                                         feltNavn="Gjenlevendepensjon og omstillingsstønad"
-                                        feltVerdi={hentSvarTilSpørsmålene("gjenlevendepensjon eller omstillingsstønad", gjenlevendepensjon.mottar, gjenlevendepensjon.periode)}
+                                        feltVerdi={hentSvarTilSpørsmålene(
+                                            'gjenlevendepensjon eller omstillingsstønad',
+                                            gjenlevendepensjon.mottar,
+                                            gjenlevendepensjon.periode,
+                                        )}
                                     />
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
                                         feltNavn="Alderspensjon"
-                                        feltVerdi={oppsummeringAlderspensjon(alderspensjon.mottar, alderspensjon.fraDato!)}
+                                        feltVerdi={oppsummeringAlderspensjon(
+                                            alderspensjon.mottar,
+                                            alderspensjon.fraDato!,
+                                        )}
                                     />
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
                                         feltNavn="Supplerende stønad for personer over 67 år med kort botid i Norge"
                                         feltVerdi={hentSvarTilSpørsmålene(
-                                            "supplerende stønad for personer over 67 år med kort botid i Norge",
+                                            'supplerende stønad for personer over 67 år med kort botid i Norge',
                                             supplerendestønadover67.mottar,
-                                            supplerendestønadover67.periode
+                                            supplerendestønadover67.periode,
                                         )}
                                     />
                                 </div>
@@ -234,22 +247,30 @@ export default function Oppsummeringssteg({
                                     <Oppsummeringsfelt
                                         feltNavn="Supplerende stønad for uføre flyktninger"
                                         feltVerdi={hentSvarTilSpørsmålene(
-                                            "supplerende stønad for uføre flyktninger",
+                                            'supplerende stønad for uføre flyktninger',
                                             supplerendestønadflyktninger.mottar,
-                                            supplerendestønadflyktninger.periode
+                                            supplerendestønadflyktninger.periode,
                                         )}
                                     />
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
                                         feltNavn="Pengestøtte fra andre trygde- eller pensjonsordninger"
-                                        feltVerdi={hentSvarTilSpørsmålene("pengestøtte fra andre trygde- eller pensjonsordninger", pensjonsordning.mottar, pensjonsordning.periode)}
+                                        feltVerdi={hentSvarTilSpørsmålene(
+                                            'pengestøtte fra andre trygde- eller pensjonsordninger',
+                                            pensjonsordning.mottar,
+                                            pensjonsordning.periode,
+                                        )}
                                     />
                                 </div>
                                 <div style={{ marginTop: '2rem' }}>
                                     <Oppsummeringsfelt
                                         feltNavn="Stønad gjennom Jobbsjansen"
-                                        feltVerdi={hentSvarTilSpørsmålene("stønad gjennom Jobbsjansen", jobbsjansen.mottar, jobbsjansen.periode)}
+                                        feltVerdi={hentSvarTilSpørsmålene(
+                                            'stønad gjennom Jobbsjansen',
+                                            jobbsjansen.mottar,
+                                            jobbsjansen.periode,
+                                        )}
                                     />
                                 </div>
                             </>
@@ -263,7 +284,7 @@ export default function Oppsummeringssteg({
                             feltNavn=""
                             feltVerdi={oppsummeringInstitusjon(
                                 institusjonsopphold.borPåInstitusjon,
-                                institusjonsopphold.periode
+                                institusjonsopphold.periode,
                             )}
                         />
                     </Accordion.Content>
@@ -271,25 +292,25 @@ export default function Oppsummeringssteg({
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Barnetillegg</Accordion.Header>
                     <Accordion.Content>
-                        {alleBarnSøktBarnetilleggFor.length > 0 ?
-                            alleBarnSøktBarnetilleggFor.map((barn, index) => {
-                            const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid);
-                            return (
-                                <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }} key={barn.uuid}>
-                                    <BarneInfo
-                                        vedlegg={barnetsVedlegg}
-                                        barn={{
-                                            ...barn,
-                                            oppholdInnenforEøs:
-                                                barn.oppholdInnenforEøs ??
-                                                barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
-                                        }}
-                                    />
-                                    {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
-                                </div>
-                            );
-                            }) : 'Jeg søker ikke om barnetillegg'
-                        }
+                        {alleBarnSøktBarnetilleggFor.length > 0
+                            ? alleBarnSøktBarnetilleggFor.map((barn, index) => {
+                                  const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid);
+                                  return (
+                                      <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }} key={barn.uuid}>
+                                          <BarneInfo
+                                              vedlegg={barnetsVedlegg}
+                                              barn={{
+                                                  ...barn,
+                                                  oppholdInnenforEøs:
+                                                      barn.oppholdInnenforEøs ??
+                                                      barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
+                                              }}
+                                          />
+                                          {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
+                                      </div>
+                                  );
+                              })
+                            : 'Jeg søker ikke om barnetillegg'}
                     </Accordion.Content>
                 </Accordion.Item>
             </Accordion>

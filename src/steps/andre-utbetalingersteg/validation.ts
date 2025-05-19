@@ -1,13 +1,16 @@
 import { påkrevdDatoValidator, påkrevdJaNeiSpørsmålValidator, påkrevdPeriodeValidator } from '@/utils/formValidators';
 import { FormPeriode } from '@/types/FormPeriode';
-import Spørsmålsbesvarelser from "@/types/Spørsmålsbesvarelser";
+import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 
 export function sykepengerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar sykepenger');
 }
 
 export function gjenlevendepensjonValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar gjenlevendepensjon eller omstillingsstønad');
+    return påkrevdJaNeiSpørsmålValidator(
+        verdi,
+        'Du må svare på om du har søkt eller mottar gjenlevendepensjon eller omstillingsstønad',
+    );
 }
 
 export function alderspensjonValidator(verdi: boolean) {
@@ -19,7 +22,10 @@ export function pensjonsordningValidator(verdi: boolean) {
 }
 
 export function jobbsjansenValidator(verdi: boolean) {
-    return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du har søkt eller mottar stønad gjennom Jobbsjansen');
+    return påkrevdJaNeiSpørsmålValidator(
+        verdi,
+        'Du må svare på om du har søkt eller mottar stønad gjennom Jobbsjansen',
+    );
 }
 
 export function etterlønnValidator(verdi: boolean) {
@@ -29,14 +35,14 @@ export function etterlønnValidator(verdi: boolean) {
 export function supplerendeStønadOver67Validator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(
         verdi,
-        'Du må svare på om du har søkt eller mottar supplerende stønad for personer over 67 år'
+        'Du må svare på om du har søkt eller mottar supplerende stønad for personer over 67 år',
     );
 }
 
 export function supplerendeStønadFlyktningerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(
         verdi,
-        'Du må svare på om du har søkt eller mottar supplerende stønad for uføre flyktninger'
+        'Du må svare på om du har søkt eller mottar supplerende stønad for uføre flyktninger',
     );
 }
 
@@ -45,7 +51,10 @@ export function påkrevdSykepengerPeriodeValidator(periode: FormPeriode) {
 }
 
 export function påkrevdGjenlevendepensjonPeriodeValidator(periode: FormPeriode) {
-    return påkrevdPeriodeValidator(periode, 'Du må oppgi hvilken periode du mottar gjenlevendepensjon eller omstillingsstønad');
+    return påkrevdPeriodeValidator(
+        periode,
+        'Du må oppgi hvilken periode du mottar gjenlevendepensjon eller omstillingsstønad',
+    );
 }
 
 export function påkrevdJobbsjansenPeriodeValidator(periode: FormPeriode) {
@@ -59,14 +68,14 @@ export function påkrevdPensjonsordningPeriodeValidator(periode: FormPeriode) {
 export function påkrevdSupplerendeStønadOver67PeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(
         periode,
-        'Du må oppgi hvilken periode du mottar supplerende stønad for personer over 67 år'
+        'Du må oppgi hvilken periode du mottar supplerende stønad for personer over 67 år',
     );
 }
 
 export function påkrevdSupplerendeStønadFlyktningerPeriodeValidator(periode: FormPeriode) {
     return påkrevdPeriodeValidator(
         periode,
-        'Du må oppgi hvilken periode du mottar supplerende stønad for uføre flyktninger'
+        'Du må oppgi hvilken periode du mottar supplerende stønad for uføre flyktninger',
     );
 }
 
@@ -78,12 +87,28 @@ export function mottarAndreUtbetalingerValidator(verdi: boolean) {
     return påkrevdJaNeiSpørsmålValidator(verdi, 'Du må svare på om du mottar andre utbetalinger');
 }
 
-export function minstEnAnnenUtbetalingHvisJaValidator({ alderspensjon, gjenlevendepensjon, pensjonsordning, supplerendestønadover67, supplerendestønadflyktninger, jobbsjansen}: Spørsmålsbesvarelser, mottarAndreUtbetalinger: boolean) {
-    if (mottarAndreUtbetalinger && !((gjenlevendepensjon && gjenlevendepensjon.mottar) ||
-        (alderspensjon && alderspensjon.mottar) || (jobbsjansen && jobbsjansen.mottar) ||
-        (supplerendestønadover67 && supplerendestønadover67.mottar) || (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
-        (pensjonsordning && pensjonsordning.mottar))
+export function minstEnAnnenUtbetalingHvisJaValidator(
+    {
+        alderspensjon,
+        gjenlevendepensjon,
+        pensjonsordning,
+        supplerendestønadover67,
+        supplerendestønadflyktninger,
+        jobbsjansen,
+    }: Spørsmålsbesvarelser,
+    mottarAndreUtbetalinger: boolean,
+) {
+    if (
+        mottarAndreUtbetalinger &&
+        !(
+            (gjenlevendepensjon && gjenlevendepensjon.mottar) ||
+            (alderspensjon && alderspensjon.mottar) ||
+            (jobbsjansen && jobbsjansen.mottar) ||
+            (supplerendestønadover67 && supplerendestønadover67.mottar) ||
+            (supplerendestønadflyktninger && supplerendestønadflyktninger.mottar) ||
+            (pensjonsordning && pensjonsordning.mottar)
+        )
     ) {
-        return "Du må svare ja på at du mottar minst én annen utbetaling"
+        return 'Du må svare ja på at du mottar minst én annen utbetaling';
     }
 }

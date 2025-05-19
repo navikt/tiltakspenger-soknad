@@ -60,7 +60,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
                     </UtfyllingSetStateContext.Provider>
                 </UtfyllingContext.Provider>
             </FormProvider>
-        </main>
+        </main>,
     );
 }
 

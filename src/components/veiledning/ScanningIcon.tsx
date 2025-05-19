@@ -16,7 +16,14 @@ const GoodScanning = ({ title, height }: ScanProps) => {
         <svg role="presentation" aria-hidden focusable="false" viewBox="0 0 83 121" height={height}>
             {title && <title>{title}</title>}
             <defs>
-                <filter x="-10.6%" y="-5.4%" width="121.2%" height="115.1%" filterUnits="objectBoundingBox" id="good_1__a">
+                <filter
+                    x="-10.6%"
+                    y="-5.4%"
+                    width="121.2%"
+                    height="115.1%"
+                    filterUnits="objectBoundingBox"
+                    id="good_1__a"
+                >
                     <feOffset dy={2} in="SourceAlpha" result="shadowOffsetOuter1" />
                     <feGaussianBlur stdDeviation={2} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
                     <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" in="shadowBlurOuter1" />
@@ -43,7 +50,14 @@ const KeystoneScanning = ({ title, height }: ScanProps) => {
             {title && <title>{title}</title>}
             <desc>Bildet er ikke tatt ovenfra</desc>
             <defs>
-                <filter x="-9.7%" y="-7.2%" width="119.4%" height="120.3%" filterUnits="objectBoundingBox" id="keystone_2__a">
+                <filter
+                    x="-9.7%"
+                    y="-7.2%"
+                    width="119.4%"
+                    height="120.3%"
+                    filterUnits="objectBoundingBox"
+                    id="keystone_2__a"
+                >
                     <feOffset dy={2} in="SourceAlpha" result="shadowOffsetOuter1" />
                     <feGaussianBlur stdDeviation={2} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
                     <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" in="shadowBlurOuter1" />
@@ -104,7 +118,14 @@ const ShadowScanning = ({ title, height }: ScanProps) => {
             {title && <title>{title}</title>}
             <desc>Bildet har skygge</desc>
             <defs>
-                <filter x="-10%" y="-5.2%" width="120%" height="114.6%" filterUnits="objectBoundingBox" id="shadow_4__a">
+                <filter
+                    x="-10%"
+                    y="-5.2%"
+                    width="120%"
+                    height="114.6%"
+                    filterUnits="objectBoundingBox"
+                    id="shadow_4__a"
+                >
                     <feOffset dy={2} in="SourceAlpha" result="shadowOffsetOuter1" />
                     <feGaussianBlur stdDeviation={2} in="shadowOffsetOuter1" result="shadowBlurOuter1" />
                     <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" in="shadowBlurOuter1" />

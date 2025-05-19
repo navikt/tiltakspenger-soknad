@@ -4,7 +4,7 @@ import { Alert } from '@navikt/ds-react';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import { gyldigPeriodeValidator } from '@/utils/formValidators';
 import { påkrevdTiltaksperiodeSpørsmål } from '@/steps/tiltakssteg/validation';
-import {FormTiltak} from "@/types/Spørsmålsbesvarelser";
+import { FormTiltak } from '@/types/Spørsmålsbesvarelser';
 
 interface TiltakMedUfullstendigPeriodeUtfyllingProps {
     valgtTiltakManglerKunTilDato: boolean;

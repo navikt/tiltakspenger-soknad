@@ -25,7 +25,7 @@ export interface FormTiltak {
 export interface Barnetillegg {
     manueltRegistrerteBarnSøktBarnetilleggFor: Barn[];
     eøsOppholdForBarnFraAPI: Record<string, boolean>;
-    kladd: Barn
+    kladd: Barn;
 }
 
 export interface Pensjonsordning {

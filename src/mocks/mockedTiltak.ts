@@ -3,7 +3,7 @@ export const mocketTiltak = [
         aktivitetId: '123',
         type: 'Annen utdanning',
         typeNavn: 'Annen utdanning',
-        arenaRegistrertPeriode: { },
+        arenaRegistrertPeriode: {},
         arrangør: 'Testarrangør',
         status: 'Aktuell',
     },
