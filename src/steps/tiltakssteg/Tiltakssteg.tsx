@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
-import {Alert, Button, Link, List} from '@navikt/ds-react';
+import { Alert, Button, Heading, Link, List } from '@navikt/ds-react';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { valgtTiltakValidator } from '@/steps/tiltakssteg/validation';
@@ -45,7 +45,10 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
         >
             {brukerHarRegistrerteTiltakMedUgyldigPeriode && (
                 <Alert variant="warning" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
-                    <List as="ul" title="Vi har funnet tiltak som mangler start- eller sluttdato">
+                    <Heading size="small" level="2">
+                        Vi har funnet tiltak som mangler start- eller sluttdato
+                    </Heading>
+                    <List as="ul">
                         {tiltakMedUgyldigPeriode.map((t) => (
                             <List.Item key={t.aktivitetId}>{lagTiltaksalternativTekst(t)}</List.Item>
                         ))}
