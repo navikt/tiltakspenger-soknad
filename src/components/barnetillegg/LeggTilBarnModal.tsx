@@ -28,7 +28,7 @@ export interface LeggTilBarnModalImperativeHandle {
 
 export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandle, LeggTilBarnModalProps>(
     function LeggTilBarnModal({ fieldArray }: LeggTilBarnModalProps, ref) {
-        const { trigger, getValues, control, setValue, clearErrors } = useFormContext<Søknad>();
+        const { trigger, getValues, control, setValue, resetField, clearErrors } = useFormContext<Søknad>();
         const uuid = useRef(uuidv4());
         const modalRef = useRef<HTMLDialogElement>(null);
         const modalErLukket = !modalRef?.current?.open;
@@ -106,6 +106,8 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
 
         const lukkModal = () => {
             clearErrors('svar.barnetillegg.kladd');
+            // TODO Fødselsdato blir ikke resatt til tom..
+            resetField('svar.barnetillegg.kladd');
             slettVedleggUtenTilknytningTilBarn();
             modalRef?.current?.close();
         };
