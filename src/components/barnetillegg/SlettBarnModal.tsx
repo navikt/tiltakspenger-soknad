@@ -1,5 +1,5 @@
-import { Button, Heading, Modal } from '@navikt/ds-react';
-import React, { useState } from 'react';
+import { Button, Modal } from '@navikt/ds-react';
+import React, { useRef } from 'react';
 import { TrashIcon } from '@navikt/aksel-icons';
 import styles from './Barnetillegg.module.css';
 import stepStyles from './../../components/step/Step.module.css';
@@ -11,10 +11,10 @@ interface SlettModalProps {
 }
 
 export const SlettBarnModal: React.FC<SlettModalProps> = ({ barn, onDelete }) => {
-    const [open, setOpen] = useState(false);
+    const modalRef = useRef<HTMLDialogElement>(null);
 
-    const åpneModal = () => setOpen(true);
-    const lukkModal = () => setOpen(false);
+    const åpneModal = () => modalRef?.current?.showModal();
+    const lukkModal = () => modalRef?.current?.close();
 
     return (
         <>
@@ -23,16 +23,12 @@ export const SlettBarnModal: React.FC<SlettModalProps> = ({ barn, onDelete }) =>
             </Button>
 
             <Modal
-                open={open}
-                aria-label="Slett barn fra søknaden"
-                onClose={lukkModal}
-                aria-labelledby="modal-heading"
+                ref={modalRef}
                 className={styles.modalSlettBarn}
+                header={{ heading: 'Slett barn fra søknaden' }}
+                onClose={lukkModal}
             >
-                <Modal.Content role="dialog">
-                    <Heading spacing level="1" size="large" id="modal-heading">
-                        Slett barn fra søknaden
-                    </Heading>
+                <Modal.Body role="dialog">
                     <p>{`Er du sikker på at du vil slette barnet ${barn.fornavn} ${barn.etternavn} fra søknaden?`}</p>
                     <div className={stepStyles.step__buttonsection}>
                         <Button type="button" onClick={lukkModal} variant="secondary">
@@ -49,7 +45,7 @@ export const SlettBarnModal: React.FC<SlettModalProps> = ({ barn, onDelete }) =>
                             Slett
                         </Button>
                     </div>
-                </Modal.Content>
+                </Modal.Body>
             </Modal>
         </>
     );
