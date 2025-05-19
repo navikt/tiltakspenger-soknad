@@ -13,6 +13,7 @@ interface FileUploaderProps {
     knappTekst: string;
     uuid: string;
 }
+
 export default function FileUploader({ name, control, knappTekst, uuid }: FileUploaderProps) {
     const [error, setError] = React.useState('');
     const [dragOver, setDragOver] = React.useState<boolean>(false);
@@ -72,9 +73,9 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
     };
 
     const validerOppløsningVedCallback = (bildefil: Blob, url: string, index: number) => {
-        const fileReader = new FileReader;
+        const fileReader = new FileReader();
         fileReader.onload = () => {
-            const img = new Image;
+            const img = new Image();
             img.onload = () => {
                 if (img.naturalWidth > MAKS_DIMENSJON || img.naturalHeight > MAKS_DIMENSJON) {
                     setError('Bildet er for stort');
@@ -85,7 +86,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
             img.src = fileReader.result as string;
         };
         fileReader.readAsDataURL(bildefil);
-    }
+    };
 
     const fileSizeString = (size: number) => {
         const kb = size / 1024;

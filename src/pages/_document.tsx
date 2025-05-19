@@ -1,5 +1,5 @@
-import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
-import { fetchDecoratorReact, DecoratorComponentsReact } from '@navikt/nav-dekoratoren-moduler/ssr';
+import Document, { DocumentContext, Head, Html, Main, NextScript } from 'next/document';
+import { DecoratorComponentsReact, fetchDecoratorReact } from '@navikt/nav-dekoratoren-moduler/ssr';
 import serverLogger from '@/utils/serverLogger';
 
 interface PageDocumentProps {

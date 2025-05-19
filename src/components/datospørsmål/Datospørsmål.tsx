@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import {Label, ReadMore} from '@navikt/ds-react';
+import { Label, ReadMore } from '@navikt/ds-react';
 import Datovelger from '@/components/datovelger/Datovelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Datospørsmål.module.css';
@@ -22,7 +22,6 @@ function validatorArrayAsObject(validate: ValidatorFunction[]) {
     validate.forEach((validatorFunction, index) => (validateObject[`${index}`] = validatorFunction));
     return validateObject;
 }
-
 
 function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
     if (Array.isArray(validate)) {

@@ -5,7 +5,11 @@ import { Alert, Button, Heading, Link, List } from '@navikt/ds-react';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { valgtTiltakValidator } from '@/steps/tiltakssteg/validation';
-import {harFullstendigPeriode, lagSvaralternativForTiltak, lagTiltaksalternativTekst} from '@/steps/tiltakssteg/utils';
+import {
+    harFullstendigPeriode,
+    lagSvaralternativForTiltak,
+    lagTiltaksalternativTekst,
+} from '@/steps/tiltakssteg/utils';
 
 interface TiltaksstegProps {
     title: string;
@@ -18,17 +22,20 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
     const { tiltak } = useContext(UtfyllingContext);
     const brukerHarRegistrerteTiltak = !!tiltak && tiltak.length > 0;
     const tiltakMedGyldigPeriode = tiltak?.filter(harFullstendigPeriode);
-    const tiltakMedUgyldigPeriode = tiltak?.filter(t => !harFullstendigPeriode(t));
+    const tiltakMedUgyldigPeriode = tiltak?.filter((t) => !harFullstendigPeriode(t));
     const brukerHarRegistrerteTiltakMedGyldigPeriode = !!tiltakMedGyldigPeriode && tiltakMedGyldigPeriode.length > 0;
     const brukerHarRegistrerteTiltakMedUgyldigPeriode = !!tiltakMedUgyldigPeriode && tiltakMedUgyldigPeriode.length > 0;
 
     const submitSectionRenderer = !brukerHarRegistrerteTiltakMedGyldigPeriode
         ? () => (
-            <Link href="https://www.nav.no/minside" style={{ margin: '1rem auto', display: 'block', width: "fit-content"}}>
-              <Button type="button" as="a">
-                  Avbryt søknaden og gå til Min side
-              </Button>
-            </Link>
+              <Link
+                  href="https://www.nav.no/minside"
+                  style={{ margin: '1rem auto', display: 'block', width: 'fit-content' }}
+              >
+                  <Button type="button" as="a">
+                      Avbryt søknaden og gå til Min side
+                  </Button>
+              </Link>
           )
         : undefined;
 
@@ -53,8 +60,8 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
                             <List.Item key={t.aktivitetId}>{lagTiltaksalternativTekst(t)}</List.Item>
                         ))}
                     </List>
-                    Dersom du ønsker å søke tiltakspenger for et av disse tiltakene, må du sende søknad på
-                    papir eller kontakte oss slik at vi kan registrere fullstendig periode på tiltaket.
+                    Dersom du ønsker å søke tiltakspenger for et av disse tiltakene, må du sende søknad på papir eller
+                    kontakte oss slik at vi kan registrere fullstendig periode på tiltaket.
                 </Alert>
             )}
             {brukerHarRegistrerteTiltakMedGyldigPeriode && (

@@ -51,7 +51,7 @@ export function påkrevdSvarValidator(verdi: string, feilmelding: string) {
 export function periodeInngårIAnnenPeriodeValidator(
     periode: FormPeriode,
     periodeÅValidereMot: Periode | FormPeriode,
-    feilmelding: string
+    feilmelding: string,
 ) {
     const fraDato = dayjs(periode?.fra);
     const tilDato = dayjs(periode?.til);
@@ -70,6 +70,6 @@ export function periodenErInnenforTiltaksperiodeValidator(periode: FormPeriode, 
     return periodeInngårIAnnenPeriodeValidator(
         periode,
         tiltaksperiode!,
-        `Perioden kan ikke gå utenfor perioden på det registrerte tiltaket (${formatPeriode(tiltaksperiode!)})`
+        `Perioden kan ikke gå utenfor perioden på det registrerte tiltaket (${formatPeriode(tiltaksperiode!)})`,
     );
 }

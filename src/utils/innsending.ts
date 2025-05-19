@@ -11,8 +11,8 @@ export function lagFormDataForInnsending(søknad: Søknad, personalia: Personali
         .filter(
             (v) =>
                 søknad.svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.find(
-                    (elem) => elem.uuid === v.uuid
-                ) != undefined
+                    (elem) => elem.uuid === v.uuid,
+                ) != undefined,
         )
         .forEach((vedlegg, index) => {
             formData.append(`vedlegg-${index}`, vedlegg.file);

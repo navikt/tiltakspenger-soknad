@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { v4 as uuidv4 } from 'uuid';
-import { Button, Link, Heading } from '@navikt/ds-react';
+import { Button, Heading, Link } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import Accordion from '@/components/accordion/Accordion';
 import Bekreftelsesspørsmål from '@/components/bekreftelsesspørsmål/Bekreftelsesspørsmål';

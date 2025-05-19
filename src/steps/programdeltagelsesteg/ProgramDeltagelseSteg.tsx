@@ -13,7 +13,7 @@ import {
     påkrevdIntroprogramPeriodeValidator,
     påkrevdKvpPeriodeValidator,
 } from '@/steps/programdeltagelsesteg/validation';
-import {Alert, Link} from '@navikt/ds-react';
+import { Alert, Link } from '@navikt/ds-react';
 
 interface ProgramDeltagelseStegProps {
     title: string;
@@ -55,8 +55,8 @@ export default function ProgramDeltagelseSteg({
             guide={
                 <React.Fragment>
                     <p>
-                        Hvis du mottar kvalifiseringsstønad eller introduksjonsstønad har du <b>ikke</b> rett
-                        på tiltakspenger. Du må derfor svare på spørsmål om dette.
+                        Hvis du mottar kvalifiseringsstønad eller introduksjonsstønad har du <b>ikke</b> rett på
+                        tiltakspenger. Du må derfor svare på spørsmål om dette.
                     </p>
                 </React.Fragment>
             }
@@ -70,10 +70,10 @@ export default function ProgramDeltagelseSteg({
                         tekst: (
                             <>
                                 <p>
-                                    Du får utbetalt kvalifiseringsstønad når du deltar i kvalifiseringsprogrammet.
-                                    Det kan være aktuelt for personer som har levd på sosialhjelp over lang tid,
-                                    eller står i fare for å komme i en slik situasjon. Programmet er et tilbud om
-                                    opplæring og arbeidstrening, og oppfølging for å komme i meningsfull aktivitet.
+                                    Du får utbetalt kvalifiseringsstønad når du deltar i kvalifiseringsprogrammet. Det
+                                    kan være aktuelt for personer som har levd på sosialhjelp over lang tid, eller står
+                                    i fare for å komme i en slik situasjon. Programmet er et tilbud om opplæring og
+                                    arbeidstrening, og oppfølging for å komme i meningsfull aktivitet.
                                 </p>
 
                                 <p>
@@ -119,11 +119,10 @@ export default function ProgramDeltagelseSteg({
                         tekst: (
                             <>
                                 <p>
-                                    Du får utbetalt introduksjonsstønad når du deltar i introduksjonsprogrammet.
-                                    Dette er en ordning for nyankomne flyktninger. Hvis du er med i
-                                    introduksjonsprogrammet har du fått et brev fra kommunen du bor i om dette. Ta
-                                    kontakt med kommunen din hvis du er usikker på om du er med i
-                                    introduksjonsprogrammet.
+                                    Du får utbetalt introduksjonsstønad når du deltar i introduksjonsprogrammet. Dette
+                                    er en ordning for nyankomne flyktninger. Hvis du er med i introduksjonsprogrammet
+                                    har du fått et brev fra kommunen du bor i om dette. Ta kontakt med kommunen din hvis
+                                    du er usikker på om du er med i introduksjonsprogrammet.
                                 </p>
                                 <Link
                                     href="https://www.imdi.no/om-imdi/brosjyrer-handboker-og-veiledere/velkommen-til-introduksjonsprogram/"

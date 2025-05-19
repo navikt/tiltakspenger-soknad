@@ -1,7 +1,4 @@
-import {
-    påkrevdPeriodeValidator,
-    påkrevdSvarValidator,
-} from '@/utils/formValidators';
+import { påkrevdPeriodeValidator, påkrevdSvarValidator } from '@/utils/formValidators';
 import { FormPeriode } from '@/types/FormPeriode';
 
 export function påkrevdTiltaksperiodeSpørsmål(verdi: FormPeriode) {
