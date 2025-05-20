@@ -57,6 +57,7 @@ export default function JaNeiSpørsmål({
                         afterOnChange && afterOnChange();
                     }}
                     {...errorObject}
+                    tabIndex={-1}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
                     {!reverse && <Radio value="nei">Nei</Radio>}

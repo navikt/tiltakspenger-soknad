@@ -45,6 +45,7 @@ export default function Flervalgsspørsmål({
                         afterOnChange && afterOnChange();
                     }}
                     error={errorMessage}
+                    tabIndex={-1}
                 >
                     {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
                     {alternativer.map((alternativ) => (
