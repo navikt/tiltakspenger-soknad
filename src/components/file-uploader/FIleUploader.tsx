@@ -1,10 +1,9 @@
 import React, { DragEventHandler, useEffect, useRef } from 'react';
 import styles from './FileUploader.module.css';
 import { Alert, BodyShort, Detail, Link, Panel } from '@navikt/ds-react';
-import { UploadIcon } from '@navikt/aksel-icons';
+import { DownloadIcon, FileCheckmarkIcon, TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
-import { Delete, Download, FileSuccess } from '@navikt/ds-icons';
 import Søknad from '@/types/Søknad';
 
 interface FileUploaderProps {
@@ -106,12 +105,12 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         <Panel className={styles.fileCard} key={attachment.id}>
                             <div className={styles.fileCardLeftContent}>
                                 <div className={styles.fileSuccess}>
-                                    <FileSuccess color={'var(--a-icon-success)'} />
+                                    <FileCheckmarkIcon color={'var(--a-icon-success)'} />
                                 </div>
                                 <div className={styles.fileInputText}>
                                     <Link href={url} download={attachment.file.name}>
                                         {attachment.file.name}
-                                        <Download title="Last ned vedlegg" />
+                                        <DownloadIcon title="Last ned vedlegg" fontSize={'1.5rem'} />
                                     </Link>
                                     <Detail>{fileSizeString(attachment.file.size)}</Detail>
                                 </div>
@@ -127,7 +126,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                                 }}
                                 className={styles.deleteAttachment}
                             >
-                                <Delete aria-hidden={true} />
+                                <TrashIcon aria-hidden={true} />
                                 <BodyShort>{'Slett'}</BodyShort>
                             </button>
                         </Panel>

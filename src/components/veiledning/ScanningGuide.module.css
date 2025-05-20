@@ -1,0 +1,11 @@
+.iconError {
+    font-size: 1.5rem;
+    vertical-align: top;
+    color: var(--a-nav-red);
+}
+
+.iconSuccess {
+    font-size: 1.5rem;
+    vertical-align: top;
+    color: var(--a-icon-success);
+}

@@ -1,8 +1,8 @@
-import { Error, Success } from '@navikt/ds-icons';
 import { BodyShort, Label } from '@navikt/ds-react';
 import React from 'react';
-
 import ScanningIcon from './ScanningIcon';
+import { FileCheckmarkIcon, XMarkOctagonIcon } from '@navikt/aksel-icons';
+import styles from './ScanningGuide.module.css';
 
 export interface ScanningGuideProps {
     className?: string;
@@ -40,7 +40,7 @@ export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) 
                     <ScanningIcon status={'good'} title={tekster?.alert?.exampleLabelGood} />
                     <div style={{ padding: '0.5rem' }}>
                         <span>
-                            <Success color={'var(--a-green-600)'} />
+                            <FileCheckmarkIcon className={styles.iconSuccess} />
                             <Label as="span">{tekster?.alert?.exampleLabelGood}</Label>
                         </span>
                         <BodyShort>{tekster?.alert?.exampleGood}</BodyShort>
@@ -51,7 +51,7 @@ export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) 
                         <ScanningIcon status={'keystone'} title={tekster?.alert?.exampleLabelBad} />
                         <div style={{ padding: '0.5rem' }}>
                             <span>
-                                <Error color={'var(--a-nav-red)'} />
+                                <XMarkOctagonIcon className={styles.iconError} />
                                 <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
                             </span>
                             <BodyShort>{tekster?.alert?.exampleKeystone}</BodyShort>
@@ -65,7 +65,7 @@ export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) 
                         <ScanningIcon status={'horizontal'} title={tekster?.alert?.exampleLabelBad} />
                         <div style={{ padding: '0.5rem' }}>
                             <span className={'scanning-example-status'}>
-                                <Error color={'var(--a-nav-red)'} />
+                                <XMarkOctagonIcon className={styles.iconError} />
                                 <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
                             </span>
                             <BodyShort>{tekster?.alert?.exampleHorizontal}</BodyShort>
@@ -79,7 +79,7 @@ export const ScanningGuide = ({ className, locale = 'nb' }: ScanningGuideProps) 
                         <ScanningIcon status={'shadow'} title={tekster?.alert?.exampleLabelBad} />
                         <div style={{ padding: '0.5rem' }}>
                             <span className={'scanning-example-status'}>
-                                <Error color={'var(--a-nav-red)'} />
+                                <XMarkOctagonIcon className={styles.iconError} />
                                 <Label as="span">{tekster?.alert?.exampleLabelBad}</Label>
                             </span>
                             <BodyShort>{tekster?.alert?.exampleShaddow}</BodyShort>
