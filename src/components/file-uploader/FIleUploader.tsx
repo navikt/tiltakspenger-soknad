@@ -1,6 +1,6 @@
 import React, { DragEventHandler, useEffect, useRef } from 'react';
 import styles from './FileUploader.module.css';
-import { Alert, BodyShort, Detail, Link, Panel } from '@navikt/ds-react';
+import { Alert, BodyShort, Box, Detail, Link } from '@navikt/ds-react';
 import { DownloadIcon, FileCheckmarkIcon, TrashIcon, UploadIcon } from '@navikt/aksel-icons';
 import classNames from 'classnames';
 import { Control, useFieldArray } from 'react-hook-form';
@@ -102,7 +102,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                     objectUrls.current.push(url);
                     if (!attachment.file.name.endsWith('.pdf')) validerOppløsningVedCallback(blob, url, index);
                     return (
-                        <Panel className={styles.fileCard} key={attachment.id}>
+                        <Box className={styles.fileCard} key={attachment.id} padding={'4'}>
                             <div className={styles.fileCardLeftContent}>
                                 <div className={styles.fileSuccess}>
                                     <FileCheckmarkIcon color={'var(--a-icon-success)'} />
@@ -119,7 +119,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                                 type={'button'}
                                 onClick={() => remove(index)}
                                 tabIndex={0}
-                                onKeyPress={(event) => {
+                                onKeyDown={(event) => {
                                     if (event.key === 'Enter') {
                                         remove(index);
                                     }
@@ -129,7 +129,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                                 <TrashIcon aria-hidden={true} />
                                 <BodyShort>{'Slett'}</BodyShort>
                             </button>
-                        </Panel>
+                        </Box>
                     );
                 })}
 
@@ -170,7 +170,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                             role={'button'}
                             aria-controls={inputId}
                             tabIndex={0}
-                            onKeyPress={(event) => {
+                            onKeyDown={(event) => {
                                 if (event.key === 'Enter') {
                                     fileUploadInputElement?.current?.click();
                                 }

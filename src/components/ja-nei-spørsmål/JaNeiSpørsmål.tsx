@@ -9,7 +9,7 @@ interface JaNeiSpørsmålProps {
     name: string;
     validate?: ValidatorFunction | ValidatorFunction[];
     hjelpetekst?: Hjelpetekst;
-    description?: string | JSX.Element;
+    description?: string | React.ReactElement;
     reverse?: boolean;
     afterOnChange?: () => void;
 }
