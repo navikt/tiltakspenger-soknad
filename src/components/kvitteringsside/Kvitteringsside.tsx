@@ -9,6 +9,7 @@ import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
 import { useRouter } from 'next/router';
 import defaultValues from '@/defaultValues';
+import useScript from '@/components/uxsignals/useScript';
 
 interface KvitteringssideProps {
     personalia: Personalia;
@@ -16,6 +17,7 @@ interface KvitteringssideProps {
 }
 
 export default function Kvitteringsside({ personalia, innsendingstidspunkt }: KvitteringssideProps) {
+    useScript(true); // UX Signals script for brukertesting
     const router = useRouter();
     const { getValues, reset } = useFormContext<Søknad>();
     const manueltRegistrerteBarn = getValues('svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor');
@@ -101,6 +103,8 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             <Link href="https://www.nav.no/minside" className={styles.button}>
                 <Button as="a">Følg saken på Min side</Button>
             </Link>
+
+            <div data-uxsignals-embed="panel-cw15yr9a6n" style={{ paddingTop: '1rem', maxWidth: '620px' }} />
         </div>
     );
 }
