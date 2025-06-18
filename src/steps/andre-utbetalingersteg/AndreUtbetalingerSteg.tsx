@@ -265,7 +265,7 @@ export default function AndreUtbetalingerSteg({
                                 <>
                                     <span>
                                         Du kan motta supplerende stønad hvis du er over 67 år, og ikke har bodd lenge
-                                        nok i Norge til å ha rett på alderspensjon.
+                                        nok i Norge til å ha rett til alderspensjon.
                                     </span>
                                     <Link href="https://www.nav.no/supplerende-stonad-over-67" target="_blank">
                                         Les mer om supplerende stønad for personer over 67 år med kort botid i Norge

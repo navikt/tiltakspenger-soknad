@@ -55,7 +55,7 @@ export default function ProgramDeltagelseSteg({
             guide={
                 <React.Fragment>
                     <p>
-                        Hvis du mottar kvalifiseringsstønad eller introduksjonsstønad har du <b>ikke</b> rett på
+                        Hvis du mottar kvalifiseringsstønad eller introduksjonsstønad har du <b>ikke</b> rett til
                         tiltakspenger. Du må derfor svare på spørsmål om dette.
                     </p>
                 </React.Fragment>

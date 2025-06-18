@@ -74,7 +74,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                         <li>Du må møte som avtalt i tiltaket</li>
                         <li>Du må sende inn meldekortet ditt hver 14. dag</li>
                         <li>Du må gi beskjed hvis situasjonen din endrer seg</li>
-                        <li>Du må betale tilbake hvis du får tiltakspenger du ikke har rett på</li>
+                        <li>Du må betale tilbake hvis du får tiltakspenger du ikke har rett til</li>
                     </ul>
                 </Accordion>
                 <Accordion header="Vi henter og bruker informasjon om deg">

@@ -41,7 +41,7 @@ export default function BarnetilleggSteg({
             onGoToPreviousStep={onGoToPreviousStep}
             guide={
                 <>
-                    Når du har rett til tiltakspenger, kan du også ha rett på barnetillegg.
+                    Når du har rett til tiltakspenger, kan du også ha rett til barnetillegg.
                     <ul>
                         <li>
                             Du kan få barnetillegg for egne barn under 16 år som du forsørger. Dette gjelder også for
