@@ -20,7 +20,7 @@
         "classnames": "^2.5.1",
         "dayjs": "^1.11.13",
         "jsonwebtoken": "^9.0.2",
-        "next": "^15.3.2",
+        "next": "^15.4.2",
         "node-jose": "^2.2.0",
         "pino": "^9.7.0",
         "react": "^19.1.0",
