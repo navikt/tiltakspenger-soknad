@@ -5,7 +5,7 @@ export const mocketTiltak = [
         typeNavn: 'Annen utdanning',
         arenaRegistrertPeriode: {},
         arrangør: 'Testarrangør',
-        status: 'Aktuell',
+        gjennomforingId: '123456',
     },
     {
         aktivitetId: '12asdad3',
@@ -13,7 +13,7 @@ export const mocketTiltak = [
         typeNavn: 'Annen utdaasdnning',
         arenaRegistrertPeriode: {},
         arrangør: 'Testarrangør',
-        status: 'Aktuell',
+        gjennomforingId: '98765',
     },
     {
         aktivitetId: '12sdf3',
@@ -21,6 +21,6 @@ export const mocketTiltak = [
         typeNavn: 'Annen utdweranning',
         arenaRegistrertPeriode: { fra: '2025-04-01', til: '2026-03-01' },
         arrangør: 'Testarrangør',
-        status: 'Aktuell',
+        gjennomforingId: '456788',
     },
 ] as const;
