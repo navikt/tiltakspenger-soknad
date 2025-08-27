@@ -113,6 +113,7 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
         typeNavn: tiltak.typeNavn,
         arenaRegistrertPeriode: tiltak.arenaRegistrertPeriode,
         periode: formatPeriod(formTiltak.periode!),
+        gjennomforingId: tiltak.gjennomforingId,
     };
 }
 

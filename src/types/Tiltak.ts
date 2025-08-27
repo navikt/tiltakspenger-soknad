@@ -6,5 +6,5 @@ export interface Tiltak {
     typeNavn: string;
     arenaRegistrertPeriode?: Periode;
     arrangør: string;
-    status: string;
+    gjennomforingId: string;
 }
