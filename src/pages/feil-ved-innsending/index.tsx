@@ -43,8 +43,7 @@ export default function FeilVedInnsending() {
                 <Button
                     type="button"
                     onClick={() => {
-                        const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
-                        (window.location as any) = basePath;
+                        router.push('/');
                     }}
                 >
                     Start søknaden på nytt
