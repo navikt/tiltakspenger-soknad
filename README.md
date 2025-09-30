@@ -15,32 +15,23 @@ For å få tilgang til alle dependencies må man generere en personal access-tok
 ## Hvordan kjøre opp lokalt utviklingsmiljø
 
 ### Demo mode med mock data
+
 Kopier `.env.demo` til `.env.local` og kjør `npm run dev`. Demo-modus er tilgjengelig på http://localhost:3000/demo
 
-### Med hele verdikjeden 
+### Med hele verdikjeden
+
 **Obs!** Mulig dette ikke fungerer akkurat nå..
 
-1. Opprett en `.env.local` fil på rot av repoet, og legg inn følgende miljøvariabler:
-    ```
-    TILTAKSPENGER_SOKNAD_API_URL=http://localhost:8080
-    TOKEN_X_CLIENT_ID=localhost:tpts:tiltakspenger-soknad
-    TOKEN_X_PRIVATE_JWK='<generert JWK>'
-    TOKEN_X_TOKEN_ENDPOINT=http://host.docker.internal:6969/tokendings/token
-    TOKEN_X_WELL_KNOWN_URL=http://host.docker.internal:6969/tokendings/.well-known/openid-configuration
-    NAIS_CLUSTER_NAME=localhost
-    IDPORTEN_WELL_KNOWN_URL=http://host.docker.internal:6969/idporten/.well-known/openid-configuration
-    IDPORTEN_CLIENT_ID=localhost:tpts:tiltakspenger-soknad
-    NAIS_CLUSTER_NAME=localhost
-    DEKORATOR_ENV=dev
-    ```
+1. Opprett en `.env.local` fil på rot av repoet - og kopier innholdet fra `.env-template`
+
 2. Legg til følgende innhold i hosts-filen på `/etc/hosts` (Om man bruker mac):
     ```
     127.0.0.1 host.docker.internal
     ```
 3. Opprett en fil på pathen `./docker-compose/.env` og legg inn en miljøvariabel:
-   ```
-   WONDERWALL_OPENID_CLIENT_JWK=<generert JWK>
-   ```
+    ```
+    WONDERWALL_OPENID_CLIENT_JWK=<generert JWK>
+    ```
 4. Start docker-compose oppsettet i `./docker-compose` med f.eks. `docker compose up --build -d`
 5. Kjør opp frontend med `npm run dev` på rot av repoet
 6. :rocket: Gå på localhost:2222 (dette gjør at man treffer Wonderwall)
