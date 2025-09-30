@@ -1,1 +1,1 @@
-export default { tabWidth: 4, singleQuote: true, printWidth: 120 };
+module.exports = { tabWidth: 4, singleQuote: true, printWidth: 120 };
