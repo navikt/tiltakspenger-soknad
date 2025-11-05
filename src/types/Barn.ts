@@ -5,16 +5,9 @@ export interface Barn {
     fødselsdato: string;
     bostedsland?: string;
     uuid: string;
-    adressebeskyttelse: AdressebeskyttelseDTO;
+    fnr: string | null;
     oppholdInnenforEøs?: boolean;
     index?: number;
-}
-
-export enum AdressebeskyttelseDTO {
-    STRENGT_FORTROLIG_UTLAND = 'STRENGT_FORTROLIG_UTLAND',
-    STRENGT_FORTROLIG = 'STRENGT_FORTROLIG',
-    FORTROLIG = 'FORTROLIG',
-    UGRADERT = 'UGRADERT',
 }
 
 export interface BarnDTO {
@@ -22,7 +15,7 @@ export interface BarnDTO {
     fornavn: string | null;
     mellomnavn: string | null;
     etternavn: string | null;
-    adressebeskyttelse: AdressebeskyttelseDTO;
+    fnr: string;
 }
 
 export interface PersonDTO {

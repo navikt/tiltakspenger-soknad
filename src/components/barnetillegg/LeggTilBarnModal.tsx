@@ -15,7 +15,7 @@ import Søknad from '@/types/Søknad';
 import { ScanningGuide } from '@/components/veiledning/ScanningGuide';
 import Fritekstspørsmål from '@/components/fritekstspørsmål/Fritekstspørsmål';
 import Datospørsmål from '@/components/datospørsmål/Datospørsmål';
-import { AdressebeskyttelseDTO, Barn } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 
 interface LeggTilBarnModalProps {
     fieldArray: UseFieldArrayReturn<Søknad>;
@@ -83,25 +83,24 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         }
 
         const tomtBarn: Barn = {
+            fnr: null,
             fornavn: '',
             etternavn: '',
             fødselsdato: '',
             uuid: '',
             index: undefined,
-            adressebeskyttelse: AdressebeskyttelseDTO.UGRADERT,
         };
 
         const åpneModal = (barn: Barn) => {
             const åpneMedUuid = barn.uuid === '' ? uuidv4() : barn.uuid;
             setValue('svar.barnetillegg.kladd', {
+                fnr: barn.fnr,
                 fornavn: barn.fornavn,
                 etternavn: barn.etternavn,
                 fødselsdato: barn.fødselsdato,
                 oppholdInnenforEøs: barn.oppholdInnenforEøs,
                 uuid: åpneMedUuid,
                 index: barn.index,
-                //kan ikke bestemme adressebeskyttelse her for manuelt lagt til barn
-                adressebeskyttelse: AdressebeskyttelseDTO.UGRADERT,
             });
             uuid.current = åpneMedUuid;
             modalRef?.current?.showModal();

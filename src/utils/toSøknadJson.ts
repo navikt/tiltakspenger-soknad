@@ -13,7 +13,7 @@ import Spørsmålsbesvarelser, {
 } from '@/types/Spørsmålsbesvarelser';
 import dayjs from 'dayjs';
 import { Tiltak } from '@/types/Tiltak';
-import { AdressebeskyttelseDTO, Barn } from '@/types/Barn';
+import { Barn } from '@/types/Barn';
 import { Nullable } from '@/utils/eller-null';
 
 interface Periode {
@@ -119,16 +119,14 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
 
 function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
     const oppholdInnenforEøsDict = barnetillegg.eøsOppholdForBarnFraAPI;
-    const registrerteBarn = barnFraAPI.map(
-        ({ fornavn, fødselsdato, mellomnavn, etternavn, uuid, adressebeskyttelse }) => ({
-            fornavn,
-            fødselsdato,
-            mellomnavn,
-            etternavn,
-            oppholdInnenforEøs: oppholdInnenforEøsDict[uuid],
-            adressebeskyttelse: adressebeskyttelse,
-        }),
-    );
+    const registrerteBarn = barnFraAPI.map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid, fnr }) => ({
+        fnr: fnr,
+        fornavn,
+        fødselsdato,
+        mellomnavn,
+        etternavn,
+        oppholdInnenforEøs: oppholdInnenforEøsDict[uuid],
+    }));
     const manueltRegistrerteBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
         .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
         .map((barn) => ({
