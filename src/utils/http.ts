@@ -1,7 +1,7 @@
 import logger from '@/utils/serverLogger';
 import { NextApiRequest } from 'next';
 
-export async function makeGetRequest(url: string, token: string): Promise<Response> {
+export async function makeGetRequest<T>(url: string, token: string): Promise<Response> {
     logger.info(`Making request to ${url}`);
     const controller = new AbortController();
     setTimeout(() => controller.abort(), 5000);

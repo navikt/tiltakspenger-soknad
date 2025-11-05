@@ -19,6 +19,7 @@ import IkkeMyndig from '@/components/ikke-myndig/IkkeMyndig';
 import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 import { mockedPersonalia } from '@/mocks/mockedPersonalia';
+import { PersonDTO } from '@/types/Barn';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -137,12 +138,13 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
     try {
         const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
         if (personaliaResponse.ok) {
-            const personaliaJson = await personaliaResponse.json();
+            const personaliaJson = (await personaliaResponse.json()) as PersonDTO;
+
             return {
                 props: {
                     personalia: {
                         ...personaliaJson,
-                        barn: personaliaJson.barn.map((barn: any) => ({
+                        barn: personaliaJson.barn.map((barn) => ({
                             ...barn,
                             uuid: uuidv4(),
                         })),

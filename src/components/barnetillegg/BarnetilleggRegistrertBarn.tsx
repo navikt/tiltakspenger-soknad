@@ -1,4 +1,4 @@
-import { Barn } from '@/types/Barn';
+import { AdressebeskyttelseDTO, Barn } from '@/types/Barn';
 import React from 'react';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
@@ -19,10 +19,10 @@ function barnUtenforEØSValidator(verdi: boolean) {
 }
 
 export default function BarnetilleggRegistrertBarn({ barn }: BarnetilleggRegistrertBarnProps) {
-    const { fødselsdato, fornavn, etternavn, mellomnavn, uuid } = barn;
+    const { fødselsdato, fornavn, etternavn, mellomnavn, uuid, adressebeskyttelse } = barn;
     return (
         <div className={styles.barnetillegg}>
-            {fornavn && (
+            {fornavn && adressebeskyttelse === AdressebeskyttelseDTO.UGRADERT && (
                 <p>
                     <strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}
                 </p>

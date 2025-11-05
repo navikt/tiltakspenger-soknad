@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatDate } from '@/utils/formatDate';
 import { Vedlegg } from '@/types/Søknad';
-import { Barn } from '@/types/Barn';
+import { AdressebeskyttelseDTO, Barn } from '@/types/Barn';
 
 interface BarneInfoProps {
     barn: Barn;
@@ -9,10 +9,10 @@ interface BarneInfoProps {
 }
 
 export default function BarneInfo({ barn, vedlegg }: BarneInfoProps) {
-    const { fødselsdato, fornavn, etternavn, mellomnavn, oppholdInnenforEøs } = barn;
+    const { fødselsdato, fornavn, etternavn, mellomnavn, oppholdInnenforEøs, adressebeskyttelse } = barn;
     return (
         <div>
-            {fornavn && (
+            {fornavn && adressebeskyttelse === AdressebeskyttelseDTO.UGRADERT && (
                 <p>
                     <strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}
                 </p>
