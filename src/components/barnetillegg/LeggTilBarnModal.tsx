@@ -82,7 +82,8 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
             }
         }
 
-        const tomtBarn = {
+        const tomtBarn: Barn = {
+            fnr: null,
             fornavn: '',
             etternavn: '',
             fødselsdato: '',
@@ -93,6 +94,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         const åpneModal = (barn: Barn) => {
             const åpneMedUuid = barn.uuid === '' ? uuidv4() : barn.uuid;
             setValue('svar.barnetillegg.kladd', {
+                fnr: barn.fnr,
                 fornavn: barn.fornavn,
                 etternavn: barn.etternavn,
                 fødselsdato: barn.fødselsdato,

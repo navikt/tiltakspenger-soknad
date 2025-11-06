@@ -119,7 +119,8 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
 
 function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
     const oppholdInnenforEøsDict = barnetillegg.eøsOppholdForBarnFraAPI;
-    const registrerteBarn = barnFraAPI.map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid }) => ({
+    const registrerteBarn = barnFraAPI.map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid, fnr }) => ({
+        fnr: fnr,
         fornavn,
         fødselsdato,
         mellomnavn,
