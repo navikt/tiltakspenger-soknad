@@ -36,7 +36,7 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
         }
         oboToken = await getOnBehalfOfToken(request.headers.authorization!!);
     } catch (error) {
-        logger.error('Bruker har ikke tilgang', error);
+        logger.error(`Bruker har ikke tilgang. Message: ${(error as Error).message}`);
         response.status(401).json({ message: 'Bruker har ikke tilgang' });
     }
 

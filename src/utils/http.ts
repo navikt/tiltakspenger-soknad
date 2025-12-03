@@ -39,9 +39,10 @@ async function readRequestAsStream(request: NextApiRequest): Promise<Buffer> {
 export async function makePostRequest(url: string, token: string, request: NextApiRequest): Promise<Response> {
     logger.info(`Making request to ${url}`);
     const requestBuffer = await readRequestAsStream(request);
+    const body = new Uint8Array(requestBuffer);
     return await fetch(url, {
         method: 'POST',
-        body: requestBuffer,
+        body: body,
         headers: {
             authorization: `Bearer ${token}`,
             'content-type': request.headers['content-type'],
