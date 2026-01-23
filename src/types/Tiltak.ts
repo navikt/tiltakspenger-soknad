@@ -7,4 +7,5 @@ export interface Tiltak {
     arenaRegistrertPeriode?: Periode;
     arrangør: string;
     gjennomforingId: string;
+    visningsnavn?: string;
 }

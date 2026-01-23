@@ -13,6 +13,7 @@ import stepStyles from './../../components/step/Step.module.css';
 import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import BarneInfo from '@/components/barnetillegg/BarneInfo';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
+import { lagTiltakVisningTekst } from '@/steps/tiltakssteg/utils';
 
 interface OppsummeringsstegProps {
     title: string;
@@ -145,9 +146,7 @@ export default function Oppsummeringssteg({
                     <Accordion.Content>
                         <div>
                             <span>
-                                {valgtTiltak?.arrangør || ''}
-                                {valgtTiltak?.arrangør && valgtTiltak?.typeNavn && ' - '}
-                                {valgtTiltak?.typeNavn || ''}
+                                {valgtTiltak ? lagTiltakVisningTekst(valgtTiltak) : ''}
                             </span>
                             <br />
                             <span>

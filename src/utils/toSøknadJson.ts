@@ -114,6 +114,7 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
         arenaRegistrertPeriode: tiltak.arenaRegistrertPeriode,
         periode: formatPeriod(formTiltak.periode!),
         gjennomforingId: tiltak.gjennomforingId,
+        visningsnavn: tiltak.visningsnavn,
     };
 }
 
