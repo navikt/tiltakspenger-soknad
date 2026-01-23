@@ -2,8 +2,9 @@ import { Tiltak } from '@/types/Tiltak';
 import { formatDate } from '@/utils/formatDate';
 import { formatPeriode } from '@/utils/formatPeriode';
 
-export const lagTiltaksalternativTekst = ({ typeNavn, arrangør, arenaRegistrertPeriode }: Tiltak) => {
-    const tiltaksbeskrivelse = arrangør ? `${typeNavn} - ${arrangør}` : typeNavn;
+export const lagTiltaksalternativTekst = (tiltak: Tiltak) => {
+    const { arenaRegistrertPeriode } = tiltak;
+    const tiltaksbeskrivelse = lagTiltakVisningTekst(tiltak);
     if (arenaRegistrertPeriode?.fra && !arenaRegistrertPeriode?.til) {
         return `${tiltaksbeskrivelse}. Startdato: ${formatDate(arenaRegistrertPeriode!.fra)}`;
     }
@@ -14,6 +15,11 @@ export const lagTiltaksalternativTekst = ({ typeNavn, arrangør, arenaRegistrert
         return `${tiltaksbeskrivelse}. Periode: ${formatPeriode(arenaRegistrertPeriode!)}`;
     }
     return tiltaksbeskrivelse;
+};
+
+export const lagTiltakVisningTekst = ({ visningsnavn, typeNavn, arrangør }: Tiltak) => {
+    const alternativtNavn = arrangør ? `${typeNavn} - ${arrangør}` : typeNavn;
+    return visningsnavn ? visningsnavn : alternativtNavn;
 };
 
 export const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
