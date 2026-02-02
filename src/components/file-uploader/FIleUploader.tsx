@@ -105,7 +105,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         <Box className={styles.fileCard} key={attachment.id} padding={'space-16'}>
                             <div className={styles.fileCardLeftContent}>
                                 <div className={styles.fileSuccess}>
-                                    <FileCheckmarkIcon color={'var(--a-icon-success)'} />
+                                    <FileCheckmarkIcon color={'var(--ax-success-500)'} />
                                 </div>
                                 <div className={styles.fileInputText}>
                                     <Link href={url} download={attachment.file.name}>

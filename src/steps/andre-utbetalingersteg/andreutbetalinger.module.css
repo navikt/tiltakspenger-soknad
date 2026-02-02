@@ -1,9 +1,9 @@
 .blokk :global(.navds-fieldset) {
-    margin-top: 0rem;
+    margin-top: 0;
 }
 
 .blokkUtvidet :global(.navds-fieldset) {
-    margin-top: 0rem;
+    margin-top: 0;
 }
 
 .blokk {
@@ -12,7 +12,7 @@
 }
 
 .blokkUtvidet {
-    background-color: var(--a-gray-50);
+    background-color: var(--ax-neutral-100);
     padding: 1rem 0 0.5rem 0.5rem;
     margin-top: 0.5rem;
 }
