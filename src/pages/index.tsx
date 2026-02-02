@@ -98,7 +98,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                         Nav.
                     </p>
                     <Link
-                        href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten"
+                        href="https://www.nav.no/personvern"
                         target="_blank"
                     >
                         Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane).
