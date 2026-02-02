@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Flervalgsspørsmål from '@/components/flervalgsspørsmål/Flervalgsspørsmål';
 import Step from '@/components/step/Step';
-import { Alert, Button, Heading, Link, List } from '@navikt/ds-react';
+import { Alert, Box, Button, Heading, Link, List } from '@navikt/ds-react';
 import Veiledningstekst from '@/steps/tiltakssteg/Veiledningstekst';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { valgtTiltakValidator } from '@/steps/tiltakssteg/validation';
@@ -55,11 +55,13 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
                     <Heading size="small" level="2">
                         Vi har funnet tiltak som mangler start- eller sluttdato
                     </Heading>
-                    <List as="ul">
-                        {tiltakMedUgyldigPeriode.map((t) => (
-                            <List.Item key={t.aktivitetId}>{lagTiltaksalternativTekst(t)}</List.Item>
-                        ))}
-                    </List>
+                    <Box marginBlock="space-16" asChild>
+                        <List as="ul">
+                            {tiltakMedUgyldigPeriode.map((t) => (
+                                <List.Item key={t.aktivitetId}>{lagTiltaksalternativTekst(t)}</List.Item>
+                            ))}
+                        </List>
+                    </Box>
                     Dersom du ønsker å søke tiltakspenger for et av disse tiltakene, må du sende søknad på papir eller
                     kontakte oss slik at vi kan registrere fullstendig periode på tiltaket.
                 </Alert>

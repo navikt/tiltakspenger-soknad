@@ -102,7 +102,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                     objectUrls.current.push(url);
                     if (!attachment.file.name.endsWith('.pdf')) validerOppløsningVedCallback(blob, url, index);
                     return (
-                        <Box className={styles.fileCard} key={attachment.id} padding={'4'}>
+                        <Box className={styles.fileCard} key={attachment.id} padding={'space-16'}>
                             <div className={styles.fileCardLeftContent}>
                                 <div className={styles.fileSuccess}>
                                     <FileCheckmarkIcon color={'var(--a-icon-success)'} />
@@ -132,7 +132,6 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                         </Box>
                     );
                 })}
-
             <div
                 className={styles.dropZone}
                 onDragEnter={handleDragEnter}

@@ -21,7 +21,6 @@ export const SlettBarnModal: React.FC<SlettModalProps> = ({ barn, onDelete }) =>
             <Button type="button" icon={<TrashIcon aria-hidden />} variant="tertiary" onClick={åpneModal}>
                 Slett
             </Button>
-
             <Modal
                 ref={modalRef}
                 className={styles.modalSlettBarn}
@@ -35,12 +34,13 @@ export const SlettBarnModal: React.FC<SlettModalProps> = ({ barn, onDelete }) =>
                             Avbryt
                         </Button>
                         <Button
+                            data-color="danger"
                             type="button"
                             onClick={() => {
                                 onDelete();
                                 lukkModal();
                             }}
-                            variant="danger"
+                            variant="primary"
                         >
                             Slett
                         </Button>
