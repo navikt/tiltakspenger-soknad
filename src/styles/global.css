@@ -1,15 +1,15 @@
-.navds-fieldset,
-.navds-form-field {
+.aksel-fieldset,
+.aksel-form-field {
     margin-top: 1rem;
 }
 
-.navds-date__wrapper {
+.aksel-date__wrapper {
     display: flex;
     gap: 1rem;
     margin-top: 0.5rem;
 }
 
-.navds-date__field {
+.aksel-date__field {
     margin-top: 0.5rem;
 }
 

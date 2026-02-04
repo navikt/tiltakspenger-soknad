@@ -165,7 +165,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
                     <BodyShort className={styles.bodyShort}>{'eller'}</BodyShort>
                     <label htmlFor={inputId}>
                         <span
-                            className={`${styles?.fileInputButton} navds-button navds-button__inner navds-body-short navds-button--secondary`}
+                            className={`${styles?.fileInputButton} aksel-button aksel-body-short`}
                             role={'button'}
                             aria-controls={inputId}
                             tabIndex={0}

@@ -1,8 +1,8 @@
-.blokk :global(.navds-fieldset) {
+.blokk :global(.aksel-fieldset) {
     margin-top: 0;
 }
 
-.blokkUtvidet :global(.navds-fieldset) {
+.blokkUtvidet :global(.aksel-fieldset) {
     margin-top: 0;
 }
 
