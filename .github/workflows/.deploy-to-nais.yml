@@ -12,7 +12,7 @@ on:
       NAIS_RESOURCES:
         required: false
         type: string
-        default: '.nais/nais.yml,.nais/unleash-apitoken.yml'
+        default: '.nais/nais.yml'
 
 jobs:
   deploy:

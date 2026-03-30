@@ -10,10 +10,12 @@ class PageDocument extends Document<PageDocumentProps> {
     static async getInitialProps(ctx: DocumentContext) {
         const initialProps = await Document.getInitialProps(ctx);
 
-        serverLogger.info(`Setter opp dekoratør med env satt til: ${(process.env.DEKORATOR_ENV as any) || 'dev'}`);
+        const dekoratorEnv = (process.env.DEKORATOR_ENV || 'prod') as 'prod'
+
+        serverLogger.info(`Setter opp dekoratør med env satt til: ${dekoratorEnv}`);
 
         const Decorator = await fetchDecoratorReact({
-            env: (process.env.DEKORATOR_ENV as any) || 'prod',
+            env: dekoratorEnv,
             params: {
                 context: 'privatperson',
                 simple: true,

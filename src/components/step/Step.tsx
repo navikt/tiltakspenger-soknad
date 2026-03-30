@@ -34,10 +34,10 @@ export default function Step({
         formState: { submitCount, errors },
     } = useFormContext();
 
-    const errorRef = React.useRef(null);
+    const errorRef = React.useRef<HTMLDivElement>(null);
 
     function focusErrorSummary() {
-        errorRef?.current && (errorRef.current as any).focus();
+        errorRef?.current?.focus();
     }
 
     React.useEffect(focusErrorSummary, [submitCount]);
@@ -71,7 +71,7 @@ export default function Step({
                     {shouldShowErrorSummary && (
                         <ErrorSummary
                             className={styles.step__errorsummary}
-                            ref={errorRef}
+                            ref={errorRef ?? undefined}
                             heading="Du må fikse disse feilene før du kan fortsette:"
                         >
                             {allErrors.map(({ message, ref, type, types, root }) => {

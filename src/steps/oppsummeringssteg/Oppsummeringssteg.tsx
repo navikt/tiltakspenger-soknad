@@ -47,7 +47,7 @@ function oppsummeringAlderspensjon(mottar: boolean, fraDato: string) {
     }
 }
 
-function hentSvarTilSpørsmålene(spørsmålTittel: String, mottar: boolean, periode?: Periode) {
+function hentSvarTilSpørsmålene(spørsmålTittel: string, mottar: boolean, periode?: Periode) {
     if (mottar) {
         return `Ja, jeg mottar ${spørsmålTittel} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
     } else {

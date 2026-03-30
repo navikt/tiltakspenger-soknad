@@ -145,7 +145,7 @@ export default function toSøknadJson(
     spørsmålsbesvarelser: Spørsmålsbesvarelser,
     barnFraApi: Barn[],
     valgtTiltak: Tiltak,
-): String {
+): string {
     return JSON.stringify({
         ...spørsmålsbesvarelser,
         kvalifiseringsprogram: kvalifiseringsprogram(spørsmålsbesvarelser.kvalifiseringsprogram),

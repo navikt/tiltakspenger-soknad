@@ -15,12 +15,8 @@ spec:
         value: {{ TILTAKSPENGER_SOKNAD_API_URL }}
       - name: NEXT_PUBLIC_TELEMETRY_URL
         value: {{ NEXT_PUBLIC_TELEMETRY_URL }}
-      - name: UNLEASH_SERVER_API_URL
-        value: {{ unleash.url }}
       - name: DEKORATOR_ENV
         value: {{ dekorator.env }}
-  envFrom:
-    - secret: tiltakspenger-soknad-unleash-secrets
   ingresses:
     - {{ ingress }}
   replicas:
@@ -34,8 +30,6 @@ spec:
         - application: tiltakspenger-soknad-api
         - application: nav-dekoratoren
           namespace: personbruker
-      external:
-        - host: tiltakspenger-unleash-api.nav.cloud.nais.io
   idporten:
     enabled: true
     sidecar:

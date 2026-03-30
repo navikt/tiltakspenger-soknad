@@ -127,9 +127,9 @@ IndexPage.getLayout = function getLayout(page: ReactElement) {
 const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerSidePropsContext) => {
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
-    let token = null;
+    let token;
     try {
-        token = await getOnBehalfOfToken(context.req.headers.authorization!!);
+        token = await getOnBehalfOfToken(context.req.headers.authorization!);
     } catch (error) {
         logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
         return redirectToLogin(context);

@@ -342,7 +342,7 @@ export default function AndreUtbetalingerSteg({
                                 <>
                                     <span>
                                         Dette er pengestøtte du får fra andre enn NAV, og som vi ikke har spurt om over.
-                                         Det kan for eksempel være:
+                                        Det kan for eksempel være:
                                     </span>
                                     <ul>
                                         <li>utbetalinger fra andre land</li>

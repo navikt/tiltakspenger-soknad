@@ -42,7 +42,7 @@ export default function Flervalgsspørsmål({
                     onBlur={onBlur}
                     onChange={(event) => {
                         onChange(event);
-                        afterOnChange && afterOnChange();
+                        afterOnChange?.();
                     }}
                     error={errorMessage}
                     tabIndex={-1}

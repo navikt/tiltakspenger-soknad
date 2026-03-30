@@ -54,7 +54,7 @@ export default function JaNeiSpørsmål({
                     onBlur={onBlur}
                     onChange={(value) => {
                         onChange(value === 'ja');
-                        afterOnChange && afterOnChange();
+                        afterOnChange?.();
                     }}
                     {...errorObject}
                     tabIndex={-1}

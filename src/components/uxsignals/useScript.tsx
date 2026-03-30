@@ -14,7 +14,9 @@ const useScript = (ready: boolean) => {
         return () => {
             try {
                 document.body.removeChild(script);
-            } catch {}
+            } catch {
+                return
+            }
         };
     }, [ready]);
 };

@@ -49,6 +49,12 @@ jobs:
       - name: Copy env file
         run: cp .env.${{ inputs.ENV }} .env.production
 
+      - name: Run type checking
+        run: tsc --noEmit
+
+      - name: Run linting
+        run: npm run lint
+
       - name: Build app
         run: npm run build
 

@@ -66,7 +66,7 @@ export default function FileUploader({ name, control, knappTekst, uuid }: FileUp
         [styles.dragOver]: dragOver,
     });
 
-    const validerStørrelse = (file: File): Boolean => {
+    const validerStørrelse = (file: File): boolean => {
         const samletStørrelse = fields.reduce((acc, fil) => acc + fil.file.size, 0);
         return samletStørrelse + file.size < MAKS_TOTAL_FILSTØRRELSE;
     };

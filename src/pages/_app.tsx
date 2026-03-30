@@ -29,7 +29,7 @@ interface UtfyllingSetStateContextType {
 
 export const UtfyllingSetStateContext = createContext<Partial<UtfyllingSetStateContextType>>({});
 
-export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+export type NextPageWithLayout<P = Record<string, unknown>, IP = P> = NextPage<P, IP> & {
     getLayout?: (page: ReactElement) => ReactNode;
 };
 

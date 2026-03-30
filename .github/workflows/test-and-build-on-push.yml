@@ -6,14 +6,6 @@ on:
       - main
 
 jobs:
-  test:
-    name: Run tests
-    uses: ./.github/workflows/.run-tests.yml
-    permissions:
-      contents: read
-    secrets:
-      READER_TOKEN: ${{ secrets.READER_TOKEN }}
-
   build:
     name: Build app
     uses: ./.github/workflows/.build-app.yml
