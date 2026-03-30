@@ -1,7 +1,8 @@
+import '../styles/global.css';
+
 import React, { createContext, Dispatch, ReactElement, ReactNode, SetStateAction, useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import type { AppProps } from 'next/app';
-import '@navikt/ds-css';
 import { initializeFaro } from '@grafana/faro-web-sdk';
 import Søknad from '@/types/Søknad';
 import { Tiltak } from '@/types/Tiltak';
@@ -9,7 +10,6 @@ import { Personalia } from '@/types/Personalia';
 import { UtfyllingContext } from './utfylling/[[...step]]';
 import { NextPage } from 'next';
 import defaultValues from '@/defaultValues';
-import '../styles/global.css';
 import Head from 'next/head';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'production') {
