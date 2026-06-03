@@ -1,13 +1,13 @@
 import logger from '@/utils/serverLogger';
 import { NextApiRequest } from 'next';
 
-export async function makeGetRequest<T>(url: string, token: string): Promise<Response> {
+const TIMEOUT_DEFAULT = 10000;
+
+export async function makeGetRequest(url: string, token: string, timeout: number = TIMEOUT_DEFAULT): Promise<Response> {
     logger.info(`Making request to ${url}`);
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 5000);
     return await fetch(url, {
         method: 'GET',
-        signal: controller.signal,
+        signal: AbortSignal.timeout(timeout),
         headers: {
             'content-type': 'application/json',
             authorization: `Bearer ${token}`,
@@ -36,13 +36,19 @@ async function readRequestAsStream(request: NextApiRequest): Promise<Buffer> {
     });
 }
 
-export async function makePostRequest(url: string, token: string, request: NextApiRequest): Promise<Response> {
+export async function makePostRequest(
+    url: string,
+    token: string,
+    request: NextApiRequest,
+    timeout: number = TIMEOUT_DEFAULT,
+): Promise<Response> {
     logger.info(`Making request to ${url}`);
     const requestBuffer = await readRequestAsStream(request);
     const body = new Uint8Array(requestBuffer);
     return await fetch(url, {
         method: 'POST',
         body: body,
+        signal: AbortSignal.timeout(timeout),
         headers: {
             authorization: `Bearer ${token}`,
             'content-type': request.headers['content-type'],
