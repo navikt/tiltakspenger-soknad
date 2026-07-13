@@ -23,9 +23,10 @@ async function makeApiRequest(request: NextApiRequest, oboToken: string): Promis
 }
 
 const middlewareLive = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
+    const requestContext = { path: request.url, method: request.method };
     let oboToken = null;
     try {
-        logger.info('Henter token');
+        logger.info(requestContext, 'Henter token');
         const authorizationHeader = request.headers['authorization'];
         if (!authorizationHeader) {
             throw Error('Mangler token');
@@ -36,30 +37,30 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
         }
         oboToken = await getOnBehalfOfToken(request.headers.authorization!);
     } catch (error) {
-        logger.error(`Bruker har ikke tilgang. Message: ${(error as Error).message}`);
+        logger.error({ err: error, ...requestContext }, 'Bruker har ikke tilgang');
         response.status(401).json({ message: 'Bruker har ikke tilgang' });
     }
 
     if (oboToken) {
-        logger.info('Starter http kall');
+        logger.info(requestContext, 'Starter http kall');
         try {
             const res = await makeApiRequest(request, oboToken as string);
             if (res.ok) {
                 try {
                     const body = await res.json();
-                    logger.info('Returnerer respons');
+                    logger.info(requestContext, 'Returnerer respons');
                     response.status(res.status).json(body);
                 } catch (error) {
-                    logger.error(`Respons er ikke gyldig JSON, returnerer 502. Message: ${(error as Error).message}`);
+                    logger.error({ err: error, ...requestContext }, 'Respons er ikke gyldig JSON, returnerer 502');
                     response.status(502).json({ message: 'Bad Gateway' });
                 }
             } else {
-                logger.info(`Respons var ikke OK. Status: ${res.status}`);
+                logger.info({ ...requestContext, status: res.status }, `Respons var ikke OK. Status: ${res.status}`);
                 const error = await res.text();
                 response.status(res.status).json({ error: !error ? res.statusText : error });
             }
         } catch (error) {
-            logger.error(`Fikk ikke kontakt med APIet, returnerer 502. Message: ${(error as Error).message}`);
+            logger.error({ err: error, ...requestContext }, 'Fikk ikke kontakt med APIet, returnerer 502');
             response.status(502).json({ message: 'Bad Gateway' });
         }
     }

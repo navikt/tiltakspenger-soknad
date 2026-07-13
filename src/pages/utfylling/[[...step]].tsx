@@ -175,6 +175,7 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
             };
         }
         logger.error(
+            { err: error },
             `Noe gikk galt ved henting av tiltak: ${(error as Error).message}, redirecter bruker til /generell-feil`,
         );
         return {
