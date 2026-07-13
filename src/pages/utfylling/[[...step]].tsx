@@ -150,11 +150,9 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
     const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
     try {
-        logger.info('Hent data om tiltak start');
         const tiltakResponse = await makeGetRequest(`${backendUrl}/tiltak`, token);
         if (tiltakResponse.ok) {
             const tiltakJson = await tiltakResponse.json();
-            logger.info('Hent data om tiltak OK');
             const svarMedMocketTiltak =
                 process.env.NODE_ENV === 'development' && (!tiltakJson.tiltak || tiltakJson.tiltak.length === 0);
             return {

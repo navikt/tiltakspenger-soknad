@@ -19,14 +19,14 @@ async function makeApiRequest(request: NextApiRequest, oboToken: string): Promis
     if (request.method!.toUpperCase() === 'POST') {
         return makePostRequest(url, oboToken, request);
     }
-    return Promise.reject(`Unsupported method ${request.method}`);
+    return Promise.reject(new Error(`Unsupported method ${request.method}`));
 }
 
 const middlewareLive = async (request: NextApiRequest, response: NextApiResponse): Promise<void> => {
-    const requestContext = { path: request.url, method: request.method };
+    // Query-params logges ikke — de kan inneholde personopplysninger.
+    const requestContext = { path: request.url?.split('?')[0], method: request.method };
     let oboToken = null;
     try {
-        logger.info(requestContext, 'Henter token');
         const authorizationHeader = request.headers['authorization'];
         if (!authorizationHeader) {
             throw Error('Mangler token');
@@ -42,25 +42,26 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
     }
 
     if (oboToken) {
-        logger.info(requestContext, 'Starter http kall');
         try {
+            // Selve kallet (metode, url, status, varighet) logges i makeRequest — her logges kun avvik.
             const res = await makeApiRequest(request, oboToken as string);
             if (res.ok) {
                 try {
                     const body = await res.json();
-                    logger.info(requestContext, 'Returnerer respons');
                     response.status(res.status).json(body);
                 } catch (error) {
                     logger.error({ err: error, ...requestContext }, 'Respons er ikke gyldig JSON, returnerer 502');
                     response.status(502).json({ message: 'Bad Gateway' });
                 }
             } else {
-                logger.info({ ...requestContext, status: res.status }, `Respons var ikke OK. Status: ${res.status}`);
                 const error = await res.text();
                 response.status(res.status).json({ error: !error ? res.statusText : error });
             }
         } catch (error) {
-            logger.error({ err: error, ...requestContext }, 'Fikk ikke kontakt med APIet, returnerer 502');
+            logger.error(
+                { err: error, ...requestContext },
+                `Fikk ikke kontakt med APIet, returnerer 502. Message: ${(error as Error).message}`,
+            );
             response.status(502).json({ message: 'Bad Gateway' });
         }
     }

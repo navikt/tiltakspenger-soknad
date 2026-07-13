@@ -11,24 +11,26 @@ async function makeRequest(
     init: RequestInit & { method: string },
 ): Promise<Response> {
     const start = Date.now();
-    logger.info({ url, method: init.method }, `Making request to ${url}`);
+    // Query-params logges ikke — de kan inneholde personopplysninger.
+    const loggbarUrl = url.split('?')[0];
     try {
         const response = await fetch(url, {
             ...init,
             signal: AbortSignal.timeout(timeout),
         });
+        const durationMs = Date.now() - start;
         logger.info(
-            { url, method: init.method, status: response.status, durationMs: Date.now() - start },
-            `Request to ${url} completed with status ${response.status}`,
+            { url: loggbarUrl, method: init.method, status: response.status, durationMs },
+            `${init.method} ${loggbarUrl} -> ${response.status} (${durationMs}ms)`,
         );
         return response;
     } catch (err) {
         const durationMs = Date.now() - start;
-        logger.error(
-            { err, url, method: init.method, durationMs, timeout },
-            `Request to ${url} failed after ${durationMs}ms (timeout ${timeout}ms)`,
+        // Logges ikke her — call site logger én feillinje med konsekvensen, og får konteksten via meldingen/cause.
+        throw new Error(
+            `${init.method} ${loggbarUrl} failed after ${durationMs}ms (timeout ${timeout}ms): ${(err as Error).message}`,
+            { cause: err },
         );
-        throw err;
     }
 }
 
@@ -56,7 +58,7 @@ async function readRequestAsStream(request: NextApiRequest): Promise<Buffer> {
                 return resolve(buffer);
             })
             .on('error', (error) => {
-                logger.error(`Error occured reading buffer ${JSON.stringify(error)}`);
+                // Logges ikke her — feilen propagerer til call site som logger én feillinje.
                 return reject(error);
             });
     });

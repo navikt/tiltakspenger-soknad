@@ -16,7 +16,8 @@ const loggerOptions: LoggerOptions = {
                 const err = object.err instanceof Error ? pino.stdSerializers.err(object.err) : object.err;
                 object.stack_trace = err.stack;
                 object.type = err.type;
-                object.message = err.message;
+                // NB: ikke sett object.message her — msg mappes til message-feltet i Elastic,
+                // og en overskriving med err.message gjør alle feillinjer identiske i Kibana.
                 delete object.err;
             }
 
