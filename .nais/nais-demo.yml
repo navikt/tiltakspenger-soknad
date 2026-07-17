@@ -8,6 +8,9 @@ metadata:
 spec:
   image: {{ image }}
   port: 3000
+  # Avvik fra felles probe-mal (se «Delte konvensjoner» i navikt/tiltakspenger AGENTS.md):
+  # appen har ingen helse-endepunkter (all /api-trafikk går via catch-all-middleware mot soknad-api),
+  # så prober er ikke konfigurert. Skru på malen når egne isAlive-/isReady-endepunkter er på plass.
   env:
     - name: TILTAKSPENGER_SOKNAD_API_URL
       value: {{ TILTAKSPENGER_SOKNAD_API_URL }}
