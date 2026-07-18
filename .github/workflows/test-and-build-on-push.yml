@@ -14,17 +14,20 @@ on:
       - 'docker-compose/**'
       - 'LICENSE'
 
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
 jobs:
   build:
     name: Build app
-    uses: ./.github/workflows/.build-app.yml
+    # Delt workflow i metarepoet, se https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
+    uses: navikt/tiltakspenger/.github/workflows/test-og-bygg-node.yml@main
     permissions:
       contents: read
-      id-token: write
     with:
-      ENV: dev
-      buildImage: false
+      node-version: '24'
+      # Samme gate som det lokale image-bygget kjører (jf. .build-app.yml): env-fil, typer, lint og next-bygg.
+      kommando: cp .env.dev .env.production && npx tsc --noEmit && "$PAKKEHANDTERER" run lint && "$PAKKEHANDTERER" run build
     secrets:
-      NAIS_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SLACK_VARSEL_WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}

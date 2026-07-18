@@ -1,5 +1,8 @@
 name: Deploy dev applications
 
+# Lokal reusable workflow: bygger og deployer både dev- og demo-varianten (repo-spesifikk ENV-matrise).
+# Deploy-jobbene bruker den delte deploy-nais.yml fra metarepoet.
+
 on:
   workflow_call:
     secrets:
@@ -9,6 +12,9 @@ on:
         required: true
       SLACK_VARSEL_WEBHOOK_URL:
         required: true
+
+# Minste privilegium: toppnivået nullstiller token-rettighetene for jobber som ikke deklarerer egne.
+permissions: {}
 
 jobs:
   build:
@@ -40,7 +46,7 @@ jobs:
   deploy:
     name: Deploy to NAIS (dev)
     needs: [ build ]
-    uses: ./.github/workflows/.deploy-to-nais.yml
+    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
@@ -51,11 +57,11 @@ jobs:
   deploy-demo:
     name: Deploy to NAIS (dev-demo)
     needs: [ build-demo ]
-    uses: ./.github/workflows/.deploy-to-nais.yml
+    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
     with:
       NAIS_ENV: dev
       IMAGE: ${{ needs.build-demo.outputs.IMAGE }}
-      NAIS_RESOURCES: '.nais/nais-demo.yml'
+      nais-ressurs: '.nais/nais-demo.yml'

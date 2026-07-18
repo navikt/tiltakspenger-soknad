@@ -3,6 +3,9 @@ name: Build, push, and deploy to dev (manual)
 on:
   workflow_dispatch:
 
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
 jobs:
   build-and-deploy:
     name: Build and deploy to dev

@@ -1,5 +1,11 @@
 name: Build and deploy
 
+# Raske påfølgende pushes ga overlappende NAIS-rollouts i backend-repoene (2026-07-16).
+# Kjør deployene serielt; ved flere ventende kjøringer vinner den nyeste.
+concurrency:
+  group: build-and-deploy
+  cancel-in-progress: false
+
 on:
   push:
     branches:
@@ -14,6 +20,11 @@ on:
       - 'docker-compose/**'
       - 'LICENSE'
 
+# Minste privilegium: toppnivået nullstiller alle token-rettigheter, hver jobb deklarerer eksplisitt det den trenger.
+permissions: {}
+
+# Image-bygget er lokalt (.build-app.yml: ENV-matrise, env-filer, CDN-opplasting); deployen er delt - se
+# https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
 jobs:
   build-prod:
     name: Build and push
@@ -30,8 +41,8 @@ jobs:
 
   deploy-prod:
     name: Deploy to NAIS (prod)
-    needs: [build-prod]
-    uses: ./.github/workflows/.deploy-to-nais.yml
+    needs: [ build-prod ]
+    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
