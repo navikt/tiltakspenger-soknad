@@ -1,9 +1,21 @@
 name: Test/build on feature branch push
 
+# Fork-PR-er: pushes i forks trigger aldri workflows i base-repoet, derfor pull_request-trigger i tillegg.
+# Delt workflow skipper selv interne PR-events (dekkes av push-triggeren).
 on:
   push:
     branches-ignore:
       - main
+    paths-ignore:
+      - '**.md'
+      - '.env-template'
+      - '.gitattributes'
+      - '.gitignore'
+      - '.husky/**'
+      - 'CODEOWNERS'
+      - 'docker-compose/**'
+      - 'LICENSE'
+  pull_request:
     paths-ignore:
       - '**.md'
       - '.env-template'
@@ -25,7 +37,6 @@ jobs:
     permissions:
       contents: read
     with:
-      node-version: '24'
       # Samme gate som det lokale image-bygget kjører (jf. .build-app.yml): env-fil, typer, lint og next-bygg.
       kommando: cp .env.dev .env.production && npx tsc --noEmit && "$PAKKEHANDTERER" run lint && "$PAKKEHANDTERER" run build
     secrets:
