@@ -4,7 +4,7 @@
     "license": "MIT",
     "author": "NAV",
     "scripts": {
-        "dev": "next dev | pino-pretty",
+        "dev": "next dev -H 127.0.0.1 | pino-pretty",
         "build": "next build",
         "start": "next start",
         "lint": "eslint .",
