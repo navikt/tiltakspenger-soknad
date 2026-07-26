@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import logger from './../../utils/serverLogger';
-import { getOnBehalfOfToken } from '@/utils/authentication';
+import { getOnBehalfOfToken, validateAuthorizationHeader } from '@/utils/authentication';
 import { makeGetRequest, makePostRequest } from '@/utils/http';
-import { validateIdportenToken } from '@navikt/oasis';
 
 const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
@@ -27,15 +26,8 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
     const requestContext = { path: request.url?.split('?')[0], method: request.method };
     let oboToken = null;
     try {
-        const authorizationHeader = request.headers['authorization'];
-        if (!authorizationHeader) {
-            throw Error('Mangler token');
-        }
-        const validationResult = await validateIdportenToken(authorizationHeader);
-        if (!validationResult.ok) {
-            throw validationResult.error;
-        }
-        oboToken = await getOnBehalfOfToken(request.headers.authorization!);
+        await validateAuthorizationHeader(request.headers.authorization);
+        oboToken = await getOnBehalfOfToken(request.headers.authorization);
     } catch (error) {
         logger.error({ err: error, ...requestContext }, 'Bruker har ikke tilgang');
         response.status(401).json({ message: 'Bruker har ikke tilgang' });

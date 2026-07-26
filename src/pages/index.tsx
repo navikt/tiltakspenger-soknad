@@ -129,7 +129,7 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
 
     let token;
     try {
-        token = await getOnBehalfOfToken(context.req.headers.authorization!);
+        token = await getOnBehalfOfToken(context.req.headers.authorization);
     } catch (error) {
         logger.error(`Bruker har ikke tilgang: ${(error as Error).message}`);
         return redirectToLogin(context);

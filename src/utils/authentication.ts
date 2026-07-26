@@ -5,6 +5,16 @@ import { v4 as uuidv4 } from 'uuid';
 import jwt from 'jsonwebtoken';
 import { GetServerSidePropsContext } from 'next';
 
+// Lokal kjøring uten authserver: hopper over ID-porten-validering og TokenX-veksling, slik at
+// frontend kan snakke med en lokal søknads-API som godtar hvilket som helst token.
+// Dobbel guard: flagget virker kun utenfor NAIS, så stien er umulig å nå i dev og prod.
+// NAIS setter NAIS_CLUSTER_NAME til dev-gcp/prod-gcp, mens den lokalt er uspesifisert eller «localhost».
+const kjørerUtenforNais = process.env.NAIS_CLUSTER_NAME === undefined || process.env.NAIS_CLUSTER_NAME === 'localhost';
+
+const brukFakeToken = process.env.BRUK_LOKAL_FAKE_TOKEN === 'true' && kjørerUtenforNais;
+
+const fakeToken = process.env.LOKAL_FAKE_TOKEN ?? 'TokenMcTokenface';
+
 async function getKey(jwk: any) {
     if (!jwk) {
         logger.error('JWK Mangler');
@@ -69,7 +79,7 @@ function removeBearer(authorizationHeader: string) {
     return authorizationHeader.replace('Bearer ', '');
 }
 
-export async function validateAuthorizationHeader(authorizationHeader: string | undefined) {
+async function validateAuthorizationHeaderLive(authorizationHeader: string | undefined): Promise<void> {
     if (!authorizationHeader) {
         throw new Error('Mangler authorization header');
     }
@@ -78,14 +88,22 @@ export async function validateAuthorizationHeader(authorizationHeader: string | 
     if (!validationResult.ok) {
         throw validationResult.error;
     }
-
-    return validationResult;
 }
 
-export async function getOnBehalfOfToken(authorizationHeader: string) {
+const validateAuthorizationHeaderFake = async (): Promise<void> => {};
+
+async function getOnBehalfOfTokenLive(authorizationHeader: string | undefined) {
     const subjectToken = removeBearer(authorizationHeader || '');
     return exchangeToken(subjectToken);
 }
+
+const getOnBehalfOfTokenFake = async () => fakeToken;
+
+export const validateAuthorizationHeader = brukFakeToken
+    ? validateAuthorizationHeaderFake
+    : validateAuthorizationHeaderLive;
+
+export const getOnBehalfOfToken = brukFakeToken ? getOnBehalfOfTokenFake : getOnBehalfOfTokenLive;
 
 export function redirectToLogin(context: GetServerSidePropsContext) {
     return {

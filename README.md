@@ -18,6 +18,29 @@ For å få tilgang til alle dependencies må man generere en personal access-tok
 
 Kopier `.env.demo` til `.env.local` og kjør `npm run dev`. Demo-modus er tilgjengelig på http://localhost:3000/demo
 
+### Mot lokal backend uten authserver
+
+Søknaden kan kjøres mot et ekte, lokalt [tiltakspenger-soknad-api](https://github.com/navikt/tiltakspenger-soknad-api)
+uten at authserveren kjører. Da er postgres den eneste eksterne avhengigheten i verdikjeden.
+
+1. Start søknads-APIet med `main()` i `LokalMain.kt` (i testkildene der) — det godtar hvilket som helst token, og
+   trenger kun postgres ved siden av. Se [README-en i det repoet](https://github.com/navikt/tiltakspenger-soknad-api).
+2. Kjør frontend med fake token:
+    ```sh
+    BRUK_LOKAL_FAKE_TOKEN=true npm run dev
+    ```
+3. :rocket: Gå på http://localhost:3000 (ikke via Wonderwall på 2222 — den er ikke i bruk her)
+
+Frontenden hopper da over ID-porten-validering og TokenX-vekslingen, og sender fake-tokenet videre til søknads-APIet.
+Til forskjell fra demo-modus over, som kjører helt uten backend, snakker frontenden her med et ekte API — det er kun
+autentiseringen som er faket. `TILTAKSPENGER_SOKNAD_API_URL` må peke på det lokale APIet (`http://localhost:8080`).
+
+Miljøvariabler (dokumentert i `.env-template`, samme navn og oppførsel som i `tiltakspenger-saksbehandling`):
+
+- `BRUK_LOKAL_FAKE_TOKEN` — `true` slår på fake token. Virker kun utenfor Nais (`NAIS_CLUSTER_NAME` uspesifisert eller
+  `localhost`), altså aldri i dev eller prod.
+- `LOKAL_FAKE_TOKEN` — tokenet som sendes til søknads-APIet. Valgfri, default `TokenMcTokenface`.
+
 ### Med hele verdikjeden
 
 **Obs!** Mulig dette ikke fungerer akkurat nå..
