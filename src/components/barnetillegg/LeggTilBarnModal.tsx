@@ -1,5 +1,6 @@
 import { Alert, Button, Link, Modal, ReadMore } from '@navikt/ds-react';
-import React, { useImperativeHandle, useRef } from 'react';
+import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
+import dayjs from 'dayjs';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './Barnetillegg.module.css';
@@ -15,7 +16,18 @@ import Søknad from '@/types/Søknad';
 import { ScanningGuide } from '@/components/veiledning/ScanningGuide';
 import Fritekstspørsmål from '@/components/fritekstspørsmål/Fritekstspørsmål';
 import Datospørsmål from '@/components/datospørsmål/Datospørsmål';
+import { DATOFORMAT_BESKRIVELSE } from '@/components/datovelger/datoFeilmelding';
 import { Barn } from '@/types/Barn';
+
+// Grensen for hva vi godtar, satt for å fange grove tastefeil i årstallet.
+// Den er ikke en regel om hvem det gis barnetillegg for. Aldersvurderingen hører hjemme i
+// saksbehandling, som måler fødselsdato mot tiltaksperioden og periodiserer tillegget fram til
+// dagen før barnet fyller 16. Derfor er grensen satt så vidt at den ikke stenger noen ute.
+const ANTALL_ÅR_TILBAKE_I_DATOVELGER = 100;
+
+// Nedtrekket viser bare de siste årene, siden barnetillegget gjelder barn under 16.
+// Trenger noen et eldre årstall, skriver de det inn — grensen over er fortsatt den som gjelder.
+const ANTALL_ÅR_I_NEDTREKK = 20;
 
 interface LeggTilBarnModalProps {
     fieldArray: UseFieldArrayReturn<Søknad>;
@@ -32,6 +44,18 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
         const uuid = useRef(uuidv4());
         const modalRef = useRef<HTMLDialogElement>(null);
         const modalErÅpen = modalRef?.current?.open;
+        // useDatepicker leser defaultSelected kun ved montering, og Modal.Body holder innholdet
+        // montert også når dialogen er lukket. Vi bytter derfor key på datospørsmålet hver gang
+        // modalen åpnes, slik at feltet viser dato for det barnet som faktisk redigeres.
+        const [åpningsnummer, setÅpningsnummer] = useState(0);
+        const tidligsteFødselsdato = useMemo(
+            () => dayjs().subtract(ANTALL_ÅR_TILBAKE_I_DATOVELGER, 'year').startOf('year').toDate(),
+            [],
+        );
+        const tidligsteÅrINedtrekk = useMemo(
+            () => dayjs().subtract(ANTALL_ÅR_I_NEDTREKK, 'year').startOf('year').toDate(),
+            [],
+        );
 
         React.useEffect(() => {
             // Setter fokus på første felt i modalen når den åpnes slik at bruker kan fylle inn informasjon med en gang.
@@ -103,6 +127,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                 index: barn.index,
             });
             uuid.current = åpneMedUuid;
+            setÅpningsnummer((forrige) => forrige + 1);
             modalRef?.current?.showModal();
         };
 
@@ -116,7 +141,6 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
 
         const lukkModal = () => {
             clearErrors('svar.barnetillegg.kladd');
-            // TODO Fødselsdato blir ikke resatt til tom..
             resetField('svar.barnetillegg.kladd');
             slettVedleggUtenTilknytningTilBarn();
             modalRef?.current?.close();
@@ -154,11 +178,15 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                             Etternavn
                         </Fritekstspørsmål>
                         <Datospørsmål
+                            key={åpningsnummer}
                             name="svar.barnetillegg.kladd.fødselsdato"
                             datoMåVæreIFortid={true}
+                            minDate={tidligsteFødselsdato}
+                            kalenderFraDato={tidligsteÅrINedtrekk}
+                            description={DATOFORMAT_BESKRIVELSE}
                             validate={datofeltValidator}
                         >
-                            Fødselsdato (dd.mm.åååå)
+                            Fødselsdato
                         </Datospørsmål>
                         <JaNeiSpørsmål
                             reverse

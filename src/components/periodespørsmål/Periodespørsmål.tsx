@@ -1,6 +1,6 @@
 import React from 'react';
 import { Controller, get, useFormContext } from 'react-hook-form';
-import { Label, ReadMore } from '@navikt/ds-react';
+import { Fieldset, ReadMore } from '@navikt/ds-react';
 import Periodevelger from '@/components/datovelger/Periodevelger';
 import { ValidatorFunction } from '@/types/ValidatorFunction';
 import styles from './Periodespørsmål.module.css';
@@ -43,8 +43,10 @@ export default function Periodespørsmål({
     const { control, formState, getValues } = useFormContext();
     const errorMessage = get(formState.errors, name)?.message;
     return (
-        <div className={styles.periodespørsmål} id={name}>
-            <Label>{children}</Label>
+        // Fra og Til hører sammen, og uten fieldset står feltene igjen med bare «Fra»/«Til» for
+        // skjermlesere — flere perioder på samme side blir da umulige å skille fra hverandre.
+        // Feilen settes ikke her, men per felt i Periodevelger, så bare feltet som er feil markeres.
+        <Fieldset legend={children} className={styles.periodespørsmål} id={name}>
             {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
                 name={name}
@@ -81,6 +83,6 @@ export default function Periodespørsmål({
                     );
                 }}
             />
-        </div>
+        </Fieldset>
     );
 }
