@@ -43,7 +43,7 @@
         "@testing-library/jest-dom": "6.9.1",
         "@testing-library/react": "16.3.2",
         "@types/jsonwebtoken": "9.0.10",
-        "@types/node": "24.12.2",
+        "@types/node": "26.1.1",
         "@types/node-jose": "1.1.13",
         "@types/react": "19.2.14",
         "@types/react-dom": "19.2.3",
