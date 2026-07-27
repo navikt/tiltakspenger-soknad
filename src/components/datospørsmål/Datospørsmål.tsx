@@ -12,6 +12,10 @@ interface DatospørsmålProps {
     validate?: ValidatorFunction | ValidatorFunction[];
     minDate?: Date;
     maxDate?: Date;
+    /** Korter ned kalenderen og år-nedtrekket uten å stramme inn hva som godtas — se [Datovelger]. */
+    kalenderFraDato?: Date;
+    defaultMonth?: Date;
+    description?: string;
     hjelpetekst?: Hjelpetekst;
     datoMåVæreIFortid?: boolean;
     legend?: string;
@@ -30,12 +34,29 @@ function setupValidation(validate?: ValidatorFunction | ValidatorFunction[]) {
     return validate;
 }
 
+// Feltet er typet som string (`Barn.fødselsdato`), men datovelgeren skriver en Date tilbake.
+// Verdien kan derfor være tom streng, en Date eller en datostreng.
+// Datovelgeren tar bare imot en Date eller ingenting, så alt som ikke lar seg tolke blir undefined.
+function somDato(verdi: unknown): Date | undefined {
+    if (verdi instanceof Date) {
+        return verdi;
+    }
+    if (typeof verdi === 'string' && verdi !== '') {
+        const dato = new Date(verdi);
+        return isNaN(dato.getTime()) ? undefined : dato;
+    }
+    return undefined;
+}
+
 export default function Datospørsmål({
     name,
     children,
     validate,
     minDate,
     maxDate,
+    kalenderFraDato,
+    defaultMonth,
+    description,
     hjelpetekst,
     datoMåVæreIFortid,
     legend,
@@ -44,7 +65,7 @@ export default function Datospørsmål({
     const errorMessage = get(formState.errors, name)?.message;
     return (
         <div className={styles.datospørsmål}>
-            <Label>{legend}</Label>
+            {legend && <Label>{legend}</Label>}
             {hjelpetekst && <ReadMore header={hjelpetekst.tittel}>{hjelpetekst.tekst}</ReadMore>}
             <Controller
                 name={name}
@@ -54,12 +75,15 @@ export default function Datospørsmål({
                     <Datovelger
                         id={name}
                         label={children}
+                        description={description}
                         onDateChange={onChange}
                         errorMessage={errorMessage}
                         minDate={minDate}
                         maxDate={maxDate}
+                        kalenderFraDato={kalenderFraDato}
+                        defaultMonth={defaultMonth}
                         datoMåVæreIFortid={datoMåVæreIFortid}
-                        defaultSelected={value != '' ? value : null}
+                        defaultSelected={somDato(value)}
                     />
                 )}
             />

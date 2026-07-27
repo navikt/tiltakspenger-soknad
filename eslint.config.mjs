@@ -13,6 +13,7 @@ export default tseslint.config(
             "next.config.js",
             ".prettierrc.js",
             "eslint.config.mjs",
+            "jest.config.mjs",
         ],
     },
     {

@@ -7,6 +7,7 @@ import { gyldigPeriodeValidator, periodenErInnenforTiltaksperiodeValidator } fro
 import { formatPeriode } from '@/utils/formatPeriode';
 import Show from '@/components/show/show';
 import Datospørsmål from '@/components/datospørsmål/Datospørsmål';
+import { DATOFORMAT_BESKRIVELSE } from '@/components/datovelger/datoFeilmelding';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import styles from './andreutbetalinger.module.css';
 import {
@@ -249,9 +250,11 @@ export default function AndreUtbetalingerSteg({
                             validate={påkrevdAlderspensjonDatofeltValidator}
                             minDate={new Date(tiltaksperiode?.fra)}
                             maxDate={new Date(tiltaksperiode?.til)}
+                            defaultMonth={new Date(tiltaksperiode?.fra)}
+                            description={DATOFORMAT_BESKRIVELSE}
                             legend="Når begynner din alderspensjon?"
                         >
-                            Fra dato (dd.mm.åååå)
+                            Fra dato
                         </Datospørsmål>
                     )}
                 </div>

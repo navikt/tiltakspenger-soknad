@@ -5,6 +5,8 @@ let isDevelopment = process.env.NODE_ENV === 'development';
 const appDirectives = {
     'script-src-elem': ["'self'"],
     'style-src-elem': ["'self'"],
+    // Next serverer sine egne fonter fra samme origin; uten 'self' blokkeres de av dekoratørens font-src.
+    'font-src': ["'self'"],
     'img-src': isDevelopment ? ['data:', "'self'"] : ['data:'],
     'connect-src': isDevelopment
         ? ["'self'", process.env.NEXT_PUBLIC_TELEMETRY_URL]
