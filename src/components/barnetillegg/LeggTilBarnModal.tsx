@@ -10,7 +10,7 @@ import {
     påkrevdFritekstfeltValidator,
     påkrevdJaNeiSpørsmålValidator,
 } from '@/utils/formValidators';
-import FileUploader from '@/components/file-uploader/FIleUploader';
+import FileUploader from '@/components/file-uploader/FileUploader';
 import { UseFieldArrayReturn, useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
 import { ScanningGuide } from '@/components/veiledning/ScanningGuide';
@@ -239,7 +239,7 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                             <FileUploader
                                 name="vedlegg"
                                 uuid={uuid.current}
-                                knappTekst="Last opp fødselsattest eller adopsjonsbevis"
+                                label="Last opp fødselsattest eller adopsjonsbevis"
                                 control={control}
                             />
                         </div>
