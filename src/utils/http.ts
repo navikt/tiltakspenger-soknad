@@ -1,15 +1,21 @@
 import logger from '@/utils/serverLogger';
 import { NextApiRequest } from 'next';
 
-const TIMEOUT_DEFAULT = 10000;
+/** Vanlige oppslag mot soknad-api: personalia, tiltak. Små svar, ingen grunn til å vente lenge. */
+export const TIMEOUT_DEFAULT = 10_000;
+
+/**
+ * Innsending av søknad, som er den eneste POST-en vi proxer.
+ *
+ * Kallet returnerer først når backend har virusskannet alle vedleggene, og skanningen skjer synkront inne i requesten.
+ * Målt i dev: 5 vedlegg på 17,5 MB brukte 9 sekunder i ClamAV og 15 sekunder totalt, mens grensene tillater 10 vedlegg på 50 MB.
+ * Med den korte timeouten ga BFF-en opp mens backend fullførte, og brukeren fikk 502 på en søknad som ble registrert og journalført — hvorpå et nytt forsøk gir duplikat.
+ */
+export const TIMEOUT_INNSENDING = 60_000;
 
 // trace_id/span_id injiseres automatisk i loggene av OTel-autoinstrumenteringen,
 // og propageres til backend via traceparent-headeren på fetch-kallet.
-async function makeRequest(
-    url: string,
-    timeout: number,
-    init: RequestInit & { method: string },
-): Promise<Response> {
+async function makeRequest(url: string, timeout: number, init: RequestInit & { method: string }): Promise<Response> {
     const start = Date.now();
     // Query-params logges ikke — de kan inneholde personopplysninger.
     const loggbarUrl = url.split('?')[0];
@@ -68,7 +74,7 @@ export async function makePostRequest(
     url: string,
     token: string,
     request: NextApiRequest,
-    timeout: number = TIMEOUT_DEFAULT,
+    timeout: number = TIMEOUT_INNSENDING,
 ): Promise<Response> {
     const requestBuffer = await readRequestAsStream(request);
     const body = new Uint8Array(requestBuffer);
