@@ -4,3 +4,6 @@ TILTAKSPENGER_SOKNAD_API_URL: http://tiltakspenger-soknad-api
 NEXT_PUBLIC_TELEMETRY_URL: https://telemetry.ekstern.dev.nav.no/collect
 dekorator:
   env: dev
+probes:
+  isAlive: /api/isAlive
+  isReady: /api/isReady

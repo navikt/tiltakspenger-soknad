@@ -8,9 +8,22 @@ metadata:
 spec:
   image: {{ image }}
   port: 3000
-  # Avvik fra felles probe-mal (se «Delte konvensjoner» i navikt/tiltakspenger AGENTS.md):
-  # appen har ingen helse-endepunkter (all /api-trafikk går via catch-all-middleware mot soknad-api),
-  # så prober er ikke konfigurert. Skru på malen når egne isAlive-/isReady-endepunkter er på plass.
+  startup:
+    path: /demo/api/isAlive
+    initialDelay: 5
+    periodSeconds: 5
+    failureThreshold: 60 # 5 + 60 × 5 s ≈ 5 min oppstartsvindu
+    timeout: 3
+  liveness:
+    path: /demo/api/isAlive
+    periodSeconds: 10
+    failureThreshold: 3
+    timeout: 3
+  readiness:
+    path: /demo/api/isReady
+    periodSeconds: 5
+    failureThreshold: 1
+    timeout: 3
   env:
     - name: TILTAKSPENGER_SOKNAD_API_URL
       value: {{ TILTAKSPENGER_SOKNAD_API_URL }}
