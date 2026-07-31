@@ -45,15 +45,20 @@ jobs:
           # Ikke la tokenet ligge igjen i .git/config - byggesteget kjører avhengigheters kode.
           persist-credentials: false
 
+      # pnpm-versjonen leses fra packageManager-feltet i package.json.
+      - name: Set up pnpm
+        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+
       - name: Set up Node
         uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: '24'
           registry-url: "https://npm.pkg.github.com"
+          cache: 'pnpm'
 
       # READER_TOKEN trengs for @navikt-pakker fra GitHub Packages; den har kun read:packages.
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
 
@@ -63,16 +68,16 @@ jobs:
           MILJO: ${{ inputs.ENV }}
 
       - name: Run type checking
-        run: npx tsc --noEmit
+        run: pnpm exec tsc --noEmit
 
       - name: Run linting
-        run: npm run lint
+        run: pnpm run lint
 
       - name: Run tests
-        run: npm test
+        run: pnpm run test
 
       - name: Build app
-        run: npm run build
+        run: pnpm run build
 
       - name: Build and push docker image
         # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags

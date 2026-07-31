@@ -38,7 +38,7 @@ jobs:
       contents: read
     with:
       # Samme gate som det lokale image-bygget kjører (jf. .build-app.yml): env-fil, typer, lint, tester og next-bygg.
-      kommando: cp .env.dev .env.production && npx tsc --noEmit && "$PAKKEHANDTERER" run lint && "$PAKKEHANDTERER" run test && "$PAKKEHANDTERER" run build
+      kommando: cp .env.dev .env.production && "$PAKKEHANDTERER" exec tsc --noEmit && "$PAKKEHANDTERER" run lint && "$PAKKEHANDTERER" run test && "$PAKKEHANDTERER" run build
     secrets:
       READER_TOKEN: ${{ secrets.READER_TOKEN }}
       SLACK_VARSEL_WEBHOOK_URL: ${{ secrets.SLACK_VARSEL_WEBHOOK_URL }}
