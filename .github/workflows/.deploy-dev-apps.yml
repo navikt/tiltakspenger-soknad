@@ -46,7 +46,7 @@ jobs:
   deploy:
     name: Deploy to NAIS (dev)
     needs: [ build ]
-    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
+    uses: navikt/tiltakspenger-workflows/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
@@ -57,7 +57,7 @@ jobs:
   deploy-demo:
     name: Deploy to NAIS (dev-demo)
     needs: [ build-demo ]
-    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
+    uses: navikt/tiltakspenger-workflows/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write

@@ -32,8 +32,8 @@ permissions: {}
 jobs:
   build:
     name: Build app
-    # Delt workflow i metarepoet, se https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
-    uses: navikt/tiltakspenger/.github/workflows/test-og-bygg-node.yml@main
+    # Delt workflow i metarepoet, se https://github.com/navikt/tiltakspenger-workflows/blob/main/.github/workflows/README.md
+    uses: navikt/tiltakspenger-workflows/.github/workflows/test-og-bygg-node.yml@main
     permissions:
       contents: read
     with:

@@ -24,7 +24,7 @@ on:
 permissions: {}
 
 # Image-bygget er lokalt (.build-app.yml: ENV-matrise, env-filer, CDN-opplasting); deployen er delt - se
-# https://github.com/navikt/tiltakspenger/blob/main/.github/workflows/README.md
+# https://github.com/navikt/tiltakspenger-workflows/blob/main/.github/workflows/README.md
 jobs:
   build-prod:
     name: Build and push
@@ -42,7 +42,7 @@ jobs:
   deploy-prod:
     name: Deploy to NAIS (prod)
     needs: [ build-prod ]
-    uses: navikt/tiltakspenger/.github/workflows/deploy-nais.yml@main
+    uses: navikt/tiltakspenger-workflows/.github/workflows/deploy-nais.yml@main
     permissions:
       contents: read
       id-token: write
