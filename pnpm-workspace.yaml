@@ -1,7 +1,10 @@
 # Tillat byggescript for spesifikke pakker selv om .npmrc har ignore-scripts=true.
 # sharp:          native bildebehandling brukt av Next.js sin next/image
 # unrs-resolver:  Rust-basert modulresolver brukt av eslint-plugins
+# @parcel/watcher: filovervåker for jest-haste-map; nektes fordi install-scriptet bare bygger fra kildekode
+#                 når ferdigbygd binær mangler, og den kommer som plattformpakke.
 allowBuilds:
+  '@parcel/watcher': false
   sharp: true
   unrs-resolver: true
 
@@ -12,8 +15,7 @@ minimumReleaseAgeExclude:
   - "@navikt/*"
   - "@nais/*"
 
-# Sikkerhetsfikser i transitive pakker: js-cookie kommer via nav-dekoratoren-moduler, uuid 9 via node-jose.
+# Sikkerhetsfiks i transitiv pakke: node-jose 2.2.0 (siste versjon) krever uuid ^9.
 # Fjernes når foreldrepakken selv krever fikset versjon (sjekk med `pnpm why <pakke>`).
 overrides:
-  js-cookie: 3.0.8
   node-jose>uuid: 11.1.1
