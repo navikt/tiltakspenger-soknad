@@ -75,21 +75,11 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
                         <span>Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. </span>
                         <p>Saken din er nå til behandling hos Nav.</p>
                         <p>
-                            <Link href="https://www.nav.no/ettersende#tiltakspenger" target="_blank">
-                                Her kan du ettersende dokumentasjon digitalt (åpnes i nytt vindu)
+                            <Link href="https://www.nav.no/fyllut-ettersending/nav761345/innsendingsvalg" target="_blank">
+                                Her kan du ettersende dokumentasjon digitalt eller per post (åpnes i nytt vindu).
                             </Link>
                         </p>
-                        <p>
-                            Du kan også{' '}
-                            <Link
-                                href="https://www.nav.no/soknader/nb/person/arbeid/tiltakspenger/NAV%2076-13.45/ettersendelse/brev"
-                                target="_blank"
-                            >
-                                ettersende per post (åpnes i nytt vindu)
-                            </Link>{' '}
-                            eller levere
-                        </p>
-                        <p>dokumentasjon på ditt lokale NAV-kontor.</p>
+                        <p>Du kan også levere dokumentasjon på ditt lokale NAV-kontor.</p>
                     </span>
                 </Alert>
             </Show>
