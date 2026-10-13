@@ -2,7 +2,7 @@ const defaultValues = {
     svar: {
         tiltak: {},
         barnetillegg: {
-            eøsOppholdForBarnFraAPI: {},
+            bostedForBarnFraFolkeregisteret: {},
             manueltRegistrerteBarnSøktBarnetilleggFor: [],
         },
         institusjonsopphold: {},

@@ -22,9 +22,17 @@ export interface FormTiltak {
     arenaRegistrertPeriode?: Periode;
 }
 
+export interface Bosted {
+    borINorge?: boolean;
+    /** Spørres bare om når barnet ikke bor i Norge. */
+    borIEøs?: boolean;
+}
+
 export interface Barnetillegg {
+    søkerOmBarnetillegg?: boolean;
     manueltRegistrerteBarnSøktBarnetilleggFor: Barn[];
-    eøsOppholdForBarnFraAPI: Record<string, boolean>;
+    /** Svarene for barna fra Folkeregisteret, med barnets uuid som nøkkel. */
+    bostedForBarnFraFolkeregisteret: Record<string, Bosted>;
     kladd: Barn;
 }
 

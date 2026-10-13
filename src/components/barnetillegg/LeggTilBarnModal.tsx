@@ -1,15 +1,11 @@
-import { Alert, Button, Link, Modal, ReadMore } from '@navikt/ds-react';
+import { Alert, Button, Modal, ReadMore } from '@navikt/ds-react';
 import React, { useImperativeHandle, useMemo, useRef, useState } from 'react';
 import dayjs from 'dayjs';
-import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { v4 as uuidv4 } from 'uuid';
 import styles from './Barnetillegg.module.css';
-import { ExternalLinkIcon, PlusIcon } from '@navikt/aksel-icons';
-import {
-    påkrevdDatoValidator,
-    påkrevdFritekstfeltValidator,
-    påkrevdJaNeiSpørsmålValidator,
-} from '@/utils/formValidators';
+import { PlusIcon } from '@navikt/aksel-icons';
+import { påkrevdDatoValidator, påkrevdFritekstfeltValidator } from '@/utils/formValidators';
+import BostedSpørsmål, { navnPåBarnet } from '@/components/barnetillegg/BostedSpørsmål';
 import FileUploader from '@/components/file-uploader/FileUploader';
 import { UseFieldArrayReturn, useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
@@ -40,7 +36,10 @@ export interface LeggTilBarnModalImperativeHandle {
 
 export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandle, LeggTilBarnModalProps>(
     function LeggTilBarnModal({ fieldArray }: LeggTilBarnModalProps, ref) {
-        const { trigger, getValues, control, setValue, resetField, setFocus, clearErrors } = useFormContext<Søknad>();
+        const { trigger, getValues, control, setValue, resetField, setFocus, clearErrors, watch } =
+            useFormContext<Søknad>();
+        const kladdFornavn = watch('svar.barnetillegg.kladd.fornavn');
+        const kladdEtternavn = watch('svar.barnetillegg.kladd.etternavn');
         const uuid = useRef(uuidv4());
         const modalRef = useRef<HTMLDialogElement>(null);
         const modalErÅpen = modalRef?.current?.open;
@@ -91,14 +90,6 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
             return påkrevdDatoValidator(verdi, 'Du må oppgi fødselsdato');
         }
 
-        function barnUtenforEØSValidator(verdi: boolean) {
-            if (!modalErÅpen) return;
-            return påkrevdJaNeiSpørsmålValidator(
-                verdi,
-                'Du må svare på om barnet ditt oppholder seg i Norge eller et annet EØS-land i tiltaksperioden',
-            );
-        }
-
         function maks25tegnValidator(verdi: string) {
             if (!modalRef?.current?.open) return;
             if (verdi.length > 25) {
@@ -122,7 +113,8 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                 fornavn: barn.fornavn,
                 etternavn: barn.etternavn,
                 fødselsdato: barn.fødselsdato,
-                oppholdInnenforEøs: barn.oppholdInnenforEøs,
+                borINorge: barn.borINorge,
+                borIEøs: barn.borIEøs,
                 uuid: åpneMedUuid,
                 index: barn.index,
             });
@@ -188,33 +180,12 @@ export const LeggTilBarnModal = React.forwardRef<LeggTilBarnModalImperativeHandl
                         >
                             Fødselsdato
                         </Datospørsmål>
-                        <JaNeiSpørsmål
-                            reverse
-                            name={`svar.barnetillegg.kladd.oppholdInnenforEøs`}
-                            validate={barnUtenforEØSValidator}
-                            hjelpetekst={{
-                                tittel: 'Hvorfor spør vi om dette?',
-                                tekst: (
-                                    <>
-                                        <span>
-                                            Hvis barnet ditt oppholder seg utenfor EØS i tiltaksperioden kan det ha
-                                            betydning for din rett til barnetillegg.
-                                        </span>
-                                        <span style={{ display: 'block', marginTop: '1rem' }}>
-                                            <Link
-                                                href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
-                                                target="_blank"
-                                            >
-                                                Du kan lese mer om hvilke land som er med i EØS her.
-                                                <ExternalLinkIcon title="a11y-title" />
-                                            </Link>
-                                        </span>
-                                    </>
-                                ),
-                            }}
-                        >
-                            Oppholder barnet ditt seg i Norge eller et annet EØS-land i tiltaksperioden?
-                        </JaNeiSpørsmål>
+                        <BostedSpørsmål
+                            barnetsNavn={navnPåBarnet({ fornavn: kladdFornavn, etternavn: kladdEtternavn })}
+                            borINorgeName="svar.barnetillegg.kladd.borINorge"
+                            borIEøsName="svar.barnetillegg.kladd.borIEøs"
+                            skalValideres={() => !!modalRef?.current?.open}
+                        />
                         <Alert variant="info" style={{ marginTop: '1rem' }}>
                             <div style={{ width: 'initial', wordWrap: 'break-word', wordBreak: 'break-word' }}>
                                 <b>Du må legge ved:</b>

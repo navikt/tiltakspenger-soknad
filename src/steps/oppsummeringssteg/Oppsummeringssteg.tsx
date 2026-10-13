@@ -97,9 +97,16 @@ export default function Oppsummeringssteg({
     const tiltaksperiode = tiltak.periode;
     const opprinneligTiltaksperiode = valgtTiltakManglerPeriode ? tiltaksperiode : valgtTiltak.arenaRegistrertPeriode;
 
-    const alleBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
-        .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
-        .concat(personalia!.barn);
+    const alleBarnSøktBarnetilleggFor = barnetillegg.søkerOmBarnetillegg
+        ? barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
+              .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
+              .concat(
+                  (personalia!.barn ?? []).map((barn) => ({
+                      ...barn,
+                      ...barnetillegg.bostedForBarnFraFolkeregisteret[barn.uuid],
+                  })),
+              )
+        : [];
     return (
         <Step
             title={title}
@@ -296,15 +303,7 @@ export default function Oppsummeringssteg({
                                   const barnetsVedlegg = vedlegg.filter((v) => v.uuid === barn.uuid);
                                   return (
                                       <div style={{ marginTop: index == 0 ? '0rem' : '2rem' }} key={barn.uuid}>
-                                          <BarneInfo
-                                              vedlegg={barnetsVedlegg}
-                                              barn={{
-                                                  ...barn,
-                                                  oppholdInnenforEøs:
-                                                      barn.oppholdInnenforEøs ??
-                                                      barnetillegg.eøsOppholdForBarnFraAPI[barn.uuid],
-                                              }}
-                                          />
+                                          <BarneInfo vedlegg={barnetsVedlegg} barn={barn} />
                                           {index != alleBarnSøktBarnetilleggFor.length - 1 && <hr />}
                                       </div>
                                   );

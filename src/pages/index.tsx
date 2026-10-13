@@ -1,6 +1,5 @@
 import React, { ReactElement, useContext, useEffect } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
 import { Button, Heading, Link } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import Accordion from '@/components/accordion/Accordion';
@@ -136,19 +135,14 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
     }
 
     try {
-        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
+        // Barna hentes først når søkeren har svart at hen vil søke barnetillegg.
+        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia?medBarn=false`, token);
         if (personaliaResponse.ok) {
-            const personaliaJson = (await personaliaResponse.json()) as PersonDTO;
+            const { barn: _barn, ...personalia } = (await personaliaResponse.json()) as PersonDTO;
 
             return {
                 props: {
-                    personalia: {
-                        ...personaliaJson,
-                        barn: personaliaJson.barn.map((barn) => ({
-                            ...barn,
-                            uuid: uuidv4(),
-                        })),
-                    },
+                    personalia,
                 },
             };
         } else {
