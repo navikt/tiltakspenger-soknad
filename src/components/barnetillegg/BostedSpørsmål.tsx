@@ -4,6 +4,7 @@ import { Link } from '@navikt/ds-react';
 import { ExternalLinkIcon } from '@navikt/aksel-icons';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
+import { formaterBarnetsNavn, Navnedeler } from '@/utils/barnetsNavn';
 
 interface BostedSpørsmålProps {
     /** Navnet på barnet slik det skal stå i spørsmålene. */
@@ -14,16 +15,9 @@ interface BostedSpørsmålProps {
     skalValideres?: () => boolean;
 }
 
-export function navnPåBarnet({
-    fornavn,
-    mellomnavn,
-    etternavn,
-}: {
-    fornavn?: string;
-    mellomnavn?: string;
-    etternavn?: string;
-}) {
-    return [fornavn, mellomnavn, etternavn].filter((del) => !!del?.trim()).join(' ') || 'barnet';
+/** Navnet slik det skal stå inne i et spørsmål, med «barnet» når ingen deler av navnet er kjent. */
+export function navnPåBarnet(barn: Navnedeler) {
+    return formaterBarnetsNavn(barn) ?? 'barnet';
 }
 
 export default function BostedSpørsmål({

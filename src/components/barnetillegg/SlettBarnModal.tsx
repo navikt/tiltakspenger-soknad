@@ -4,6 +4,7 @@ import { TrashIcon } from '@navikt/aksel-icons';
 import styles from './Barnetillegg.module.css';
 import stepStyles from './../../components/step/Step.module.css';
 import { Barn } from '@/types/Barn';
+import { formaterBarnetsNavn } from '@/utils/barnetsNavn';
 
 interface SlettModalProps {
     barn: Barn;
@@ -12,6 +13,7 @@ interface SlettModalProps {
 
 export const SlettBarnModal: React.FC<SlettModalProps> = ({ barn, onDelete }) => {
     const modalRef = useRef<HTMLDialogElement>(null);
+    const navn = formaterBarnetsNavn(barn);
 
     const åpneModal = () => modalRef?.current?.showModal();
     const lukkModal = () => modalRef?.current?.close();
@@ -28,7 +30,7 @@ export const SlettBarnModal: React.FC<SlettModalProps> = ({ barn, onDelete }) =>
                 onClose={lukkModal}
             >
                 <Modal.Body role="dialog">
-                    <p>{`Er du sikker på at du vil slette barnet ${barn.fornavn} ${barn.etternavn} fra søknaden?`}</p>
+                    <p>{`Er du sikker på at du vil slette barnet ${navn ? `${navn} ` : ''}fra søknaden?`}</p>
                     <div className={stepStyles.step__buttonsection}>
                         <Button type="button" onClick={lukkModal} variant="secondary">
                             Avbryt

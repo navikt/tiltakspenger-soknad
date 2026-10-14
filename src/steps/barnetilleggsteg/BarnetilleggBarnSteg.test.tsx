@@ -144,6 +144,18 @@ describe('BarnetilleggBarnSteg', () => {
         await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
     });
 
+    test('viser barnets navn selv om fornavnet mangler, og «Ukjent navn» når ingen navn er kjent', async () => {
+        const bareEtternavn: Barn = { uuid: 'etternavn', fnr: '1', etternavn: 'Gullaber', fødselsdato: '2019-01-01' };
+        const utenNavn: Barn = { uuid: 'uten-navn', fnr: '2', fødselsdato: '2020-01-01' };
+        renderSteg({ personalia: { ...personaliaUtenBarn, barn: [bareEtternavn, utenNavn] } });
+
+        const navnelinjer = screen.getAllByText('Navn:').map((navn) => navn.closest('p'));
+        expect(navnelinjer[0]).toHaveTextContent('Navn: Gullaber');
+        expect(navnelinjer[1]).toHaveTextContent('Navn: Ukjent navn');
+        expect(screen.getByRole('radiogroup', { name: 'Bor Gullaber i Norge?' })).toBeInTheDocument();
+        expect(screen.getByRole('radiogroup', { name: 'Bor barnet i Norge?' })).toBeInTheDocument();
+    });
+
     test('henter ikke barna på nytt når de allerede er hentet', async () => {
         renderSteg({ personalia: { ...personaliaUtenBarn, barn: [KIM] } });
 

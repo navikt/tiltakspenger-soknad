@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatDate } from '@/utils/formatDate';
+import { visningsnavnForBarn } from '@/utils/barnetsNavn';
 import { Vedlegg } from '@/types/Søknad';
 import { Barn } from '@/types/Barn';
 
@@ -13,14 +14,12 @@ interface BarneInfoProps {
 }
 
 export default function BarneInfo({ barn, vedlegg }: BarneInfoProps) {
-    const { fødselsdato, fornavn, etternavn, mellomnavn, borINorge, borIEøs } = barn;
+    const { fødselsdato, borINorge, borIEøs } = barn;
     return (
         <div>
-            {fornavn && (
-                <p>
-                    <strong>Navn:</strong> {fornavn} {mellomnavn} {etternavn}
-                </p>
-            )}
+            <p>
+                <strong>Navn:</strong> {visningsnavnForBarn(barn)}
+            </p>
             <p>
                 <strong>Fødselsdato:</strong> {formatDate(fødselsdato)}
             </p>
