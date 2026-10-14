@@ -31,8 +31,8 @@ export default function BarnetilleggSteg({
                     Når du har rett til tiltakspenger, kan du også ha rett til barnetillegg.
                     <ul>
                         <li>
-                            Du kan få barnetillegg for egne barn under 16 år som du forsørger. Dette gjelder også for
-                            barn du har bidragsplikt for, selv om du ikke betaler bidrag akkurat nå.
+                            Du kan få barnetillegg for biologiske eller adopterte barn under 16 år som du forsørger.
+                            Dette gjelder også barn du har bidragsplikt for, selv om du ikke betaler bidrag nå.
                         </li>
                         <li className="marginTop">
                             Du får ikke barnetillegg hvis barnet oppholder seg utenfor EØS i over 90 dager i løpet av en
