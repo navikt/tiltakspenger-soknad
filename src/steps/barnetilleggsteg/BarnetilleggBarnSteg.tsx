@@ -1,7 +1,7 @@
 import React, { use, useCallback, useEffect, useRef, useState } from 'react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import Step from '@/components/step/Step';
-import { Alert, BodyLong, Button, ErrorMessage, Heading, Loader, ReadMore } from '@navikt/ds-react';
+import { Alert, BodyLong, BodyShort, Button, ErrorMessage, Heading, Loader, ReadMore } from '@navikt/ds-react';
 import Søknad from '@/types/Søknad';
 import BarnetilleggRegistrertBarn from '@/components/barnetillegg/BarnetilleggRegistrertBarn';
 import { LeggTilBarnModal, LeggTilBarnModalImperativeHandle } from '@/components/barnetillegg/LeggTilBarnModal';
@@ -39,6 +39,7 @@ export default function BarnetilleggBarnSteg({
     const leggTilBarnModalRef = useRef<LeggTilBarnModalImperativeHandle>(null);
     const ingenBarnFeilRef = useRef<HTMLDivElement>(null);
     const [hentingFeilet, setHentingFeilet] = useState(false);
+    const henterBarn = !barnFraApi && !hentingFeilet;
     const [harForsøktÅFortsetteUtenBarn, setHarForsøktÅFortsetteUtenBarn] = useState(false);
     const visIngenBarnFeil = harForsøktÅFortsetteUtenBarn && fieldArray.fields.length === 0;
     const måHenteBarn = personalia !== undefined && personalia.barn === undefined;
@@ -96,6 +97,15 @@ export default function BarnetilleggBarnSteg({
             <ReadMore className="marginTop" header={'Hvilke barn viser vi?'}>
                 Vi viser dine barn under 16 år som er registrert i Folkeregisteret.
             </ReadMore>
+            {/* Live-området må ligge i DOM-en før teksten settes inn, ellers leser ikke alle skjermlesere den opp. */}
+            <div role="status">
+                {henterBarn && (
+                    <div className={`marginTop ${styles.henterBarn}`}>
+                        <Loader aria-hidden />
+                        <BodyShort>Henter barn fra Folkeregisteret …</BodyShort>
+                    </div>
+                )}
+            </div>
             {hentingFeilet ? (
                 <Alert variant="error" className="marginTop">
                     Vi klarte ikke å hente barna dine fra Folkeregisteret.
@@ -105,11 +115,7 @@ export default function BarnetilleggBarnSteg({
                         </Button>
                     </div>
                 </Alert>
-            ) : !barnFraApi ? (
-                <div className="marginTop">
-                    <Loader title="Henter barn fra Folkeregisteret" />
-                </div>
-            ) : barnFraApi.length > 0 ? (
+            ) : !barnFraApi ? null : barnFraApi.length > 0 ? (
                 <div className="marginTop">
                     {barnFraApi.map((barn) => (
                         <BarnetilleggRegistrertBarn key={barn.uuid} barn={barn} />

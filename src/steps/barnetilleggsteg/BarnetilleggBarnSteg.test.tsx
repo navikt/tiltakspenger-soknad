@@ -48,6 +48,7 @@ const personaliaUtenBarn: Personalia = {
 };
 
 const INGEN_BARN_FEIL = /Du har ikke lagt til noen barn/;
+const HENTER_BARN = 'Henter barn fra Folkeregisteret …';
 
 beforeAll(async () => {
     BarnetilleggBarnSteg = (await import('./BarnetilleggBarnSteg')).default;
@@ -124,11 +125,23 @@ describe('BarnetilleggBarnSteg', () => {
         hentBarnMock.mockResolvedValue([KIM, TRULTE]);
         const { personalia } = renderSteg();
 
-        expect(screen.getByText('Henter barn fra Folkeregisteret')).toBeInTheDocument();
+        expect(screen.getByRole('status')).toHaveTextContent(HENTER_BARN);
         expect(await screen.findByRole('radiogroup', { name: 'Bor Kim Gullaber i Norge?' })).toBeInTheDocument();
+        expect(screen.getByRole('status')).toBeEmptyDOMElement();
         expect(screen.getByRole('radiogroup', { name: 'Bor Trulte Syltestrikk i Norge?' })).toBeInTheDocument();
         expect(hentBarnMock).toHaveBeenCalledTimes(1);
         expect(personalia()?.barn).toEqual([KIM, TRULTE]);
+    });
+
+    test('hentingen vises med tekst i et live-område, og spinneren skjules for skjermlesere', async () => {
+        hentBarnMock.mockReturnValue(new Promise(() => {}));
+        renderSteg();
+
+        const status = screen.getByRole('status');
+        expect(status).toHaveTextContent(HENTER_BARN);
+        expect(within(status).getByText(HENTER_BARN)).toBeVisible();
+        expect(status.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+        await act(() => new Promise((resolve) => setTimeout(resolve, 0)));
     });
 
     test('henter ikke barna på nytt når de allerede er hentet', async () => {
@@ -143,8 +156,13 @@ describe('BarnetilleggBarnSteg', () => {
         renderSteg();
 
         expect(await screen.findByText('Vi klarte ikke å hente barna dine fra Folkeregisteret.')).toBeInTheDocument();
+        const status = screen.getByRole('status');
+        expect(status).toBeEmptyDOMElement();
 
         fireEvent.click(screen.getByRole('button', { name: 'Prøv igjen' }));
+        // Samme live-område som før, slik at skjermlesere annonserer teksten når den settes inn.
+        expect(screen.getByRole('status')).toBe(status);
+        expect(status).toHaveTextContent(HENTER_BARN);
 
         expect(await screen.findByRole('radiogroup', { name: 'Bor Kim Gullaber i Norge?' })).toBeInTheDocument();
         expect(screen.queryByText('Vi klarte ikke å hente barna dine fra Folkeregisteret.')).not.toBeInTheDocument();
