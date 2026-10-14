@@ -40,17 +40,17 @@ jobs:
       IMAGE: ${{ steps.docker-push.outputs.image }}
     steps:
       - name: Checkout
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@v7.0.0
         with:
           # Ikke la tokenet ligge igjen i .git/config - byggesteget kjører avhengigheters kode.
           persist-credentials: false
 
       # pnpm-versjonen leses fra packageManager-feltet i package.json.
       - name: Set up pnpm
-        uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271 # v6.0.9
+        uses: pnpm/action-setup@v6.0.9
 
       - name: Set up Node
-        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        uses: actions/setup-node@v7.0.0
         with:
           node-version: '24'
           registry-url: "https://npm.pkg.github.com"
@@ -80,8 +80,8 @@ jobs:
         run: pnpm run build
 
       - name: Build and push docker image
-        # Versjonsoversikt (tag -> SHA): https://github.com/nais/docker-build-push/tags
-        uses: nais/docker-build-push@31c3a7321909bcb20799fdf46153fec721fd9512 # v0
+        # Versjonsoversikt: https://github.com/nais/docker-build-push/tags
+        uses: nais/docker-build-push@main
         if: inputs.buildImage == true
         id: docker-push
         with:
@@ -90,9 +90,9 @@ jobs:
           identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
           image_suffix: ${{ inputs.ENV }}
 
-      # Actionen bor i nais/deploy-repoet og versjoneres i stien (/v2); resten av Nav bruker @master, vi SHA-pinner (jf. metarepoets workflows-README).
+      # Actionen bor i nais/deploy-repoet og versjoneres i stien (/v2); som resten av Nav bruker vi @master, låst til commit i actions.lock.
       - name: Upload static files to NAV CDN
-        uses: nais/deploy/actions/cdn-upload/v2@2d18f050f07b6a007864c6a57070ed915d571beb # master 2026-07
+        uses: nais/deploy/actions/cdn-upload/v2@master
         if: inputs.ENV == 'prod'
         with:
           team: tpts
