@@ -1,5 +1,7 @@
 import Spørsmålsbesvarelser from '@/types/Spørsmålsbesvarelser';
 import { Søknadssteg } from '@/types/Søknadssteg';
+import { Barn } from '@/types/Barn';
+import { harSvartPåBosted } from '@/utils/bosted';
 
 export function brukerHarFyltUtTiltakssteg({ tiltak: { aktivitetId, periode } }: Spørsmålsbesvarelser) {
     return !!aktivitetId && !!periode && !!periode.fra && !!periode.til;
@@ -125,11 +127,39 @@ export function brukerHarFyltUtAndreUtbetalingerSteg(spørsmålsbesvarelser: Sp�
     return true;
 }
 
+export function brukerHarFyltUtBarnetilleggsteg(
+    { barnetillegg }: Spørsmålsbesvarelser,
+    barnFraFolkeregisteret: Barn[] | undefined,
+) {
+    const { søkerOmBarnetillegg, manueltRegistrerteBarnSøktBarnetilleggFor, bostedForBarnFraFolkeregisteret } =
+        barnetillegg;
+    if (søkerOmBarnetillegg === undefined) {
+        return false;
+    }
+    if (!søkerOmBarnetillegg) {
+        return true;
+    }
+    if (!barnFraFolkeregisteret) {
+        return false;
+    }
+    if (barnFraFolkeregisteret.length === 0 && manueltRegistrerteBarnSøktBarnetilleggFor.length === 0) {
+        return false;
+    }
+    return (
+        barnFraFolkeregisteret.every(({ uuid }) => harSvartPåBosted(bostedForBarnFraFolkeregisteret[uuid])) &&
+        manueltRegistrerteBarnSøktBarnetilleggFor.every(harSvartPåBosted)
+    );
+}
+
 export function brukerHarFyltUtOppsummeringssteg({ harBekreftetAlleOpplysninger }: Spørsmålsbesvarelser) {
     return harBekreftetAlleOpplysninger;
 }
 
-export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarelser, steg: Søknadssteg | null) {
+export function brukerHarFyltUtNødvendigeOpplysninger(
+    svar: Spørsmålsbesvarelser,
+    steg: Søknadssteg | null,
+    barnFraFolkeregisteret?: Barn[],
+) {
     if (steg === Søknadssteg.TILTAK) {
         return svar.harBekreftetÅSvareSåGodtManKan;
     } else if (steg === Søknadssteg.PROGRAM_DELTAGELSE) {
@@ -149,13 +179,21 @@ export function brukerHarFyltUtNødvendigeOpplysninger(svar: Spørsmålsbesvarel
             brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
             brukerHarFyltUtInstitusjonsoppholdSteg(svar)
         );
-    } else if (steg === Søknadssteg.OPPSUMMERING) {
-        // todo: Sjekk at bruker har fylt ut steget om barnetillegg når det er klart
+    } else if (steg === Søknadssteg.BARNETILLEGG_BARN) {
         return (
             brukerHarFyltUtTiltakssteg(svar) &&
             brukerHarFyltUtProgramDeltagelseSteg(svar) &&
             brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
-            brukerHarFyltUtInstitusjonsoppholdSteg(svar)
+            brukerHarFyltUtInstitusjonsoppholdSteg(svar) &&
+            svar.barnetillegg.søkerOmBarnetillegg === true
+        );
+    } else if (steg === Søknadssteg.OPPSUMMERING) {
+        return (
+            brukerHarFyltUtTiltakssteg(svar) &&
+            brukerHarFyltUtProgramDeltagelseSteg(svar) &&
+            brukerHarFyltUtAndreUtbetalingerSteg(svar) &&
+            brukerHarFyltUtInstitusjonsoppholdSteg(svar) &&
+            brukerHarFyltUtBarnetilleggsteg(svar, barnFraFolkeregisteret)
         );
     } else if (steg === Søknadssteg.KVITTERING) {
         return (

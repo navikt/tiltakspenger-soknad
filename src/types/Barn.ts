@@ -6,7 +6,8 @@ export interface Barn {
     bostedsland?: string;
     uuid: string;
     fnr: string | null;
-    oppholdInnenforEøs?: boolean;
+    borINorge?: boolean;
+    borIEøs?: boolean;
     index?: number;
 }
 
@@ -24,4 +25,8 @@ export interface PersonDTO {
     etternavn: string;
     barn: BarnDTO[];
     harFylt18År?: boolean;
+}
+
+export interface BarnListeDTO {
+    barn: BarnDTO[];
 }

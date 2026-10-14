@@ -34,7 +34,7 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
     const { step } = router.query;
     const { getValues, watch, reset, setValue } = useFormContext();
     const { setTiltak, setValgtTiltak } = useContext(UtfyllingSetStateContext);
-    const { valgtTiltak } = useContext(UtfyllingContext);
+    const { valgtTiltak, personalia } = useContext(UtfyllingContext);
     const valgtAktivitetId = watch('svar.tiltak.aktivitetId');
 
     React.useEffect(() => {
@@ -85,6 +85,8 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
                 return Søknadssteg.INSTITUSJONSOPPHOLD;
             case Søknadssteg.BARNETILLEGG:
                 return Søknadssteg.BARNETILLEGG;
+            case Søknadssteg.BARNETILLEGG_BARN:
+                return Søknadssteg.BARNETILLEGG_BARN;
             case Søknadssteg.OPPSUMMERING:
                 return Søknadssteg.OPPSUMMERING;
             case Søknadssteg.KVITTERING:
@@ -104,7 +106,7 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
     }
 
     const brukerErPåSteg = (søknadssteg: Søknadssteg | null) => {
-        const formStateErGyldig = brukerHarFyltUtNødvendigeOpplysninger(svar, søknadssteg);
+        const formStateErGyldig = brukerHarFyltUtNødvendigeOpplysninger(svar, søknadssteg, personalia?.barn);
         return step && step[0] === søknadssteg && formStateErGyldig;
     };
 

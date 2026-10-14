@@ -6,5 +6,6 @@ export interface Personalia {
     etternavn: string;
     fødselsnummer: string;
     harFylt18År: boolean;
-    barn: Barn[];
+    /** Barna fra Folkeregisteret hentes først når søkeren har svart at hen vil søke barnetillegg. */
+    barn?: Barn[];
 }

@@ -1,6 +1,7 @@
 import Spørsmålsbesvarelser, {
     Alderspensjon,
     Barnetillegg,
+    Bosted,
     FormTiltak,
     Gjenlevendepensjon,
     Institusjonsopphold,
@@ -15,6 +16,7 @@ import dayjs from 'dayjs';
 import { Tiltak } from '@/types/Tiltak';
 import { Barn } from '@/types/Barn';
 import { Nullable } from '@/utils/eller-null';
+import { tilOppholdssted } from '@/utils/bosted';
 
 interface Periode {
     fra: string;
@@ -118,24 +120,44 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
     };
 }
 
-function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
-    const oppholdInnenforEøsDict = barnetillegg.eøsOppholdForBarnFraAPI;
-    const registrerteBarn = barnFraAPI.map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid, fnr }) => ({
+function opphold(bosted: Bosted) {
+    const oppholdssted = tilOppholdssted(bosted);
+    // oppholdInnenforEøs sendes med for søknad-api-versjoner som ikke kjenner oppholdssted.
+    return {
+        oppholdssted,
+        oppholdInnenforEøs: oppholdssted === undefined ? undefined : oppholdssted !== 'IKKE_EØS_LAND',
+    };
+}
+
+export function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[] | undefined) {
+    const { søkerOmBarnetillegg } = barnetillegg;
+    if (!søkerOmBarnetillegg) {
+        // Barn lagt til før søkeren ombestemte seg og svarte nei, skal ikke sendes inn.
+        return {
+            søkerOmBarnetillegg,
+            registrerteBarnSøktBarnetilleggFor: [],
+            manueltRegistrerteBarnSøktBarnetilleggFor: [],
+        };
+    }
+    const registrerteBarn = (barnFraAPI ?? []).map(({ fornavn, fødselsdato, mellomnavn, etternavn, uuid, fnr }) => ({
         fnr: fnr,
         fornavn,
         fødselsdato,
         mellomnavn,
         etternavn,
-        oppholdInnenforEøs: oppholdInnenforEøsDict[uuid],
+        ...opphold(barnetillegg.bostedForBarnFraFolkeregisteret[uuid] ?? {}),
     }));
     const manueltRegistrerteBarnSøktBarnetilleggFor = barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor
         .filter(({ fornavn, etternavn, fødselsdato }) => fornavn && etternavn && fødselsdato)
-        .map((barn) => ({
-            ...barn,
-            fødselsdato: formatDate(barn.fødselsdato),
+        .map(({ fornavn, mellomnavn, etternavn, fødselsdato, borINorge, borIEøs }) => ({
+            fornavn,
+            mellomnavn,
+            etternavn,
+            fødselsdato: formatDate(fødselsdato),
+            ...opphold({ borINorge, borIEøs }),
         }));
     return {
-        ...barnetillegg,
+        søkerOmBarnetillegg,
         registrerteBarnSøktBarnetilleggFor: registrerteBarn,
         manueltRegistrerteBarnSøktBarnetilleggFor: manueltRegistrerteBarnSøktBarnetilleggFor,
     };
@@ -143,7 +165,7 @@ function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[]) {
 
 export default function toSøknadJson(
     spørsmålsbesvarelser: Spørsmålsbesvarelser,
-    barnFraApi: Barn[],
+    barnFraApi: Barn[] | undefined,
     valgtTiltak: Tiltak,
 ): string {
     return JSON.stringify({

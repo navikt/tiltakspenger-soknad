@@ -4,6 +4,7 @@ import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import Tiltakssteg from '@/steps/tiltakssteg/Tiltakssteg';
 import AndreUtbetalingerSteg from '@/steps/andre-utbetalingersteg/AndreUtbetalingerSteg';
 import BarnetilleggSteg from '@/steps/barnetilleggsteg/BarnetilleggSteg';
+import BarnetilleggBarnSteg from '@/steps/barnetilleggsteg/BarnetilleggBarnSteg';
 import Oppsummeringssteg from '@/steps/oppsummeringssteg/Oppsummeringssteg';
 import Kvitteringsside from '@/components/kvitteringsside/Kvitteringsside';
 import { useRouter } from 'next/router';
@@ -98,6 +99,21 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
         case Søknadssteg.BARNETILLEGG:
             return (
                 <BarnetilleggSteg
+                    title="Barnetillegg"
+                    stepNumber={5}
+                    onCompleted={() =>
+                        navigateTo(
+                            getValues('svar.barnetillegg.søkerOmBarnetillegg')
+                                ? Søknadssteg.BARNETILLEGG_BARN
+                                : Søknadssteg.OPPSUMMERING,
+                        )
+                    }
+                    onGoToPreviousStep={goBack}
+                />
+            );
+        case Søknadssteg.BARNETILLEGG_BARN:
+            return (
+                <BarnetilleggBarnSteg
                     title="Barnetillegg"
                     stepNumber={5}
                     onCompleted={() => navigateTo(Søknadssteg.OPPSUMMERING)}

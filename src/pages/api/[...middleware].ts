@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import logger from './../../utils/serverLogger';
 import { getOnBehalfOfToken, validateAuthorizationHeader } from '@/utils/authentication';
 import { makeGetRequest, makePostRequest } from '@/utils/http';
+import { mockedBarn } from '@/mocks/mockedPersonalia';
 
 const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
@@ -60,6 +61,9 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
 };
 
 const middlewareDemo = async (request: NextApiRequest, response: NextApiResponse) => {
+    if (request.method?.toUpperCase() === 'GET' && request.url?.split('?')[0].endsWith('/personalia/barn')) {
+        return response.status(200).json({ barn: mockedBarn });
+    }
     return response.status(201).json({
         innsendingTidspunkt: new Date().toISOString(),
     });

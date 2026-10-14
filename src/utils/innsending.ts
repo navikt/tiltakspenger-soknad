@@ -7,12 +7,12 @@ export function lagFormDataForInnsending(søknad: Søknad, personalia: Personali
     const søknadJson = toSøknadJson(søknad.svar, personalia.barn, valgtTiltak);
     const formData = new FormData();
     formData.append('søknad', søknadJson as string);
+    const { søkerOmBarnetillegg, manueltRegistrerteBarnSøktBarnetilleggFor } = søknad.svar.barnetillegg;
     søknad.vedlegg
         .filter(
             (v) =>
-                søknad.svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor.find(
-                    (elem) => elem.uuid === v.uuid,
-                ) != undefined,
+                søkerOmBarnetillegg &&
+                manueltRegistrerteBarnSøktBarnetilleggFor.find((elem) => elem.uuid === v.uuid) != undefined,
         )
         .forEach((vedlegg, index) => {
             formData.append(`vedlegg-${index}`, vedlegg.file);
