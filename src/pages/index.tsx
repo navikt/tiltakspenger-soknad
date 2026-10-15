@@ -136,9 +136,9 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
 
     try {
         // Barna hentes først når søkeren har svart at hen vil søke barnetillegg.
-        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia?medBarn=false`, token);
+        const personaliaResponse = await makeGetRequest(`${backendUrl}/personalia`, token);
         if (personaliaResponse.ok) {
-            const { barn: _barn, ...personalia } = (await personaliaResponse.json()) as PersonDTO;
+            const personalia = (await personaliaResponse.json()) as PersonDTO;
 
             return {
                 props: {

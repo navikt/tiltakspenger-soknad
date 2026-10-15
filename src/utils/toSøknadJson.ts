@@ -121,12 +121,7 @@ function tiltak(formTiltak: FormTiltak, tiltak: Tiltak) {
 }
 
 function opphold(bosted: Bosted) {
-    const oppholdssted = tilOppholdssted(bosted);
-    // oppholdInnenforEøs sendes med for søknad-api-versjoner som ikke kjenner oppholdssted.
-    return {
-        oppholdssted,
-        oppholdInnenforEøs: oppholdssted === undefined ? undefined : oppholdssted !== 'IKKE_EØS_LAND',
-    };
+    return { oppholdssted: tilOppholdssted(bosted) };
 }
 
 export function barnetillegg(barnetillegg: Barnetillegg, barnFraAPI: Barn[] | undefined) {
