@@ -67,10 +67,7 @@ export default function BostedSpørsmål({
                                     EFTA-landene Norge, Island og Liechtenstein.
                                 </span>
                                 <span style={{ display: 'block', marginTop: '1rem' }}>
-                                    <Link
-                                        href="https://www.nav.no/no/person/flere-tema/arbeid-og-opphold-i-utlandet/relatert-informasjon/eos-landene"
-                                        target="_blank"
-                                    >
+                                    <Link href="https://www.nav.no/opphold-i-eos" target="_blank">
                                         Du kan lese mer om hvilke land som er med i EØS her (åpnes i ny fane)
                                         <ExternalLinkIcon aria-hidden />
                                     </Link>
