@@ -3,7 +3,6 @@ export interface Barn {
     mellomnavn?: string;
     etternavn?: string;
     fødselsdato: string;
-    bostedsland?: string;
     uuid: string;
     fnr: string | null;
     borINorge?: boolean;
@@ -23,7 +22,6 @@ export interface PersonDTO {
     fornavn: string;
     mellomnavn: string | null;
     etternavn: string;
-    barn: BarnDTO[];
     harFylt18År?: boolean;
 }
 

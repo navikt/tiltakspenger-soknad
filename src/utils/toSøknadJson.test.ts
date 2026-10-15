@@ -29,7 +29,7 @@ const svar = (overstyr: Partial<Barnetillegg>): Barnetillegg => ({
 });
 
 describe('barnetillegg i søknaden', () => {
-    test('sender oppholdssted og avledet oppholdInnenforEøs for alle barna når søkeren svarer ja', () => {
+    test('sender oppholdssted for alle barna når søkeren svarer ja', () => {
         const resultat = barnetillegg(svar({ søkerOmBarnetillegg: true }), barnFraFolkeregisteret);
 
         expect(resultat.søkerOmBarnetillegg).toBe(true);
@@ -41,7 +41,6 @@ describe('barnetillegg i søknaden', () => {
                 etternavn: 'Gullaber',
                 fødselsdato: '2018-03-04',
                 oppholdssted: 'NORGE',
-                oppholdInnenforEøs: true,
             },
             {
                 fnr: '10987654321',
@@ -50,7 +49,6 @@ describe('barnetillegg i søknaden', () => {
                 etternavn: 'Syltestrikk',
                 fødselsdato: '2021-02-02',
                 oppholdssted: 'ANNET_EØS_LAND',
-                oppholdInnenforEøs: true,
             },
         ]);
         expect(resultat.manueltRegistrerteBarnSøktBarnetilleggFor).toEqual([
@@ -60,7 +58,6 @@ describe('barnetillegg i søknaden', () => {
                 etternavn: 'Nordmann',
                 fødselsdato: '2020-01-01',
                 oppholdssted: 'IKKE_EØS_LAND',
-                oppholdInnenforEøs: false,
             },
         ]);
     });
