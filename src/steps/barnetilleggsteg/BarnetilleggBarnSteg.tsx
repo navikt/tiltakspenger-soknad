@@ -12,6 +12,7 @@ import { PencilIcon } from '@navikt/aksel-icons';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { UtfyllingSetStateContext } from '@/pages/_app';
 import { hentBarnFraFolkeregisteret } from '@/utils/hentBarn';
+import { bostedForBarnFraFolkeregisteret } from '@/utils/forhåndsutfylling';
 import styles from './../../components/barnetillegg/Barnetillegg.module.css';
 
 interface BarnetilleggBarnStegProps {
@@ -30,8 +31,9 @@ export default function BarnetilleggBarnSteg({
     onCompleted,
     onGoToPreviousStep,
 }: BarnetilleggBarnStegProps) {
-    const { getValues } = useFormContext<Søknad>();
-    const { personalia } = use(UtfyllingContext);
+    const { getValues, setValue } = useFormContext<Søknad>();
+    const { personalia, valgtTiltak } = use(UtfyllingContext);
+    const forrigeSvar = valgtTiltak?.tidligereSøknad?.svar;
     const { setPersonalia } = use(UtfyllingSetStateContext);
     const fieldArray = useFieldArray<Søknad>({ name: 'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor' });
     const barnFraApi = personalia?.barn;
@@ -46,9 +48,18 @@ export default function BarnetilleggBarnSteg({
 
     const hentBarn = useCallback(() => {
         hentBarnFraFolkeregisteret()
-            .then((barn) => setPersonalia!((forrige) => ({ ...forrige!, barn })))
+            .then((barn) => {
+                if (forrigeSvar) {
+                    // Barna får ny uuid ved hver henting, så bostedet fra forrige søknad kan først fylles ut nå.
+                    setValue('svar.barnetillegg.bostedForBarnFraFolkeregisteret', {
+                        ...bostedForBarnFraFolkeregisteret(forrigeSvar, barn),
+                        ...getValues('svar.barnetillegg.bostedForBarnFraFolkeregisteret'),
+                    });
+                }
+                setPersonalia!((forrige) => ({ ...forrige!, barn }));
+            })
             .catch(() => setHentingFeilet(true));
-    }, [setPersonalia]);
+    }, [setPersonalia, forrigeSvar, getValues, setValue]);
 
     useEffect(() => {
         if (måHenteBarn) {

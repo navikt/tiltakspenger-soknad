@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
+import ForrigeSvar from '@/components/forrige-svar/ForrigeSvar';
 import { gyldigPeriodeValidator, periodenErInnenforTiltaksperiodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import Show from '@/components/show/show';
@@ -109,6 +110,7 @@ export default function AndreUtbetalingerSteg({
                 >
                     Mottar du etterlønn fra en tidligere arbeidsgiver i perioden {tiltaksperiodeTekst}?
                 </JaNeiSpørsmål>
+                <ForrigeSvar felt="etterlønn" />
             </div>
             <div className={watchSykepenger ? styles.blokkUtvidet : styles.blokk}>
                 <JaNeiSpørsmål
@@ -146,6 +148,7 @@ export default function AndreUtbetalingerSteg({
                         I hvilken del av perioden er du sykmeldt?
                     </Periodespørsmål>
                 )}
+                <ForrigeSvar felt="sykepenger" />
             </div>
             <JaNeiSpørsmål
                 name="svar.mottarAndreUtbetalinger"
@@ -186,6 +189,7 @@ export default function AndreUtbetalingerSteg({
             >
                 Mottar du noen av disse pengestøttene i perioden {tiltaksperiodeTekst}?
             </JaNeiSpørsmål>
+            <ForrigeSvar felt="mottarAndreUtbetalinger" />
             <Show if={watchMottarAndreUtbetalinger}>
                 <div className={watchGjenlevendepensjon ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
@@ -224,6 +228,7 @@ export default function AndreUtbetalingerSteg({
                             I hvilken del av perioden mottar du pengestøtte til gjenlevende ektefelle?
                         </Periodespørsmål>
                     )}
+                    <ForrigeSvar felt="gjenlevendepensjon" />
                 </div>
                 <div className={watchAlderspensjon ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
@@ -257,6 +262,7 @@ export default function AndreUtbetalingerSteg({
                             Fra dato
                         </Datospørsmål>
                     )}
+                    <ForrigeSvar felt="alderspensjon" />
                 </div>
                 <div className={watchSupplerendestønadOver67 ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
@@ -297,6 +303,7 @@ export default function AndreUtbetalingerSteg({
                             botid i Norge?
                         </Periodespørsmål>
                     )}
+                    <ForrigeSvar felt="supplerendestønadover67" />
                 </div>
                 <div className={watchSupplerendestønadFlyktninger ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
@@ -334,6 +341,7 @@ export default function AndreUtbetalingerSteg({
                             I hvilken del av perioden mottar du supplerende stønad for uføre flyktninger?
                         </Periodespørsmål>
                     )}
+                    <ForrigeSvar felt="supplerendestønadflyktninger" />
                 </div>
                 <div className={watchPensjonsordning ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
@@ -380,6 +388,7 @@ export default function AndreUtbetalingerSteg({
                             I hvilken del av perioden mottar du pengestøtte fra andre trygde- eller pensjonsordninger?
                         </Periodespørsmål>
                     )}
+                    <ForrigeSvar felt="pensjonsordning" />
                 </div>
                 <div className={watchJobbsjansen ? styles.blokkUtvidet : styles.blokk}>
                     <JaNeiSpørsmål
@@ -419,6 +428,7 @@ export default function AndreUtbetalingerSteg({
                             I hvilken del av perioden mottar du stønad gjennom Jobbsjansen?
                         </Periodespørsmål>
                     )}
+                    <ForrigeSvar felt="jobbsjansen" />
                 </div>
             </Show>
         </Step>

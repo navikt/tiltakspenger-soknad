@@ -1,3 +1,5 @@
+import { mocketTidligereSvar } from '@/mocks/mockedTidligereSøknad';
+
 export const mocketTiltak = [
     {
         aktivitetId: '123',
@@ -25,5 +27,15 @@ export const mocketTiltak = [
         arrangør: 'Testarrangør C',
         gjennomforingId: '456788',
         visningsnavn: 'Arbeidstrening hos Testarrangør C',
+    },
+    {
+        aktivitetId: '45avk6',
+        type: 'AVKLARAG',
+        typeNavn: 'Avklaring',
+        arenaRegistrertPeriode: { fra: '2025-03-01', til: '2025-06-30' },
+        arrangør: 'Testarrangør D',
+        gjennomforingId: '345678',
+        visningsnavn: 'Avklaring hos Testarrangør D',
+        tidligereSøknad: { mottatt: '2025-03-03T10:15:00', svar: mocketTidligereSvar },
     },
 ] as const;

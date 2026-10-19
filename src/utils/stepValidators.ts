@@ -162,7 +162,7 @@ export function brukerHarFyltUtNødvendigeOpplysninger(
 ) {
     if (steg === Søknadssteg.TILTAK) {
         return svar.harBekreftetÅSvareSåGodtManKan;
-    } else if (steg === Søknadssteg.PROGRAM_DELTAGELSE) {
+    } else if (steg === Søknadssteg.TIDLIGERE_SØKNAD || steg === Søknadssteg.PROGRAM_DELTAGELSE) {
         return brukerHarFyltUtTiltakssteg(svar);
     } else if (steg === Søknadssteg.ANDRE_UTBETALINGER) {
         return brukerHarFyltUtTiltakssteg(svar) && brukerHarFyltUtProgramDeltagelseSteg(svar);

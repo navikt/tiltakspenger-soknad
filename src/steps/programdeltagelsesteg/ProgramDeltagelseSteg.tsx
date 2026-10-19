@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import Periodespørsmål from '@/components/periodespørsmål/Periodespørsmål';
 import Step from '@/components/step/Step';
+import ForrigeSvar from '@/components/forrige-svar/ForrigeSvar';
 import { gyldigPeriodeValidator, periodenErInnenforTiltaksperiodeValidator } from '@/utils/formValidators';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
@@ -111,6 +112,7 @@ export default function ProgramDeltagelseSteg({
                         </Periodespørsmål>
                     </>
                 )}
+                <ForrigeSvar felt="kvalifiseringsprogram" />
                 <JaNeiSpørsmål
                     name="svar.introduksjonsprogram.deltar"
                     validate={deltarIIntroprogrammetValidator}
@@ -156,6 +158,7 @@ export default function ProgramDeltagelseSteg({
                         </Periodespørsmål>
                     </>
                 )}
+                <ForrigeSvar felt="introduksjonsprogram" />
             </>
         </Step>
     );

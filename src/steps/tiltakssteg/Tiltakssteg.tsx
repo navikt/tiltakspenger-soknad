@@ -10,6 +10,7 @@ import {
     lagSvaralternativForTiltak,
     lagTiltaksalternativTekst,
 } from '@/steps/tiltakssteg/utils';
+import { MIN_SIDE_URL } from '@/utils/lenker';
 
 interface TiltaksstegProps {
     title: string;
@@ -28,10 +29,7 @@ export default function Tiltakssteg({ title, stepNumber, onCompleted, onGoToPrev
 
     const submitSectionRenderer = !brukerHarRegistrerteTiltakMedGyldigPeriode
         ? () => (
-              <Link
-                  href="https://www.nav.no/minside"
-                  style={{ margin: '1rem auto', display: 'block', width: 'fit-content' }}
-              >
+              <Link href={MIN_SIDE_URL} style={{ margin: '1rem auto', display: 'block', width: 'fit-content' }}>
                   <Button type="button" as="a">
                       Avbryt søknaden og gå til Min side
                   </Button>

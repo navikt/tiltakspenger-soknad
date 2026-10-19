@@ -1,9 +1,8 @@
 import React, { useContext } from 'react';
 import { useFormContext } from 'react-hook-form';
-import { Accordion, Button } from '@navikt/ds-react';
+import { Accordion, Alert, BodyLong, Button, Heading } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
-import { Periode } from '@/types/Periode';
 import { formatPeriode } from '@/utils/formatPeriode';
 import { formatDate } from '@/utils/formatDate';
 import Søknad from '@/types/Søknad';
@@ -14,6 +13,12 @@ import { påkrevdBekreftelsesspørsmål } from '@/utils/formValidators';
 import BarneInfo from '@/components/barnetillegg/BarneInfo';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { lagTiltakVisningTekst } from '@/steps/tiltakssteg/utils';
+import toSøknadJson from '@/utils/toSøknadJson';
+import { InnsendteSvar } from '@/types/InnsendteSvar';
+import { endredeSvar, oppsummerSvar, Svarfelt, SVARFELT_NAVN } from '@/utils/svaroppsummering';
+import { useForrigeSøknad } from '@/components/forrige-svar/useForrigeSøknad';
+import EttersendOpplysninger from '@/components/ettersending/EttersendOpplysninger';
+import { dateStrWithMonthNameAndHourMinute } from '@/utils/formatDate';
 
 interface OppsummeringsstegProps {
     title: string;
@@ -21,38 +26,8 @@ interface OppsummeringsstegProps {
     onGoToPreviousStep: () => void;
     onCompleted: () => void;
     søknadsinnsendingInProgress: boolean;
-}
-
-function hentSvarTilProgramDeltagelse(program: string, deltar: boolean, periode?: Periode) {
-    if (deltar) {
-        return `Ja, jeg mottar ${program} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
-    } else {
-        return `Nei, jeg mottar ikke ${program}`;
-    }
-}
-
-function oppsummeringInstitusjon(borPåInstitusjon: boolean, periodePåInstitusjon?: Periode) {
-    if (borPåInstitusjon) {
-        return `Ja, jeg bor på institusjon med fri kost og losji i perioden ${formatPeriode(periodePåInstitusjon!)}`;
-    } else {
-        return 'Nei, jeg bor ikke på institusjon med fri kost og losji i perioden jeg går på tiltak';
-    }
-}
-
-function oppsummeringAlderspensjon(mottar: boolean, fraDato: string) {
-    if (mottar) {
-        return `Ja, jeg mottar alderspensjon fra ${formatDate(fraDato!)}`;
-    } else {
-        return 'Nei, jeg mottar ikke alderspensjon';
-    }
-}
-
-function hentSvarTilSpørsmålene(spørsmålTittel: string, mottar: boolean, periode?: Periode) {
-    if (mottar) {
-        return `Ja, jeg mottar ${spørsmålTittel} ${periode ? `i perioden ${formatPeriode(periode!)}` : ''} `;
-    } else {
-        return `Nei, jeg mottar ikke ${spørsmålTittel} i perioden jeg går på tiltak`;
-    }
+    /** Satt når backenden avviste søknaden fordi svarene er de samme som i en søknad vi allerede har mottatt. */
+    avvistUtenEndringer?: { mottatt: string };
 }
 
 function harBekreftetAlleOpplysningerValidator(verdi: boolean) {
@@ -65,27 +40,26 @@ export default function Oppsummeringssteg({
     onGoToPreviousStep,
     onCompleted,
     søknadsinnsendingInProgress,
+    avvistUtenEndringer,
 }: OppsummeringsstegProps) {
     const { getValues } = useFormContext();
     const { personalia, valgtTiltak } = useContext(UtfyllingContext);
     const søknad: Søknad = getValues() as Søknad;
     const svar = søknad.svar;
-    const {
-        kvalifiseringsprogram,
-        introduksjonsprogram,
-        pensjonsordning,
-        etterlønn,
-        mottarAndreUtbetalinger,
-        sykepenger,
-        gjenlevendepensjon,
-        alderspensjon,
-        supplerendestønadover67,
-        supplerendestønadflyktninger,
-        jobbsjansen,
-        institusjonsopphold,
-        tiltak,
-        barnetillegg,
-    } = svar;
+    const { mottarAndreUtbetalinger, tiltak, barnetillegg } = svar;
+    const forrige = useForrigeSøknad();
+    // Samme form som søknaden sendes inn i, slik at den sammenlignes med forrige søknad slik backenden gjør.
+    const oppsummering = oppsummerSvar(JSON.parse(toSøknadJson(svar, personalia!.barn, valgtTiltak!)) as InnsendteSvar);
+    const endret = forrige ? endredeSvar(oppsummering, forrige.oppsummering) : [];
+    const ingenEndringer = !!forrige && endret.length === 0;
+
+    const felt = (navn: Svarfelt, feltNavn: string = SVARFELT_NAVN[navn]) => (
+        <Oppsummeringsfelt
+            feltNavn={feltNavn}
+            feltVerdi={oppsummering[navn] ?? ''}
+            forrigeVerdi={endret.includes(navn) ? (forrige!.oppsummering[navn] ?? 'Ikke besvart') : undefined}
+        />
+    );
 
     const vedlegg = søknad.vedlegg;
 
@@ -115,6 +89,19 @@ export default function Oppsummeringssteg({
             onCompleted={onCompleted}
             submitSectionRenderer={() => (
                 <div className={stepStyles.step__buttonsection}>
+                    {avvistUtenEndringer && (
+                        <Alert variant="error" role="alert" style={{ marginBottom: '2rem', width: '100%' }}>
+                            <Heading size="small" level="2" spacing>
+                                Søknaden ble ikke sendt inn
+                            </Heading>
+                            <BodyLong spacing>
+                                Svarene dine er de samme som i søknaden vi mottok{' '}
+                                {dateStrWithMonthNameAndHourMinute(avvistUtenEndringer.mottatt)}. Vil du sende en ny
+                                søknad, må du endre svarene som ikke lenger stemmer.
+                            </BodyLong>
+                            <EttersendOpplysninger />
+                        </Alert>
+                    )}
                     <Button
                         type="button"
                         onClick={onGoToPreviousStep}
@@ -136,6 +123,25 @@ export default function Oppsummeringssteg({
             )}
             guide='Her kan du se over at alt er riktig før du sender inn søknaden din. Om du trenger å gjøre endringer, kan du kikke deg tilbake i søknaden. Trykk på knappen "Forrige steg" nederst på siden.'
         >
+            {ingenEndringer && (
+                <Alert variant="warning" style={{ marginTop: '2rem' }}>
+                    <Heading size="small" level="2" spacing>
+                        Du har ikke endret noen svar
+                    </Heading>
+                    <BodyLong spacing>
+                        Svarene dine er de samme som i søknaden vi mottok{' '}
+                        {dateStrWithMonthNameAndHourMinute(forrige.søknad.mottatt)}. Vi tar ikke imot en ny søknad med
+                        de samme svarene. Gå tilbake og endre svarene som ikke lenger stemmer.
+                    </BodyLong>
+                    <EttersendOpplysninger />
+                </Alert>
+            )}
+            {forrige && endret.length > 0 && (
+                <Alert variant="info" style={{ marginTop: '2rem' }}>
+                    Svar som er endret siden søknaden vi mottok{' '}
+                    {dateStrWithMonthNameAndHourMinute(forrige.søknad.mottatt)} er merket med «Endret».
+                </Alert>
+            )}
             <Accordion style={{ marginTop: '2rem' }}>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Om deg</Accordion.Header>
@@ -152,9 +158,7 @@ export default function Oppsummeringssteg({
                     <Accordion.Header>Tiltak</Accordion.Header>
                     <Accordion.Content>
                         <div>
-                            <span>
-                                {valgtTiltak ? lagTiltakVisningTekst(valgtTiltak) : ''}
-                            </span>
+                            <span>{valgtTiltak ? lagTiltakVisningTekst(valgtTiltak) : ''}</span>
                             <br />
                             <span>
                                 {formatDate(opprinneligTiltaksperiode!.fra)}
@@ -173,127 +177,31 @@ export default function Oppsummeringssteg({
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Introduksjonsstønad og kvalifiseringsstønad</Accordion.Header>
                     <Accordion.Content>
-                        <Oppsummeringsfelt
-                            feltNavn="Introduksjonsstønad"
-                            feltVerdi={hentSvarTilProgramDeltagelse(
-                                'introduksjonsstønad',
-                                introduksjonsprogram.deltar,
-                                introduksjonsprogram.periode,
-                            )}
-                        />
-                        <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt
-                                feltNavn="Kvalifiseringsstønad"
-                                feltVerdi={hentSvarTilProgramDeltagelse(
-                                    'kvalifiseringsstønad',
-                                    kvalifiseringsprogram.deltar,
-                                    kvalifiseringsprogram.periode,
-                                )}
-                            />
-                        </div>
+                        {felt('introduksjonsprogram')}
+                        <div style={{ marginTop: '2rem' }}>{felt('kvalifiseringsprogram')}</div>
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Utbetalinger</Accordion.Header>
                     <Accordion.Content>
-                        <Oppsummeringsfelt
-                            feltNavn="Etterlønn"
-                            feltVerdi={hentSvarTilSpørsmålene(
-                                'etterlønn fra en tidligere arbeidsgiver i perioden jeg går på tiltak',
-                                etterlønn.mottar,
-                            )}
-                        />
-                        <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt
-                                feltNavn="Sykepenger"
-                                feltVerdi={hentSvarTilSpørsmålene('sykepenger', sykepenger.mottar, sykepenger.periode)}
-                            />
-                        </div>
-                        <div style={{ marginTop: '2rem' }}>
-                            <Oppsummeringsfelt
-                                feltNavn="Annen pengestøtte"
-                                feltVerdi={hentSvarTilSpørsmålene(
-                                    'annen pengestøtte i perioden jeg går på tiltak',
-                                    mottarAndreUtbetalinger,
-                                )}
-                            />
-                        </div>
+                        {felt('etterlønn')}
+                        <div style={{ marginTop: '2rem' }}>{felt('sykepenger')}</div>
+                        <div style={{ marginTop: '2rem' }}>{felt('mottarAndreUtbetalinger')}</div>
                         {mottarAndreUtbetalinger && (
                             <>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Gjenlevendepensjon og omstillingsstønad"
-                                        feltVerdi={hentSvarTilSpørsmålene(
-                                            'gjenlevendepensjon eller omstillingsstønad',
-                                            gjenlevendepensjon.mottar,
-                                            gjenlevendepensjon.periode,
-                                        )}
-                                    />
-                                </div>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Alderspensjon"
-                                        feltVerdi={oppsummeringAlderspensjon(
-                                            alderspensjon.mottar,
-                                            alderspensjon.fraDato!,
-                                        )}
-                                    />
-                                </div>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Supplerende stønad for personer over 67 år med kort botid i Norge"
-                                        feltVerdi={hentSvarTilSpørsmålene(
-                                            'supplerende stønad for personer over 67 år med kort botid i Norge',
-                                            supplerendestønadover67.mottar,
-                                            supplerendestønadover67.periode,
-                                        )}
-                                    />
-                                </div>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Supplerende stønad for uføre flyktninger"
-                                        feltVerdi={hentSvarTilSpørsmålene(
-                                            'supplerende stønad for uføre flyktninger',
-                                            supplerendestønadflyktninger.mottar,
-                                            supplerendestønadflyktninger.periode,
-                                        )}
-                                    />
-                                </div>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Pengestøtte fra andre trygde- eller pensjonsordninger"
-                                        feltVerdi={hentSvarTilSpørsmålene(
-                                            'pengestøtte fra andre trygde- eller pensjonsordninger',
-                                            pensjonsordning.mottar,
-                                            pensjonsordning.periode,
-                                        )}
-                                    />
-                                </div>
-                                <div style={{ marginTop: '2rem' }}>
-                                    <Oppsummeringsfelt
-                                        feltNavn="Stønad gjennom Jobbsjansen"
-                                        feltVerdi={hentSvarTilSpørsmålene(
-                                            'stønad gjennom Jobbsjansen',
-                                            jobbsjansen.mottar,
-                                            jobbsjansen.periode,
-                                        )}
-                                    />
-                                </div>
+                                <div style={{ marginTop: '2rem' }}>{felt('gjenlevendepensjon')}</div>
+                                <div style={{ marginTop: '2rem' }}>{felt('alderspensjon')}</div>
+                                <div style={{ marginTop: '2rem' }}>{felt('supplerendestønadover67')}</div>
+                                <div style={{ marginTop: '2rem' }}>{felt('supplerendestønadflyktninger')}</div>
+                                <div style={{ marginTop: '2rem' }}>{felt('pensjonsordning')}</div>
+                                <div style={{ marginTop: '2rem' }}>{felt('jobbsjansen')}</div>
                             </>
                         )}
                     </Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Institusjonsopphold</Accordion.Header>
-                    <Accordion.Content>
-                        <Oppsummeringsfelt
-                            feltNavn=""
-                            feltVerdi={oppsummeringInstitusjon(
-                                institusjonsopphold.borPåInstitusjon,
-                                institusjonsopphold.periode,
-                            )}
-                        />
-                    </Accordion.Content>
+                    <Accordion.Content>{felt('institusjonsopphold', '')}</Accordion.Content>
                 </Accordion.Item>
                 <Accordion.Item defaultOpen>
                     <Accordion.Header>Barnetillegg</Accordion.Header>
@@ -309,6 +217,15 @@ export default function Oppsummeringssteg({
                                   );
                               })
                             : 'Jeg søker ikke om barnetillegg'}
+                        {endret.includes('barnetillegg') && (
+                            <div style={{ marginTop: '2rem' }}>
+                                <Oppsummeringsfelt
+                                    feltNavn="Barnetillegg"
+                                    feltVerdi={oppsummering.barnetillegg!}
+                                    forrigeVerdi={forrige!.oppsummering.barnetillegg}
+                                />
+                            </div>
+                        )}
                     </Accordion.Content>
                 </Accordion.Item>
             </Accordion>

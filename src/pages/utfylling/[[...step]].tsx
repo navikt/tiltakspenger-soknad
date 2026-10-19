@@ -77,6 +77,8 @@ export default function Utfylling({ tiltak }: UtfyllingProps) {
         switch (route) {
             case Søknadssteg.TILTAK:
                 return Søknadssteg.TILTAK;
+            case Søknadssteg.TIDLIGERE_SØKNAD:
+                return Søknadssteg.TIDLIGERE_SØKNAD;
             case Søknadssteg.PROGRAM_DELTAGELSE:
                 return Søknadssteg.PROGRAM_DELTAGELSE;
             case Søknadssteg.ANDRE_UTBETALINGER:

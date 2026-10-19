@@ -46,6 +46,10 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
                     logger.error({ err: error, ...requestContext }, 'Respons er ikke gyldig JSON, returnerer 502');
                     response.status(502).json({ message: 'Bad Gateway' });
                 }
+            } else if (res.status === 409) {
+                // Søknaden har de samme svarene som en vi allerede har mottatt: nettleseren trenger svaret som det er for å vise når vi mottok den.
+                response.setHeader('Content-Type', res.headers.get('content-type') ?? 'application/json');
+                response.status(409).send(await res.text());
             } else {
                 const error = await res.text();
                 response.status(res.status).json({ error: !error ? res.statusText : error });

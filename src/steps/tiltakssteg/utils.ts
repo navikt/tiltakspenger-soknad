@@ -1,5 +1,5 @@
 import { Tiltak } from '@/types/Tiltak';
-import { formatDate } from '@/utils/formatDate';
+import { dateStrWithMonthNameAndHourMinute, formatDate } from '@/utils/formatDate';
 import { formatPeriode } from '@/utils/formatPeriode';
 
 export const lagTiltaksalternativTekst = (tiltak: Tiltak) => {
@@ -23,8 +23,11 @@ export const lagTiltakVisningTekst = ({ visningsnavn, typeNavn, arrangør }: Til
 };
 
 export const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
+    const mottatt = tiltak.tidligereSøknad?.mottatt;
     return {
-        tekst: lagTiltaksalternativTekst(tiltak),
+        tekst: mottatt
+            ? `${lagTiltaksalternativTekst(tiltak)}. Vi mottok søknaden din for dette tiltaket ${dateStrWithMonthNameAndHourMinute(mottatt)}`
+            : lagTiltaksalternativTekst(tiltak),
         value: tiltak.aktivitetId,
     };
 };
