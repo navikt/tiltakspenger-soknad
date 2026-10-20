@@ -26,6 +26,7 @@ export const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
     return {
         tekst: lagTiltaksalternativTekst(tiltak),
         value: tiltak.aktivitetId,
+        tag: tiltak.tidligereSøknad ? 'Du har allerede søkt' : undefined,
     };
 };
 

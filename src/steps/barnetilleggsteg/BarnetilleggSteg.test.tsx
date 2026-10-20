@@ -2,13 +2,24 @@
  * @jest-environment jsdom
  */
 import '@testing-library/jest-dom/jest-globals';
-import { describe, expect, jest, test } from '@jest/globals';
+import { beforeAll, describe, expect, jest, test } from '@jest/globals';
 import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import React from 'react';
 import { FormProvider, useForm, UseFormReturn } from 'react-hook-form';
-import BarnetilleggSteg from './BarnetilleggSteg';
 import Søknad from '@/types/Søknad';
 import defaultValues from '@/defaultValues';
+
+// Siden drar med seg serverkode. Steget trenger bare konteksten.
+// Mockene heises ikke over importene når jest importeres fra @jest/globals, så modulene lastes dynamisk etterpå.
+jest.mock('../../pages/utfylling/[[...step]]', () => ({
+    UtfyllingContext: jest.requireActual<typeof import('react')>('react').createContext({}),
+}));
+
+let BarnetilleggSteg: typeof import('./BarnetilleggSteg').default;
+
+beforeAll(async () => {
+    BarnetilleggSteg = (await import('./BarnetilleggSteg')).default;
+});
 
 const SPØRSMÅL = 'Har du barn du vil søke barnetillegg for?';
 

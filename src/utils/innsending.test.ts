@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { lagFormDataForInnsending } from './innsending';
+import { lagFormDataForInnsending, tolkInnsendingssvar } from './innsending';
 import Søknad from '@/types/Søknad';
 import { Personalia } from '@/types/Personalia';
 import { Tiltak } from '@/types/Tiltak';
@@ -74,5 +74,31 @@ describe('lagFormDataForInnsending', () => {
             'registrerteBarnSøktBarnetilleggFor',
             'søkerOmBarnetillegg',
         ]);
+    });
+});
+
+describe('tolkInnsendingssvar', () => {
+    const json = (status: number, body: unknown) =>
+        new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+
+    test('201 gir innsendingstidspunktet', async () => {
+        expect(await tolkInnsendingssvar(json(201, { innsendingTidspunkt: '2025-01-01T12:00:00' }))).toEqual({
+            type: 'mottatt',
+            innsendingstidspunkt: '2025-01-01T12:00:00',
+        });
+    });
+
+    test('409 for søknad uten endringer gir når vi mottok den forrige', async () => {
+        const svar = json(409, { kode: 'SØKNAD_UTEN_ENDRINGER', mottatt: '2024-12-15T12:30:00', melding: 'm' });
+
+        expect(await tolkInnsendingssvar(svar)).toEqual({ type: 'utenEndringer', mottatt: '2024-12-15T12:30:00' });
+    });
+
+    test.each([
+        ['409 uten kjent kode', json(409, { error: 'noe annet' })],
+        ['409 uten json', new Response('Conflict', { status: 409 })],
+        ['500', new Response('Internal server error', { status: 500 })],
+    ])('%s gir feil', async (_, svar) => {
+        expect(await tolkInnsendingssvar(svar)).toEqual({ type: 'feil' });
     });
 });

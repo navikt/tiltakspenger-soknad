@@ -10,6 +10,7 @@ import Søknad from '@/types/Søknad';
 import { useRouter } from 'next/router';
 import defaultValues from '@/defaultValues';
 import useScript from '@/components/uxsignals/useScript';
+import { ETTERSENDING_URL, MIN_SIDE_URL, SAKSBEHANDLINGSTID_URL } from '@/utils/lenker';
 
 interface KvitteringssideProps {
     personalia: Personalia;
@@ -75,7 +76,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
                         <span>Vi mangler dokumentasjon fra deg for å kunne behandle søknaden. </span>
                         <p>Saken din er nå til behandling hos Nav.</p>
                         <p>
-                            <Link href="https://www.nav.no/fyllut-ettersending/nav761345/innsendingsvalg" target="_blank">
+                            <Link href={ETTERSENDING_URL} target="_blank">
                                 Her kan du ettersende dokumentasjon digitalt eller per post (åpnes i nytt vindu).
                             </Link>
                         </p>
@@ -85,12 +86,12 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             </Show>
 
             <p>
-                <Link href="https://www.nav.no/saksbehandlingstider#tiltakspenger" target="_blank">
+                <Link href={SAKSBEHANDLINGSTID_URL} target="_blank">
                     Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstider (åpnes i ny fane).
                 </Link>
             </p>
 
-            <Link href="https://www.nav.no/minside" className={styles.button}>
+            <Link href={MIN_SIDE_URL} className={styles.button}>
                 <Button as="a">Følg saken på Min side</Button>
             </Link>
 

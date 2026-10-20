@@ -18,6 +18,12 @@ For å få tilgang til alle dependencies må man generere en personal access-tok
 
 Kopier `.env.demo` til `.env.local` og kjør `pnpm dev`. Demo-modus er tilgjengelig på http://localhost:3000/demo
 
+På forsiden i demo-modus kan du velge om brukeren har sendt inn en søknad tidligere (for tiltaket «Avklaring hos
+Testarrangør D»). Valget lagres i cookien `demo-tidligere-soknad`.
+
+Demo-APIet husker søknadene du sender inn (i minnet, per nettleser via cookien `demo-sesjon`), og avviser en ny søknad
+for samme tiltak uten endrede svar, slik søknad-api gjør. Et nytt valg på forsiden glemmer søknadene du har sendt inn.
+
 ### Mot lokal backend uten authserver
 
 Søknaden kan kjøres mot et ekte, lokalt [tiltakspenger-soknad-api](https://github.com/navikt/tiltakspenger-soknad-api)

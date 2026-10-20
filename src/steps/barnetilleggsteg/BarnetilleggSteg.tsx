@@ -1,5 +1,6 @@
 import React from 'react';
 import Step from '@/components/step/Step';
+import ForrigeSvar from '@/components/forrige-svar/ForrigeSvar';
 import JaNeiSpørsmål from '@/components/ja-nei-spørsmål/JaNeiSpørsmål';
 import { påkrevdJaNeiSpørsmålValidator } from '@/utils/formValidators';
 
@@ -53,6 +54,7 @@ export default function BarnetilleggSteg({
             >
                 Har du barn du vil søke barnetillegg for?
             </JaNeiSpørsmål>
+            <ForrigeSvar felt="barnetillegg" />
         </Step>
     );
 }

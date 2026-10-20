@@ -19,6 +19,8 @@ import CustomGuidePanel from '@/components/custom-guide-panel/CustomGuidePanel';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 import { mockedPersonalia } from '@/mocks/mockedPersonalia';
 import { PersonDTO } from '@/types/Barn';
+import Demovalg from '@/components/demovalg/Demovalg';
+import { demoMedTidligereSøknad } from '@/mocks/demo';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -29,9 +31,11 @@ function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
 
 interface IndexPageProps {
     personalia: Personalia;
+    /** Bare satt i demo-modus. */
+    demo?: { medTidligereSøknad: boolean };
 }
 
-export default function IndexPage({ personalia }: IndexPageProps) {
+export default function IndexPage({ personalia, demo }: IndexPageProps) {
     const router = useRouter();
     const { handleSubmit } = useFormContext<Søknad>();
 
@@ -51,6 +55,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
 
     return (
         <form onSubmit={handleSubmit(startSøknad)}>
+            {demo && <Demovalg medTidligereSøknad={demo.medTidligereSøknad} />}
             <Heading className={styles.søknadstittel} size="large" level="1">
                 Søknad om tiltakspenger
             </Heading>
@@ -96,10 +101,7 @@ export default function IndexPage({ personalia }: IndexPageProps) {
                         hvis informasjonen har betydning for andre ytelser du har søkt om eller oppfølgingen du får av
                         Nav.
                     </p>
-                    <Link
-                        href="https://www.nav.no/personvern"
-                        target="_blank"
-                    >
+                    <Link href="https://www.nav.no/personvern" target="_blank">
                         Du kan lese mer om hvordan NAV behandler personopplysninger på nav.no (åpnes i ny fane).
                     </Link>
                 </Accordion>
@@ -171,10 +173,11 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
     }
 });
 
-const getServerSidePropsDemo = async () => {
+const getServerSidePropsDemo = async (context: GetServerSidePropsContext) => {
     return {
         props: {
             personalia: mockedPersonalia,
+            demo: { medTidligereSøknad: demoMedTidligereSøknad(context.req.cookies) },
         },
     };
 };

@@ -8,12 +8,13 @@ import BarnetilleggBarnSteg from '@/steps/barnetilleggsteg/BarnetilleggBarnSteg'
 import Oppsummeringssteg from '@/steps/oppsummeringssteg/Oppsummeringssteg';
 import Kvitteringsside from '@/components/kvitteringsside/Kvitteringsside';
 import { useRouter } from 'next/router';
-import { lagFormDataForInnsending, postSøknadMultipart } from '@/utils/innsending';
-import SøknadResponse from '@/types/SøknadResponse';
+import { lagFormDataForInnsending, postSøknadMultipart, tolkInnsendingssvar } from '@/utils/innsending';
 import { useFormContext } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
 import ProgramDeltagelseSteg from '@/steps/programdeltagelsesteg/ProgramDeltagelseSteg';
 import InstitusjonsoppholdSteg from '@/steps/institusjonsoppholdsteg/InstitusjonsoppholdSteg';
+import TidligereSøknadSteg from '@/steps/tidligere-søknadsteg/TidligereSøknadSteg';
+import { forhåndsutfyllFraForrigeSøknad } from '@/utils/forhåndsutfylling';
 
 interface AktivtSøknadsstegProps {
     steg: Søknadssteg | null;
@@ -21,25 +22,58 @@ interface AktivtSøknadsstegProps {
 
 const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
     const router = useRouter();
-    const { personalia, valgtTiltak } = useContext(UtfyllingContext);
-    const { getValues } = useFormContext<Søknad>();
+    const { personalia, valgtTiltak, tiltak } = useContext(UtfyllingContext);
+    const { getValues, setValue } = useFormContext<Søknad>();
     const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
     const [innsendingstidspunkt, setInnsendingstidspunkt] = React.useState<string>();
+    const [avvistUtenEndringer, setAvvistUtenEndringer] = React.useState<{ mottatt: string }>();
+    const [forrigeSteg, setForrigeSteg] = React.useState(steg);
+
+    // Feilmeldingen om at søknaden ble avvist gjelder bare innsendingen bruker nettopp gjorde, og fjernes når bruker går til et annet steg.
+    if (steg !== forrigeSteg) {
+        setForrigeSteg(steg);
+        setAvvistUtenEndringer(undefined);
+    }
+
+    function gåVidereFraTiltak() {
+        const aktivitetId = getValues('svar.tiltak.aktivitetId');
+        const harSøktFør = !!tiltak?.find((t) => t.aktivitetId === aktivitetId)?.tidligereSøknad;
+        return navigateTo(harSøktFør ? Søknadssteg.TIDLIGERE_SØKNAD : Søknadssteg.PROGRAM_DELTAGELSE);
+    }
+
+    function startNySøknadFraForrige() {
+        const forrige = valgtTiltak?.tidligereSøknad;
+        // Valg av nytt tiltak nullstiller svarene. Er de fortsatt tomme, har vi ikke fylt dem ut før, og overskriver ikke endringer bruker har gjort.
+        if (forrige && getValues('svar.introduksjonsprogram.deltar') === undefined) {
+            const { barnetillegg, ...svar } = forhåndsutfyllFraForrigeSøknad(forrige.svar, personalia?.barn);
+            Object.entries(svar).forEach(([felt, verdi]) => setValue(`svar.${felt}` as 'svar', verdi as never));
+            setValue('svar.barnetillegg.søkerOmBarnetillegg', barnetillegg.søkerOmBarnetillegg);
+            setValue(
+                'svar.barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor',
+                barnetillegg.manueltRegistrerteBarnSøktBarnetilleggFor,
+            );
+            setValue('svar.barnetillegg.bostedForBarnFraFolkeregisteret', barnetillegg.bostedForBarnFraFolkeregisteret);
+        }
+        return navigateTo(Søknadssteg.PROGRAM_DELTAGELSE);
+    }
 
     async function sendInnSøknad() {
         const søknad = getValues();
         const formData = lagFormDataForInnsending(søknad, personalia!, valgtTiltak!);
         try {
             setSøknadsinnsendingInProgress(true);
-            const response = await postSøknadMultipart(formData);
-            if (response.status !== 201) {
-                return navigateToError();
+            setAvvistUtenEndringer(undefined);
+            const resultat = await tolkInnsendingssvar(await postSøknadMultipart(formData));
+            switch (resultat.type) {
+                case 'mottatt':
+                    setInnsendingstidspunkt(resultat.innsendingstidspunkt);
+                    return navigateTo(Søknadssteg.KVITTERING);
+                case 'utenEndringer':
+                    setSøknadsinnsendingInProgress(false);
+                    return setAvvistUtenEndringer({ mottatt: resultat.mottatt });
+                case 'feil':
+                    return navigateToError();
             }
-            const innsendingstidspunktFraApi = await response
-                .json()
-                .then((json: SøknadResponse) => json.innsendingTidspunkt);
-            setInnsendingstidspunkt(innsendingstidspunktFraApi);
-            return navigateTo(Søknadssteg.KVITTERING);
         } catch {
             return navigateToError();
         }
@@ -65,8 +99,17 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
                 <Tiltakssteg
                     title="Tiltak"
                     stepNumber={1}
-                    onCompleted={() => navigateTo(Søknadssteg.PROGRAM_DELTAGELSE)}
+                    onCompleted={gåVidereFraTiltak}
                     onGoToPreviousStep={navigateToHome}
+                />
+            );
+        case Søknadssteg.TIDLIGERE_SØKNAD:
+            return (
+                <TidligereSøknadSteg
+                    title="Du har allerede søkt for dette tiltaket"
+                    stepNumber={1}
+                    onCompleted={startNySøknadFraForrige}
+                    onGoToPreviousStep={goBack}
                 />
             );
         case Søknadssteg.PROGRAM_DELTAGELSE:
@@ -127,6 +170,7 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
                     stepNumber={6}
                     onGoToPreviousStep={goBack}
                     søknadsinnsendingInProgress={søknadsinnsendingInProgress}
+                    avvistUtenEndringer={avvistUtenEndringer}
                     onCompleted={sendInnSøknad}
                 />
             );

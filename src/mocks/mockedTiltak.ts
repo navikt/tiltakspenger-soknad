@@ -26,4 +26,13 @@ export const mocketTiltak = [
         gjennomforingId: '456788',
         visningsnavn: 'Arbeidstrening hos Testarrangør C',
     },
+    {
+        aktivitetId: '45avk6',
+        type: 'AVKLARAG',
+        typeNavn: 'Avklaring',
+        arenaRegistrertPeriode: { fra: '2025-03-01', til: '2025-06-30' },
+        arrangør: 'Testarrangør D',
+        gjennomforingId: '345678',
+        visningsnavn: 'Avklaring hos Testarrangør D',
+    },
 ] as const;

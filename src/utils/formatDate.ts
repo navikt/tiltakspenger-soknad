@@ -17,3 +17,8 @@ export const dateStrWithHourMinute = (dateStr: Nullable<string>): string => {
     if (!dateStr) return '';
     return dayjs(dateStr).format('HH.mm');
 };
+
+export const dateStrWithMonthNameAndHourMinute = (dateStr: Nullable<string>): string => {
+    if (!dateStr) return '';
+    return `${dayjs(dateStr).format('D. MMMM YYYY')}, klokken ${dateStrWithHourMinute(dateStr)}`;
+};
