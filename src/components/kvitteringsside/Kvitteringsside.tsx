@@ -10,7 +10,7 @@ import Søknad from '@/types/Søknad';
 import { useRouter } from 'next/router';
 import defaultValues from '@/defaultValues';
 import useScript from '@/components/uxsignals/useScript';
-import { ETTERSENDING_URL, MIN_SIDE_URL } from '@/utils/lenker';
+import { ETTERSENDING_URL, MIN_SIDE_URL, SAKSBEHANDLINGSTID_URL } from '@/utils/lenker';
 
 interface KvitteringssideProps {
     personalia: Personalia;
@@ -86,7 +86,7 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
             </Show>
 
             <p>
-                <Link href="https://www.nav.no/saksbehandlingstider#tiltakspenger" target="_blank">
+                <Link href={SAKSBEHANDLINGSTID_URL} target="_blank">
                     Du kan se forventet saksbehandlingstid på nav.no/saksbehandlingstider (åpnes i ny fane).
                 </Link>
             </p>

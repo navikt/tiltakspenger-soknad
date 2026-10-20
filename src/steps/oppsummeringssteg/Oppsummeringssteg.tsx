@@ -14,6 +14,7 @@ import BarneInfo from '@/components/barnetillegg/BarneInfo';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { lagTiltakVisningTekst } from '@/steps/tiltakssteg/utils';
 import toSøknadJson from '@/utils/toSøknadJson';
+import BarnetilleggSvar from '@/components/barnetillegg/BarnetilleggSvar';
 import { InnsendteSvar } from '@/types/InnsendteSvar';
 import { endredeSvar, oppsummerSvar, Svarfelt, SVARFELT_NAVN } from '@/utils/svaroppsummering';
 import { useForrigeSøknad } from '@/components/forrige-svar/useForrigeSøknad';
@@ -49,7 +50,8 @@ export default function Oppsummeringssteg({
     const { mottarAndreUtbetalinger, tiltak, barnetillegg } = svar;
     const forrige = useForrigeSøknad();
     // Samme form som søknaden sendes inn i, slik at den sammenlignes med forrige søknad slik backenden gjør.
-    const oppsummering = oppsummerSvar(JSON.parse(toSøknadJson(svar, personalia!.barn, valgtTiltak!)) as InnsendteSvar);
+    const innsendteSvar = JSON.parse(toSøknadJson(svar, personalia!.barn, valgtTiltak!)) as InnsendteSvar;
+    const oppsummering = oppsummerSvar(innsendteSvar);
     const endret = forrige ? endredeSvar(oppsummering, forrige.oppsummering) : [];
     const ingenEndringer = !!forrige && endret.length === 0;
 
@@ -88,9 +90,9 @@ export default function Oppsummeringssteg({
             onGoToPreviousStep={onGoToPreviousStep}
             onCompleted={onCompleted}
             submitSectionRenderer={() => (
-                <div className={stepStyles.step__buttonsection}>
+                <>
                     {avvistUtenEndringer && (
-                        <Alert variant="error" role="alert" style={{ marginBottom: '2rem', width: '100%' }}>
+                        <Alert variant="error" role="alert" style={{ marginTop: '4rem' }}>
                             <Heading size="small" level="2" spacing>
                                 Søknaden ble ikke sendt inn
                             </Heading>
@@ -102,24 +104,29 @@ export default function Oppsummeringssteg({
                             <EttersendOpplysninger />
                         </Alert>
                     )}
-                    <Button
-                        type="button"
-                        onClick={onGoToPreviousStep}
-                        variant="secondary"
-                        disabled={søknadsinnsendingInProgress}
-                        loading={søknadsinnsendingInProgress}
+                    <div
+                        className={stepStyles.step__buttonsection}
+                        style={avvistUtenEndringer ? { marginTop: '2rem' } : undefined}
                     >
-                        Forrige steg
-                    </Button>
-                    <Button
-                        type="submit"
-                        style={{ marginLeft: '1rem' }}
-                        disabled={søknadsinnsendingInProgress}
-                        loading={søknadsinnsendingInProgress}
-                    >
-                        Send inn søknad
-                    </Button>
-                </div>
+                        <Button
+                            type="button"
+                            onClick={onGoToPreviousStep}
+                            variant="secondary"
+                            disabled={søknadsinnsendingInProgress}
+                            loading={søknadsinnsendingInProgress}
+                        >
+                            Forrige steg
+                        </Button>
+                        <Button
+                            type="submit"
+                            style={{ marginLeft: '1rem' }}
+                            disabled={søknadsinnsendingInProgress}
+                            loading={søknadsinnsendingInProgress}
+                        >
+                            Send inn søknad
+                        </Button>
+                    </div>
+                </>
             )}
             guide='Her kan du se over at alt er riktig før du sender inn søknaden din. Om du trenger å gjøre endringer, kan du kikke deg tilbake i søknaden. Trykk på knappen "Forrige steg" nederst på siden.'
         >
@@ -221,8 +228,8 @@ export default function Oppsummeringssteg({
                             <div style={{ marginTop: '2rem' }}>
                                 <Oppsummeringsfelt
                                     feltNavn="Barnetillegg"
-                                    feltVerdi={oppsummering.barnetillegg!}
-                                    forrigeVerdi={forrige!.oppsummering.barnetillegg}
+                                    feltVerdi={<BarnetilleggSvar svar={innsendteSvar} />}
+                                    forrigeVerdi={<BarnetilleggSvar svar={forrige!.søknad.svar} />}
                                 />
                             </div>
                         )}

@@ -14,6 +14,8 @@ import { UtfyllingSetStateContext } from '@/pages/_app';
 import SøknadLayout from '@/components/søknad-layout/SøknadLayout';
 import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 import { mocketTiltak } from '@/mocks/mockedTiltak';
+import { mocketTiltakForDemo } from '@/mocks/demo';
+import { tidligereSøknaderIDemo } from '@/mocks/demoInnsendinger';
 
 interface UtfyllingProps {
     tiltak: Tiltak[];
@@ -189,10 +191,10 @@ const getServerSidePropsLive = pageWithAuthentication(async (context: GetServerS
     }
 });
 
-const getServerSidePropsDemo = async () => {
+const getServerSidePropsDemo = async (context: GetServerSidePropsContext) => {
     return {
         props: {
-            tiltak: mocketTiltak,
+            tiltak: mocketTiltakForDemo(tidligereSøknaderIDemo(context.req.cookies)),
         },
     };
 };

@@ -4,6 +4,7 @@
 
 .oppsummeringsfelt__feltNavn {
     display: block;
+    margin-bottom: 0.25rem;
 }
 
 .oppsummeringsfelt__endret {

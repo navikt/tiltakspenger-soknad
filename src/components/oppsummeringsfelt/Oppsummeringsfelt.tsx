@@ -1,17 +1,17 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { Tag } from '@navikt/ds-react';
 import styles from './Oppsumeringsfelt.module.css';
 
 interface OppsummeringsfeltProps {
     feltNavn: string;
-    feltVerdi: string;
+    feltVerdi: ReactNode;
     /** Svaret i forrige søknad, når det er endret. */
-    forrigeVerdi?: string;
+    forrigeVerdi?: ReactNode;
 }
 
 const Oppsummeringsfelt = ({ feltNavn, feltVerdi, forrigeVerdi }: OppsummeringsfeltProps) => {
     return (
-        <p className={styles.oppsummeringsfelt}>
+        <div className={styles.oppsummeringsfelt}>
             <b className={styles.oppsummeringsfelt__feltNavn}>
                 {feltNavn}
                 {forrigeVerdi !== undefined && (
@@ -20,11 +20,11 @@ const Oppsummeringsfelt = ({ feltNavn, feltVerdi, forrigeVerdi }: Oppsummeringsf
                     </Tag>
                 )}
             </b>
-            <span>{feltVerdi}</span>
+            <div>{feltVerdi}</div>
             {forrigeVerdi !== undefined && (
-                <span className={styles.oppsummeringsfelt__forrigeVerdi}>Forrige svar: {forrigeVerdi}</span>
+                <div className={styles.oppsummeringsfelt__forrigeVerdi}>Forrige svar: {forrigeVerdi}</div>
             )}
-        </p>
+        </div>
     );
 };
 

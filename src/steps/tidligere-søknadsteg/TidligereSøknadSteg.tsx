@@ -1,13 +1,15 @@
 import React, { use } from 'react';
-import { Alert, BodyLong, Button, Heading, VStack } from '@navikt/ds-react';
+import { Alert, BodyLong, Button, Heading, Link, VStack } from '@navikt/ds-react';
 import Step from '@/components/step/Step';
 import Oppsummeringsfelt from '@/components/oppsummeringsfelt/Oppsummeringsfelt';
+import BarnetilleggSvar from '@/components/barnetillegg/BarnetilleggSvar';
 import EttersendOpplysninger from '@/components/ettersending/EttersendOpplysninger';
 import { useForrigeSøknad } from '@/components/forrige-svar/useForrigeSøknad';
 import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { lagTiltakVisningTekst } from '@/steps/tiltakssteg/utils';
 import { dateStrWithMonthNameAndHourMinute } from '@/utils/formatDate';
 import { formatPeriode } from '@/utils/formatPeriode';
+import { SAKSBEHANDLINGSTID_URL } from '@/utils/lenker';
 import { SVARFELT, SVARFELT_NAVN } from '@/utils/svaroppsummering';
 import stepStyles from './../../components/step/Step.module.css';
 
@@ -56,8 +58,15 @@ export default function TidligereSøknadSteg({
                     Vi har mottatt søknaden din for dette tiltaket
                 </Heading>
                 <BodyLong spacing>
-                    Vi mottok søknaden din om tiltakspenger for {lagTiltakVisningTekst(valgtTiltak)}{' '}
-                    {dateStrWithMonthNameAndHourMinute(søknad.mottatt)}.
+                    Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(søknad.mottatt)}, for tiltaket{' '}
+                    {lagTiltakVisningTekst(valgtTiltak)}. Du vil få beskjed når søknaden din er ferdig behandlet.
+                </BodyLong>
+                <BodyLong spacing>
+                    Se{' '}
+                    <Link href={SAKSBEHANDLINGSTID_URL} target="_blank">
+                        forventet saksbehandlingstid (åpnes i ny fane)
+                    </Link>
+                    .
                 </BodyLong>
                 <BodyLong spacing>
                     Har du nye eller endrede opplysninger, kan du sende en ny søknad. Den nye søknaden blir fylt ut med
@@ -76,7 +85,11 @@ export default function TidligereSøknadSteg({
                 {SVARFELT.map((felt) => {
                     const tekst = oppsummering[felt];
                     return tekst === undefined ? null : (
-                        <Oppsummeringsfelt key={felt} feltNavn={SVARFELT_NAVN[felt]} feltVerdi={tekst} />
+                        <Oppsummeringsfelt
+                            key={felt}
+                            feltNavn={SVARFELT_NAVN[felt]}
+                            feltVerdi={felt === 'barnetillegg' ? <BarnetilleggSvar svar={søknad.svar} /> : tekst}
+                        />
                     );
                 })}
             </VStack>

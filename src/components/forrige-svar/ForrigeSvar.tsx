@@ -7,7 +7,7 @@ import styles from './ForrigeSvar.module.css';
 /** Viser hva bruker svarte på spørsmålet i forrige søknad for tiltaket, slik at det er lett å se hva som er endret. */
 export default function ForrigeSvar({ felt }: { felt: Svarfelt }) {
     const forrige = useForrigeSøknad();
-    const tekst = forrige?.oppsummering[felt];
+    const tekst = forrige?.kortSvar[felt];
     if (tekst === undefined) {
         return null;
     }

@@ -55,7 +55,7 @@ function renderSteg(tiltak: Tiltak[]) {
 }
 
 describe('Tiltakssteg', () => {
-    test('lar bruker velge et tiltak vi har mottatt søknad for, og viser når vi mottok den', () => {
+    test('merker tiltak bruker har søkt for med «Du har allerede søkt», og lar bruker velge det', () => {
         renderSteg([
             lagTiltak('1', 'Arbeidstrening hos A'),
             lagTiltak('2', 'Arbeidstrening hos B', { mottatt: '2025-01-15T10:30:00', svar: mocketTidligereSvar }),
@@ -63,11 +63,8 @@ describe('Tiltakssteg', () => {
 
         const valg = within(screen.getByRole('radiogroup', { name: SPØRSMÅL })).getAllByRole('radio');
         expect(valg.map((radio) => radio.getAttribute('value'))).toEqual(['1', '2']);
-        expect(
-            screen.getByLabelText(
-                /Arbeidstrening hos B.*Vi mottok søknaden din for dette tiltaket 15\. januar 2025, klokken 10\.30/,
-            ),
-        ).toBeInTheDocument();
-        expect(screen.queryByText(/Vi mottok søknaden din/, { selector: ':not(label, label *)' })).toBeNull();
+        expect(screen.getByLabelText(/Arbeidstrening hos B.*Du har allerede søkt/)).toBeInTheDocument();
+        expect(screen.getByLabelText(/Arbeidstrening hos A/)).not.toHaveAccessibleName(/allerede søkt/);
+        expect(screen.getAllByText('Du har allerede søkt')).toHaveLength(1);
     });
 });

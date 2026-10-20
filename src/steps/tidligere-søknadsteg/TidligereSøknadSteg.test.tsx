@@ -3,7 +3,7 @@
  */
 import '@testing-library/jest-dom/jest-globals';
 import { beforeAll, describe, expect, jest, test } from '@jest/globals';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
@@ -62,7 +62,7 @@ describe('TidligereSøknadSteg', () => {
 
         expect(
             screen.getByText(
-                /Vi mottok søknaden din om tiltakspenger for Avklaring hos Testarrangør D 03\. mars 2025, klokken 10\.15/,
+                /Vi mottok søknaden din 3\. mars 2025, klokken 10\.15, for tiltaket Avklaring hos Testarrangør D\./,
             ),
         ).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /ettersende dem/ })).toHaveAttribute('href', ETTERSENDING_URL);
@@ -71,7 +71,7 @@ describe('TidligereSøknadSteg', () => {
             screen.getByText(/Ja, jeg mottar sykepenger i perioden 01\.03\.2025 - 31\.03\.2025/),
         ).toBeInTheDocument();
         expect(
-            screen.getByText('Jeg søker om barnetillegg for: Kari Nordmann, født 17.05.2020, bor i Norge'),
+            within(screen.getByRole('list')).getByText('Kari Nordmann, født 17.05.2020, bor i Norge'),
         ).toBeInTheDocument();
         // Spørsmålene under annen pengestøtte ble ikke stilt, siden bruker svarte nei.
         expect(screen.queryByText('Alderspensjon')).not.toBeInTheDocument();

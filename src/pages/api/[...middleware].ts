@@ -3,6 +3,10 @@ import logger from './../../utils/serverLogger';
 import { getOnBehalfOfToken, validateAuthorizationHeader } from '@/utils/authentication';
 import { makeGetRequest, makePostRequest } from '@/utils/http';
 import { mockedBarn } from '@/mocks/mockedPersonalia';
+import { DEMO_SESJON_COOKIE } from '@/mocks/demo';
+import { mottaDemosøknad } from '@/mocks/demoInnsendinger';
+import { InnsendteSvar } from '@/types/InnsendteSvar';
+import { SøknadUtenEndringerResponse } from '@/types/SøknadResponse';
 
 const backendUrl = process.env.TILTAKSPENGER_SOKNAD_API_URL;
 
@@ -64,13 +68,39 @@ const middlewareLive = async (request: NextApiRequest, response: NextApiResponse
     }
 };
 
+async function lesInnsendteSvar(request: NextApiRequest): Promise<InnsendteSvar> {
+    const deler: Buffer[] = [];
+    for await (const del of request) {
+        deler.push(del as Buffer);
+    }
+    const formData = await new Response(Buffer.concat(deler), {
+        headers: { 'content-type': request.headers['content-type'] ?? '' },
+    }).formData();
+    return JSON.parse(formData.get('søknad') as string);
+}
+
 const middlewareDemo = async (request: NextApiRequest, response: NextApiResponse) => {
-    if (request.method?.toUpperCase() === 'GET' && request.url?.split('?')[0].endsWith('/personalia/barn')) {
+    const path = request.url?.split('?')[0];
+    const method = request.method?.toUpperCase();
+    if (method === 'GET' && path?.endsWith('/personalia/barn')) {
         return response.status(200).json({ barn: mockedBarn });
     }
-    return response.status(201).json({
-        innsendingTidspunkt: new Date().toISOString(),
-    });
+    if (method === 'POST' && path?.endsWith('/soknad')) {
+        const resultat = mottaDemosøknad(request.cookies, await lesInnsendteSvar(request));
+        if (resultat.type === 'utenEndringer') {
+            const body: SøknadUtenEndringerResponse = {
+                kode: 'SØKNAD_UTEN_ENDRINGER',
+                mottatt: resultat.mottatt,
+                melding: 'Søknaden har de samme svarene som en søknad vi allerede har mottatt.',
+            };
+            return response.status(409).json(body);
+        }
+        if (resultat.nySesjon) {
+            response.setHeader('Set-Cookie', `${DEMO_SESJON_COOKIE}=${resultat.nySesjon}; Path=/; SameSite=Lax`);
+        }
+        return response.status(201).json({ innsendingTidspunkt: resultat.mottatt });
+    }
+    return response.status(404).json({ message: 'Finnes ikke i demoen' });
 };
 
 // sørger for at NextJS sin default bodyParser ikke ødelegger for vedleggsopplastning

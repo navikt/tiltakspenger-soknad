@@ -27,6 +27,13 @@ const AktivtSøknadssteg = ({ steg }: AktivtSøknadsstegProps) => {
     const [søknadsinnsendingInProgress, setSøknadsinnsendingInProgress] = React.useState(false);
     const [innsendingstidspunkt, setInnsendingstidspunkt] = React.useState<string>();
     const [avvistUtenEndringer, setAvvistUtenEndringer] = React.useState<{ mottatt: string }>();
+    const [forrigeSteg, setForrigeSteg] = React.useState(steg);
+
+    // Feilmeldingen om at søknaden ble avvist gjelder bare innsendingen bruker nettopp gjorde, og fjernes når bruker går til et annet steg.
+    if (steg !== forrigeSteg) {
+        setForrigeSteg(steg);
+        setAvvistUtenEndringer(undefined);
+    }
 
     function gåVidereFraTiltak() {
         const aktivitetId = getValues('svar.tiltak.aktivitetId');

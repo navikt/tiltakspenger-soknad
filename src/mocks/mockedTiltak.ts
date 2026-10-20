@@ -1,5 +1,3 @@
-import { mocketTidligereSvar } from '@/mocks/mockedTidligereSøknad';
-
 export const mocketTiltak = [
     {
         aktivitetId: '123',
@@ -36,6 +34,5 @@ export const mocketTiltak = [
         arrangør: 'Testarrangør D',
         gjennomforingId: '345678',
         visningsnavn: 'Avklaring hos Testarrangør D',
-        tidligereSøknad: { mottatt: '2025-03-03T10:15:00', svar: mocketTidligereSvar },
     },
 ] as const;

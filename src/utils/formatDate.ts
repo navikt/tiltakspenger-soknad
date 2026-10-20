@@ -20,5 +20,5 @@ export const dateStrWithHourMinute = (dateStr: Nullable<string>): string => {
 
 export const dateStrWithMonthNameAndHourMinute = (dateStr: Nullable<string>): string => {
     if (!dateStr) return '';
-    return `${dateStrWithMonthName(dateStr)}, klokken ${dateStrWithHourMinute(dateStr)}`;
+    return `${dayjs(dateStr).format('D. MMMM YYYY')}, klokken ${dateStrWithHourMinute(dateStr)}`;
 };
