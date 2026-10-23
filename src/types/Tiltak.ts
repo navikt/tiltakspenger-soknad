@@ -1,10 +1,11 @@
 import { Periode } from '@/types/Periode';
 import { InnsendteSvar } from '@/types/InnsendteSvar';
 
-/** Utfallet av behandlingen av en søknad, når vedtaket er iverksatt. */
+/** Utfallet av behandlingen av en søknad, når vedtaket er iverksatt eller søknaden er avbrutt. */
 export interface Behandlingsutfall {
-    resultat: 'INNVILGELSE' | 'AVSLAG';
-    vedtakstidspunkt: string;
+    resultat: 'INNVILGELSE' | 'AVSLAG' | 'AVBRUTT';
+    /** Når vedtaket ble fattet, eller når søknaden ble avbrutt. */
+    tidspunkt: string;
 }
 
 /** Den sist mottatte søknaden for tiltaket som dekker hele perioden, se `tidligereSøknad` på {@link Tiltak}. */

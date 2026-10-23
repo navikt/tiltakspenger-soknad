@@ -39,6 +39,8 @@ const lagTagForTidligereSøknad = ({ tidligereSøknad }: Tiltak) => {
             return 'Søknaden din er innvilget';
         case 'AVSLAG':
             return 'Søknaden din er avslått';
+        case 'AVBRUTT':
+            return 'Søknaden din er avbrutt';
         default:
             return 'Du har allerede søkt';
     }

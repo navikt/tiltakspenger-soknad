@@ -73,17 +73,23 @@ describe('Tiltakssteg', () => {
             lagTiltak('1', 'Arbeidstrening hos A', {
                 mottatt: '2025-01-15T10:30:00',
                 svar: mocketTidligereSvar,
-                behandlingsutfall: { resultat: 'INNVILGELSE', vedtakstidspunkt: '2025-02-01T12:00:00' },
+                behandlingsutfall: { resultat: 'INNVILGELSE', tidspunkt: '2025-02-01T12:00:00' },
             }),
             lagTiltak('2', 'Arbeidstrening hos B', {
                 mottatt: '2025-01-15T10:30:00',
                 svar: mocketTidligereSvar,
-                behandlingsutfall: { resultat: 'AVSLAG', vedtakstidspunkt: '2025-02-01T12:00:00' },
+                behandlingsutfall: { resultat: 'AVSLAG', tidspunkt: '2025-02-01T12:00:00' },
+            }),
+            lagTiltak('3', 'Arbeidstrening hos C', {
+                mottatt: '2025-01-15T10:30:00',
+                svar: mocketTidligereSvar,
+                behandlingsutfall: { resultat: 'AVBRUTT', tidspunkt: '2025-02-01T12:00:00' },
             }),
         ]);
 
         expect(screen.getByLabelText(/Arbeidstrening hos A.*Søknaden din er innvilget/)).toBeInTheDocument();
         expect(screen.getByLabelText(/Arbeidstrening hos B.*Søknaden din er avslått/)).toBeInTheDocument();
+        expect(screen.getByLabelText(/Arbeidstrening hos C.*Søknaden din er avbrutt/)).toBeInTheDocument();
         expect(screen.queryByText('Du har allerede søkt')).not.toBeInTheDocument();
     });
 });

@@ -82,12 +82,26 @@ describe('TidligereSøknadSteg', () => {
             ...valgtTiltak,
             tidligereSøknad: {
                 ...valgtTiltak.tidligereSøknad!,
-                behandlingsutfall: { resultat: 'AVSLAG', vedtakstidspunkt: '2025-04-10T09:00:00' },
+                behandlingsutfall: { resultat: 'AVSLAG', tidspunkt: '2025-04-10T09:00:00' },
             },
         });
 
         expect(screen.getByText('Søknaden din for dette tiltaket er ferdig behandlet')).toBeInTheDocument();
         expect(screen.getByText(/Søknaden ble avslått 10\. april 2025\./)).toBeInTheDocument();
+        expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
+    });
+
+    test('viser at forrige søknad er avbrutt, uten krav om å endre svar', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            tidligereSøknad: {
+                ...valgtTiltak.tidligereSøknad!,
+                behandlingsutfall: { resultat: 'AVBRUTT', tidspunkt: '2025-04-10T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText('Søknaden din for dette tiltaket er avbrutt')).toBeInTheDocument();
+        expect(screen.getByText(/Søknaden ble avbrutt 10\. april 2025\./)).toBeInTheDocument();
         expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
     });
 

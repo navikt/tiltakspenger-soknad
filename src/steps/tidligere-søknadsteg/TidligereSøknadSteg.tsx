@@ -11,7 +11,14 @@ import { dateStrWithMonthName, dateStrWithMonthNameAndHourMinute } from '@/utils
 import { formatPeriode } from '@/utils/formatPeriode';
 import { SAKSBEHANDLINGSTID_URL } from '@/utils/lenker';
 import { SVARFELT, SVARFELT_NAVN } from '@/utils/svaroppsummering';
+import { Behandlingsutfall } from '@/types/Tiltak';
 import stepStyles from './../../components/step/Step.module.css';
+
+const resultatTekst: Record<Behandlingsutfall['resultat'], string> = {
+    INNVILGELSE: 'innvilget',
+    AVSLAG: 'avslått',
+    AVBRUTT: 'avbrutt',
+};
 
 interface TidligereSøknadStegProps {
     title: string;
@@ -23,7 +30,7 @@ interface TidligereSøknadStegProps {
 /**
  * Vises når bruker har valgt et tiltak vi allerede har mottatt en søknad for.
  * Bruker ser svarene fra forrige søknad, og kan velge å ettersende opplysninger eller starte en ny søknad som er fylt ut med de samme svarene.
- * Er forrige søknad ferdig behandlet, ser bruker utfallet, og kan sende den nye søknaden uten å endre svarene.
+ * Er forrige søknad ferdig behandlet eller avbrutt, ser bruker utfallet, og kan sende den nye søknaden uten å endre svarene.
  */
 export default function TidligereSøknadSteg({
     title,
@@ -57,13 +64,15 @@ export default function TidligereSøknadSteg({
             {søknad.behandlingsutfall ? (
                 <Alert variant="info" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
                     <Heading size="small" level="2" spacing>
-                        Søknaden din for dette tiltaket er ferdig behandlet
+                        {søknad.behandlingsutfall.resultat === 'AVBRUTT'
+                            ? 'Søknaden din for dette tiltaket er avbrutt'
+                            : 'Søknaden din for dette tiltaket er ferdig behandlet'}
                     </Heading>
                     <BodyLong spacing>
                         Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(søknad.mottatt)}, for tiltaket{' '}
                         {lagTiltakVisningTekst(valgtTiltak)}. Søknaden ble{' '}
-                        {søknad.behandlingsutfall.resultat === 'INNVILGELSE' ? 'innvilget' : 'avslått'}{' '}
-                        {dateStrWithMonthName(søknad.behandlingsutfall.vedtakstidspunkt)}.
+                        {resultatTekst[søknad.behandlingsutfall.resultat]}{' '}
+                        {dateStrWithMonthName(søknad.behandlingsutfall.tidspunkt)}.
                     </BodyLong>
                     <BodyLong>
                         Du kan sende en ny søknad for tiltaket. Den nye søknaden blir fylt ut med svarene dine fra
