@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { DEMO_SESJON_COOKIE, DEMO_TIDLIGERE_SØKNAD, demoMedTidligereSøknad } from '@/mocks/demo';
+import { DEMO_SESJON_COOKIE, DEMO_TIDLIGERE_SØKNAD, demoBehandlingsutfall, demoMedTidligereSøknad } from '@/mocks/demo';
 import { InnsendteSvar } from '@/types/InnsendteSvar';
 import { TidligereSøknad } from '@/types/Tiltak';
 import { endredeSvar, oppsummerSvar } from '@/utils/svaroppsummering';
@@ -19,7 +19,9 @@ const innsendinger: Innsendinger = (global.demoInnsendinger ??= new Map());
 /** Den sist mottatte søknaden for hvert tiltak demo-brukeren har søkt for, nøklet på aktivitetId. */
 export function tidligereSøknaderIDemo(cookies: Cookies): Record<string, TidligereSøknad> {
     const { aktivitetId, mottatt, svar } = DEMO_TIDLIGERE_SØKNAD;
-    const valgt = demoMedTidligereSøknad(cookies) ? { [aktivitetId]: { mottatt, svar } } : {};
+    const valgt = demoMedTidligereSøknad(cookies)
+        ? { [aktivitetId]: { mottatt, svar, behandlingsutfall: demoBehandlingsutfall(cookies) } }
+        : {};
     const sesjon = cookies[DEMO_SESJON_COOKIE];
     return { ...valgt, ...(sesjon ? innsendinger.get(sesjon) : undefined) };
 }

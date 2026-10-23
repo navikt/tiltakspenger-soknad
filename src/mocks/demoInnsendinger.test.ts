@@ -18,12 +18,18 @@ let mockedBarn: Barn[];
 let DEMO_TIDLIGERE_SØKNAD: typeof import('./demo').DEMO_TIDLIGERE_SØKNAD;
 let DEMO_SESJON_COOKIE: string;
 let DEMO_TIDLIGERE_SØKNAD_COOKIE: string;
+let DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE: string;
 
 beforeAll(async () => {
     forhåndsutfyll = (await import('@/utils/forhåndsutfylling')).forhåndsutfyllFraForrigeSøknad;
     demo = await import('./demoInnsendinger');
     mockedBarn = (await import('./mockedPersonalia')).mockedBarn;
-    ({ DEMO_TIDLIGERE_SØKNAD, DEMO_SESJON_COOKIE, DEMO_TIDLIGERE_SØKNAD_COOKIE } = await import('./demo'));
+    ({
+        DEMO_TIDLIGERE_SØKNAD,
+        DEMO_SESJON_COOKIE,
+        DEMO_TIDLIGERE_SØKNAD_COOKIE,
+        DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE,
+    } = await import('./demo'));
 });
 
 const tiltak = { aktivitetId: '45avk6' } as Tiltak;
@@ -53,6 +59,36 @@ describe('mottaDemosøknad', () => {
         expect(demo.mottaDemosøknad(cookies, sendUendret(DEMO_TIDLIGERE_SØKNAD.svar))).toEqual({
             type: 'utenEndringer',
             mottatt: DEMO_TIDLIGERE_SØKNAD.mottatt,
+        });
+    });
+
+    test('den valgte tidligere søknaden er under behandling når det ikke er valgt noe gyldig resultat', () => {
+        ['UNDER_BEHANDLING', 'UKJENT', undefined].forEach((resultat) => {
+            const cookies = {
+                [DEMO_TIDLIGERE_SØKNAD_COOKIE]: 'true',
+                [DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE]: resultat,
+            };
+
+            expect(demo.tidligereSøknaderIDemo(cookies)[tiltak.aktivitetId].behandlingsutfall).toBeNull();
+        });
+    });
+
+    test('tar imot den valgte tidligere søknaden uten endringer når den er ferdig behandlet eller avbrutt', () => {
+        (['INNVILGELSE', 'AVSLAG', 'AVBRUTT'] as const).forEach((resultat) => {
+            const cookies = {
+                [DEMO_TIDLIGERE_SØKNAD_COOKIE]: 'true',
+                [DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE]: resultat,
+                [DEMO_SESJON_COOKIE]: `sesjon-${resultat}`,
+            };
+
+            expect(demo.tidligereSøknaderIDemo(cookies)[tiltak.aktivitetId].behandlingsutfall).toEqual({
+                resultat,
+                tidspunkt: '2025-04-10T09:00:00',
+            });
+            expect(demo.mottaDemosøknad(cookies, sendUendret(DEMO_TIDLIGERE_SØKNAD.svar))).toEqual({
+                type: 'mottatt',
+                mottatt: expect.any(String),
+            });
         });
     });
 
