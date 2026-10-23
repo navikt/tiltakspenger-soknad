@@ -15,7 +15,8 @@ beforeAll(async () => {
     Demovalg = (await import('./Demovalg')).default;
 });
 
-const RESULTATSPØRSMÅL = 'Demo: Hva er resultatet av behandlingen?';
+// Navnet på gruppen inkluderer også beskrivelsen, så vi matcher bare på starten.
+const RESULTATSPØRSMÅL = /^Demo: Hva er resultatet av behandlingen\?/;
 
 describe('Demovalg', () => {
     beforeEach(() => {
@@ -26,10 +27,11 @@ describe('Demovalg', () => {
 
     test('spør om resultatet av behandlingen bare når brukeren har sendt inn en søknad tidligere', () => {
         render(<Demovalg medTidligereSøknad={false} resultat="UNDER_BEHANDLING" />);
-        expect(screen.queryByRole('group', { name: RESULTATSPØRSMÅL })).not.toBeInTheDocument();
+        expect(screen.queryByRole('radiogroup', { name: RESULTATSPØRSMÅL })).not.toBeInTheDocument();
 
         fireEvent.click(screen.getByRole('radio', { name: 'Ja' }));
 
+        expect(screen.getByRole('radiogroup', { name: RESULTATSPØRSMÅL })).toBeInTheDocument();
         expect(screen.getByRole('radio', { name: 'Under behandling' })).toBeChecked();
         expect(document.cookie).toContain('demo-tidligere-soknad=true');
     });
