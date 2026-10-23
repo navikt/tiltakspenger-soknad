@@ -9,7 +9,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
 import defaultValues from '@/defaultValues';
 import { Tiltak } from '@/types/Tiltak';
-import { ETTERSENDING_URL } from '@/utils/lenker';
+import { ETTERSENDING_URL, MIN_SIDE_URL } from '@/utils/lenker';
 import { mocketTidligereSvar } from '@/mocks/mockedTidligereSøknad';
 
 // Siden drar med seg serverkode. Steget trenger bare konteksten.
@@ -88,6 +88,8 @@ describe('TidligereSøknadSteg', () => {
 
         expect(screen.getByText('Søknaden din for dette tiltaket er ferdig behandlet')).toBeInTheDocument();
         expect(screen.getByText(/Søknaden ble avslått 10\. april 2025\./)).toBeInTheDocument();
+        expect(screen.getByText(/Du kan se vedtaksbrevet på/)).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
         expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
     });
 
@@ -102,6 +104,8 @@ describe('TidligereSøknadSteg', () => {
 
         expect(screen.getByText('Søknaden din for dette tiltaket er avbrutt')).toBeInTheDocument();
         expect(screen.getByText(/Søknaden ble avbrutt 10\. april 2025\./)).toBeInTheDocument();
+        // En avbrutt søknad har ikke noe vedtak, og dermed ikke noe vedtaksbrev.
+        expect(screen.queryByText(/vedtaksbrevet/)).not.toBeInTheDocument();
         expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
     });
 
@@ -110,6 +114,7 @@ describe('TidligereSøknadSteg', () => {
 
         expect(screen.getByText('Vi har mottatt søknaden din for dette tiltaket')).toBeInTheDocument();
         expect(screen.getByText(/du må endre minst ett svar/)).toBeInTheDocument();
+        expect(screen.queryByText(/vedtaksbrevet/)).not.toBeInTheDocument();
     });
 
     test('Start ny søknad går videre', async () => {

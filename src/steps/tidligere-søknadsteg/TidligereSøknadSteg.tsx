@@ -9,7 +9,7 @@ import { UtfyllingContext } from '@/pages/utfylling/[[...step]]';
 import { lagTiltakVisningTekst } from '@/steps/tiltakssteg/utils';
 import { dateStrWithMonthName, dateStrWithMonthNameAndHourMinute } from '@/utils/formatDate';
 import { formatPeriode } from '@/utils/formatPeriode';
-import { SAKSBEHANDLINGSTID_URL } from '@/utils/lenker';
+import { MIN_SIDE_URL, SAKSBEHANDLINGSTID_URL } from '@/utils/lenker';
 import { SVARFELT, SVARFELT_NAVN } from '@/utils/svaroppsummering';
 import { Behandlingsutfall } from '@/types/Tiltak';
 import stepStyles from './../../components/step/Step.module.css';
@@ -74,6 +74,15 @@ export default function TidligereSøknadSteg({
                         {resultatTekst[søknad.behandlingsutfall.resultat]}{' '}
                         {dateStrWithMonthName(søknad.behandlingsutfall.tidspunkt)}.
                     </BodyLong>
+                    {søknad.behandlingsutfall.resultat !== 'AVBRUTT' && (
+                        <BodyLong spacing>
+                            Du kan se vedtaksbrevet på{' '}
+                            <Link href={MIN_SIDE_URL} target="_blank">
+                                Min side (åpnes i ny fane)
+                            </Link>
+                            .
+                        </BodyLong>
+                    )}
                     <BodyLong>
                         Du kan sende en ny søknad for tiltaket. Den nye søknaden blir fylt ut med svarene dine fra
                         forrige søknad, så du kan endre svarene som ikke lenger stemmer.
