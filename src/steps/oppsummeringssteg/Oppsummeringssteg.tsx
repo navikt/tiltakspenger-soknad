@@ -53,7 +53,8 @@ export default function Oppsummeringssteg({
     const innsendteSvar = JSON.parse(toSøknadJson(svar, personalia!.barn, valgtTiltak!)) as InnsendteSvar;
     const oppsummering = oppsummerSvar(innsendteSvar);
     const endret = forrige ? endredeSvar(oppsummering, forrige.oppsummering) : [];
-    const ingenEndringer = !!forrige && endret.length === 0;
+    // En ferdig behandlet søknad kan sendes inn på nytt med de samme svarene.
+    const ingenEndringer = !!forrige && !forrige.søknad.behandlingsutfall && endret.length === 0;
 
     const felt = (navn: Svarfelt, feltNavn: string = SVARFELT_NAVN[navn]) => (
         <Oppsummeringsfelt

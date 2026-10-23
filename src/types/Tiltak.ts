@@ -1,10 +1,19 @@
 import { Periode } from '@/types/Periode';
 import { InnsendteSvar } from '@/types/InnsendteSvar';
 
+/** Utfallet av behandlingen av en søknad, når vedtaket er iverksatt eller søknaden er avbrutt. */
+export interface Behandlingsutfall {
+    resultat: 'INNVILGELSE' | 'AVSLAG' | 'AVBRUTT';
+    /** Når vedtaket ble fattet, eller når søknaden ble avbrutt. */
+    tidspunkt: string;
+}
+
 /** Den sist mottatte søknaden for tiltaket som dekker hele perioden, se `tidligereSøknad` på {@link Tiltak}. */
 export interface TidligereSøknad {
     mottatt: string;
     svar: InnsendteSvar;
+    /** Satt når søknaden er ferdig behandlet. Da kan bruker sende den samme søknaden på nytt. */
+    behandlingsutfall?: Behandlingsutfall | null;
 }
 
 export interface Tiltak {
@@ -17,7 +26,8 @@ export interface Tiltak {
     visningsnavn?: string;
     /**
      * Satt når bruker allerede har søkt for tiltaket og perioden.
-     * Bruker kan søke på nytt, men får først se svarene fra forrige søknad, og den nye søknaden avvises om svarene er de samme.
+     * Bruker kan søke på nytt, men får først se svarene fra forrige søknad.
+     * Er forrige søknad ikke ferdig behandlet, avvises den nye søknaden om svarene er de samme.
      */
     tidligereSøknad?: TidligereSøknad | null;
 }

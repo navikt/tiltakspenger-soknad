@@ -26,8 +26,24 @@ export const lagSvaralternativForTiltak = (tiltak: Tiltak) => {
     return {
         tekst: lagTiltaksalternativTekst(tiltak),
         value: tiltak.aktivitetId,
-        tag: tiltak.tidligereSøknad ? 'Du har allerede søkt' : undefined,
+        tag: lagTagForTidligereSøknad(tiltak),
     };
+};
+
+const lagTagForTidligereSøknad = ({ tidligereSøknad }: Tiltak) => {
+    if (!tidligereSøknad) {
+        return undefined;
+    }
+    switch (tidligereSøknad.behandlingsutfall?.resultat) {
+        case 'INNVILGELSE':
+            return 'Søknaden din er innvilget';
+        case 'AVSLAG':
+            return 'Søknaden din er avslått';
+        case 'AVBRUTT':
+            return 'Søknaden din er avbrutt';
+        default:
+            return 'Du har allerede søkt';
+    }
 };
 
 export const harFullstendigPeriode = (tiltak: Tiltak) => {

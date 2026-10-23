@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { DEMO_SESJON_COOKIE, DEMO_TIDLIGERE_SØKNAD, demoMedTidligereSøknad } from '@/mocks/demo';
+import { DEMO_SESJON_COOKIE, DEMO_TIDLIGERE_SØKNAD, demoBehandlingsutfall, demoMedTidligereSøknad } from '@/mocks/demo';
 import { InnsendteSvar } from '@/types/InnsendteSvar';
 import { TidligereSøknad } from '@/types/Tiltak';
 import { endredeSvar, oppsummerSvar } from '@/utils/svaroppsummering';
@@ -19,7 +19,9 @@ const innsendinger: Innsendinger = (global.demoInnsendinger ??= new Map());
 /** Den sist mottatte søknaden for hvert tiltak demo-brukeren har søkt for, nøklet på aktivitetId. */
 export function tidligereSøknaderIDemo(cookies: Cookies): Record<string, TidligereSøknad> {
     const { aktivitetId, mottatt, svar } = DEMO_TIDLIGERE_SØKNAD;
-    const valgt = demoMedTidligereSøknad(cookies) ? { [aktivitetId]: { mottatt, svar } } : {};
+    const valgt = demoMedTidligereSøknad(cookies)
+        ? { [aktivitetId]: { mottatt, svar, behandlingsutfall: demoBehandlingsutfall(cookies) } }
+        : {};
     const sesjon = cookies[DEMO_SESJON_COOKIE];
     return { ...valgt, ...(sesjon ? innsendinger.get(sesjon) : undefined) };
 }
@@ -30,10 +32,15 @@ export type Demoinnsending =
 /**
  * Tar imot en søknad i demoen slik søknad-api-et gjør.
  * En søknad for et tiltak med de samme svarene som den sist mottatte søknaden for tiltaket, avvises.
+ * Er den sist mottatte søknaden ferdig behandlet, tas den nye søknaden imot.
  */
 export function mottaDemosøknad(cookies: Cookies, svar: InnsendteSvar, nå: Date = new Date()): Demoinnsending {
     const tidligere = tidligereSøknaderIDemo(cookies)[svar.tiltak.aktivitetId];
-    if (tidligere && endredeSvar(oppsummerSvar(svar), oppsummerSvar(tidligere.svar)).length === 0) {
+    if (
+        tidligere &&
+        !tidligere.behandlingsutfall &&
+        endredeSvar(oppsummerSvar(svar), oppsummerSvar(tidligere.svar)).length === 0
+    ) {
         return { type: 'utenEndringer', mottatt: tidligere.mottatt };
     }
     const nySesjon = cookies[DEMO_SESJON_COOKIE] ? undefined : randomUUID();

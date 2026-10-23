@@ -91,9 +91,9 @@ export default function Kvitteringsside({ personalia, innsendingstidspunkt }: Kv
                 </Link>
             </p>
 
-            <Link href={MIN_SIDE_URL} className={styles.button}>
-                <Button as="a">Følg saken på Min side</Button>
-            </Link>
+            <Button as={"a"} href={MIN_SIDE_URL} className={styles.button}>
+                Følg saken på Min side
+            </Button>
 
             <div data-uxsignals-embed="panel-cw15yr9a6n" style={{ paddingTop: '1rem', maxWidth: '620px' }} />
         </div>
