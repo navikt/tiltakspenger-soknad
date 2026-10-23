@@ -30,10 +30,15 @@ export type Demoinnsending =
 /**
  * Tar imot en søknad i demoen slik søknad-api-et gjør.
  * En søknad for et tiltak med de samme svarene som den sist mottatte søknaden for tiltaket, avvises.
+ * Er den sist mottatte søknaden ferdig behandlet, tas den nye søknaden imot.
  */
 export function mottaDemosøknad(cookies: Cookies, svar: InnsendteSvar, nå: Date = new Date()): Demoinnsending {
     const tidligere = tidligereSøknaderIDemo(cookies)[svar.tiltak.aktivitetId];
-    if (tidligere && endredeSvar(oppsummerSvar(svar), oppsummerSvar(tidligere.svar)).length === 0) {
+    if (
+        tidligere &&
+        !tidligere.behandlingsutfall &&
+        endredeSvar(oppsummerSvar(svar), oppsummerSvar(tidligere.svar)).length === 0
+    ) {
         return { type: 'utenEndringer', mottatt: tidligere.mottatt };
     }
     const nySesjon = cookies[DEMO_SESJON_COOKIE] ? undefined : randomUUID();

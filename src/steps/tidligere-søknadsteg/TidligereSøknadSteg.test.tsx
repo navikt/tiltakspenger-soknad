@@ -37,11 +37,11 @@ const valgtTiltak: Tiltak = {
     tidligereSøknad: { mottatt: '2025-03-03T10:15:00', svar: mocketTidligereSvar },
 };
 
-function renderSteg(onCompleted: () => void) {
+function renderSteg(onCompleted: () => void, tiltak: Tiltak = valgtTiltak) {
     function Skjema() {
         const skjema = useForm<Søknad>({ defaultValues: defaultValues as unknown as Søknad });
         return (
-            <UtfyllingContext value={{ valgtTiltak }}>
+            <UtfyllingContext value={{ valgtTiltak: tiltak }}>
                 <FormProvider {...skjema}>
                     <TidligereSøknadSteg
                         title="Du har allerede søkt for dette tiltaket"
@@ -75,6 +75,27 @@ describe('TidligereSøknadSteg', () => {
         ).toBeInTheDocument();
         // Spørsmålene under annen pengestøtte ble ikke stilt, siden bruker svarte nei.
         expect(screen.queryByText('Alderspensjon')).not.toBeInTheDocument();
+    });
+
+    test('viser utfallet når forrige søknad er ferdig behandlet, uten krav om å endre svar', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            tidligereSøknad: {
+                ...valgtTiltak.tidligereSøknad!,
+                behandlingsutfall: { resultat: 'AVSLAG', vedtakstidspunkt: '2025-04-10T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText('Søknaden din for dette tiltaket er ferdig behandlet')).toBeInTheDocument();
+        expect(screen.getByText(/Søknaden ble avslått 10\. april 2025\./)).toBeInTheDocument();
+        expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
+    });
+
+    test('krever endrede svar når forrige søknad ikke er ferdig behandlet', () => {
+        renderSteg(jest.fn());
+
+        expect(screen.getByText('Vi har mottatt søknaden din for dette tiltaket')).toBeInTheDocument();
+        expect(screen.getByText(/du må endre minst ett svar/)).toBeInTheDocument();
     });
 
     test('Start ny søknad går videre', async () => {
