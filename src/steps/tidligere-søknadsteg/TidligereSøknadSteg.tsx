@@ -80,12 +80,12 @@ export default function TidligereSøknadSteg({
             {sisteVedtak && (
                 <Alert variant="info" style={{ marginTop: '1rem' }}>
                     <Heading size="small" level="2" spacing>
-                        Du har fått vedtak på en søknad for dette tiltaket
+                        Du har en ferdig behandlet søknad for dette tiltaket
                     </Heading>
                     <BodyLong spacing>
-                        Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(sisteVedtak.søknadMottatt)}. Den ble{' '}
+                        Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(sisteVedtak.søknadMottatt)}. Søknaden ble{' '}
                         {resultatTekst[sisteVedtak.behandlingsutfall.resultat]}{' '}
-                        {dateStrWithMonthName(sisteVedtak.behandlingsutfall.tidspunkt)}.
+                        {dateStrWithMonthNameAndHourMinute(sisteVedtak.behandlingsutfall.tidspunkt)}.
                     </BodyLong>
                     <BodyLong>
                         <VedtaksbrevPåMinSide />
