@@ -9,7 +9,7 @@ import { FormProvider, useForm } from 'react-hook-form';
 import Søknad from '@/types/Søknad';
 import defaultValues from '@/defaultValues';
 import { Tiltak } from '@/types/Tiltak';
-import { ETTERSENDING_URL } from '@/utils/lenker';
+import { ETTERSENDING_URL, MIN_SIDE_URL } from '@/utils/lenker';
 import { mocketTidligereSvar } from '@/mocks/mockedTidligereSøknad';
 
 // Siden drar med seg serverkode. Steget trenger bare konteksten.
@@ -37,11 +37,11 @@ const valgtTiltak: Tiltak = {
     tidligereSøknad: { mottatt: '2025-03-03T10:15:00', svar: mocketTidligereSvar },
 };
 
-function renderSteg(onCompleted: () => void) {
+function renderSteg(onCompleted: () => void, tiltak: Tiltak = valgtTiltak) {
     function Skjema() {
         const skjema = useForm<Søknad>({ defaultValues: defaultValues as unknown as Søknad });
         return (
-            <UtfyllingContext value={{ valgtTiltak }}>
+            <UtfyllingContext value={{ valgtTiltak: tiltak }}>
                 <FormProvider {...skjema}>
                     <TidligereSøknadSteg
                         title="Du har allerede søkt for dette tiltaket"
@@ -75,6 +75,91 @@ describe('TidligereSøknadSteg', () => {
         ).toBeInTheDocument();
         // Spørsmålene under annen pengestøtte ble ikke stilt, siden bruker svarte nei.
         expect(screen.queryByText('Alderspensjon')).not.toBeInTheDocument();
+    });
+
+    test('viser utfallet når forrige søknad er ferdig behandlet, uten krav om å endre svar', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            tidligereSøknad: {
+                ...valgtTiltak.tidligereSøknad!,
+                behandlingsutfall: { resultat: 'AVSLAG', tidspunkt: '2025-04-10T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText('Søknaden din for dette tiltaket er ferdig behandlet')).toBeInTheDocument();
+        expect(screen.getByText(/Søknaden ble avslått 10\. april 2025\./)).toBeInTheDocument();
+        expect(screen.getByText(/Du kan se vedtaksbrevet på/)).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
+        expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
+    });
+
+    test('viser at forrige søknad er avbrutt, uten krav om å endre svar', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            tidligereSøknad: {
+                ...valgtTiltak.tidligereSøknad!,
+                behandlingsutfall: { resultat: 'AVBRUTT', tidspunkt: '2025-04-10T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText('Søknaden din for dette tiltaket er avbrutt')).toBeInTheDocument();
+        expect(screen.getByText(/Søknaden ble avbrutt 10\. april 2025\./)).toBeInTheDocument();
+        // En avbrutt søknad har ikke noe vedtak, og dermed ikke noe vedtaksbrev.
+        expect(screen.queryByText(/vedtaksbrevet/)).not.toBeInTheDocument();
+        expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
+    });
+
+    test('viser det siste vedtaket i tillegg til at den nyeste søknaden er avbrutt', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            tidligereSøknad: {
+                ...valgtTiltak.tidligereSøknad!,
+                behandlingsutfall: { resultat: 'AVBRUTT', tidspunkt: '2025-04-10T09:00:00' },
+            },
+            sisteVedtak: {
+                søknadMottatt: '2025-02-01T08:30:00',
+                behandlingsutfall: { resultat: 'INNVILGELSE', tidspunkt: '2025-02-20T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText('Du har en ferdig behandlet søknad for dette tiltaket')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                /Vi mottok søknaden din 1\. februar 2025, klokken 08\.30\. Søknaden ble innvilget 20\. februar 2025, klokken 09\.00\./,
+            ),
+        ).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
+        expect(screen.getByText('Den nye søknaden din for dette tiltaket er avbrutt')).toBeInTheDocument();
+        expect(
+            screen.getByText(/Vi mottok den nye søknaden din 3\. mars 2025, klokken 10\.15, for tiltaket/),
+        ).toBeInTheDocument();
+        expect(screen.getByText(/Søknaden ble avbrutt 10\. april 2025\./)).toBeInTheDocument();
+    });
+
+    test('viser det siste vedtaket i tillegg til at den nyeste søknaden er under behandling', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            sisteVedtak: {
+                søknadMottatt: '2025-02-01T08:30:00',
+                behandlingsutfall: { resultat: 'AVSLAG', tidspunkt: '2025-02-20T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText(/Søknaden ble avslått 20\. februar 2025, klokken 09\.00\./)).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
+        expect(screen.getByText('Vi har mottatt en ny søknad for dette tiltaket')).toBeInTheDocument();
+        expect(
+            screen.getByText(/Vi mottok den nye søknaden din 3\. mars 2025, klokken 10\.15, for tiltaket/),
+        ).toBeInTheDocument();
+        expect(screen.getByText(/du må endre minst ett svar/)).toBeInTheDocument();
+    });
+
+    test('krever endrede svar når forrige søknad ikke er ferdig behandlet', () => {
+        renderSteg(jest.fn());
+
+        expect(screen.getByText('Vi har mottatt søknaden din for dette tiltaket')).toBeInTheDocument();
+        expect(screen.getByText(/du må endre minst ett svar/)).toBeInTheDocument();
+        expect(screen.queryByText(/vedtaksbrevet/)).not.toBeInTheDocument();
     });
 
     test('Start ny søknad går videre', async () => {
