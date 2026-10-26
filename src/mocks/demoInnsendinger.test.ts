@@ -19,6 +19,7 @@ let DEMO_TIDLIGERE_SØKNAD: typeof import('./demo').DEMO_TIDLIGERE_SØKNAD;
 let DEMO_SESJON_COOKIE: string;
 let DEMO_TIDLIGERE_SØKNAD_COOKIE: string;
 let DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE: string;
+let DEMO_TIDLIGERE_VEDTAK_COOKIE: string;
 
 beforeAll(async () => {
     forhåndsutfyll = (await import('@/utils/forhåndsutfylling')).forhåndsutfyllFraForrigeSøknad;
@@ -29,6 +30,7 @@ beforeAll(async () => {
         DEMO_SESJON_COOKIE,
         DEMO_TIDLIGERE_SØKNAD_COOKIE,
         DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE,
+        DEMO_TIDLIGERE_VEDTAK_COOKIE,
     } = await import('./demo'));
 });
 
@@ -113,5 +115,51 @@ describe('mottaDemosøknad', () => {
         demo.mottaDemosøknad({ [DEMO_SESJON_COOKIE]: 'en-sesjon' }, DEMO_TIDLIGERE_SØKNAD.svar);
 
         expect(demo.tidligereSøknaderIDemo({ [DEMO_SESJON_COOKIE]: 'en-annen-sesjon' })).toEqual({});
+    });
+});
+
+describe('sisteVedtakIDemo', () => {
+    test('viser vedtaket på en eldre søknad når den tidligere søknaden er avbrutt', () => {
+        const cookies = {
+            [DEMO_TIDLIGERE_SØKNAD_COOKIE]: 'true',
+            [DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE]: 'AVBRUTT',
+            [DEMO_TIDLIGERE_VEDTAK_COOKIE]: 'INNVILGELSE',
+        };
+
+        expect(demo.sisteVedtakIDemo(cookies)).toEqual({
+            [tiltak.aktivitetId]: {
+                søknadMottatt: '2025-01-06T10:15:00',
+                behandlingsutfall: { resultat: 'INNVILGELSE', tidspunkt: '2025-02-03T09:00:00' },
+            },
+        });
+    });
+
+    test('viser vedtaket på den tidligere søknaden først når en nyere søknad er sendt inn', () => {
+        const cookies = {
+            [DEMO_TIDLIGERE_SØKNAD_COOKIE]: 'true',
+            [DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE]: 'AVSLAG',
+            [DEMO_SESJON_COOKIE]: 'sesjon-siste-vedtak',
+        };
+        // Vedtaket står som utfall på den tidligere søknaden selv.
+        expect(demo.sisteVedtakIDemo(cookies)).toEqual({});
+
+        demo.mottaDemosøknad(cookies, DEMO_TIDLIGERE_SØKNAD.svar);
+
+        expect(demo.sisteVedtakIDemo(cookies)).toEqual({
+            [tiltak.aktivitetId]: {
+                søknadMottatt: DEMO_TIDLIGERE_SØKNAD.mottatt,
+                behandlingsutfall: { resultat: 'AVSLAG', tidspunkt: '2025-04-10T09:00:00' },
+            },
+        });
+    });
+
+    test('har ingen vedtak uten en tidligere søknad med vedtak', () => {
+        expect(demo.sisteVedtakIDemo({ [DEMO_TIDLIGERE_VEDTAK_COOKIE]: 'INNVILGELSE' })).toEqual({});
+        expect(
+            demo.sisteVedtakIDemo({
+                [DEMO_TIDLIGERE_SØKNAD_COOKIE]: 'true',
+                [DEMO_TIDLIGERE_VEDTAK_COOKIE]: 'UKJENT',
+            }),
+        ).toEqual({});
     });
 });

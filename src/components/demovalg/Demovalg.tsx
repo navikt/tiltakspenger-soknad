@@ -4,13 +4,16 @@ import {
     DEMO_SESJON_COOKIE,
     DEMO_TIDLIGERE_SØKNAD_COOKIE,
     DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE,
+    DEMO_TIDLIGERE_VEDTAK_COOKIE,
     DemoResultat,
+    DemoVedtak,
 } from '@/mocks/demo';
 import styles from './Demovalg.module.css';
 
 interface DemovalgProps {
     medTidligereSøknad: boolean;
     resultat: DemoResultat;
+    vedtak: DemoVedtak;
 }
 
 const RESULTATVALG: { verdi: DemoResultat; tekst: string }[] = [
@@ -20,6 +23,12 @@ const RESULTATVALG: { verdi: DemoResultat; tekst: string }[] = [
     { verdi: 'AVBRUTT', tekst: 'Avbrutt' },
 ];
 
+const VEDTAKSVALG: { verdi: DemoVedtak; tekst: string }[] = [
+    { verdi: 'INGEN', tekst: 'Nei' },
+    { verdi: 'INNVILGELSE', tekst: 'Ja, innvilget' },
+    { verdi: 'AVSLAG', tekst: 'Ja, avslått' },
+];
+
 function settCookie(navn: string, verdi: string) {
     document.cookie = `${navn}=${verdi}; path=/; SameSite=Lax`;
     // Starter demoen på nytt, uten søknadene som er sendt inn så langt.
@@ -27,9 +36,10 @@ function settCookie(navn: string, verdi: string) {
 }
 
 /** Lar den som prøver demoen velge om brukeren har sendt inn en søknad tidligere, og hvordan den er behandlet. */
-export default function Demovalg({ medTidligereSøknad, resultat }: DemovalgProps) {
+export default function Demovalg({ medTidligereSøknad, resultat, vedtak }: DemovalgProps) {
     const [valgt, setValgt] = useState(medTidligereSøknad);
     const [valgtResultat, setValgtResultat] = useState(resultat);
+    const [valgtVedtak, setValgtVedtak] = useState(vedtak);
 
     const velg = (verdi: boolean) => {
         settCookie(DEMO_TIDLIGERE_SØKNAD_COOKIE, String(verdi));
@@ -39,6 +49,11 @@ export default function Demovalg({ medTidligereSøknad, resultat }: DemovalgProp
     const velgResultat = (verdi: DemoResultat) => {
         settCookie(DEMO_TIDLIGERE_SØKNAD_RESULTAT_COOKIE, verdi);
         setValgtResultat(verdi);
+    };
+
+    const velgVedtak = (verdi: DemoVedtak) => {
+        settCookie(DEMO_TIDLIGERE_VEDTAK_COOKIE, verdi);
+        setValgtVedtak(verdi);
     };
 
     return (
@@ -64,6 +79,21 @@ export default function Demovalg({ medTidligereSøknad, resultat }: DemovalgProp
                         size="small"
                     >
                         {RESULTATVALG.map(({ verdi, tekst }) => (
+                            <Radio key={verdi} value={verdi}>
+                                {tekst}
+                            </Radio>
+                        ))}
+                    </RadioGroup>
+                )}
+                {valgt && (valgtResultat === 'UNDER_BEHANDLING' || valgtResultat === 'AVBRUTT') && (
+                    <RadioGroup
+                        legend="Demo: Fikk brukeren vedtak på en enda eldre søknad for tiltaket?"
+                        description="Det siste vedtaket vises alltid, også når en nyere søknad er under behandling eller avbrutt. Du kan også se det ved å velge innvilget eller avslått over, og sende inn søknaden på nytt."
+                        value={valgtVedtak}
+                        onChange={velgVedtak}
+                        size="small"
+                    >
+                        {VEDTAKSVALG.map(({ verdi, tekst }) => (
                             <Radio key={verdi} value={verdi}>
                                 {tekst}
                             </Radio>

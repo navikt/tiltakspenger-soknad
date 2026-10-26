@@ -20,7 +20,13 @@ import { pageWithAuthentication } from '@/utils/pageWithAuthentication';
 import { mockedPersonalia } from '@/mocks/mockedPersonalia';
 import { PersonDTO } from '@/types/Barn';
 import Demovalg from '@/components/demovalg/Demovalg';
-import { DemoResultat, demoMedTidligereSøknad, demoTidligereSøknadResultat } from '@/mocks/demo';
+import {
+    DemoResultat,
+    DemoVedtak,
+    demoMedTidligereSøknad,
+    demoTidligereSøknadResultat,
+    demoTidligereVedtak,
+} from '@/mocks/demo';
 
 function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
     return påkrevdBekreftelsesspørsmål(
@@ -32,7 +38,7 @@ function harBekreftetÅSvareSåGodtManKanValidator(verdi: boolean) {
 interface IndexPageProps {
     personalia: Personalia;
     /** Bare satt i demo-modus. */
-    demo?: { medTidligereSøknad: boolean; resultat: DemoResultat };
+    demo?: { medTidligereSøknad: boolean; resultat: DemoResultat; vedtak: DemoVedtak };
 }
 
 export default function IndexPage({ personalia, demo }: IndexPageProps) {
@@ -55,7 +61,7 @@ export default function IndexPage({ personalia, demo }: IndexPageProps) {
 
     return (
         <form onSubmit={handleSubmit(startSøknad)}>
-            {demo && <Demovalg medTidligereSøknad={demo.medTidligereSøknad} resultat={demo.resultat} />}
+            {demo && <Demovalg {...demo} />}
             <Heading className={styles.søknadstittel} size="large" level="1">
                 Søknad om tiltakspenger
             </Heading>
@@ -180,6 +186,7 @@ const getServerSidePropsDemo = async (context: GetServerSidePropsContext) => {
             demo: {
                 medTidligereSøknad: demoMedTidligereSøknad(context.req.cookies),
                 resultat: demoTidligereSøknadResultat(context.req.cookies),
+                vedtak: demoTidligereVedtak(context.req.cookies),
             },
         },
     };

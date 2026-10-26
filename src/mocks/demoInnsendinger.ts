@@ -1,7 +1,13 @@
 import { randomUUID } from 'crypto';
-import { DEMO_SESJON_COOKIE, DEMO_TIDLIGERE_SØKNAD, demoBehandlingsutfall, demoMedTidligereSøknad } from '@/mocks/demo';
+import {
+    DEMO_SESJON_COOKIE,
+    DEMO_TIDLIGERE_SØKNAD,
+    demoBehandlingsutfall,
+    demoMedTidligereSøknad,
+    demoSisteVedtak,
+} from '@/mocks/demo';
 import { InnsendteSvar } from '@/types/InnsendteSvar';
-import { TidligereSøknad } from '@/types/Tiltak';
+import { SisteVedtak, TidligereSøknad } from '@/types/Tiltak';
 import { endredeSvar, oppsummerSvar } from '@/utils/svaroppsummering';
 
 type Cookies = Partial<Record<string, string>>;
@@ -24,6 +30,21 @@ export function tidligereSøknaderIDemo(cookies: Cookies): Record<string, Tidlig
         : {};
     const sesjon = cookies[DEMO_SESJON_COOKIE];
     return { ...valgt, ...(sesjon ? innsendinger.get(sesjon) : undefined) };
+}
+
+/**
+ * Det siste vedtaket for hvert tiltak, nøklet på aktivitetId, slik søknad-api-et serverer det.
+ * Bare de valgte søknadene fra før demoen startet kan ha vedtak, se {@link demoSisteVedtak}.
+ * Vedtaket er med når den sist mottatte søknaden for tiltaket ikke selv har fått vedtak, for eksempel når bruker har sendt inn en ny søknad i demoen.
+ */
+export function sisteVedtakIDemo(cookies: Cookies): Record<string, SisteVedtak> {
+    const vedtak = demoMedTidligereSøknad(cookies) ? demoSisteVedtak(cookies) : null;
+    const { aktivitetId } = DEMO_TIDLIGERE_SØKNAD;
+    const nyesteUtfall = tidligereSøknaderIDemo(cookies)[aktivitetId]?.behandlingsutfall?.resultat;
+    if (!vedtak || nyesteUtfall === 'INNVILGELSE' || nyesteUtfall === 'AVSLAG') {
+        return {};
+    }
+    return { [aktivitetId]: vedtak };
 }
 
 export type Demoinnsending =

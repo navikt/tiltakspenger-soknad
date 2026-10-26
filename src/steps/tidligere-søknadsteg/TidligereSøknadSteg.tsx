@@ -20,6 +20,18 @@ const resultatTekst: Record<Behandlingsutfall['resultat'], string> = {
     AVBRUTT: 'avbrutt',
 };
 
+function VedtaksbrevPåMinSide() {
+    return (
+        <BodyLong spacing>
+            Du kan se vedtaksbrevet på{' '}
+            <Link href={MIN_SIDE_URL} target="_blank">
+                Min side (åpnes i ny fane)
+            </Link>
+            .
+        </BodyLong>
+    );
+}
+
 interface TidligereSøknadStegProps {
     title: string;
     stepNumber: number;
@@ -31,6 +43,7 @@ interface TidligereSøknadStegProps {
  * Vises når bruker har valgt et tiltak vi allerede har mottatt en søknad for.
  * Bruker ser svarene fra forrige søknad, og kan velge å ettersende opplysninger eller starte en ny søknad som er fylt ut med de samme svarene.
  * Er forrige søknad ferdig behandlet eller avbrutt, ser bruker utfallet, og kan sende den nye søknaden uten å endre svarene.
+ * Har en søknad for tiltaket fått vedtak, ser bruker alltid det siste vedtaket, også når en nyere søknad er avbrutt eller under behandling.
  */
 export default function TidligereSøknadSteg({
     title,
@@ -44,6 +57,7 @@ export default function TidligereSøknadSteg({
         return null;
     }
     const { søknad, oppsummering } = forrige;
+    const { sisteVedtak } = valgtTiltak;
 
     return (
         <Step
@@ -61,6 +75,19 @@ export default function TidligereSøknadSteg({
                 </div>
             )}
         >
+            {sisteVedtak && (
+                <Alert variant="info" style={{ marginTop: '1rem' }}>
+                    <Heading size="small" level="2" spacing>
+                        Du har fått vedtak på en søknad for dette tiltaket
+                    </Heading>
+                    <BodyLong spacing>
+                        Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(sisteVedtak.søknadMottatt)}. Den ble{' '}
+                        {resultatTekst[sisteVedtak.behandlingsutfall.resultat]}{' '}
+                        {dateStrWithMonthName(sisteVedtak.behandlingsutfall.tidspunkt)}.
+                    </BodyLong>
+                    <VedtaksbrevPåMinSide />
+                </Alert>
+            )}
             {søknad.behandlingsutfall ? (
                 <Alert variant="info" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
                     <Heading size="small" level="2" spacing>
@@ -74,15 +101,7 @@ export default function TidligereSøknadSteg({
                         {resultatTekst[søknad.behandlingsutfall.resultat]}{' '}
                         {dateStrWithMonthName(søknad.behandlingsutfall.tidspunkt)}.
                     </BodyLong>
-                    {søknad.behandlingsutfall.resultat !== 'AVBRUTT' && (
-                        <BodyLong spacing>
-                            Du kan se vedtaksbrevet på{' '}
-                            <Link href={MIN_SIDE_URL} target="_blank">
-                                Min side (åpnes i ny fane)
-                            </Link>
-                            .
-                        </BodyLong>
-                    )}
+                    {søknad.behandlingsutfall.resultat !== 'AVBRUTT' && <VedtaksbrevPåMinSide />}
                     <BodyLong>
                         Du kan sende en ny søknad for tiltaket. Den nye søknaden blir fylt ut med svarene dine fra
                         forrige søknad, så du kan endre svarene som ikke lenger stemmer.

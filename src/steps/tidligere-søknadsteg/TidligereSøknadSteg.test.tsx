@@ -109,6 +109,45 @@ describe('TidligereSøknadSteg', () => {
         expect(screen.queryByText(/du må endre minst ett svar/)).not.toBeInTheDocument();
     });
 
+    test('viser det siste vedtaket i tillegg til at den nyeste søknaden er avbrutt', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            tidligereSøknad: {
+                ...valgtTiltak.tidligereSøknad!,
+                behandlingsutfall: { resultat: 'AVBRUTT', tidspunkt: '2025-04-10T09:00:00' },
+            },
+            sisteVedtak: {
+                søknadMottatt: '2025-02-01T08:30:00',
+                behandlingsutfall: { resultat: 'INNVILGELSE', tidspunkt: '2025-02-20T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText('Du har fått vedtak på en søknad for dette tiltaket')).toBeInTheDocument();
+        expect(
+            screen.getByText(
+                /Vi mottok søknaden din 1\. februar 2025, klokken 08\.30\. Den ble innvilget 20\. februar 2025\./,
+            ),
+        ).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
+        expect(screen.getByText('Søknaden din for dette tiltaket er avbrutt')).toBeInTheDocument();
+        expect(screen.getByText(/Søknaden ble avbrutt 10\. april 2025\./)).toBeInTheDocument();
+    });
+
+    test('viser det siste vedtaket i tillegg til at den nyeste søknaden er under behandling', () => {
+        renderSteg(jest.fn(), {
+            ...valgtTiltak,
+            sisteVedtak: {
+                søknadMottatt: '2025-02-01T08:30:00',
+                behandlingsutfall: { resultat: 'AVSLAG', tidspunkt: '2025-02-20T09:00:00' },
+            },
+        });
+
+        expect(screen.getByText(/Den ble avslått 20\. februar 2025\./)).toBeInTheDocument();
+        expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
+        expect(screen.getByText('Vi har mottatt søknaden din for dette tiltaket')).toBeInTheDocument();
+        expect(screen.getByText(/du må endre minst ett svar/)).toBeInTheDocument();
+    });
+
     test('krever endrede svar når forrige søknad ikke er ferdig behandlet', () => {
         renderSteg(jest.fn());
 
