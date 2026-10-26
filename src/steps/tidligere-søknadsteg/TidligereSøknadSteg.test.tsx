@@ -129,7 +129,10 @@ describe('TidligereSøknadSteg', () => {
             ),
         ).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
-        expect(screen.getByText('Søknaden din for dette tiltaket er avbrutt')).toBeInTheDocument();
+        expect(screen.getByText('Den nye søknaden din for dette tiltaket er avbrutt')).toBeInTheDocument();
+        expect(
+            screen.getByText(/Vi mottok den nye søknaden din 3\. mars 2025, klokken 10\.15, for tiltaket/),
+        ).toBeInTheDocument();
         expect(screen.getByText(/Søknaden ble avbrutt 10\. april 2025\./)).toBeInTheDocument();
     });
 
@@ -144,7 +147,10 @@ describe('TidligereSøknadSteg', () => {
 
         expect(screen.getByText(/Den ble avslått 20\. februar 2025\./)).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
-        expect(screen.getByText('Vi har mottatt søknaden din for dette tiltaket')).toBeInTheDocument();
+        expect(screen.getByText('Vi har mottatt en ny søknad for dette tiltaket')).toBeInTheDocument();
+        expect(
+            screen.getByText(/Vi mottok den nye søknaden din 3\. mars 2025, klokken 10\.15, for tiltaket/),
+        ).toBeInTheDocument();
         expect(screen.getByText(/du må endre minst ett svar/)).toBeInTheDocument();
     });
 

@@ -22,13 +22,13 @@ const resultatTekst: Record<Behandlingsutfall['resultat'], string> = {
 
 function VedtaksbrevPåMinSide() {
     return (
-        <BodyLong spacing>
+        <>
             Du kan se vedtaksbrevet på{' '}
             <Link href={MIN_SIDE_URL} target="_blank">
                 Min side (åpnes i ny fane)
             </Link>
             .
-        </BodyLong>
+        </>
     );
 }
 
@@ -58,6 +58,8 @@ export default function TidligereSøknadSteg({
     }
     const { søknad, oppsummering } = forrige;
     const { sisteVedtak } = valgtTiltak;
+    // Har bruker fått vedtak på en eldre søknad, er den sist mottatte søknaden en ny søknad.
+    const søknadenDin = sisteVedtak ? 'den nye søknaden din' : 'søknaden din';
 
     return (
         <Step
@@ -85,23 +87,29 @@ export default function TidligereSøknadSteg({
                         {resultatTekst[sisteVedtak.behandlingsutfall.resultat]}{' '}
                         {dateStrWithMonthName(sisteVedtak.behandlingsutfall.tidspunkt)}.
                     </BodyLong>
-                    <VedtaksbrevPåMinSide />
+                    <BodyLong>
+                        <VedtaksbrevPåMinSide />
+                    </BodyLong>
                 </Alert>
             )}
             {søknad.behandlingsutfall ? (
                 <Alert variant="info" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
                     <Heading size="small" level="2" spacing>
                         {søknad.behandlingsutfall.resultat === 'AVBRUTT'
-                            ? 'Søknaden din for dette tiltaket er avbrutt'
+                            ? `${sisteVedtak ? 'Den nye søknaden din' : 'Søknaden din'} for dette tiltaket er avbrutt`
                             : 'Søknaden din for dette tiltaket er ferdig behandlet'}
                     </Heading>
                     <BodyLong spacing>
-                        Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(søknad.mottatt)}, for tiltaket{' '}
+                        Vi mottok {søknadenDin} {dateStrWithMonthNameAndHourMinute(søknad.mottatt)}, for tiltaket{' '}
                         {lagTiltakVisningTekst(valgtTiltak)}. Søknaden ble{' '}
                         {resultatTekst[søknad.behandlingsutfall.resultat]}{' '}
                         {dateStrWithMonthName(søknad.behandlingsutfall.tidspunkt)}.
                     </BodyLong>
-                    {søknad.behandlingsutfall.resultat !== 'AVBRUTT' && <VedtaksbrevPåMinSide />}
+                    {søknad.behandlingsutfall.resultat !== 'AVBRUTT' && (
+                        <BodyLong spacing>
+                            <VedtaksbrevPåMinSide />
+                        </BodyLong>
+                    )}
                     <BodyLong>
                         Du kan sende en ny søknad for tiltaket. Den nye søknaden blir fylt ut med svarene dine fra
                         forrige søknad, så du kan endre svarene som ikke lenger stemmer.
@@ -110,10 +118,12 @@ export default function TidligereSøknadSteg({
             ) : (
                 <Alert variant="info" style={{ marginTop: '1rem', marginBottom: '2rem' }}>
                     <Heading size="small" level="2" spacing>
-                        Vi har mottatt søknaden din for dette tiltaket
+                        {sisteVedtak
+                            ? 'Vi har mottatt en ny søknad for dette tiltaket'
+                            : 'Vi har mottatt søknaden din for dette tiltaket'}
                     </Heading>
                     <BodyLong spacing>
-                        Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(søknad.mottatt)}, for tiltaket{' '}
+                        Vi mottok {søknadenDin} {dateStrWithMonthNameAndHourMinute(søknad.mottatt)}, for tiltaket{' '}
                         {lagTiltakVisningTekst(valgtTiltak)}. Du vil få beskjed når søknaden din er ferdig behandlet.
                     </BodyLong>
                     <BodyLong spacing>
