@@ -83,8 +83,8 @@ export default function TidligereSøknadSteg({
                         Du har en ferdig behandlet søknad for dette tiltaket
                     </Heading>
                     <BodyLong spacing>
-                        Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(sisteVedtak.søknadMottatt)}. Søknaden ble{' '}
-                        {resultatTekst[sisteVedtak.behandlingsutfall.resultat]}{' '}
+                        Vi mottok søknaden din {dateStrWithMonthNameAndHourMinute(sisteVedtak.søknadMottatt)}. Søknaden
+                        ble {resultatTekst[sisteVedtak.behandlingsutfall.resultat]}{' '}
                         {dateStrWithMonthNameAndHourMinute(sisteVedtak.behandlingsutfall.tidspunkt)}.
                     </BodyLong>
                     <BodyLong>

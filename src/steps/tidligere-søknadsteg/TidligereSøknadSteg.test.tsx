@@ -122,10 +122,10 @@ describe('TidligereSøknadSteg', () => {
             },
         });
 
-        expect(screen.getByText('Du har fått vedtak på en søknad for dette tiltaket')).toBeInTheDocument();
+        expect(screen.getByText('Du har en ferdig behandlet søknad for dette tiltaket')).toBeInTheDocument();
         expect(
             screen.getByText(
-                /Vi mottok søknaden din 1\. februar 2025, klokken 08\.30\. Den ble innvilget 20\. februar 2025\./,
+                /Vi mottok søknaden din 1\. februar 2025, klokken 08\.30\. Søknaden ble innvilget 20\. februar 2025, klokken 09\.00\./,
             ),
         ).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
@@ -145,7 +145,7 @@ describe('TidligereSøknadSteg', () => {
             },
         });
 
-        expect(screen.getByText(/Den ble avslått 20\. februar 2025\./)).toBeInTheDocument();
+        expect(screen.getByText(/Søknaden ble avslått 20\. februar 2025, klokken 09\.00\./)).toBeInTheDocument();
         expect(screen.getByRole('link', { name: /Min side/ })).toHaveAttribute('href', MIN_SIDE_URL);
         expect(screen.getByText('Vi har mottatt en ny søknad for dette tiltaket')).toBeInTheDocument();
         expect(
