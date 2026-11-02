@@ -14,8 +14,21 @@ minimumReleaseAge: 10080
 minimumReleaseAgeExclude:
   - "@navikt/*"
   - "@nais/*"
+  # CVE-2026-118779, CVE-2026-118782, CVE-2026-119187, CVE-2026-119188, CVE-2026-119190 og CVE-2026-85393 (HIGH) i node-forge 1.4.0 er tettet i 1.4.1.
+  # 1.4.2 tas inn før cooldown fordi 1.4.1 knekker pem.decode() for Buffer, som node-jose bruker.
+  # Fjernes når node-forge 1.4.2 har passert cooldown (2026-11-03).
+  - "node-forge@1.4.2"
 
 # Sikkerhetsfiks i transitiv pakke: node-jose 2.2.0 (siste versjon) krever uuid ^9.
 # Fjernes når foreldrepakken selv krever fikset versjon (sjekk med `pnpm why <pakke>`).
 overrides:
   node-jose>uuid: 11.1.1
+# Sikkerhetsfiks i transitiv pakke: node-jose 2.2.0 (siste versjon) krever node-forge ^1.2.1, og cooldown holder igjen 1.4.0 med flere HIGH-funn.
+# Fjernes når node-forge 1.4.2 har passert cooldown og ligger i lockfila uten override.
+  node-jose>node-forge: 1.4.2
+# CVE-2026-93749 (HIGH) i source-map-js 1.2.1, dratt inn av postcss, css-tree og @eslint/css-tree.
+# Fjernes når ingen foreldrepakke løses til en sårbar versjon (sjekk med `pnpm why source-map-js -r`).
+  "source-map-js@<1.2.2": ^1.2.2
+# GHSA-jggr-w7fw-pc2j (MEDIUM) i fast-copy 4.0.4, dratt inn av pino-pretty.
+# Fjernes når pino-pretty krever fikset versjon (sjekk med `pnpm why fast-copy -r`).
+  pino-pretty>fast-copy: ^4.1.0
